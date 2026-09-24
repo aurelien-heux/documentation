@@ -1,0 +1,1506 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Git model and release cycle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f7f5; --surface:#ffffff; --ink:#15231d; --muted:#51645b; --line:#d3e0d8;
+  --green:#00915a; --green-ink:#007347; --deep:#0a3d2e; --mint:#dcefe5; --mint-ink:#0a3d2e;
+  --gate:#d9822b; --gate-bg:#fbead6; --gate-ink:#7a4510;
+  /* Git branches */
+  --branch-master:#0a3d2e; --branch-develop:#6fae8e; --branch-feature:#8fd4b0; --branch-epic:#2e8a63;
+  --branch-rc:#00915a; --branch-bugfix:#8fd4b0; --branch-hotfix:#d9822b;
+  --branch-rc-next:#00915a; --branch-rc-current:#4f7fbf;
+  --on-deep:#eef6f1; --on-deep-muted:#b7d6c6;
+  --sans:"Manrope", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0d1814; --surface:#14231d; --ink:#e3eee8; --muted:#9bb3a7; --line:#2a3e35;
+    --green:#2fbf85; --green-ink:#5fd6a3; --deep:#0f3326; --mint:#1b3a2d; --mint-ink:#cfeadb;
+    --gate:#e9a25a; --gate-bg:#3b2a17; --gate-ink:#f3c99a;
+    --branch-master:#cfe6da; --branch-develop:#5f9c7e; --branch-feature:#3f8a66; --branch-epic:#4fb58a;
+    --branch-rc:#2fbf85; --branch-bugfix:#3f8a66; --branch-hotfix:#e9a25a;
+    --branch-rc-next:#2fbf85; --branch-rc-current:#7fa8e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0d1814; --surface:#14231d; --ink:#e3eee8; --muted:#9bb3a7; --line:#2a3e35;
+  --green:#2fbf85; --green-ink:#5fd6a3; --deep:#0f3326; --mint:#1b3a2d; --mint-ink:#cfeadb;
+  --gate:#e9a25a; --gate-bg:#3b2a17; --gate-ink:#f3c99a;
+  --branch-master:#cfe6da; --branch-develop:#5f9c7e; --branch-feature:#3f8a66; --branch-epic:#4fb58a;
+  --branch-rc:#2fbf85; --branch-bugfix:#3f8a66; --branch-hotfix:#e9a25a;
+  --branch-rc-next:#2fbf85; --branch-rc-current:#7fa8e6;
+  color-scheme: dark;
+}
+/* ============================================================
+   Semantic colours: change these to recolour one type of element.
+   They derive from the base palette above, so both themes follow.
+   ============================================================ */
+:root{
+  /* matrix and timeline: step types */
+  --step-bg:var(--mint);                 --step-ink:var(--mint-ink);
+  --milestone-bg:var(--deep);            --milestone-ink:var(--on-deep);
+  --job-bg:var(--paper);                 --job-ink:var(--ink);           --job-line:var(--panel-line);
+  --manual-bg:var(--panel-bg);           --manual-ink:var(--ink);        --manual-line:var(--gate-line);
+  --gate-fill:var(--gate-bg);            --gate-line:var(--gate);        --gate-text:var(--gate-ink);
+  --optional-line:var(--branch-develop); --optional-text:var(--ink);
+  --tbd-line:var(--gate);                --tbd-text:var(--ink);
+  /* levels and pivot */
+  --level-feature-bg:var(--mint);        --level-feature-ink:var(--mint-ink);
+  --level-release-bg:var(--deep);        --level-release-ink:var(--on-deep);
+  --pivot-bg:var(--green);               --pivot-ink:#fff;               --pivot-line:var(--branch-develop);
+  /* timeline */
+  --tl-rail:var(--line);                 --tl-cursor:var(--green);
+  --tl-dot:var(--line);                  --tl-dot-done:var(--green);     --tl-dot-active:var(--green);
+  --tl-dot-halo:var(--mint);             --tl-head-ink:var(--green-ink);
+  /* timeline: automated DevOps tooling (Git-tooling), not a step of the matrix */
+  --tool-ink:var(--muted);               --tool-line:var(--git-backmerge);  --tool-bg:transparent;
+  /* git graph */
+  --git-node-fill:var(--surface);        --git-arrow:var(--ink);         --git-backmerge:var(--muted);
+  --git-tag-bg:var(--gate);              --git-tag-ink:#ffffff;
+  --git-halo:var(--green);               --git-halo-gate:var(--gate);    --git-lane-label:var(--ink);
+  /* panels and controls */
+  --panel-bg:var(--surface);             --panel-line:var(--line);
+  --seg-bg:var(--deep);                  --seg-ink:var(--on-deep);       --seg-idle-ink:var(--ink);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:3px solid var(--green);outline-offset:3px;border-radius:4px}
+code{font-family:var(--mono);font-size:.9em}
+.tbd{color:var(--gate-ink);background:var(--gate-bg);border-radius:4px;padding:0 .25em}
+button{font:inherit;cursor:pointer}
+p{margin:0}
+h1,h2,h3,h4{line-height:1.12;margin:0;letter-spacing:-.01em}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:6;display:flex;align-items:center;gap:18px;padding:10px clamp(16px,4vw,48px);background:var(--surface);border-bottom:1px solid var(--line);min-height:56px}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:15px;white-space:nowrap}
+.brand-mark{width:28px;height:28px;border-radius:8px;background:var(--green);position:relative;flex:none}
+.brand-mark::after{content:"";position:absolute;left:7px;top:7px;width:14px;height:14px;border-radius:50%;border:3px solid #fff;border-right-color:transparent;transform:rotate(-30deg)}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 12px;font-weight:600;font-size:14px}
+.btn:hover{border-color:var(--green)}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+
+/* sections */
+.slide{padding:44px clamp(20px,5vw,72px) 64px;scroll-margin-top:56px}
+.slide + .slide{border-top:1px solid var(--line)}
+.inner{max-width:1240px;margin:0 auto}
+h1,h2{font-size:clamp(30px,3.6vw,46px);font-weight:800;max-width:30ch}
+.lede{font-size:19px;color:var(--muted);max-width:66ch;margin-top:12px}
+
+/* phases: vertical timeline (processes and timeframe) with the description on the right */
+.mx{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:0;margin-top:22px;align-items:stretch;background:var(--panel-bg);border:1px solid var(--panel-line);border-radius:14px}
+.mx-tl{padding:6px 0 10px}
+.mx .detail.mx-detail,.mx .detail.mx-detail.is-gate,.mx .detail.mx-detail.is-mst,.mx .detail.mx-detail.is-man{margin:0;border:0;border-left:1px solid var(--panel-line);border-radius:0 13px 13px 0;padding:0;background:transparent}
+.mx-dc{position:sticky;top:130px;padding:18px 22px}
+.mx-tl{padding:6px 18px 14px}
+.mx-grp + .mx-grp{border-top:1px solid var(--panel-line);margin-top:12px}
+.mx-h{font-size:18px;font-weight:800;margin:14px 0 10px}
+.mx-body{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px}
+.mx-list{display:flex;flex-direction:column;gap:6px}
+.mx-list .ms{margin:0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mx-list .ms > span{flex:1}
+.mx-list .ms > i{flex:none;font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:4px;border:1px solid var(--job-line);background:var(--panel-bg);color:var(--muted)}
+.mx-list .ms > i.man{color:var(--gate-text);border-color:var(--manual-line)}
+.mx-list .ms.optm{border:1.5px dashed color-mix(in srgb,var(--milestone-ink) 55%,transparent)}
+.mx-list .ms > i.optb{background:transparent;border-color:color-mix(in srgb,var(--milestone-ink) 55%,transparent);color:var(--milestone-ink)}
+.mx-ph{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tl-head-ink);margin:8px 0 0}
+.mx-ph:first-child{margin-top:0}
+.mx-sub{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--panel-line)}
+.mx-list .ms + .mx-ph{margin-top:12px;padding-top:10px;border-top:1px dashed var(--panel-line)}
+.mx-sub .cal-when{text-transform:none;letter-spacing:0;font-weight:500;font-size:11px;padding:1px 7px}
+/* double arrow: the timeframe of the process */
+.mx-span{position:relative;display:flex;align-items:center;justify-content:center}
+.mx-span::before{content:"";position:absolute;left:50%;top:7px;bottom:7px;border-left:2px solid var(--pivot-line);transform:translateX(-1px)}
+.mx-span > span{position:relative;z-index:1;writing-mode:vertical-rl;transform:rotate(180deg);background:var(--panel-bg);padding:8px 2px;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--green-ink);white-space:nowrap}
+.mx-span .ah{position:absolute;left:50%;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;transform:translateX(-50%)}
+.mx-span .ah.t{top:0;border-bottom:9px solid var(--pivot-line)}
+.mx-span .ah.b{bottom:0;border-top:9px solid var(--pivot-line)}
+/* markers: shared by the list and its legend */
+.mk{position:relative;display:inline-block;flex:none;width:14px;height:14px;box-sizing:border-box;border-radius:50%;border:3px solid var(--tl-dot-done);background:var(--panel-bg)}
+.mk.gate{width:12px;height:12px;border-radius:2px;border-color:var(--gate-line);transform:rotate(45deg)}
+.mk.mst{border-radius:3px;border-color:var(--milestone-bg);background:var(--milestone-bg)}
+.mk.tool{width:12px;height:12px;border-radius:2px;border-width:2px;border-style:dashed;border-color:var(--tool-line)}
+.mk.opt{border-width:2px;border-style:dashed;border-color:var(--muted)}
+.mx-rail .mk{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.mx-rail .mk.gate{transform:translate(-50%,-50%) rotate(45deg)}
+
+.mx-it[aria-pressed="true"] .mk.ev{background:var(--tl-dot-done)}
+.mx-it[aria-pressed="true"] .mk.gate{background:var(--gate-line);box-shadow:0 0 0 5px var(--gate-fill)}
+.mx-it[aria-pressed="true"] .mk.tool{background:var(--tool-line);border-style:solid}
+.legend .mk{margin-right:2px}
+@media (max-width:980px){
+  .mx{grid-template-columns:1fr}
+  .mx .detail.mx-detail,.mx .detail.mx-detail.is-gate,.mx .detail.mx-detail.is-mst,.mx .detail.mx-detail.is-man{border-left:0;border-top:1px solid var(--panel-line)}
+  .mx-dc{position:static}
+  .mx-body{grid-template-columns:40px minmax(0,1fr);gap:10px}
+  .mx-tl{padding:4px 12px 12px}
+}
+
+/* path intro */
+@media (max-width:980px){ .path-intro{grid-template-columns:1fr;gap:16px;padding:18px} }
+@media (prefers-reduced-motion: no-preference){ .path-intro.swap{animation:swap .25s ease} }
+
+/* matrix: feature cycle + release calendar */
+.blk{margin-top:22px;background:var(--panel-bg);border:1px solid var(--panel-line);border-radius:14px;padding:20px 22px}
+.blk-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:16px}
+.blk-head h3{font-size:20px;font-weight:800}
+.blk-sub{font-size:14px;color:var(--muted)}
+.pivot-chip code{background:var(--pivot-bg);color:var(--pivot-ink);padding:2px 8px;border-radius:6px}
+.cycle{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap}
+.cyc-arrow{align-self:center;color:var(--muted);font-size:18px}
+.loop{display:flex;align-items:center;gap:10px;margin-top:12px}
+.loop-back{color:var(--pivot-line);font-size:13px;line-height:1}
+.loop-end{width:2px;height:16px;background:var(--pivot-line);border-radius:2px}
+.loop-line{flex:1;border-top:2px dashed var(--pivot-line)}
+.loop-lab{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap}
+.stab-row{display:flex;flex-wrap:wrap;gap:8px}
+.stab-row .ms{flex:0 1 280px;width:auto}
+.stab .blk-head .cal-when{margin-left:auto}
+.cal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;background:var(--paper);border:1px solid var(--panel-line);border-radius:12px}
+.cal-col{display:flex;flex-direction:column;gap:8px;padding:14px}
+.cal-col + .cal-col{border-left:1px solid var(--panel-line)}
+.rel-when{margin-left:auto}
+@media (max-width:980px){ .cal-col + .cal-col{border-left:0;border-top:1px solid var(--panel-line)} }
+.cal-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:2px}
+.cal-head h4{font-size:15px;font-weight:800}
+.cal-when{font-family:var(--mono);font-size:12px;color:var(--muted);background:var(--panel-bg);border:1px solid var(--panel-line);padding:2px 8px;border-radius:999px;white-space:nowrap}
+.ms{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:center;border:1.5px solid transparent;background:var(--step-bg);color:var(--step-ink);border-radius:8px;padding:10px 12px;font-size:14.5px;font-weight:700;cursor:pointer}
+.cycle .ms{flex:1 1 0;min-width:108px;padding:9px 10px;font-size:13.5px}
+.cyc-arrow{flex:none}
+.ms span{flex:1;text-align:left;display:flex;flex-direction:column;gap:1px}
+.ms span b{font-family:var(--mono);font-weight:500;font-size:11.5px;color:var(--muted)}
+.ms i{flex:none;font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:4px;background:var(--panel-bg);color:var(--muted);border:1px solid var(--job-line)}
+.ms i.man{color:var(--gate-text);border-color:var(--manual-line)}
+.ms.manual{background:var(--manual-bg);color:var(--manual-ink);border-color:var(--manual-line);border-style:dashed}
+.detail.is-man{border-left-color:var(--manual-line)}
+.chip.b code{font-size:12px}
+.ms:hover{filter:brightness(.97)}
+.ms.gate{background:var(--gate-fill);color:var(--gate-text)}
+.ms.mst{background:var(--milestone-bg);color:var(--milestone-ink)}
+.ms.job{background:var(--job-bg);color:var(--job-ink);border-color:var(--job-line)}
+.ms.opt{background:transparent;border:1.5px dashed var(--optional-line);color:var(--optional-text)}
+.ms.gate.opt{border-color:var(--gate-line);color:var(--gate-text)}
+.ms.tbdms{background:transparent;border:1.5px dotted var(--tbd-line);color:var(--tbd-text)}
+.ms.tbdms.gate{color:var(--gate-text)}
+.ms[aria-pressed="true"]{outline:2.5px solid var(--green);outline-offset:1px}
+.ms.gate[aria-pressed="true"]{outline-color:var(--gate-line)}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;font-size:13.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.sw{display:inline-block;width:22px;height:14px;border-radius:4px;background:var(--step-bg)}
+.sw.g{background:var(--gate-fill);border:1px solid var(--gate-line)}
+.sw.j{background:var(--job-bg);border:1px solid var(--job-line)}
+.sw.o{background:transparent;border:1.5px dashed var(--gate-line)}
+.sw.m{background:var(--milestone-bg)}
+.sw.t{background:transparent;border:1.5px dotted var(--tbd-line)}
+.sw.n{background:var(--manual-bg);border:1.5px dashed var(--manual-line)}
+@media (max-width:980px){ .cal{grid-template-columns:1fr} .cycle .ms{flex:1 1 100%} .cyc-arrow{transform:rotate(90deg)} }
+
+/* path intro */
+@media (max-width:980px){ .path-intro{grid-template-columns:1fr;gap:16px;padding:18px} }
+@media (prefers-reduced-motion: no-preference){ .path-intro.swap{animation:swap .25s ease} }
+
+/* matrix */
+.band{display:grid;grid-template-columns:1fr 56px 3fr;gap:16px;margin:14px 0 12px;font-size:14px;font-weight:700}
+.band span{padding:6px 12px;border-radius:8px;text-align:center}
+.band .a{background:var(--level-feature-bg);color:var(--level-feature-ink)}
+.band .b{background:var(--level-release-bg);color:var(--level-release-ink);grid-column:3}
+.frise{display:grid;grid-template-columns:1fr 56px 1fr 1fr 1fr;gap:16px;align-items:stretch}
+.phase{background:var(--panel-bg);border:1px solid var(--panel-line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.phase header{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+.phase header b{font-size:13px;color:var(--tl-head-ink)}
+.phase header h3{font-size:19px}
+.ms{display:block;width:100%;text-align:left;border:1.5px solid transparent;background:var(--step-bg);color:var(--step-ink);border-radius:8px;padding:8px 12px;font-size:15px;font-weight:600;transition:transform .12s ease}
+.ms.gate{background:var(--gate-fill);color:var(--gate-text)}
+.ms.mst{background:var(--milestone-bg);color:var(--milestone-ink)}
+.ms{cursor:pointer}
+.ms:hover{filter:brightness(.97)}
+.ms[aria-pressed="true"]{outline:2.5px solid var(--green);outline-offset:1px}
+.ms.gate[aria-pressed="true"]{outline-color:var(--gate-line)}
+.detail{margin-top:16px;background:var(--paper);border:1px solid var(--panel-line);border-left:5px solid var(--green);border-radius:0 12px 12px 0;padding:16px 20px}
+.detail.is-gate{border-left-color:var(--gate-line)}
+.detail.is-mst{border-left-color:var(--milestone-bg)}
+.d-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.d-head h3{font-size:20px;font-weight:800;margin-right:4px}
+.chip{font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--step-bg);color:var(--step-ink);white-space:nowrap}
+.chip.q{background:transparent;border:1px solid var(--panel-line);color:var(--muted)}
+.chip.j{background:var(--milestone-bg);color:var(--milestone-ink)}
+.chip.t{background:transparent;border:1.5px dotted var(--tbd-line);color:var(--gate-text)}
+.d-body{margin-top:12px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px 28px;font-size:15.5px;line-height:1.55}
+.d-body p{max-width:62ch}
+.d-tools{padding-left:20px;border-left:1px solid var(--panel-line);color:var(--muted)}
+@media (max-width:980px){ .d-tools{padding-left:0;border-left:0;padding-top:12px;border-top:1px solid var(--panel-line)} }
+.d-body .d-sub{margin-bottom:4px}
+.d-body section{min-height:54px}
+.d-sub{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.d-todo{color:var(--muted);font-style:italic}
+@media (max-width:980px){ .d-body{grid-template-columns:1fr} }
+.ms.opt{background:transparent;border:1.5px dashed var(--optional-line);color:var(--optional-text)}
+.ms.gate.opt{border-color:var(--gate-line);color:var(--gate-text)}
+.ms[aria-pressed="true"]{outline:2.5px solid var(--green);outline-offset:1px}
+.ms.gate[aria-pressed="true"]{outline-color:var(--gate)}
+.ms small{font-weight:500;opacity:.8}
+.pivot-col{display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:10px}
+.pivot-col i{flex:1;border-left:2px dashed var(--pivot-line)}
+.pivot-col code{writing-mode:vertical-rl;transform:rotate(180deg);background:var(--pivot-bg);color:var(--pivot-ink);border-radius:6px;padding:10px 4px}
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;font-size:14px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.sw{display:inline-block;width:22px;height:14px;border-radius:4px;background:var(--step-bg)}
+.sw.g{background:var(--gate-fill);border:1px solid var(--gate-line)}
+.sw.o{background:transparent;border:1.5px dashed var(--gate-line)}
+.sw.m{background:var(--milestone-bg)}
+
+/* detail block */
+.chip{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--mint);color:var(--mint-ink);white-space:nowrap}
+.chip.r{background:var(--deep);color:var(--on-deep)}
+.chip.g{background:var(--gate-bg);color:var(--gate-ink)}
+.chip.o{background:transparent;border:1.5px dashed var(--branch-develop);color:var(--ink)}
+@media (prefers-reduced-motion: no-preference){ .detail.swap{animation:swap .25s ease} }
+@keyframes swap{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* path bar */
+.pathbar{position:sticky;top:56px;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px clamp(16px,4vw,48px);background:var(--paper);border-bottom:1px solid var(--line);min-height:58px}
+.pb-label{font-size:13px;font-weight:800;color:var(--muted)}
+.pb-sum{margin-left:auto;font-size:14px;font-weight:700;color:var(--green-ink);transition:opacity .2s ease}
+.pb-sum.off{opacity:0;visibility:hidden}
+.pathbar small{font-size:12.5px;color:var(--muted);max-width:40ch;line-height:1.3}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;color:var(--seg-idle-ink);padding:7px 13px;font-weight:700;font-size:14px}
+.seg button + button{border-left:1.5px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--seg-bg);color:var(--seg-ink)}
+.seg button:disabled{opacity:.35;cursor:not-allowed}
+.ms.tbdms{background:transparent;border:1.5px dotted var(--tbd-line);color:var(--tbd-text)}
+.ms.tbdms.gate{color:var(--gate-text)}
+.sw.t{background:transparent;border:1.5px dotted var(--tbd-line)}
+.sw.n{background:var(--manual-bg);border:1.5px dashed var(--manual-line)}
+.chip.t{background:transparent;border:1.5px dotted var(--gate);color:var(--gate-ink)}
+.slide{scroll-margin-top:116px}
+#walkthrough{padding-bottom:16px}
+
+@media (max-width:980px){
+  .pathbar{position:static}
+  .pb-sum{display:none}
+  .slide{scroll-margin-top:56px}
+  .frise{grid-template-columns:1fr}
+  .pivot-col{flex-direction:row;padding:0}
+  .pivot-col i{border-left:0;border-top:2px dashed var(--branch-develop);height:0}
+  .pivot-col code{writing-mode:horizontal-tb;transform:none;padding:4px 10px}
+  .band{display:none}
+  .brand span:not(.brand-mark){display:none}
+}
+@media (max-width:560px){ .brand span:not(.brand-mark){display:none} }
+/* walkthrough (scrollytelling) */
+.walk .inner{max-width:1560px}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--seg-idle-ink);padding:8px 14px;font-weight:700;font-size:14px}
+.seg button + button{border-left:1.5px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--seg-bg);color:var(--seg-ink)}
+.seg button:disabled{opacity:.4;cursor:not-allowed}
+.viewtog{flex:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid var(--panel-line);background:var(--paper)}
+.viewtog > span{font-size:13px;font-weight:800;color:var(--muted);margin-right:4px}
+.vt{border:1.5px solid var(--panel-line);background:var(--panel-bg);color:var(--muted);border-radius:999px;padding:4px 12px;font-weight:700;font-size:13px}
+.vt[aria-pressed="true"]{border-color:var(--green);color:var(--green-ink);background:var(--step-bg)}
+.vt[aria-pressed="true"]::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:7px;vertical-align:1px}
+.vt .sm{display:none}
+.chk{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap}
+.chk2{margin-left:14px}
+.chk input{accent-color:var(--green);width:15px;height:15px;cursor:pointer}
+.views{flex:1;min-height:0;display:grid;grid-template-columns:minmax(220px,.66fr) minmax(0,1.75fr) minmax(0,.9fr)}
+.views.one{grid-template-columns:minmax(240px,.6fr) minmax(0,2fr)}
+.view + .view{border-left:1px solid var(--panel-line)}
+.view[hidden]{display:none}
+.v-title{padding:10px 14px 0;font-size:13px;font-weight:800;color:var(--ink)}
+.view.off{display:none}
+.env-body{position:relative;flex:1;min-height:0;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;scroll-behavior:smooth}
+.envs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.env-g{margin:10px 0 2px;font-size:11.5px;font-weight:800;letter-spacing:.02em;color:var(--muted);font-family:var(--mono)}
+.env-g:first-child{margin-top:0}
+.env{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;border:1.5px solid transparent;font-size:13.5px;font-weight:600;color:var(--ink);opacity:.45;transition:background .3s ease,border-color .3s ease,opacity .3s ease}
+.env-n{flex:1;min-width:0}
+.env-k{font-family:var(--mono);font-size:10.5px;padding:1px 6px;border-radius:4px;border:1px solid var(--panel-line);color:var(--muted)}
+.env-a{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:999px;white-space:nowrap}
+.env.used{opacity:.8}
+.env.on{opacity:1}
+.env.on.auto{background:var(--job-bg);border-color:var(--green)}
+.env.on.auto .env-a{background:var(--green);color:#fff}
+.env.on.manual{background:var(--manual-bg);border-color:var(--manual-line);border-style:dashed}
+.env.on.manual .env-a{background:var(--gate-fill);color:var(--gate-text)}
+.env.on.test{background:var(--step-bg);border-color:var(--step-bg)}
+.env.on.test .env-a{background:var(--milestone-bg);color:var(--milestone-ink)}
+.env-none{margin-top:12px;font-size:13px;color:var(--muted);font-style:italic}
+.env-empty{margin:auto;color:var(--muted);font-style:italic;font-size:14px;text-align:center}
+.envs + .desc{margin-top:14px}
+.desc{flex:none;margin-bottom:14px;border:1px solid var(--panel-line);border-radius:10px;overflow:hidden;background:var(--panel-bg)}
+a.repo{color:var(--green-ink);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.desc-h{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;font-family:var(--mono);font-size:12.5px;font-weight:500;border-bottom:1px solid var(--panel-line);background:var(--paper)}
+.desc-h span{font-family:var(--mono);font-weight:500;color:var(--muted);margin-left:6px}
+.desc .yaml{margin:0;padding:10px 12px;font-family:var(--mono);font-size:11.5px;line-height:1.55;overflow-x:auto;white-space:pre;background:#0f2a21;color:#d9ebe1}
+.desc .yk{color:#7fe0b0}.desc .yv{color:#f1f7f3}.desc .yc{color:#8aa99a}
+.desc-sub{padding:8px 12px 2px;font-size:11.5px;font-weight:800;color:var(--muted)}
+.dres{list-style:none;margin:0;padding:4px 12px 10px;display:flex;flex-direction:column;gap:4px}
+.dres li{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.dres code{min-width:96px;font-size:12px}
+.dres .src{padding:2px 8px;border-radius:999px;font-family:var(--mono);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dres .src.br{background:var(--green);color:#fff}
+.dres .src.up{border:1px dashed var(--panel-line);color:var(--muted)}
+.dres .src .tbd{background:transparent;padding:0}
+.dres li.rest code{color:var(--muted)}
+@media (prefers-reduced-motion: no-preference){ .env.on{animation:rowflash 1s ease} }
+.v-leg{margin-left:10px;font-weight:600;font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+.v-leg i{display:inline-block;width:18px;height:0;margin-left:6px;vertical-align:middle}
+.v-leg .lg-pr{border-top:3px solid var(--branch-develop)}
+.v-leg .lg-gt{border-top:3px dashed var(--git-backmerge)}
+.v-leg .lg-a{width:10px;height:10px;border-radius:3px;background:var(--green)}
+.v-leg .lg-m{width:10px;height:10px;border-radius:3px;border:1.5px dashed var(--manual-line)}
+.v-leg .lg-t{width:10px;height:10px;border-radius:3px;background:var(--step-bg)}
+.tl-item.mst::before{border-radius:3px;background:var(--milestone-bg);border-color:var(--milestone-bg)}
+.view{display:flex;flex-direction:column;min-height:0;min-width:0}
+@media (max-width:980px){ .view.off{display:none} }
+
+/* timeline: a column of the views block, sharing the Git graph's vertical coordinates */
+.scrolly{position:relative;margin-top:24px}
+.v-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v-title .v-leg{flex-wrap:nowrap;display:inline}
+.tl-leg{display:flex;flex-direction:row;flex-wrap:wrap;gap:3px 12px;padding:4px 14px 8px;font-size:11.5px;font-weight:600;color:var(--muted)}
+.tl-leg span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tl-leg i{display:inline-block;flex:none}
+.git-leg{flex:none}
+.tl-leg .lg-pr{width:18px;height:0;border-top:3px solid var(--branch-develop)}
+.tl-leg .lg-gt{width:18px;height:0;border-top:3px dashed var(--git-backmerge)}
+.tl-leg .lg-tag{width:16px;height:10px;border-radius:2px;background:var(--git-tag-bg)}
+.env-leg{flex:none;border-bottom:1px solid var(--line)}
+.tl-leg .lg-a{width:10px;height:10px;border-radius:3px;background:var(--green)}
+.tl-leg .lg-m{width:10px;height:10px;border-radius:3px;border:1.5px dashed var(--manual-line)}
+.tl-leg .lg-t{width:10px;height:10px;border-radius:3px;background:var(--step-bg);border:1px solid var(--line)}
+/* Jira card: tickets of the path, shown once raised for development */
+.jcard{flex:none;display:flex;align-items:stretch;gap:10px;padding:10px 12px;border-bottom:1px solid var(--panel-line);background:var(--panel-bg);overflow-x:auto;height:122px;box-sizing:border-box}
+.jcard-h{flex:none;display:flex;flex-direction:column;justify-content:center;gap:2px;padding-right:6px;border-right:1px solid var(--panel-line);margin-right:2px}
+.jcard-h b{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.jcard-h span{font-size:11.5px;color:var(--muted)}
+.jcard-empty{align-self:center;font-size:13px;color:var(--muted);font-style:italic}
+.jk{align-self:flex-start;flex:0 1 270px;min-width:236px;box-sizing:border-box;display:flex;flex-direction:column;gap:3px;padding:7px 10px;border:1.5px solid var(--panel-line);border-radius:10px;background:var(--paper);transition:border-color .25s ease,background .25s ease,opacity .25s ease}
+.jk.wait{display:none}
+.jk.done{opacity:.6}
+.jk.on{border-color:var(--green);background:var(--step-bg)}
+.jk-top{display:flex;align-items:center;gap:6px}
+.jk-top code{flex:none;white-space:nowrap;font-size:12px;font-weight:500;color:var(--green-ink)}
+.jk-type{font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:4px;background:var(--panel-bg);border:1px solid var(--panel-line);color:var(--muted)}
+.jk-type.bug{color:var(--gate-text);border-color:var(--gate-line)}
+.jk-type.epic{color:var(--milestone-ink);background:var(--milestone-bg);border-color:var(--milestone-bg)}
+.jk-st{flex:none;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--panel-bg);border:1px solid var(--panel-line);color:var(--ink);white-space:nowrap}
+.jk.on .jk-st{background:var(--green);border-color:var(--green);color:#fff}
+.jk-bot{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+.jk-bot .jk-br{max-width:100%}
+.jk-sum{font-size:13px;font-weight:700;color:var(--ink);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jk-br{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (prefers-reduced-motion: no-preference){ .jk.new{animation:jin .45s cubic-bezier(.2,.8,.2,1)} }
+@keyframes jin{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+.jcard-h{order:-9999}
+.jcard-empty{order:-9998}
+@media (max-width:980px){ .git-leg{display:none} .tl-bot{font-size:9px;padding:0 4px} .jcard{padding:8px 10px;height:92px} .jk{min-width:200px} .jk-sum{display:none} .jcard-h{display:none} .jk{min-width:170px} }
+/* lane headers appear when their branch is created */
+.lh{transition:opacity .35s ease}
+.lh.wait{opacity:0}
+.tl-sp{flex:none;box-sizing:border-box;border-bottom:1px solid var(--line)}
+.tlb{position:relative;flex:1;min-height:0;overflow:hidden}
+.tlb::before,.tlb::after{content:"";position:absolute;left:0;right:0;height:36px;z-index:1;pointer-events:none}
+.tlb::before{top:0;background:linear-gradient(var(--panel-bg),transparent)}
+.tlb::after{bottom:0;background:linear-gradient(transparent,var(--panel-bg))}
+.tl{position:absolute;left:0;right:0;top:0;will-change:transform}
+.tl-rail{position:absolute;left:21px;width:0;border-left:2px solid var(--tl-rail)}
+.tl-head,.tl-start{position:absolute;left:12px;right:8px;margin:0;transform:translateY(-50%);font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--tl-head-ink);background:var(--panel-bg);padding:2px 0;display:flex;align-items:center;gap:8px}
+.tl-start{color:var(--muted);font-weight:700}
+.tl-hx{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tl-head code{background:var(--pivot-bg);color:var(--pivot-ink);padding:2px 8px;border-radius:5px;font-size:11.5px;text-transform:none;letter-spacing:0}
+.tl-item{position:absolute;left:0;right:8px;transform:translateY(-50%);padding-left:40px;cursor:pointer}
+.tl-t{display:block;font-size:14.5px;font-weight:700;line-height:1.25;color:var(--ink);transition:opacity .25s ease}
+.tl-item:not(.on) .tl-t{opacity:.55}
+.tl-item:hover .tl-t{opacity:.9}
+.tl-item.tool .tl-t{font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--tool-ink)}
+.tl-item.tool.on .tl-t{color:var(--ink)}
+.tl-item.tool:not(.on) .tl-t{opacity:.75}
+.tl-bot{display:table;max-width:100%;overflow:hidden;text-overflow:ellipsis;margin:0 0 3px;padding:0 6px;border:1.5px dashed var(--tool-line);border-radius:4px;background:var(--tool-bg);font-family:var(--sans);font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--tool-ink);vertical-align:1px;white-space:nowrap}
+.tl-item.tool::before{width:12px;height:12px;left:16px;margin-top:-6px;border-radius:2px;border-width:2px;border-style:dashed;border-color:var(--tool-line)}
+.tl-item.tool.done::before{border-color:var(--tool-line);background:var(--paper)}
+.tl-item.tool.on::before{background:var(--tool-line);border-style:solid;border-color:var(--tool-line);box-shadow:0 0 0 5px color-mix(in srgb,var(--tool-line) 22%,transparent)}
+.tl-leg .lg-proc{width:10px;height:10px;border-radius:50%;border:2.5px solid var(--tl-dot-done)}
+.tl-leg .lg-gate{width:8px;height:8px;border:2px solid var(--gate-line);transform:rotate(45deg)}
+.tl-leg .lg-mst{width:9px;height:9px;border-radius:2px;background:var(--milestone-bg)}
+.tl-leg .lg-tool{width:9px;height:9px;border-radius:2px;border:2px dashed var(--tool-line)}
+.tl-cur{position:absolute;left:0;right:0;height:0;z-index:2;pointer-events:none;border-top:1.5px dashed color-mix(in srgb,var(--tl-cursor) 45%,transparent)}
+.tl-cur::before{content:"";position:absolute;left:0;top:-10px;border-left:12px solid var(--tl-cursor);border-top:10px solid transparent;border-bottom:10px solid transparent}
+.g-cur{position:absolute;left:0;right:0;height:0;z-index:0;pointer-events:none;border-top:1.5px dashed color-mix(in srgb,var(--tl-cursor) 30%,transparent)}
+@media (prefers-reduced-motion: no-preference){
+  .tl-cur.fire::before{animation:nudge .45s ease}
+  .view.hit{animation:hit 1s ease}
+  .wg.fwd path.solid.now{stroke-dasharray:1;animation:draw .6s ease forwards}
+  .wg.fwd circle.now,.wg.fwd g.now{transform-box:fill-box;transform-origin:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+}
+@keyframes nudge{0%{transform:translateX(0)}40%{transform:translateX(6px)}100%{transform:translateX(0)}}
+@keyframes hit{0%{box-shadow:inset 0 3px 0 var(--green),inset 0 0 0 9999px color-mix(in srgb,var(--green) 10%,transparent)}100%{box-shadow:inset 0 3px 0 var(--green),inset 0 0 0 9999px transparent}}
+@keyframes hitbtn{0%{box-shadow:0 0 0 5px color-mix(in srgb,var(--green) 35%,transparent)}100%{box-shadow:0 0 0 0 transparent}}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes pop{from{transform:scale(.2)}to{transform:scale(1)}}
+@keyframes rowflash{0%{background:color-mix(in srgb,var(--green) 40%,var(--mint))}100%{background:var(--mint)}}
+.view.changed{box-shadow:inset 0 3px 0 var(--green)}
+@media (max-width:980px){ .v-title{display:none} }
+.tl-item::before{content:"";position:absolute;left:14px;top:50%;margin-top:-8px;box-sizing:border-box;width:16px;height:16px;border-radius:50%;background:var(--paper);border:3px solid var(--tl-dot);transition:all .25s ease}
+.tl-item.gate::before{border-radius:3px;transform:rotate(45deg)}
+.tl-item.opt::before{border-style:dashed}
+.tl-item.done::before{border-color:var(--tl-dot-done)}
+.tl-item.gate.done::before{border-color:var(--gate-line)}
+.tl-item.on::before{background:var(--tl-dot-active);border-color:var(--tl-dot-active);box-shadow:0 0 0 6px var(--tl-dot-halo)}
+.tl-item.gate.on::before{background:var(--gate-line);border-color:var(--gate-line);box-shadow:0 0 0 6px var(--gate-fill)}
+.stage{position:sticky;top:130px;height:calc(100vh - 146px);display:flex;flex-direction:column;background:var(--panel-bg);border:1px solid var(--panel-line);border-radius:16px;overflow:hidden}
+.stage-head{border-bottom:1px solid var(--line);padding:8px 10px 2px}
+.stage-head svg{display:block;width:100%;height:auto}
+.gv{position:relative;flex:1;overflow:hidden}
+.gtrack{position:absolute;left:0;right:0;top:0;padding:0 10px;will-change:transform}
+.gtrack svg{display:block;width:100%;height:auto;overflow:visible}
+.gv::before,.gv::after{content:"";position:absolute;left:0;right:0;height:36px;z-index:1;pointer-events:none}
+.gv::before{top:0;background:linear-gradient(var(--panel-bg),transparent)}
+.gv::after{bottom:0;background:linear-gradient(transparent,var(--panel-bg))}
+.wg .el{transition:opacity .35s ease}
+.wg .fut{opacity:0}
+.wg .past{opacity:.9}
+.wg .now{opacity:1}
+.wg .halo{transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion: no-preference){
+  .wg .halo{animation:pulse 1.6s ease-out infinite}
+}
+@media (prefers-reduced-motion: reduce){ .wg .el{transition:none} }
+@keyframes pulse{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.8);opacity:0}}
+
+@media (max-width:980px){
+  .stage{top:58px;height:calc(100svh - 70px);z-index:3}
+  .views,.views.one{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+  .tl-t{font-size:12.5px}
+  .tl-head,.tl-start{font-size:10px;letter-spacing:.03em;white-space:nowrap}
+  .tl-item{padding-left:34px}
+  .view.off{display:none}
+  .v-title{display:none}
+  .vt .lg{display:none}
+  .vt .sm{display:inline}
+  .viewtog{padding:6px 10px}
+}
+
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>Git model and release cycle</span></div>
+  <button class="btn" id="themeBtn" type="button" aria-label="Switch theme" style="margin-left:auto">Theme</button>
+</header>
+<div class="pathbar" role="group" aria-label="Choose a path">
+  <span class="pb-label">Path</span>
+  <div class="seg" data-pick="down" aria-label="Release type">
+    <button type="button" data-v="major" aria-pressed="true">Monthly</button>
+    <button type="button" data-v="minor" aria-pressed="false">Minor</button>
+    <button type="button" data-v="hotfix" aria-pressed="false">Hotfix</button>
+  </div>
+  <div class="seg" data-pick="up" aria-label="Before develop">
+    <button type="button" data-v="story" aria-pressed="true">Standard story</button>
+    <button type="button" data-v="epic" aria-pressed="false">Large project</button>
+  </div>
+  <small id="pathNote" hidden>A hotfix is a single fix from master, so the story / large project choice doesn't apply.</small>
+  <span class="pb-sum" id="pathSummary">Standard story, then monthly release</span>
+</div>
+
+<main id="main">
+<section class="slide" id="phases" data-title="Phases">
+  <div class="inner">
+    <h1 id="pathTitle">Standard story, then monthly release</h1>
+    <div class="mx">
+      <div class="mx-tl" id="mxTl" role="list"></div>
+      <article class="detail mx-detail" id="mxDetail" aria-live="polite"></article>
+    </div>
+    <div class="legend">
+      <span><i class="sw"></i>Event</span>
+      <span><i class="sw g"></i>Gate</span>
+      <span><i class="sw m"></i>Milestone</span>
+      <span><i class="sw j"></i>CI/CD (auto or manual trigger)</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide walk" id="walkthrough" data-title="Walkthrough">
+  <div class="inner">
+    <h2>Follow a change, from story to production</h2>
+    <div class="scrolly" id="scrolly">
+      <aside class="stage" id="stage" aria-label="Synchronised views">
+        <div class="jcard" id="jira" aria-label="Jira tickets of this path" aria-live="polite"></div>
+        <div class="viewtog" role="group" aria-label="Views next to the timeline">
+          <span>Views</span>
+          <button type="button" class="vt" data-view="viewGit" aria-pressed="true">Git</button>
+          <button type="button" class="vt" data-view="viewEnv" aria-pressed="true"><span class="lg">Environments</span><span class="sm">Environments</span></button>
+          <label class="chk"><input type="checkbox" id="multiRepo"> Multi-repository</label>
+        </div>
+        <div class="views" id="views">
+          <section class="view" id="viewTl" aria-label="Timeline">
+            <p class="v-title">Timeline</p>
+            <div class="tl-sp" id="tlHead"><p class="tl-leg" id="tlLeg"><span><i class="lg-proc"></i>event</span><span><i class="lg-gate"></i>gate</span><span><i class="lg-mst"></i>milestone</span><span><i class="lg-tool"></i>CI/CD</span></p></div>
+            <div class="tlb" id="tlBody"><div class="tl-cur" id="tlCursor" aria-hidden="true"></div><div class="tl" id="tl"></div></div>
+          </section>
+          <section class="view" id="viewGit" aria-label="Git view">
+            <p class="v-title">Git</p>
+            <p class="tl-leg git-leg"><span><i class="lg-pr"></i>pull request</span><span><i class="lg-gt"></i>Git-tooling</span><span><i class="lg-tag"></i>tag</span></p>
+            <div class="stage-head" id="laneHead"></div>
+            <div class="gv" id="gv"><div class="g-cur" id="gCursor" aria-hidden="true"></div><div class="gtrack" id="gtrack"></div></div>
+          </section>
+          <section class="view" id="viewEnv" aria-label="Binaries and environments view">
+            <p class="v-title">Environments</p>
+            <p class="tl-leg env-leg"><span><i class="lg-a"></i>automatic deploy</span><span><i class="lg-m"></i>manual deploy</span><span><i class="lg-t"></i>testing</span></p>
+            <div class="env-body" id="envBody"></div>
+          </section>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>
+
+
+
+<script>
+(function(){
+  "use strict";
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  var ENV_REPO = "https://bitbucket.cib.echonet/projects/E2ECC/e2ecc-k8s-envs/";
+  function tbd(s){ return esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[[^\]]+\]/g,function(m){return '<span class="tbd">'+m+'</span>';})
+    .replace(/\{\{repo\}\}/g,'<a class="repo" href="'+ENV_REPO+'" target="_blank" rel="noopener">e2ecc-k8s-envs</a>'); }
+
+  /* ---------- phases matrix ---------- */
+  var LIB = {
+    /* ---- feature level: Jira statuses ---- */
+    ready:{name:"Ready for Development", jira:1,
+      desc:"The US or bug is ready to be developed and planned in a monthly release through its Fix Version/s.",
+      tools:"Jira: Fix Version/s = the monthly release. Every Jira with this Fix Version must be closed before the cut-off.",
+      v:{epic:{desc:"The epic is split into stories; each story carries the Fix Version of the monthly release it targets."},
+         minor_epic:{desc:"The epic is split into stories, all planned in the minor release. The Jiras must be added to the Hotfix/Minor: Content & Follow-up page, a prerequisite for merging into RC_X."},
+         minor:{desc:"Only for topics that cannot wait for the next monthly release. The Jira must be added to the Hotfix/Minor: Content & Follow-up page, a prerequisite for merging its pull request into the RC branch.",
+           tools:"Confluence: Hotfix/Minor: Content & Follow-up page updated. Jira: Fix Version/s = the minor release."},
+         hotfix:{desc:"Only for bugs raised in production that cannot wait for the next monthly or minor release. Prerequisites: a Jira version (e.g. 26.1 Hotfix 3), a bug with priority Critical or Blocker, the ServiceNow incident number and a remediation plan; then an email to Release Management and APS listing the bugs, and, once approved, a run-book from the template.",
+           tools:"Jira: version, bug and remediation plan fields. ServiceNow: incident ticket. Confluence: run-book from [TEMPLATE] Run-book for Hotfix. Teams: Hotfix Team Channel."}}},
+    inprogress:{name:"In Progress", jira:1,
+      desc:"Development of the user story or bug.",
+      tools:"Git: feature branch created from `develop`.",
+      v:{epic:{tools:"Git: feature branch created from the epic branch."},
+         minor:{tools:"Git: fix branch `fix/E2ECC-…` created from RC_X, the release candidate currently in production."},
+         minor_epic:{tools:"Git: epic branch created from RC_X, then a feature branch `feat/E2ECC-…` per story from the epic branch."},
+         hotfix:{tools:"Git: fix branch `fix/E2ECC-…` created from `master`. No RC branch is created for a hotfix."}}},
+    codereview:{name:"Code Review", jira:1,
+      desc:"The pull request is reviewed. No new commit in the target branch at this stage.",
+      tools:"Bitbucket: pull request and review. Jenkins: CI build.",
+      },
+    testing:{name:"Testing", jira:1,
+      desc:"Functional tests on the Dev Team environment, including UI/UX testing.",
+      tools:"Descriptor changes are made in the {{repo}} repository (Bitbucket): one YAML file per team environment, where the modules under test point to their feature branch image; every module not listed comes from the upstream environment.",
+      v:{hotfix:{desc:"Functional tests on the Dev Team environment. The Development Team is solely responsible for testing a hotfix; the QA factory is not involved."}}},
+    merge:{name:"Merge", jira:1,
+      desc:"The validated change is merged. The PR merge deadline is one day before the cut-off: Jiras not merged by the cut-off meeting move to the next release, with no exception.",
+      tools:"Bitbucket: pull request merged into `develop`.",
+      v:{epic:{desc:"The validated story is merged into the epic branch.", tools:"Bitbucket: pull request merged into the epic branch."},
+         minor:{desc:"The validated change is merged into RC_X, once listed on the Content & Follow-up page.", tools:"Bitbucket: pull request merged into RC_X."},
+         hotfix:{desc:"The validated fix is merged into master, from which a new tag will be delivered.", tools:"Bitbucket: pull request merged into `master`."}}},
+    int_epic:{name:"Integration Testing", on:"epic",  jira:1,
+      desc:"Functional tests of the story within the whole project, on the epic branch only: the team environment runs the epic branch image, with no feature branch.",
+      tools:"Team env descriptor: the modules of the epic point to `epic/*`; every other module comes from the upstream (develop).",
+      v:{minor:{tools:"Team env descriptor: the modules of the epic point to `epic/*`; every other module comes from the upstream (minor-release)."}}},
+    merge2:{name:"Merge", jira:1,
+      desc:"The accepted epic is merged into develop, before the PR merge deadline of the targeted release.",
+      tools:"Bitbucket: pull request from the epic branch into `develop`.",
+      v:{minor:{desc:"The accepted epic is merged into RC_X, once all its Jiras are listed on the Content & Follow-up page.", tools:"Bitbucket: pull request from the epic branch into RC_X."}}},
+    int_dev:{name:"Integration Testing", on:"develop", jira:1,
+      desc:"Functional tests on the Develop environment.",
+      tools:"Automatic deployment of `develop` on INT (K8S)."},
+    int_prod:{name:"Integration Testing", on:"RC_X", jira:1,
+      desc:"The change is validated on the minor-release environment.",
+      tools:"Deployment of RC_X on mycreditapp-minor-release (TRAINING, K8S)."},
+    int_master:{name:"Integration Testing", on:"master", jira:1,
+      desc:"The fix is checked from master by the Development Team.",
+      tools:"Deployment from `master` on QA-FIX (VM)."},
+
+    /* ---- release level ---- */
+    promoInt:{name:"Promotion (INT)", auto:1,
+      desc:"At the end of each day, a pre-package is generated from everything merged into develop and deployed automatically.",
+      tools:"Jenkins: end of day, generation of a pre-package deployed on INT (K8S)."},
+    promoUAT:{name:"Promotion (UAT)", auto:1,
+      desc:"Release stabilisation: at the end of each day, the RC branch is packaged and deployed automatically on UAT, the same way INT and QA are fed from develop.",
+      tools:"Jenkins: end-of-day package of RC_X+1 (e.g. `RC_26.8_V0.2608.18`) deployed on UAT (VM)."},
+    promoQA:{name:"Promotion (QA)", auto:1,
+      desc:"The same pre-package is deployed on the QA virtual machines, when the INT pipeline is successful.",
+      tools:"Jenkins: end-of-day deployment of the pre-package on QA (VM), when the INT pipeline is successful."},
+    cutoff:{name:"Cut-off", gate:1,
+      desc:"The next release candidate RC_X+1 is created from develop, on the commit of the last package deployed on QA. After the cut-off, only defects and bugs (except Minor) may join the release; any other type needs a justification emailed to Release Management.",
+      tools:"Git: RC_X+1 branch, named RC_YY.n_V0.YYMM.m, created from develop on the commit of the last package deployed on QA (YY year, n monthly increment, V0.YYMM.m the develop tag it is created from), e.g. `RC_26.8_V0.2608.18`. Jenkins then promotes the RC automatically at the end of each day: on UAT (VM) for the NRT campaign, and on STAGING (VM) for the performance tests. The cut-off also creates the first package tag on the RC branch, named branch.increment: `RC_26.8_V0.2608.18.1`."},
+    promoNRT:{name:"Promotion (NRT)", auto:1,
+      desc:"RC_X+1 is deployed on UAT for the NRT campaign and on STAGING for the performance tests.",
+      tools:"Jenkins: end-of-day deployment of RC_X+1 on UAT (VM) and STAGING (VM)."},
+    testNRTPerf:{name:"Testing (NRT, Performance)",
+      desc:"A release needs the green light of the Testing team on the NRT campaign. Performance tests are mandatory.",
+      tools:"NRT: Development + Testing teams. Performance tests: Performance team."},
+    bugfix:{name:"Bug fixing (regressions, critical bugs)",
+      desc:"Regressions and critical bugs found during the NRT are fixed on a fix branch created from the RC, tested on the Dev Team environment, merged into the RC and retested on the release environment.",
+      tools:"Git: fix branch `fix/E2ECC-…` from the RC, PR into the RC. Each merge produces a new package tag, incremented by 1, e.g. `RC_26.8_V0.2608.18.2`. Git-tooling then merges the RC back into develop automatically (merge commit strategy)."},
+    precrb:{name:"Pre-CRB", mst:1,
+      desc:"Meeting, Tuesday PM, week n, after the package freeze: all the evidence (performance, NRT, rehearsal, etc.) is presented to the production teams. If it is not validated, the release is delayed.",
+      tools:"Request for change (created in week n-1) and the evidence pack: performance and NRT results, rehearsal report."},
+    freeze:{name:"Package freeze", gate:1,
+      desc:"Friday, before the pre-CRB and the CRB: the last auto-generated package becomes the release package, and the Jenkins NRT job is frozen as well. No new tag is created: the package keeps the tag it already has on the RC branch. A GB flow must be prepared for new flows (CFT, API, etc.) [scope of the GB flow: to be defined].",
+      tools:"Jenkins: the last automatic package build is frozen, e.g. the one tagged `RC_26.8_V0.2608.18.2`. The frozen package is then promoted manually on PRE-PROD by APS for the rehearsal (Tuesday, week n).",
+      v:{minor:{tools:"Jenkins: the last automatic package build on RC_26.7 is frozen, e.g. the one tagged `RC_26.7_V0.2607.18.22`. The frozen package is then promoted manually on PRE-PROD by APS for the rehearsal (Tuesday, week n)."}}},
+    promoRehearsal:{name:"Promotion (Rehearsal)", manual:1,
+      desc:"Tuesday, week n: last sanity tests, the package is communicated to APS and the deployment is rehearsed in PRE-PROD.",
+      tools:"Manual deployment of the package on PRE-PROD by APS."},
+    sanityProd:{name:"Sanity checks (PROD)",
+      desc:"After the go-live, sanity checks in production to verify the state of the application in the production environment, especially when new flows (CFT, API, etc.) or infrastructure changes are delivered, plus specific and critical end-to-end scenarios. Their result drives the decision to keep the release.",
+      tools:"PROD, APS team and Development Team: sanity checklist, critical E2E scenarios."},
+    sanity:{name:"Sanity checks (PRE-PROD)",
+      desc:"Pre-release sanity checks in PRE-PROD, to validate the frozen package before the CRB.",
+      tools:"PRE-PROD, APS team.",
+      v:{hotfix:{desc:"Pre-release sanity checks in PRE-PROD, to validate the hotfix package before the go-live."}}},
+    crb:{name:"CRB", mst:1,
+      desc:"Meeting, Wednesday AM, week n, after the package freeze: the frozen package is validated or not with top management.",
+      tools:"CRB meeting."},
+    gngb:{name:"Business Go / NoGo", mst:1, opt:1, kind:"Optional milestone",
+      desc:"After the go-live, only for high-risk releases: the business validates the opening of a feature to users. The feature is delivered hidden behind a toggle, and the toggle is switched on once the business says go.",
+      tools:"Feature toggle strategy: the feature ships switched off, then the toggle is turned on in production after the business Go."},
+    golive:{name:"Go-live", mst:1,
+      desc:"Thursday noon, week n, in the best case, or later if the previous steps are not complete. The package is delivered in production and the production tag is put on the RC branch; RC_X+1 then becomes the RC_X that hosts the minor releases.",
+      tools:"PROD delivery by APS. Git: production tag `REL_…` put on the RC branch, on the delivered package, e.g. `REL_26.8_V0.2608.18.2` (the current one being `REL_26.7_V0.2607.18.21`). Git-tooling then merges the RC into `master`; it creates no tag.",
+      v:{minor:{tools:"PROD delivery by APS. Git: production tag put on RC_26.7, on the delivered package, e.g. `REL_26.7_V0.2607.18.22`. Git-tooling then merges RC_26.7 into `master`; it creates no tag."}}},
+    /* minor-release specifics */
+    promoTraining:{name:"Promotion (minor-release)", auto:1,
+      desc:"At the end of each day, RC_26.7 is deployed automatically on the minor-release environment, where each Jira is validated.",
+      tools:"Jenkins: end-of-day deployment of RC_26.7 on mycreditapp-minor-release (TRAINING, K8S)."},
+    contentClosed:{name:"All Jiras closed", gate:1, tbd:1,
+      desc:"Once every Jira of the Content & Follow-up page is closed, the minor release content is final. [Is this the minor equivalent of the cut-off? To be confirmed]",
+      tools:"Confluence: Hotfix/Minor: Content & Follow-up page. Jira: status Closed."},
+    promoQAFix:{name:"Promotion (QA-FIX)", manual:1,
+      desc:"Once all Jiras are closed, the DevOps team deploys on QA-FIX.",
+      tools:"Manual deployment on QA-FIX (VM) by the DevOps team."},
+    testNRTScope:{name:"Testing (NRT on impacted scope)",
+      desc:"No full NRT campaign: the Development Team runs the NRT on the impacted scope. No performance tests, so only topics with no performance impact are allowed.",
+      tools:"Development Team."},
+    sanityQAFix:{name:"Sanity checks (QA-FIX)",
+      desc:"Sanity checks on QA-FIX by the Development Team; some sanity tests can also be asked to the Testing team in parallel.",
+      tools:"QA-FIX (VM)."},
+    sanityPreprod:{name:"Sanity checks (PRE-PROD)",
+      desc:"Pre-release sanity checks in PRE-PROD by the APS team, to validate the package before the go-live.",
+      tools:"PRE-PROD, APS team."},
+    /* hotfix specifics */
+    testNRTDev:{name:"Testing (NRT)",
+      desc:"The Development Team is solely responsible for testing; the QA factory is not involved. Performance tests are not executed, so the change must not affect performance.",
+      tools:"Development Team, on QA-FIX."},
+    hotfixLive:{name:"Go-live", mst:1,
+      desc:"A new tag is delivered from master. Git-tooling then retrofits master into RC_X, RC_X into RC_X+1 (if open) and RC_X+1 into develop.",
+      tools:"Git: new tag on `master`. Git-tooling: nightly retrofit merges."}
+  };
+  var CYC = ["ready","inprogress","codereview","testing","merge"];
+  var MAJOR_RELEASE = [
+    {name:"Stabilisation", when:"Month M, each end of day", items:["promoInt","promoQA"]},
+    {name:"Release Preparation", when:"Cut-off, month M+1", tf:"", items:["cutoff","testNRTPerf","bugfix"]},
+    {name:"Stabilisation", when:"Each end of day", tf:"", daily:1, items:["promoUAT"]},
+    {name:"Release", when:"Week n, Mon to Thu", tf:"Week n", items:["freeze","precrb","sanity","crb","golive","sanityProd","gngb"]}];
+  var PATHS = {
+    major_story:{unit:"small feature", loop:"Next feature", cycle:CYC.concat(["int_dev"]), release:MAJOR_RELEASE},
+    major_epic:{unit:"story of the epic", loop:"Next story of the epic", cycle:CYC.concat(["int_epic","merge2","int_dev"]), release:MAJOR_RELEASE},
+    minor_story:{unit:"story", cycle:CYC.concat(["int_prod"]), release:null},
+    minor_epic:{unit:"story of the epic", cycle:CYC.concat(["int_epic","merge2","int_prod"]), release:null},
+    minor:{unit:"bug fix", loop:"Next bug fix", cycle:CYC.concat(["int_prod"]),
+      release:[
+        {name:"Stabilisation", when:"Until week n, each end of day", items:["promoTraining"]},
+        {name:"Release Preparation", when:"Before week n", tf:"Before week n", items:["contentClosed","promoQAFix","testNRTScope","sanityQAFix"]},
+        {name:"Release", when:"Week n, Mon to Thu", tf:"Week n", items:["freeze","sanityPreprod","golive","sanityProd"]}]},
+    hotfix:{unit:"incident fix", loop:"Next incident", cycle:CYC.concat(["int_master"]),
+      release:[
+        {name:"Release Preparation", when:"On demand", items:["promoQAFix","testNRTDev"]},
+        {name:"Release", when:"On demand", items:["promoRehearsal","sanity","hotfixLive","sanityProd"]}]}
+  };
+  PATHS.minor_story.release = PATHS.minor_epic.release = PATHS.minor.release;
+  var PATH = {up:"story", down:"major"};
+  /* monthly and minor releases can carry a standard story or a large project; a hotfix is a single fix */
+  function pathKey(){ return PATH.down === "hotfix" ? "hotfix" : PATH.down + "_" + PATH.up; }
+  function resolve(id){
+    var b = LIB[id], out = {}, k;
+    for(k in b) if(k !== "v") out[k] = b[k];
+    out.id = id;
+    var v = b.v || {};
+    /* release-type variant first, then the large-project variant, then the combination of both */
+    [PATH.down, PATH.down !== "hotfix" ? PATH.up : null, PATH.down !== "hotfix" ? PATH.down + "_" + PATH.up : null].forEach(function(key){
+      if(key && v[key]) for(k in v[key]) out[k] = v[key][k];
+    });
+    return out;
+  }
+
+  var mxTl = document.getElementById("mxTl"), mxDetail = document.getElementById("mxDetail");
+  var LIST = [], curId = null;
+  /* timeframe of each step, shown in the left column of the phases timeline */
+  var WHEN = {cutoff:"Month M+1", precrb:"Tue PM", freeze:"Friday", sanity:"Before CRB", sanityPreprod:"Before go-live", sanityProd:"After go-live", crb:"Wed AM", golive:"Thu noon", gngb:"After go-live",
+    promoInt:"End of day", promoQA:"End of day", promoTraining:"End of day"};
+  function typeOf(m){ return m.mst ? "mst" : m.opt ? "opt" : m.gate ? "gate" : m.mst ? "mst" : (m.auto || m.manual) ? "tool" : "ev"; }
+
+  function renderMatrix(keepId){
+    var p = PATHS[pathKey()];
+    LIST = [];
+    function item(id, grp, phase){
+      var m = resolve(id), k = LIST.length;
+      m.grp = grp; m.col = phase || grp; m.type = typeOf(m); LIST.push(m);
+      var badge = m.auto ? '<i>auto</i>' : m.manual ? '<i class="man">'+(m.badge || 'manual')+'</i>' : m.opt ? '<i class="optb">optional</i>' : '';
+      /* the target branch is only shown when it tells two identical steps apart (large project) */
+      var twins = p.cycle.filter(function(x){ return LIB[x].name === m.name; }).length > 1;
+      var on = m.on && twins ? ' <b>'+esc(m.on)+'</b>' : '';
+      return '<button type="button" role="listitem" class="ms mx-it '+m.type+(m.opt && m.mst?" optm":"")+(m.gate?" gate":"")+(m.mst?" mst":"")+(m.auto || m.manual?" job":"")+(m.tbd?" tbdms":"")+'" data-k="'+k+'" aria-pressed="false"><span>'+esc(m.name)+on+'</span>'+badge+'</button>';
+    }
+    /* one process: a double arrow carrying the timeframe, and the list of its steps */
+    function group(name, cadence, body){
+      return '<section class="mx-grp"><h3 class="mx-h">'+esc(name)+'</h3><div class="mx-body">'+
+        '<div class="mx-span" aria-label="Timeframe: '+esc(cadence)+'"><i class="ah t"></i><i class="ah b"></i><span>'+esc(cadence)+'</span></div>'+
+        '<div class="mx-list">'+body+'</div></div></section>';
+    }
+    /* stabilisation closes the feature cycle: the daily CI/CD takes what was merged */
+    /* the first stabilisation feeds INT / QA from develop; a later one (release stabilisation) stays in the release process */
+    var stab = p.release[0] && p.release[0].name === "Stabilisation" ? p.release[0] : null;
+    var rel = stab ? p.release.slice(1) : p.release;
+    var fc = '<h4 class="mx-ph">Implementation</h4>' + p.cycle.map(function(id){ return item(id, "Feature cycle", "Implementation"); }).join("");
+    if(stab) fc += '<h4 class="mx-ph mx-sub">Stabilisation <span class="cal-when">Daily</span></h4>' + stab.items.map(function(id){ return item(id, "Feature cycle", "Stabilisation"); }).join("");
+    var html = group("Feature cycle", PATH.down === "major" ? "5 weeks" : PATH.down === "hotfix" ? "As soon as possible" : "Every feature", fc);
+    html += group("Release process", {major:"4 weeks", minor:"Weekly", hotfix:"On demand"}[PATH.down], rel.map(function(col){
+      return (col.daily ? '<h4 class="mx-ph mx-sub">'+esc(col.name)+' <span class="cal-when">Daily</span></h4>' : '<h4 class="mx-ph">'+esc(col.name)+'</h4>') +
+        col.items.map(function(id){ return item(id, "Release process", col.name); }).join("");
+    }).join(""));
+    mxTl.innerHTML = html;
+    var idx = 0;
+    LIST.forEach(function(m, k){ if(m.id === keepId) idx = k; });
+    showMs(idx, true);
+  }
+  function showMs(k, quiet){
+    k = Math.max(0, Math.min(LIST.length - 1, k));
+    var m = LIST[k];
+    curId = m.id;
+    mxTl.querySelectorAll(".mx-it").forEach(function(b){ b.setAttribute("aria-pressed", Number(b.getAttribute("data-k")) === k ? "true" : "false"); });
+    mxDetail.className = "detail mx-detail" + (m.gate ? " is-gate" : "") + (m.manual ? " is-man" : "") + (m.mst ? " is-mst" : "");
+    var kind = m.kind ? m.kind : m.gate ? "Gate" : m.mst ? "Milestone" : m.auto ? "CI/CD automation" : m.manual ? "CI/CD, manual" : m.jira ? "Jira status" : "Event";
+    var chips = '<span class="chip">'+kind+'</span><span class="chip q">'+esc(m.col)+'</span>';
+    if(m.tbd) chips += '<span class="chip t">To be confirmed for this path</span>';
+    mxDetail.innerHTML = '<div class="mx-dc"><div class="d-head"><h3>'+esc(m.name)+'</h3>'+chips+'</div>'+
+      '<div class="d-body"><section><p class="d-sub">What happens</p><p>'+(m.desc ? tbd(m.desc) : '<span class="d-todo">[to be written]</span>')+'</p></section>'+
+      '<section class="d-tools"><p class="d-sub">In the tools</p><p>'+(m.tools ? tbd(m.tools) : '<span class="d-todo">[to be written]</span>')+'</p></section></div></div>';
+    if(!quiet && matchMedia("(max-width: 980px)").matches) mxDetail.scrollIntoView({block:"nearest", behavior:"smooth"});
+  }
+  mxTl.addEventListener("click", function(e){ var b = e.target.closest(".mx-it"); if(b) showMs(Number(b.getAttribute("data-k"))); });
+  renderMatrix();
+
+  /* ---------- walkthrough ---------- */
+  var W = (function(){
+    var LANE = {
+      featA:{label:"feature/A", c:"--branch-feature"}, featB:{label:"feature/B", c:"--branch-feature"}, feat:{label:"feature/*", c:"--branch-feature"},
+      epic:{label:"epic/*", c:"--branch-epic"}, develop:{label:"develop", c:"--branch-develop"},
+      rcx1:{label:"RC_X+1", c:"--branch-rc-next"}, fix:{label:"fix", c:"--branch-bugfix"},
+      rcx:{label:"RC_X", c:"--branch-rc-current"}, master:{label:"master", c:"--branch-master"}
+    };
+    var ORDER = ["featA","featB","feat","epic","develop","rcx1","fix","rcx","master"];
+    /* init = starting state, drawn once before the first step: one commit per row, in order.
+       from = lane it comes from, auto = Git-tooling merge (dashed), tag = label on the commit.
+       step fields: links [[from,to,"auto"]] and open/close create a graph row ("auto" = Git-tooling merge, dashed);
+       tag [lane,text] marks the lane's last commit; focus = lane to highlight when nothing changes in Git;
+       env = environments touched by the step, act = auto | manual | test */
+    var UP = {
+      story: [
+        {title:"Ready for Development", focus:"develop"},
+        {title:"In Progress", open:["feat"], links:[["develop","feat"]]},
+        {title:"Code Review", focus:"feat"},
+        {title:"Testing", focus:"feat", env:["teamdev"], act:"auto"},
+        {title:"Merge", links:[["feat","develop"]], close:["feat"]},
+        {title:"Integration Testing", focus:"develop", env:["int"], act:"auto"}
+      ],
+      epic: [
+        {title:"Ready for Development", focus:"develop"},
+        {title:"Epic branch", open:["epic"], links:[["develop","epic"]]},
+        {title:"Story A: In Progress", open:["featA"], links:[["epic","featA"]]},
+        {title:"Story A: Code Review", focus:"featA"},
+        {title:"Story A: Testing", focus:"featA", env:["teamdev"], act:"auto"},
+        {title:"Story A: Merge", links:[["featA","epic"]], close:["featA"]},
+        {title:"Story A: Integration Testing", focus:"epic", env:["teamepic"], act:"test"},
+        {title:"Story B: In Progress", open:["featB"], links:[["epic","featB"]]},
+        {title:"Story B: Code Review", focus:"featB"},
+        {title:"Story B: Testing", focus:"featB", env:["teamdev"], act:"auto"},
+        {title:"Story B: Merge", links:[["featB","epic"]], close:["featB"]},
+        {title:"Story B: Integration Testing", focus:"epic", env:["teamepic"], act:"test"},
+        {title:"Merge epic into develop", links:[["epic","develop"]], close:["epic"]},
+        {title:"Integration Testing", focus:"develop", env:["int"], act:"auto"}
+      ]
+    };
+    /* release naming: RC branch = RC_YY.n_V0.YYMM.m, package tag = branch.increment, production tag = REL_... */
+    var REL = {
+      cur:{short:"RC_26.7", branch:"RC_26.7_V0.2607.18", pre:"RC_26.7_", name:"V0.2607.18", prod:"REL_26.7_V0.2607.18.21", pkg:"RC_26.7_V0.2607.18.22", rel:"REL_26.7_V0.2607.18.22", hotfix:"REL_26.7_V0.2607.18.21.1"},
+      next:{short:"RC_26.8", branch:"RC_26.8_V0.2608.18", pre:"RC_26.8_", name:"V0.2608.18", cut:"RC_26.8_V0.2608.18.1", fix:"RC_26.8_V0.2608.18.2", pkg:"RC_26.8_V0.2608.18.2", rel:"REL_26.8_V0.2608.18.2"}
+    };
+    var DOWN = {
+      major: {init:[{lane:"master", tag:REL.cur.prod}, {lane:"develop"}], steps:[
+        {title:"Promotion (INT, QA)", focus:"develop", env:["int","qa"], act:"auto"},
+        {title:"Cut-off: RC_X+1 created", gate:1, open:["rcx1"], links:[["develop","rcx1"]], tag:["rcx1",REL.next.cut], env:["uat","staging"], act:"auto"},
+        {title:"Testing (NRT, Performance)", focus:"rcx1", env:["uat","staging"], act:"test"},
+        {title:"Bug fixing: fix branch from RC_X+1", only:"api", open:["fix"], links:[["rcx1","fix"]]},
+        {title:"Bug fixing: tests on Dev Team env", only:"api", focus:"fix", env:["teamdev"], act:"auto"},
+        {title:"Bug fixing: merge into RC_X+1", only:"api", links:[["fix","rcx1"]], close:["fix"], tag:["rcx1",REL.next.fix], env:["uat","rel"], act:"auto"},
+        {title:"Git-tooling: RC_X+1 into develop", only:"api", links:[["rcx1","develop","auto"]], env:["int","qa"], act:"auto"},
+        {title:"Package freeze", gate:1, focus:"rcx1", env:["preprod"], act:"manual"},
+        {title:"Pre-CRB", mst:1, focus:"rcx1"},
+        {title:"Sanity checks (PRE-PROD)", focus:"rcx1", env:["preprod"], act:"test"},
+        {title:"CRB", mst:1, focus:"rcx1"},
+        {title:"Go-live", mst:1, tag:["rcx1",REL.next.rel], env:["prod"], act:"manual"},
+        {title:"Sanity checks (PROD)", focus:"rcx1", env:["prod"], act:"test"},
+        {title:"Git-tooling: RC_X+1 into master", links:[["rcx1","master","auto"]]},
+        {title:"RC_X+1 now hosts the minor releases", focus:"rcx1"}
+      ]},
+      minor: {init:[{lane:"master", tag:REL.cur.prod}, {lane:"rcx", from:"master", auto:1}, {lane:"develop"}, {lane:"rcx1", from:"develop"}], faint:["rcx1"], steps:[
+        {lvl:"F", title:"Ready for Development", focus:"rcx"},
+        {lvl:"F", title:"In Progress", only:"api", open:["fix"], links:[["rcx","fix"]]},
+        {lvl:"F", title:"Code Review", only:"api", focus:"fix"},
+        {lvl:"F", title:"Testing", focus:"fix", env:["teamdev"], act:"auto"},
+        {lvl:"F", title:"Merge into RC_X", only:"api", links:[["fix","rcx"]], close:["fix"], tag:["rcx",REL.cur.pkg]},
+        {lvl:"F", title:"Integration Testing", focus:"rcx", env:["train"], act:"auto"},
+        {title:"All Jiras closed", gate:1, focus:"rcx"},
+        {title:"Promotion (QA-FIX)", focus:"rcx", env:["qafix"], act:"manual"},
+        {title:"Testing (NRT on impacted scope)", focus:"rcx", env:["qafix"], act:"test"},
+        {title:"Sanity checks (QA-FIX)", focus:"rcx", env:["qafix"], act:"test"},
+        {title:"Package freeze", gate:1, focus:"rcx", env:["preprod"], act:"manual"},
+        {title:"Sanity checks (PRE-PROD)", focus:"rcx", env:["preprod"], act:"test"},
+        {title:"Go-live", mst:1, only:"api", tag:["rcx",REL.cur.rel], env:["prod"], act:"manual"},
+        {title:"Sanity checks (PROD)", focus:"rcx", env:["prod"], act:"test"},
+        {title:"Git-tooling: RC_X into master", only:"api", links:[["rcx","master","auto"]]},
+        {title:"Git-tooling: RC_X into RC_X+1", only:"api", links:[["rcx","rcx1","auto"]], env:["uat","rel"], act:"auto"},
+        {title:"Git-tooling: RC_X+1 into develop", only:"api", links:[["rcx1","develop","auto"]], env:["int","qa"], act:"auto"}
+      ]},
+      hotfix: {init:[{lane:"master", tag:REL.cur.prod}, {lane:"rcx", from:"master", auto:1}, {lane:"develop"}, {lane:"rcx1", from:"develop"}], faint:["rcx1"], steps:[
+        {lvl:"F", title:"Ready for Development", focus:"master"},
+        {lvl:"F", title:"In Progress", only:"api", open:["fix"], links:[["master","fix"]]},
+        {lvl:"F", title:"Code Review", only:"api", focus:"fix"},
+        {lvl:"F", title:"Testing", focus:"fix", env:["teamdev"], act:"auto"},
+        {lvl:"F", title:"Merge into master", only:"api", links:[["fix","master"]], close:["fix"]},
+        {lvl:"F", title:"Integration Testing", focus:"master", env:["qafix"], act:"test"},
+        {title:"Promotion (QA-FIX)", focus:"master", env:["qafix"], act:"manual"},
+        {title:"Testing (NRT)", focus:"master", env:["qafix"], act:"test"},
+        {title:"Promotion (Rehearsal)", focus:"master", env:["preprod"], act:"manual"},
+        {title:"Sanity checks (PRE-PROD)", focus:"master", env:["preprod"], act:"test"},
+        {title:"Go-live", mst:1, only:"api", tag:["master",REL.cur.hotfix], env:["prod"], act:"manual"},
+        {title:"Sanity checks (PROD)", focus:"master", env:["prod"], act:"test"},
+        {title:"Git-tooling: master into RC_X", only:"api", links:[["master","rcx","auto"]], env:["train"], act:"auto"},
+        {title:"Git-tooling: RC_X into RC_X+1", only:"api", links:[["rcx","rcx1","auto"]], env:["uat","rel"], act:"auto"},
+        {title:"Git-tooling: RC_X+1 into develop", only:"api", links:[["rcx1","develop","auto"]], env:["int","qa"], act:"auto"}
+      ]}
+    };
+    var ENVS = [
+      {id:"teamdev", name:"TEAM DEV", kind:"K8S", br:"feature / fix branch"},
+      {id:"teamepic", name:"TEAM DEV", kind:"K8S", br:"epic branch only"},
+      {id:"int", name:"INT", kind:"K8S", br:"develop"},
+      {id:"qa", name:"QA", kind:"VM", br:"develop"},
+      {id:"uat", name:"UAT (NRT)", kind:"VM", br:"RC_26.8_V0.2608.18 (next release)"},
+      {id:"staging", name:"STAGING (performance)", kind:"VM", br:"RC_26.8_V0.2608.18 (next release)"},
+      {id:"rel", name:"mycreditapp-release", kind:"K8S", br:"RC_26.8_V0.2608.18 (next release)"},
+      {id:"train", name:"mycreditapp-minor-release (TRAINING)", kind:"K8S", br:"RC_26.7_V0.2607.18 (minor releases)"},
+      {id:"qafix", name:"QA-FIX", kind:"VM", br:"RC_26.7_V0.2607.18, master"},
+      {id:"preprod", name:"PRE-PROD", kind:"", br:"package, APS"},
+      {id:"prod", name:"PROD (mycreditapp-prod)", kind:"K8S", br:"master"}
+    ];
+    var ACT = {auto:"automatic deploy", manual:"manual deploy", test:"testing"};
+    var envBody = document.getElementById("envBody");
+    /* team env descriptor: one YAML per namespace; listed modules use a branch image, the rest come from the upstream */
+    var MODULES = ["request","facility","client"];
+    function upRuns(u){
+      return /-develop\./.test(u) ? "   # develop" : /-release\./.test(u) ? "   # " + REL.next.branch : /-minor-release\./.test(u) ? "   # " + REL.cur.branch : "";
+    }
+    function descriptor(i){
+      var st = steps[i], d = state.down, up = state.up, t = st.title;
+      var upstream, upName, map = {};
+      var EPIC = "epic/E2ECC-105100";
+      if(d === "minor"){
+        upstream = "https://mycreditapp-minor-release.dev.echonet"; upName = "minor-release, " + REL.cur.branch + " [to be confirmed]";
+        if(up === "epic"){
+          var EP = "epic/E2ECC-105300", integ2 = /Integration Testing/.test(t), sB = /^Story B/.test(t);
+          if(!sB) map.request = integ2 ? EP : "feat/E2ECC-105311";
+          else { map.request = EP; map.facility = integ2 ? EP : "feat/E2ECC-105312"; }
+        } else map.request = "fix/E2ECC-105310";
+      }
+      else if(d === "hotfix"){ upstream = "https://mycreditapp-<env>.dev.echonet"; upName = "[upstream for a hotfix: to be confirmed]"; map.request = "fix/E2ECC-105402"; }
+      else if(/Bug fixing/.test(t)){ upstream = "https://mycreditapp-release.dev.echonet"; upName = "release, " + REL.next.branch + " [to be confirmed]"; map.request = "fix/E2ECC-105227"; }
+      else {
+        upstream = "https://mycreditapp-develop.dev.echonet"; upName = "develop";
+        if(up === "epic"){
+          /* Story A works on request, Story B on facility; integration testing runs on the epic branch only */
+          var integ = /Integration Testing/.test(t), storyB = /^Story B/.test(t);
+          if(!storyB) map.request = integ ? EPIC : "feat/E2ECC-105141";
+          else { map.request = EPIC; map.facility = integ ? EPIC : "feat/E2ECC-105142"; }
+        }
+        else map.request = "feat/E2ECC-105018";
+      }
+      /* multi-repository: the same change also touches a module of the second repository */
+      if(state.multi){
+        var main = map.facility || map.request;
+        if(map.facility) map.client = main; else map.facility = main;
+      }
+      var rows = MODULES.map(function(m){ return {m:m, b:map[m] || null}; });
+      var y = ["# e2ecc-k8s-envs/mycreditapp/team-env-7.yml", "---", "global:", "  upstream: " + upstream + upRuns(upstream), "  modules:"];
+      rows.forEach(function(r){ if(r.b) y.push("    " + r.m + ":", "      enabled: true", "      image:", "        branch: " + r.b); });
+      var hl = y.map(function(l){
+        var m = l.match(/^(\s*)([\w-]+):(.*)$/);
+        if(/^\s*#/.test(l)) return '<span class="yc">'+esc(l)+'</span>';
+        if(m) return m[1]+'<span class="yk">'+m[2]+'</span>:<span class="yv">'+esc(m[3])+'</span>';
+        return esc(l);
+      }).join("\n");
+      var res = '<ul class="dres">' + rows.map(function(r){
+        return '<li><code>'+esc(r.m)+'</code>'+(r.b ? '<span class="src br">'+esc(r.b)+'</span>' : '<span class="src up">upstream: '+tbd(upName)+'</span>')+'</li>';
+      }).join("") + '<li class="rest"><code>other modules</code><span class="src up">upstream: '+tbd(upName)+'</span></li></ul>';
+      return '<div class="desc"><p class="desc-h">team-env-7 <a class="repo" href="'+ENV_REPO+'" target="_blank" rel="noopener">e2ecc-k8s-envs</a></p><pre class="yaml">'+hl+'</pre><p class="desc-sub">Resolved pods</p>'+res+'</div>';
+    }
+    function renderEnv(i){
+      if(!envBody) return;
+      var st = steps[i], now = {};
+      (st.env || []).forEach(function(e){ now[e] = st.act || "test"; });
+      if(!st.env || !st.env.length){
+        envBody.innerHTML = '<p class="env-empty">No environment involved in this step.</p>';
+        envBody.scrollTop = 0;
+        return;
+      }
+      /* only the environments touched by the active step, grouped by the branch they serve */
+      var groups = [], seen = {};
+      ENVS.forEach(function(e){ if(now[e.id] && !seen[e.br]){ seen[e.br] = 1; groups.push(e.br); } });
+      var html = '<ul class="envs">';
+      groups.forEach(function(g){
+        html += '<li class="env-g">'+esc(g)+'</li>';
+        ENVS.forEach(function(e){
+          if(e.br !== g || !now[e.id]) return;
+          var a = now[e.id];
+          html += '<li class="env on '+a+'"><span class="env-n">'+esc(e.name)+'</span>'+(e.kind ? '<span class="env-k">'+e.kind+'</span>' : '')+'<span class="env-a">'+ACT[a]+'</span></li>';
+        });
+      });
+      envBody.innerHTML = html + '</ul>' + (now.teamdev || now.teamepic ? descriptor(i) : '');
+      envBody.scrollTop = 0;
+    }
+    var REPOS = [{id:"api", name:"service-api"}, {id:"web", name:"web-app"}];
+    var state = {up:"story", down:"major", multi:false}, steps = [], active = -1, els = [], halos = [], rowY = [];
+    var tl = document.getElementById("tl"), head = document.getElementById("laneHead"), track = document.getElementById("gtrack"),
+        gv = document.getElementById("gv"), tlBody = document.getElementById("tlBody"), tlHead = document.getElementById("tlHead"),
+        tlCur = document.getElementById("tlCursor"), gCur = document.getElementById("gCursor"),
+        scrolly = document.getElementById("scrolly"), stage = document.getElementById("stage");
+    var mqNarrow = matchMedia("(max-width: 980px)");
+    /* one row per timeline step: rows are in pixels, so the timeline and the graph share the same vertical scale */
+    var TOP = 34, WIDTH = 560, PX = 92, scale = 1;
+
+    /* automated DevOps tooling (Git-tooling merges): not a step of the matrix */
+    function isGitTool(st){ return !!(st.links && st.links.some(function(l){ return l[2] === "auto"; })); }
+    /* three kinds of timeline items: events of the dev lifecycle (Jira statuses, testing),
+       gates and milestones, CI/CD automation (promotions, Git-tooling) */
+    function isTool(st){ return isGitTool(st) || /^Promotion/.test(st.title); }
+    function tlTitle(st){
+      if(isGitTool(st)) return '<span class="tl-bot">Git-tooling</span>' + esc(st.title.replace(/^Git-tooling:\s*/, ""));
+      if(isTool(st)) return '<span class="tl-bot">CI/CD · ' + (st.act === "manual" ? "manual" : "auto") + '</span>' + esc(st.title.replace(/^Promotion\s*/, "Promotion "));
+      return esc(st.title);
+    }
+    function rcName(t){ return t.replace(/RC_X\+1/g, REL.next.short).replace(/RC_X\b/g, REL.cur.short); }
+    function build(){
+      var d = DOWN[state.down];
+      if(state.down === "major"){
+        steps = UP[state.up].map(function(s){ return Object.assign({lvl:"F"}, s); })
+          .concat(d.steps.map(function(s){ return Object.assign({lvl:"R"}, s); }));
+      } else if(state.down === "minor" && state.up === "epic"){
+        /* a large project in a minor release: the epic branch starts from RC_X and is merged back into it */
+        var sw = function(k){ return k === "develop" ? "rcx" : k; };
+        steps = UP.epic.map(function(s0){
+          var s1 = Object.assign({lvl:"F"}, s0);
+          if(s1.focus) s1.focus = sw(s1.focus);
+          if(s1.links) s1.links = s1.links.map(function(l){ return [sw(l[0]), sw(l[1])].concat(l.slice(2)); });
+          if(s1.env) s1.env = s1.env.map(function(e){ return e === "int" ? "train" : e; });
+          s1.title = s1.title.replace("into develop", "into RC_X");
+          if(s1.title === "Ready for Development") s1.focus = "rcx";
+          if(/^Merge epic/.test(s1.title)) s1.tag = ["rcx", REL.cur.pkg];   /* the merge into the RC produces its package tag */
+          return s1;
+        }).concat(d.steps.filter(function(s0){ return s0.lvl !== "F"; }).map(function(s0){ return Object.assign({lvl:"R"}, s0); }));
+      } else {
+        steps = d.steps.map(function(s){ return Object.assign({lvl:"R"}, s); });
+      }
+      /* the timeline names the actual release branches rather than RC_X / RC_X+1 */
+      steps.forEach(function(st){ st.title = rcName(st.title); });
+      var nr = mqNarrow.matches;
+      var GROW = 72, PROW = nr ? 58 : 48, IROW = 52, LGAP = 60;
+      var repos = state.multi ? REPOS : [{id:"", name:""}];
+      var avail = gv.clientWidth ? gv.clientWidth - 20 : 0;
+      var used = {}; d.init.forEach(function(o){ used[o.lane] = 1; });
+      steps.forEach(function(s){ (s.open||[]).forEach(function(k){ used[k] = 1; }); });
+      var ord = state.down === "minor" && state.up === "epic" ? ["develop","rcx1","featA","featB","epic","rcx","master"] : ORDER;
+      var base = ord.filter(function(k){ return used[k]; });
+      var cols = [], groups = [];
+      repos.forEach(function(r){
+        var start = cols.length;
+        base.forEach(function(k){ cols.push(r.id ? r.id + "|" + k : k); });
+        groups.push({repo:r, from:start, to:cols.length - 1});
+      });
+      function L(k){ return LANE[k.indexOf("|") > 0 ? k.split("|")[1] : k]; }
+      function key(r, k){ return r.id ? r.id + "|" + k : k; }
+      /* real branch names for the selected path: [role, prefix, name] */
+      var FIXK = {major:"E2ECC-105227", minor:"E2ECC-105310", hotfix:"E2ECC-105402"}[state.down];
+      var NAMES = {feat:["story","feat/","E2ECC-105018"], featA:["story A","feat/","E2ECC-105141"], featB:["story B","feat/","E2ECC-105142"],
+        epic:["epic","epic/","E2ECC-105100"], develop:["","","develop"], master:["production","","master"],
+        rcx1:["RC_X+1",REL.next.pre,REL.next.name], rcx:["RC_X",REL.cur.pre,REL.cur.name], fix:["bug","fix/",FIXK]};
+      if(state.down === "minor" && state.up === "epic"){ NAMES.featA[2] = "E2ECC-105311"; NAMES.featB[2] = "E2ECC-105312"; NAMES.epic[2] = "E2ECC-105300"; }
+      var MULTI = state.multi || nr;   /* compact labels and tags: multi-repository or narrow screen */
+      function NM(k){
+        var n = NAMES[k.indexOf("|") > 0 ? k.split("|")[1] : k];
+        if(!MULTI) return n;
+        /* multi-repository: compact labels (ticket number, RC version) to keep two repositories readable */
+        var sh = n[2].replace(/^E2ECC-/, "");
+        if(n[1].indexOf("RC_") === 0) sh = n[1].replace(/_$/, "");
+        return ["", "", sh];
+      }
+      function tagTxt(t){ return MULTI ? t.replace(/^(RC|REL)_\d+\.\d+_V0\.\d+\./, "$1 …") : t; }
+      /* tags are long (RC_26.8_V0.2608.18.2): each repository keeps a tag column on its right,
+         tags of inner lanes reach it with a dotted leader */
+      var fs = 10, TAGW = MULTI ? 104 : 200, nG = groups.length, perG = base.length;
+      var lblW = Math.max.apply(null, cols.map(function(k){ var n = NM(k); return (n[1] + n[2]).length; })) * fs * 0.62;
+      var padL = Math.round(lblW/2) + 8, SEP = padL + 22;
+      var fixedW = padL + nG*TAGW + (nG - 1)*SEP, slots = Math.max(1, nG*(perG - 1));
+      /* multi-repository labels alternate on two rows, so lanes can be closer */
+      var SP = Math.max(Math.max(lblW/2 + 8, 34), Math.min(160, ((avail || 0) - fixedW) / slots));
+      var STAG = SP < lblW + 8;   /* names alternate on two rows when they would touch */
+      WIDTH = Math.max(avail || 0, Math.round(fixedW + slots*SP));
+      var X = {}, gRight = {}, xx = padL;
+      groups.forEach(function(g, gi){
+        for(var c = g.from; c <= g.to; c++){ X[cols[c]] = xx; if(c < g.to) xx += SP; }
+        for(c = g.from; c <= g.to; c++) gRight[cols[c]] = X[cols[g.to]];
+        g.sepX = X[cols[g.to]] + TAGW + SEP/2 - 4;
+        xx = X[cols[g.to]] + TAGW + SEP;
+      });
+      var faint = {}; (d.faint||[]).forEach(function(k){ repos.forEach(function(r){ faint[key(r, k)] = 1; }); });
+      /* captions need room on screen even when the graph is scaled down */
+      var scE = avail ? Math.min(1, avail / WIDTH) : 1;
+      IROW = Math.max(IROW, 44 / scE); LGAP = Math.max(LGAP, 56 / scE);
+
+      var top = state.multi ? 20 : 0, hh = top + (STAG ? 38 : 25), hd = "";
+      if(state.multi){
+        groups.forEach(function(g, gi){
+          var cx = (X[cols[g.from]] + X[cols[g.to]]) / 2;
+          hd += '<text x="'+cx+'" y="13" text-anchor="middle" style="font-family:var(--sans);font-size:12px;font-weight:800;fill:var(--git-lane-label)">'+esc(g.repo.name)+'</text>';
+          if(gi) hd += '<line x1="'+groups[gi-1].sepX+'" y1="2" x2="'+groups[gi-1].sepX+'" y2="'+hh+'" stroke-width="1" stroke-dasharray="3 4" style="stroke:var(--git-backmerge)"/>';
+        });
+      }
+      /* a branch created during the walkthrough only gets its header once it exists */
+      var openAt = {};
+      steps.forEach(function(st, n){ (st.open||[]).forEach(function(k0){ if(openAt[k0] == null) openAt[k0] = n; }); });
+      head.innerHTML = '<svg viewBox="0 0 '+WIDTH+' '+hh+'" aria-hidden="true">' + hd + cols.map(function(k){
+        var n = NM(k), t = "", bk = k.indexOf("|") > 0 ? k.split("|")[1] : k, oa = used[bk] && d.init.some(function(o){ return o.lane === bk; }) ? -1 : (openAt[bk] != null ? openAt[bk] : -1);
+        var ny = STAG ? top + (cols.indexOf(k) % 2 ? 26 : 13) : top + 13;
+        t += '<text x="'+X[k]+'" y="'+ny+'" text-anchor="middle" style="font-family:var(--mono);font-size:'+fs+'px;font-weight:500;fill:var(--git-lane-label);white-space:pre">'+esc(n[1] + n[2])+'</text>';
+        return '<g class="lh" data-o="'+oa+'">' + t + '<rect x="'+(X[k]-14)+'" y="'+(hh-6)+'" width="28" height="4" rx="2" style="fill:var('+L(k).c+')"/></g>';
+      }).join("") + '</svg>';
+
+      var out = [], alive = {}, lastY = {}, y = TOP, heads = [], initY = [];
+      function seg(k, y1, y2, s){
+        out.push('<line class="el" data-s="'+s+'" x1="'+X[k]+'" y1="'+y1+'" x2="'+X[k]+'" y2="'+y2+'" stroke-width="6" stroke-linecap="round" style="stroke:var('+L(k).c+')"'+(faint[k]?' stroke-dasharray="2 9"':'')+'/>');
+      }
+      function dot(k, yy, s){
+        out.push('<circle class="el" data-s="'+s+'" cx="'+X[k]+'" cy="'+yy+'" r="'+(state.multi?7:9)+'" style="fill:var('+L(k).c+');stroke:var(--panel-bg)" stroke-width="3"/>');
+      }
+      function ring(k, yy, s){
+        out.push('<circle class="el" data-s="'+s+'" cx="'+X[k]+'" cy="'+yy+'" r="'+(state.multi?5:6)+'" style="fill:var(--panel-bg);stroke:var('+L(k).c+')" stroke-width="3"/>');
+      }
+      function tagAt(tk, txt, s, ty){
+        if(ty == null) ty = lastY[tk]; if(ty == null) return;
+        txt = tagTxt(txt);
+        var w = Math.round(txt.length*6.7 + 16), tx = gRight[tk] + 18, lead = "";
+        /* next to its own lane when it fits before the next lane, so it never seems to sit on another branch */
+        var nx = Infinity; cols.forEach(function(c){ if(alive[c] && X[c] > X[tk] && X[c] < nx && gRight[c] === gRight[tk]) nx = X[c]; });
+        if(nx - X[tk] >= w + 34) tx = X[tk] + 18;
+        if(X[tk] < gRight[tk]) lead = '<line x1="'+(X[tk]+11)+'" y1="'+ty+'" x2="'+(tx-8)+'" y2="'+ty+'" stroke-width="1.5" stroke-dasharray="2 4" style="stroke:var(--git-tag-bg)"/>';
+        out.push('<g class="el" data-s="'+s+'">'+lead+'<path d="M'+(tx-8)+' '+ty+' L'+tx+' '+(ty-10)+' L'+tx+' '+(ty+10)+'z" style="fill:var(--git-tag-bg)"/><rect x="'+tx+'" y="'+(ty-10)+'" width="'+w+'" height="20" rx="4" style="fill:var(--git-tag-bg)"/><text x="'+(tx+w/2)+'" y="'+(ty+4)+'" text-anchor="middle" style="font-family:var(--mono);font-size:11px;font-weight:500;fill:var(--git-tag-ink)">'+esc(txt)+'</text></g>');
+      }
+      /* starting state: one commit per row, master first (the version in production) */
+      d.init.forEach(function(o, j){
+        if(j){ var pv = y; y += IROW; Object.keys(alive).forEach(function(k){ seg(k, pv, y, -1); }); }
+        initY.push(y);
+        repos.forEach(function(r){
+          var k = key(r, o.lane);
+          /* the branch already exists: its line comes in from the top edge of the view */
+          seg(k, -4000, y, -1);
+          dot(k, y, -1); alive[k] = 1; lastY[k] = y;
+          if(o.tag) tagAt(k, o.tag, -1);
+        });
+      });
+      /* measure each title in the timeline column, so a wrapped title gets a taller row */
+      var avail0 = gv.clientWidth ? gv.clientWidth - 20 : WIDTH, sc0 = Math.min(1, avail0 / WIDTH) || 1;
+      tl.style.transform = ""; tl.innerHTML = steps.map(function(st){ return '<div class="tl-item'+(isTool(st)?' tool':'')+'" style="visibility:hidden;position:relative;transform:none;margin-right:8px"><span class="tl-t">'+tlTitle(st)+'</span></div>'; }).join("");
+      var th = Array.prototype.map.call(tl.querySelectorAll(".tl-t"), function(e){ return e.offsetHeight / sc0; });
+      rowY = [];
+      steps.forEach(function(st, i){
+        var hk = null, hy = null, prev = y;
+        var acting = repos.filter(function(r){
+          if(state.multi && st.only && st.only !== r.id) return false;
+          /* a repository only takes part if the branches involved exist there */
+          if(st.links && st.links.length) return st.links.every(function(l){ return (st.open||[]).indexOf(l[0]) >= 0 || lastY[key(r, l[0])] != null; });
+          if(st.focus) return alive[key(r, st.focus)] != null;
+          if(st.tag) return alive[key(r, st.tag[0])] != null;
+          return true;
+        });
+        var git = (st.links && st.links.length && acting.length) || st.retire;
+        /* a new level (feature, release) opens with a caption */
+        var rh = git ? GROW : PROW;
+        if(!i || st.lvl !== steps[i-1].lvl){
+          var capY = prev + (i ? Math.max(th[i-1]/2 + 22/sc0, LGAP*0.55) : LGAP*0.55);
+          heads.push({y: capY, lvl: st.lvl, pivot: i > 0});
+          if(i) out.push('<line x1="0" x2="'+WIDTH+'" y1="'+capY+'" y2="'+capY+'" stroke-width="1.5" stroke-dasharray="4 6" style="stroke:var(--pivot-line)" opacity=".6"/>');
+          y = capY + Math.max(rh - 8, th[i]/2 + 24/sc0);
+        } else {
+          y = prev + Math.max(rh, (th[i-1] + th[i])/2 + 14/sc0);
+        }
+        rowY.push(y);
+        Object.keys(alive).forEach(function(k){ seg(k, prev, y, i); });
+        if(st.links && st.links.length && acting.length){
+          acting.forEach(function(r){
+            (st.open||[]).forEach(function(k0){ alive[key(r, k0)] = 1; });
+            st.links.forEach(function(l){
+              var from = key(r, l[0]), to = key(r, l[1]), dash = l[2] === "dash" || l[2] === "auto";
+              var x1 = X[from], x2 = X[to], y1 = Math.max(lastY[from] != null ? lastY[from] : prev, y - GROW*0.9), y2 = y - 11;
+              var col = dash ? "--git-backmerge" : L(to).c;
+              out.push('<path class="el'+(dash?'':' solid')+'"'+(dash?'':' pathLength="1"')+' data-s="'+i+'" d="M'+x1+' '+y1+' C '+x1+' '+(y1 + (y2-y1)*0.55)+', '+x2+' '+(y2 - (y2-y1)*0.55)+', '+x2+' '+y2+'" fill="none" stroke-width="3" style="stroke:var('+col+')"'+(dash?' stroke-dasharray="6 5"':'')+' marker-end="url(#wm'+(dash?'d':'n')+')"/>');
+              dot(to, y, i); lastY[to] = y;
+            });
+            (st.close||[]).forEach(function(k0){ delete alive[key(r, k0)]; });
+          });
+          hk = key(acting[0], st.links[0][1]); hy = y;
+          if(st.tag) acting.forEach(function(r){ tagAt(key(r, st.tag[0]), st.tag[1], i); });
+        } else if(st.retire){
+          repos.forEach(function(r){
+            var rk = key(r, st.retire);
+            if(alive[rk] == null) return;
+            delete alive[rk];
+            out.push('<g class="el" data-s="'+i+'"><line x1="'+(X[rk]-9)+'" y1="'+(y-9)+'" x2="'+(X[rk]+9)+'" y2="'+(y+9)+'" stroke-width="3" style="stroke:var(--git-backmerge)"/><line x1="'+(X[rk]+9)+'" y1="'+(y-9)+'" x2="'+(X[rk]-9)+'" y2="'+(y+9)+'" stroke-width="3" style="stroke:var(--git-backmerge)"/></g>');
+          });
+          hk = key(repos[0], st.focus || "master"); hy = y;
+        } else if(st.tag && acting.length){
+          /* a tag labels the branch head: marked on this row so it stays level with its step */
+          acting.forEach(function(r){ var tk = key(r, st.tag[0]); ring(tk, y, i); tagAt(tk, st.tag[1], i, y); });
+          hk = key(acting[0], st.tag[0]); hy = y;
+        } else if(st.focus && acting.length){
+          hk = key(acting[0], st.focus); hy = y;
+        } else {
+          var fk2 = key(repos[0], (st.focus || (st.tag && st.tag[0]) || (st.links && st.links[0][1]) || "master"));
+          if(alive[fk2] != null){ hk = fk2; hy = y; }
+        }
+        if(hk != null) out.push('<circle class="halo" data-h="'+i+'" cx="'+X[hk]+'" cy="'+hy+'" r="16" fill="none" stroke-width="2.5" style="stroke:var('+(st.gate ? "--git-halo-gate" : "--git-halo")+');display:none"/>');
+      });
+      var lastI = steps.length - 1;
+      Object.keys(alive).forEach(function(k){ seg(k, y, y + 30, lastI); });
+      var H = y + 40;
+      track.innerHTML = '<svg class="wg" viewBox="0 0 '+WIDTH+' '+H+'" role="img" aria-label="Git graph for the selected path, one row per step of the timeline. A commit only appears when a branch, a merge or a tag happens."><defs>'+
+        '<marker id="wmn" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1L9 5L1 9z" style="fill:var(--git-arrow)" opacity=".55"/></marker>'+
+        '<marker id="wmd" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1L9 5L1 9z" style="fill:var(--git-backmerge)"/></marker>'+
+        '</defs>'+out.join("")+'</svg>';
+      els = Array.prototype.slice.call(track.querySelectorAll(".el"));
+      halos = Array.prototype.slice.call(track.querySelectorAll(".halo"));
+
+      /* timeline column: same rows, same scale as the graph */
+      var svg = track.querySelector("svg"), sw = svg.getBoundingClientRect().width;
+      scale = sw ? sw / WIDTH : 1;
+      renderJira(); syncHead();
+      function px(v){ return Math.round(v*scale) + "px"; }
+      var html = '<div class="tl-rail" style="top:'+px(initY[0])+';height:'+px(y - initY[0])+'"></div>';
+      html += '<p class="tl-start" style="top:'+px((initY[0] + initY[initY.length-1])/2)+'">Starting point</p>';
+      heads.forEach(function(h){
+        var txt = h.lvl === "F"
+          ? (state.down === "major" ? "Feature cycle" : state.down === "minor" ? "Feature cycle, from " + REL.cur.short : "Feature cycle, from master")
+          : "Release process";
+        var piv = "";
+        html += '<p class="tl-head" style="top:'+px(h.y)+'">'+piv+'<span class="tl-hx">'+txt+'</span></p>';
+      });
+      steps.forEach(function(st, i){
+        html += '<div class="tl-item'+(st.gate?' gate':'')+(st.opt?' opt':'')+(st.mst?' mst':'')+(isTool(st)?' tool':'')+'" data-i="'+i+'" style="top:'+px(rowY[i])+'"><span class="tl-t">'+tlTitle(st)+'</span></div>';
+      });
+      tl.innerHTML = html;
+      tl.style.height = px(H);
+      scrolly.style.height = (stage.offsetHeight + Math.max(0, steps.length - 1)*PX + 24) + "px";
+      active = -1;
+      var p = progress();
+      set(Math.round(p)); place(p);
+    }
+
+    /* Jira tickets of the selected path: m = steps working on the ticket; a ticket shows up at its first step */
+    var jiraEl = document.getElementById("jira"), jiraList = [], jiraShown = {};
+    function jiraFor(){
+      if(state.down === "minor" && state.up === "epic") return [
+        {k:"E2ECC-105300", type:"Epic", sum:"Large project in the minor release", br:"epic/E2ECC-105300", m:function(st){ return st.lvl === "F" && !/^Story/.test(st.title); }},
+        {k:"E2ECC-105311", type:"Story", sum:"Story A, on the request module", br:"feat/E2ECC-105311", m:function(st){ return /^Story A/.test(st.title); }},
+        {k:"E2ECC-105312", type:"Story", sum:"Story B, on the facility module", br:"feat/E2ECC-105312", m:function(st){ return /^Story B/.test(st.title); }}];
+      if(state.down === "minor") return [{k:"E2ECC-105310", type:"Story", sum:"Standard story for the minor release", br:"fix/E2ECC-105310", m:function(st){ return st.lvl === "F"; }}];
+      if(state.down === "hotfix") return [{k:"E2ECC-105402", type:"Bug", sum:"Critical production incident (ServiceNow)", br:"fix/E2ECC-105402", m:function(st){ return st.lvl === "F"; }}];
+      var rel = {k:"E2ECC-105227", type:"Bug", sum:"Regression found during NRT", br:"fix/E2ECC-105227", m:function(st){ return /Bug fixing/.test(st.title); }};
+      if(state.up === "epic") return [
+        {k:"E2ECC-105100", type:"Epic", sum:"Large project, spans request and facility", br:"epic/E2ECC-105100", m:function(st){ return st.lvl === "F" && !/^Story/.test(st.title); }},
+        {k:"E2ECC-105141", type:"Story", sum:"Story A, on the request module", br:"feat/E2ECC-105141", m:function(st){ return /^Story A/.test(st.title); }},
+        {k:"E2ECC-105142", type:"Story", sum:"Story B, on the facility module", br:"feat/E2ECC-105142", m:function(st){ return /^Story B/.test(st.title); }}, rel];
+      return [{k:"E2ECC-105018", type:"Story", sum:"Standard story, on the request module", br:"feat/E2ECC-105018", m:function(st){ return st.lvl === "F"; }}, rel];
+    }
+    /* Jira status of a ticket at step i, read from the timeline */
+    function statusOf(st){
+      var t = st.title;
+      if(/Ready/.test(t)) return "Ready for Development";
+      if(/Integration Testing/.test(t)) return "Integration Testing";
+      if(/In Progress|feature branch|fix branch|Epic branch/.test(t)) return "In Progress";
+      if(/Code Review/.test(t)) return "Code Review";
+      if(/Testing|tests/.test(t)) return "Testing";
+      if(/Merge|merge/.test(t)) return "Merge";
+      return null;
+    }
+    function renderJira(){
+      jiraList = jiraFor(); jiraShown = {};
+      jiraList.forEach(function(j){
+        j.first = -1; j.last = -1;
+        steps.forEach(function(st, n){ if(j.m(st)){ if(j.first < 0) j.first = n; j.last = n; } });
+      });
+      jiraEl.innerHTML = '<div class="jcard-h"><b>Jira</b><span>tickets of this path</span></div><p class="jcard-empty">No ticket raised yet.</p>' + jiraList.map(function(j, n){
+        var tc = j.type === "Bug" ? " bug" : j.type === "Epic" ? " epic" : "";
+        return '<div class="jk wait" data-j="'+n+'"><div class="jk-top"><code>'+j.k+'</code><span class="jk-type'+tc+'">'+j.type+'</span></div>'+
+          '<p class="jk-sum">'+esc(j.sum)+'</p><div class="jk-bot"><span class="jk-br">'+esc(j.br)+'</span><span class="jk-st"></span></div></div>';
+      }).join("");
+    }
+    function markJira(i){
+      var st = steps[i]; if(!st) return;
+      var any = false, cards = jiraEl.querySelectorAll(".jk"), before = [];
+      /* remember where the visible cards are, so they can slide right when a new one comes in on the left */
+      cards.forEach(function(e, q){ before[q] = e.classList.contains("wait") ? null : e.getBoundingClientRect().left; });
+      cards.forEach(function(e){
+        var n = Number(e.getAttribute("data-j")), j = jiraList[n];
+        var shown = j.first >= 0 && i >= j.first;
+        e.classList.toggle("wait", !shown);
+        if(shown && !jiraShown[n]) flash(e, "new");
+        jiraShown[n] = shown;
+        e.style.order = String(-j.first);
+        if(!shown) return;
+        any = true;
+        var status = "Closed";
+        if(i <= j.last){ status = "In Progress"; for(var q = j.first; q <= i; q++) if(j.m(steps[q])){ var s0 = statusOf(steps[q]); if(s0) status = s0; } }
+        e.querySelector(".jk-st").textContent = status;
+        e.classList.toggle("on", !!j.m(st));
+        e.classList.toggle("done", i > j.last);
+      });
+      jiraEl.querySelector(".jcard-empty").style.display = any ? "none" : "";
+      if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      cards.forEach(function(e, q){
+        if(before[q] == null || e.classList.contains("wait")) return;
+        var dx = before[q] - e.getBoundingClientRect().left; if(Math.abs(dx) < 1) return;
+        e.style.transition = "none"; e.style.transform = "translateX(" + dx + "px)";
+        void e.offsetWidth;
+        e.style.transition = "transform .45s cubic-bezier(.2,.8,.2,1), border-color .25s ease, background .25s ease, opacity .25s ease";
+        e.style.transform = "";
+      });
+    }
+    /* the timeline body starts exactly where the graph body starts */
+    function syncHead(){
+      head.style.paddingBottom = "";
+      tlHead.style.height = "auto";
+      var need = document.getElementById("tlLeg").offsetHeight + 1;
+      if(!gv.clientHeight){ tlHead.style.height = need + "px"; return; }
+      var d = gv.getBoundingClientRect().top - tlBody.getBoundingClientRect().top + tlHead.offsetHeight;
+      if(d < need){ head.style.paddingBottom = (2 + need - d) + "px"; d = need; }
+      tlHead.style.height = Math.round(d) + "px";
+    }
+    function flash(el, cls){ if(!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+    function set(i){
+      if(i === active || !steps.length) return;
+      var forward = i > active;
+      active = i;
+      var svgEl = track.querySelector("svg"); if(svgEl) svgEl.classList.toggle("fwd", forward);
+      els.forEach(function(e){
+        var s = Number(e.getAttribute("data-s"));
+        e.classList.toggle("fut", s > i);
+        e.classList.toggle("past", s < i);
+        e.classList.toggle("now", s === i);
+      });
+      halos.forEach(function(h){ h.style.display = Number(h.getAttribute("data-h")) === i ? "" : "none"; });
+      tl.querySelectorAll(".tl-item").forEach(function(it){
+        var k = Number(it.getAttribute("data-i"));
+        it.classList.toggle("on", k === i); it.classList.toggle("done", k < i);
+      });
+      renderEnv(i);
+      markJira(i);
+      head.querySelectorAll(".lh").forEach(function(g){ g.classList.toggle("wait", Number(g.getAttribute("data-o")) > i); });
+    }
+    /* the cursor stays still; timeline and graph slide together under it, following the scroll */
+    function yAt(p){
+      if(!rowY.length) return 0;
+      var i = Math.floor(p), f = p - i;
+      if(i >= rowY.length - 1) return rowY[rowY.length - 1];
+      return rowY[i] + (rowY[i+1] - rowY[i])*f;
+    }
+    function place(p){
+      if(p == null) p = Math.max(active, 0);
+      var h = tlBody.clientHeight || gv.clientHeight; if(!h) return;
+      /* no blank space above the starting point: the content stays pinned to the top
+         and the cursor follows the active step down until it reaches its resting height */
+      var yp = yAt(p)*scale;
+      var off = Math.round(Math.min(Math.round(h*0.42) - yp, 6));
+      var cy = Math.round(off + yp);
+      tlCur.style.top = cy + "px"; gCur.style.top = cy + "px";
+      track.style.transform = tl.style.transform = "translateY("+off+"px)";
+    }
+    function stageTop(){ return parseFloat(getComputedStyle(stage).top) || 0; }
+    function progress(){
+      if(!steps.length) return 0;
+      var p = (stageTop() - scrolly.getBoundingClientRect().top) / PX;
+      return Math.max(0, Math.min(steps.length - 1, p));
+    }
+    var ticking = false;
+    function onScroll(){
+      if(ticking) return; ticking = true;
+      requestAnimationFrame(function(){
+        ticking = false;
+        var sec = document.getElementById("walkthrough").getBoundingClientRect();
+        if(sec.bottom < 0 || sec.top > window.innerHeight) return;
+        var p = progress();
+        var i = Math.round(p);
+        if(i !== active){ set(i); flash(tlCur, "fire"); }
+        place(p);
+      });
+    }
+    tl.addEventListener("click", function(e){
+      var it = e.target.closest(".tl-item"); if(!it) return;
+      var i = Number(it.getAttribute("data-i"));
+      window.scrollTo({top: window.scrollY + scrolly.getBoundingClientRect().top - stageTop() + i*PX + 1, behavior: "smooth"});
+    });
+    document.addEventListener("scroll", onScroll, true);
+    var rt = null;
+    window.addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(function(){ var a = active; build(); if(a >= 0) place(progress()); }, 120); });
+
+    build();
+    return {
+      setPath: function(up, down){ state.up = up; state.down = down; build(); },
+      setMulti: function(v){ state.multi = !!v; build(); },
+      refresh: function(){ build(); },
+      top: function(){ return scrolly; }
+    };
+  })();
+
+  /* ---------- path intro ---------- */
+  var INTRO = {
+    major_story:{title:"Standard story, then monthly release",
+      desc:["The default path for new features. Each story is built and validated on its own branch before it reaches develop.",
+            "Once a month, develop is cut into a release candidate, stabilised, validated as a frozen package and deployed to production."],
+      facts:[["Cadence","Monthly [calendar TBD]"],["Starts from","`develop`"],["Branches","`feature/*`, `rc`, `bugfix/*`"],["Release tag","vX.Y.0"]],
+      gates:[["Cut-off"],["Package freeze"],["CRB"],["Business go / no-go",1]]},
+    major_epic:{title:"Large project, then monthly release",
+      desc:["For projects too large for a single story. Stories are integrated on a dedicated epic branch, kept in sync with develop, and accepted end to end before the epic joins develop.",
+            "From there, the release follows the monthly major path. [Epic branch or feature flags? To be confirmed]"],
+      facts:[["Cadence","Monthly, the epic joins the next cut-off"],["Starts from","`develop`, then `epic/*`"],["Branches","`epic/*`, `feature/*`, `rc`, `bugfix/*`"],["Release tag","vX.Y.0"]],
+      gates:[["Cut-off"],["Package freeze"],["CRB"],["Business go / no-go",1]]},
+    minor:{title:"Minor release",
+      desc:["A weekly release for fixes and small changes to what is already in production. Work starts from the current rc, which matches production after the last go live, so nothing from the next major comes along.",
+            "There is no cut-off. Once live, the change is merged back into develop."],
+      facts:[["Cadence","Weekly [day TBD]"],["Starts from","the current `rc`"],["Branches","`bugfix/*`, `rc`"],["Release tag","vX.Y.1"]],
+      gates:[["Package freeze"],["CRB"],["Business go / no-go",1]]},
+    hotfix:{title:"Hotfix",
+      desc:["The emergency path for a production incident that can't wait for the next minor release. The fix starts from master, goes through a targeted validation and a CRB, then reaches production.",
+            "It is then carried over to develop and to the open rc, so it is never lost. [Criteria for a hotfix rather than a minor: TBD]"],
+      facts:[["Cadence","On demand"],["Starts from","`master`"],["Branches","`hotfix/*`"],["Release tag","Patch tag"],["Carried over to","`develop`, `rc` if open"]],
+      gates:[["Package freeze [TBD]"],["CRB [fast-track?]"]]}
+  };
+  var pathTitle = document.getElementById("pathTitle");
+  function renderIntro(){
+    var t = PATH.down === "hotfix" ? "Hotfix" : ({story:"Standard story", epic:"Large project"})[PATH.up] + ", then " + (PATH.down === "major" ? "monthly" : "minor") + " release";
+    pathTitle.textContent = t;
+    document.title = t + " · Git model and release cycle";
+  }
+  renderIntro(false);
+  /* the path name shows in the bar only once the page title has scrolled away */
+  if("IntersectionObserver" in window){
+    var sumEl = document.getElementById("pathSummary");
+    new IntersectionObserver(function(en){ sumEl.classList.toggle("off", en[0].isIntersecting); }, {rootMargin:"-116px 0px 0px 0px"}).observe(pathTitle);
+  }
+
+  /* ---------- view toggles ---------- */
+  var narrow = matchMedia("(max-width: 980px)");
+  function applyViews(){
+    var on = 0;
+    document.querySelectorAll(".vt").forEach(function(b){
+      var v = document.getElementById(b.getAttribute("data-view")), p = b.getAttribute("aria-pressed") === "true";
+      v.classList.toggle("off", !p); if(p) on++;
+    });
+    /* a single active view takes the whole panel */
+    document.getElementById("views").classList.toggle("one", on < 2);
+    /* the panel keeps its full width, so nothing else moves */
+    document.getElementById("scrolly").classList.add("two");
+    W.refresh();
+  }
+  document.querySelectorAll(".vt").forEach(function(b){
+    b.addEventListener("click", function(){
+      var pressed = b.getAttribute("aria-pressed") === "true", all = document.querySelectorAll(".vt"), count = 0;
+      all.forEach(function(x){ if(x.getAttribute("aria-pressed") === "true") count++; });
+      if(narrow.matches){ all.forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); }); }
+      else if(pressed && count === 1) return;
+      else b.setAttribute("aria-pressed", pressed ? "false" : "true");
+      applyViews();
+    });
+  });
+  function enforceSingle(){
+    if(!narrow.matches) return;
+    var on = Array.prototype.filter.call(document.querySelectorAll(".vt"), function(x){ return x.getAttribute("aria-pressed") === "true"; });
+    if(on.length > 1) on.slice(1).forEach(function(x){ x.setAttribute("aria-pressed", "false"); });
+    if(on.length === 0) document.querySelector(".vt").setAttribute("aria-pressed", "true");
+  }
+  function onNarrow(){ enforceSingle(); applyViews(); }
+  if(narrow.addEventListener) narrow.addEventListener("change", onNarrow); else if(narrow.addListener) narrow.addListener(onNarrow);
+  enforceSingle();
+  applyViews();
+  document.getElementById("multiRepo").addEventListener("change", function(){ W.setMulti(this.checked); });
+
+  /* ---------- global path picker ---------- */
+  var upNote = document.getElementById("pathNote"), summary = document.getElementById("pathSummary");
+  var UPN = {story:"Standard story", epic:"Large project"}, DOWNN = {major:"Monthly release", minor:"Minor release", hotfix:"Hotfix"};
+  function applyPath(){
+    var upOff = PATH.down === "hotfix";
+    document.querySelectorAll('.pathbar [data-pick="up"] button').forEach(function(x){ x.disabled = upOff; });
+    upNote.hidden = !upOff;
+    summary.textContent = upOff ? DOWNN[PATH.down] : UPN[PATH.up] + ", then " + DOWNN[PATH.down].toLowerCase();
+    var keep = curId;
+    renderIntro();
+    renderMatrix(keep);
+    W.setPath(PATH.up, PATH.down);
+    var wr = document.getElementById("walkthrough").getBoundingClientRect();
+    if(wr.top < 0) window.scrollTo(0, window.scrollY + W.top().getBoundingClientRect().top - 130);
+  }
+  document.querySelectorAll(".pathbar .seg").forEach(function(seg){
+    seg.addEventListener("click", function(e){
+      var b = e.target.closest("button"); if(!b || b.disabled) return;
+      PATH[seg.getAttribute("data-pick")] = b.getAttribute("data-v");
+      seg.querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      applyPath();
+    });
+  });
+
+  /* ---------- theme ---------- */
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem("gitflow-theme"); if(saved === "light" || saved === "dark") root.setAttribute("data-theme", saved); } catch(e){}
+  document.getElementById("themeBtn").addEventListener("click", function(){
+    var cur = root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("gitflow-theme", next); } catch(e){}
+  });
+
+})();
+</script>
+</body>
+</html>
+
+</body></html>
