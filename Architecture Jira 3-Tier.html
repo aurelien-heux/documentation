@@ -1,0 +1,223 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Architecture Jira 3-Tier</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600&display=swap">
+<style>
+/* Layout: single reading column, stepped 3-board flow, twin cards that stack on mobile, capacity bar as the visual anchor of the prioritization section */
+:root {
+  --bg: #f6f7fb; --surface: #ffffff; --fg: #1b2133; --muted: #5a6278; --line: #e1e4ee;
+  --accent: #2f5bd8; --accent-soft: #e6ecfc;
+  --cos: #0f8a68; --cos-soft: #e3f4ee;
+  --b-init: #2f5bd8; --b-bau: #c07a12; --b-tech: #0f8a68; --b-inc: #c2413b;
+  --flow-bg: #141a2b; --flow-fg: #e8ecf7; --flow-arrow: #f2a93b; --flow-2: #7fe0bd; --flow-3: #a9c1ff;
+  --on-bar: #ffffff;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10141f; --surface: #181e2c; --fg: #e6e9f2; --muted: #9aa2b8; --line: #2a3246;
+  --accent: #7d9bf5; --accent-soft: #1f2a48; --cos: #4cc9a0; --cos-soft: #15322a;
+  --b-init: #4f74e0; --b-bau: #b9790f; --b-tech: #1c9874; --b-inc: #c24a44;
+  --flow-bg: #0a0d16; --flow-fg: #e8ecf7; --flow-arrow: #f2b55a; --flow-2: #7fe0bd; --flow-3: #a9c1ff;
+  --on-bar: #ffffff; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #10141f; --surface: #181e2c; --fg: #e6e9f2; --muted: #9aa2b8; --line: #2a3246;
+  --accent: #7d9bf5; --accent-soft: #1f2a48; --cos: #4cc9a0; --cos-soft: #15322a;
+  --b-init: #4f74e0; --b-bau: #b9790f; --b-tech: #1c9874; --b-inc: #c24a44;
+  --flow-bg: #0a0d16; --flow-fg: #e8ecf7; --flow-arrow: #f2b55a; --flow-2: #7fe0bd; --flow-3: #a9c1ff;
+  --on-bar: #ffffff; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.6;
+  padding-block: 2rem 3rem; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 2.25rem }
+header { border-bottom: 1px solid var(--line); padding-bottom: 1.5rem; display: flex; flex-direction: column; gap: .5rem }
+.eyebrow { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent) }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.6rem, 5vw, 2.2rem); line-height: 1.2; margin: 0; text-wrap: balance }
+.subtitle { color: var(--muted); margin: 0; max-width: 65ch }
+h2 { font-size: 1.2rem; margin: 0; text-wrap: balance }
+h3 { margin: 0; font-size: 1rem }
+section { display: flex; flex-direction: column; gap: 1rem }
+.lede { margin: 0; max-width: 65ch; color: var(--muted) }
+code { font-family: var(--font-mono); font-size: .85em; background: var(--accent-soft); padding: .1em .35em; border-radius: 4px }
+.principle { border-left: 3px solid var(--accent); padding: .25rem 0 .25rem 1.25rem; max-width: 70ch; gap: .4rem }
+.principle p { margin: 0 }
+.flow { background: var(--flow-bg); color: var(--flow-fg); border-radius: 12px; padding: 1.25rem; font-family: var(--font-mono); font-size: .85rem; display: flex; flex-direction: column; gap: .9rem }
+.step { display: grid; grid-template-columns: 12rem 1fr; gap: .25rem 1rem; align-items: baseline }
+.step:nth-child(2) { margin-left: 1rem } .step:nth-child(3) { margin-left: 2rem }
+.step .lvl { font-weight: 500; white-space: nowrap }
+.step .lvl::after { content: " →"; color: var(--flow-arrow) }
+.step .d1 { opacity: .85 } .step .d2 { color: var(--flow-2) } .step .d3 { color: var(--flow-3) }
+@media (max-width: 600px) { .step { grid-template-columns: 1fr } .step:nth-child(2), .step:nth-child(3) { margin-left: 0 } }
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem; min-width: 0; display: flex; flex-direction: column; gap: .75rem }
+.card-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; flex-wrap: wrap; padding-bottom: .6rem; border-bottom: 1px solid var(--line) }
+.tag { font-size: .72rem; font-weight: 600; padding: .2rem .55rem; border-radius: 99px }
+.tag.gov { background: var(--accent-soft); color: var(--accent) }
+.tag.exe { background: var(--cos-soft); color: var(--cos) }
+dl { margin: 0; display: grid; gap: .6rem }
+dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600 }
+dd { margin: 0 }
+.chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .3rem }
+.chip { font-family: var(--font-mono); font-size: .75rem; border: 1px solid var(--line); padding: .1rem .45rem; border-radius: 4px }
+.table-scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px }
+table { width: 100%; border-collapse: collapse; min-width: 620px }
+th, td { text-align: left; padding: .85rem 1rem; vertical-align: top; font-size: .9rem }
+th { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--line) }
+tr + tr td { border-top: 1px solid var(--line) }
+.dot { display: inline-block; width: .6rem; height: .6rem; border-radius: 2px; margin-right: .45rem; vertical-align: .05em }
+.d-init { background: var(--b-init) } .d-bau { background: var(--b-bau) } .d-tech { background: var(--b-tech) } .d-inc { background: var(--b-inc) }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap }
+
+/* Capacity bar */
+.capacity { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem; display: flex; flex-direction: column; gap: .9rem }
+.cap-row { display: flex; flex-direction: column; gap: .35rem }
+.cap-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600 }
+.bar { display: flex; height: 2.1rem; border-radius: 6px; overflow: hidden; font-family: var(--font-mono); font-size: .75rem; color: var(--on-bar); font-variant-numeric: tabular-nums }
+.bar > span { display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden; min-width: 0 }
+.bar > span + span { border-left: 2px solid var(--surface) }
+.legend { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; font-size: .85rem }
+.wip { display: flex; gap: .35rem; flex-wrap: wrap }
+.slot { width: 2.1rem; height: 2.1rem; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: .7rem; color: var(--on-bar) }
+.slot.reserve { background: transparent; border: 2px dashed var(--b-inc); color: var(--b-inc) }
+.note { margin: 0; font-size: .82rem; color: var(--muted) }
+
+.rules { display: grid; gap: .75rem; margin: 0; padding: 0; list-style: none }
+.rules li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.15rem; display: grid; gap: .25rem }
+.rules li p { margin: 0; color: var(--muted); font-size: .92rem }
+.loop { border: 1px solid var(--line); border-left: 3px solid var(--b-tech); background: var(--surface); border-radius: 0 10px 10px 0; padding: 1.1rem 1.25rem; display: grid; gap: .4rem }
+.loop p { margin: 0 }
+.benefit p { margin: 0; color: var(--muted); font-size: .92rem }
+.rule-quote { font-style: italic; color: var(--fg) }
+footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line); padding-top: 1rem; text-align: center }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Jira architecture &amp; agility</span>
+    <h1>Prioritization &amp; Kanban board optimization</h1>
+    <p class="subtitle">Separation of concerns: Class of Service on Epics (Board 2), execution by Epic and capacity bucket (Board 3), and an explicit capacity split between business and tech.</p>
+  </header>
+
+  <section class="principle">
+    <h2>Guiding principle</h2>
+    <p>No more complex double matrix. Two decisions are kept apart: <strong>how much capacity</strong> each type of work gets (a quarterly portfolio decision) and <strong>in what order</strong> items are handled inside each type (owned by one person per bucket). Strategic arbitration by cost of delay happens at <strong>Epic</strong> level; the <strong>Team board</strong> only focuses on flow.</p>
+  </section>
+
+  <div class="flow" aria-label="The three board levels">
+    <div class="step"><span class="lvl">BOARD 1 · INITIATIVES</span><span class="d1">Macro view, portfolio &amp; quarterly capacity split</span></div>
+    <div class="step"><span class="lvl">BOARD 2 · EPICS</span><span class="d2">"Class of Service" swimlanes (Expedite, Fixed Date, Standard, Intangible)</span></div>
+    <div class="step"><span class="lvl">BOARD 3 · TEAM</span><span class="d3">Epic swimlanes, ordered by Board 2 rank, with WIP limits per bucket</span></div>
+  </div>
+
+  <section>
+    <h2>Board structure</h2>
+    <div class="pair">
+      <article class="card">
+        <div class="card-head"><h3>Board 2: Epics</h3><span class="tag gov">Governance &amp; arbitration</span></div>
+        <dl>
+          <div><dt>Owned by</dt><dd>Product Owners, Tech Leads, management.</dd></div>
+          <div><dt>Swimlanes</dt><dd>Based on <em>Class of Service</em>
+            <div class="chips"><span class="chip">Expedite</span><span class="chip">Fixed Date</span><span class="chip">Standard</span><span class="chip">Intangible</span></div></dd></div>
+          <div><dt>Role</dt><dd>Decide which initiative work is critical for the organization, using cost of delay (WSJF). Tech initiatives compete here on equal terms.</dd></div>
+          <div><dt>Outcome</dt><dd>The vertical order of Epics updates the global Jira <code>Rank</code> automatically.</dd></div>
+        </dl>
+      </article>
+      <article class="card">
+        <div class="card-head"><h3>Board 3: Team</h3><span class="tag exe">Flow &amp; execution</span></div>
+        <dl>
+          <div><dt>Owned by</dt><dd>Engineering team.</dd></div>
+          <div><dt>Swimlanes</dt><dd>Native mode <code>Base swimlanes on = Epics</code>, including one permanent container Epic per bucket.</dd></div>
+          <div><dt>Role</dt><dd>Run the daily flow without cognitive overload, pulling within each lane's WIP limit.</dd></div>
+          <div><dt>Outcome</dt><dd>Epic lanes sort <strong>automatically</strong> from the Board 2 rank. No JQL to maintain.</dd></div>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Prioritization &amp; capacity allocation</h2>
+    <p class="lede">Comparing a tech story with a business story one by one almost always favours business, because its value is more visible. So the tech vs business trade-off is settled at allocation level, once per quarter, not at ticket level.</p>
+
+    <div class="capacity" aria-label="Example capacity split and WIP limits">
+      <div class="cap-row">
+        <span class="cap-label">Quarterly capacity split (example)</span>
+        <div class="bar">
+          <span style="flex:55;background:var(--b-init)">55%</span>
+          <span style="flex:20;background:var(--b-bau)">20%</span>
+          <span style="flex:15;background:var(--b-tech)">15%</span>
+          <span style="flex:10;background:var(--b-inc)">10%</span>
+        </div>
+        <div class="legend">
+          <span><i class="dot d-init"></i>Initiatives (estimated)</span>
+          <span><i class="dot d-bau"></i>BAU (business)</span>
+          <span><i class="dot d-tech"></i>Tech stories</span>
+          <span><i class="dot d-inc"></i>Incident reserve</span>
+        </div>
+      </div>
+      <div class="cap-row">
+        <span class="cap-label">Translated into WIP on Board 3 (8 items in progress)</span>
+        <div class="wip">
+          <span class="slot" style="background:var(--b-init)">INI</span><span class="slot" style="background:var(--b-init)">INI</span><span class="slot" style="background:var(--b-init)">INI</span><span class="slot" style="background:var(--b-init)">INI</span>
+          <span class="slot" style="background:var(--b-bau)">BAU</span><span class="slot" style="background:var(--b-bau)">BAU</span>
+          <span class="slot" style="background:var(--b-tech)">TEC</span>
+          <span class="slot reserve">INC</span>
+        </div>
+        <p class="note">The dashed slot is reserved for incidents (Expedite). When it is unused, it goes to tech stories.</p>
+      </div>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Bucket</th><th>Who ranks it</th><th>How it is ordered</th><th>Sizing</th></tr></thead>
+        <tbody>
+          <tr><td><i class="dot d-init"></i><strong>Initiatives</strong></td><td>PO + Tech Lead + management (Board 2)</td><td>WSJF / cost of delay. Large tech work (migrations, rewrites, end-of-support) is expressed as an initiative with its own cost of delay: risk reduction, enabler value, deadline.</td><td class="num">≈55%</td></tr>
+          <tr><td><i class="dot d-bau"></i><strong>BAU (business)</strong></td><td>Product Owner</td><td>Ranked inside the BAU container Epic.</td><td class="num">≈20%</td></tr>
+          <tr><td><i class="dot d-tech"></i><strong>Tech stories</strong></td><td>Tech Lead</td><td>Ranked inside the Tech container Epic, without business sign-off per ticket. This autonomy is the counterpart of the fixed ratio.</td><td class="num">≈15%</td></tr>
+          <tr><td><i class="dot d-inc"></i><strong>Incidents</strong></td><td>No ranking (first in, first out by severity)</td><td>Expedite class, pulled immediately.</td><td class="num">Historical avg</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="rules">
+      <li><h3>Size the incident reserve on history</h3><p>Use the average of the last 3 to 6 months, not a target. A reserve that is too small hides the real cost of run.</p></li>
+      <li><h3>Agree the overflow rule in advance</h3><p>When incidents exceed the reserve, decide upfront which bucket absorbs it (usually BAU or tech, not committed initiatives). Without a written rule, tech always pays by default.</p></li>
+      <li><h3>Give unused reserve back to tech</h3><p>If the incident slot is free, the team pulls a tech story. Stability is rewarded with more improvement time.</p></li>
+    </ul>
+
+    <div class="loop">
+      <h3>Feedback loop</h3>
+      <p>Track monthly the actual consumption per bucket and the incident volume. If incidents regularly overflow the reserve, that is a data-backed case to raise the tech bucket next quarter. The tech vs business debate moves from opinion to numbers.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Flow management on the Team board</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Type of work</th><th>Location on Board 3</th><th>Pull policy</th></tr></thead>
+        <tbody>
+          <tr><td><i class="dot d-init"></i><strong>Initiative stories</strong></td><td>Initiative Epic lanes (top of the board, in Board 2 rank order)</td><td>Pulled top-down within the initiative WIP limit. Finish the stories of Epic #1 before starting Epic #2.</td></tr>
+          <tr><td><i class="dot d-bau"></i><strong>BAU stories</strong></td><td>Permanent container Epic, e.g. <code>BAU Q4</code></td><td>Pulled in PO rank order, max 2 in progress.</td></tr>
+          <tr><td><i class="dot d-tech"></i><strong>Tech stories</strong></td><td>Permanent container Epic, e.g. <code>Tech Q4</code></td><td>Pulled in Tech Lead rank order, max 1 in progress, plus the incident slot when free.</td></tr>
+          <tr><td><i class="dot d-inc"></i><strong>Production incidents / hotfixes</strong></td><td>Expedite lane or dedicated quick filter</td><td>Absolute priority, no Epic needed. Overflow beyond the reserve follows the agreed rule.</td></tr>
+          <tr><td><strong>Untriaged items</strong></td><td>Native <em>Issues without Epics</em> lane (bottom)</td><td>Not pulled. Triaged into a bucket at the next replenishment.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Key benefits</h2>
+    <div class="pair">
+      <div class="card benefit"><h3>Zero JQL maintenance</h3><p>Native Jira behaviour only. Container Epics make buckets visible as lanes, and nothing needs editing when a new Epic opens.</p></div>
+      <div class="card benefit"><h3>Simple pull rule</h3><p>The team follows one instruction: <span class="rule-quote">"Respect each lane's WIP limit, then empty the top lane before moving to the next."</span></p></div>
+      <div class="card benefit"><h3>Tech vs business settled once</h3><p>The split is decided per quarter with data, then each bucket owner ranks freely. No ticket-by-ticket negotiation.</p></div>
+      <div class="card benefit"><h3>Run cost made visible</h3><p>Incident consumption is measured against a reserve, so its impact on delivery is explicit and actionable.</p></div>
+    </div>
+  </section>
+
+  <footer>Jira architecture proposal · 3-Tier Kanban alignment · Percentages and WIP limits are examples to calibrate</footer>
+</div>
+
+</body></html>
