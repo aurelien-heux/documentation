@@ -6,7 +6,7 @@ Every AIToolbox component with its design rules and the Angular Material tokens 
 
 - **One token vocabulary.** Since v20 every component exposes its styling as `--mat-<component>-<token>` custom properties, and since v19 each component has a `mat.<component>-overrides((token: value))` mixin that writes them. The names are the same under M2 and M3 — only the *defaults* differ: an M2 theme fills them from the `primary` / `accent` / `warn` palettes, `mat.theme` fills them from the `--mat-sys-*` system variables. The token names below are taken from the 22.1 sources; they are the ones you pass to the overrides mixins (without the component prefix).
 - **M2 on v21.** The `mat.m2-*` APIs (`m2-define-palette`, `m2-define-light-theme`, `m2-define-typography-config`) are still shipped in 22.2 and compile without deprecation output, so the M2 file is not on a cliff — but the old `--mdc-*` variable names are gone since v20: anything you wrote against `--mdc-filled-button-container-shape` and friends is dead on 21 and must become `mat.button-overrides(...)`. `theme.m2.scss` does that now.
-- **M3 on v22.** `mat.theme` + `mat.theme-overrides` pin the roles to the AIToolbox hex (Angular would otherwise put light roles at tone 40 and the dark surface at tone 6). v21 renamed the `utility-classes` mixin to `system-classes` and the `extra-small` corner to `xs`; v22 added typography mixins. Nothing in 21 or 22 changed the component tokens used here.
+- **M3 on v22.** `mat.theme` + `mat.theme-overrides` pin the roles to the AIToolbox hex (Angular would otherwise put the light primary at tone 40 and use its own surface steps). v21 renamed the `utility-classes` mixin to `system-classes` and the `extra-small` corner to `xs`; v22 added typography mixins. Nothing in 21 or 22 changed the component tokens used here.
 - **Values** are written light / dark. Extended colours (`ai`, `success`, `warning`) have no Angular slot in either generation: they are the `--md-sys-color-*` custom properties from `css/tokens.css`, used through the `.dt-*` classes.
 - **"DS rule"** lines are the design-system rules the Angular component must respect; the component READMEs are the source.
 
@@ -14,24 +14,25 @@ Every AIToolbox component with its design rules and the Angular Material tokens 
 
 | AIToolbox | Value (light / dark) | M2 · v21 | M3 · v22 |
 |---|---|---|---|
-| `primary` / `on-primary` | #254487 / #B1C5FF · on: #FFFFFF / #042C70 | `primary` palette hue 700 (light) · 200 (dark); `color="primary"` | `--mat-sys-primary` / `--mat-sys-on-primary` (pinned by `theme-overrides`) |
-| `primary-container` / `on-primary-container` | #DAE2FF / #254487 · on: #001847 / #DAE2FF | `primary` palette `lighter` (hue 100) | `--mat-sys-primary-container` / `--mat-sys-on-primary-container` |
-| `secondary` (violet) | #4D3D75 / #D0BCFE | `accent` palette 700 / 200; `color="accent"` for the violet text/icon role only | `--mat-sys-secondary` |
-| `secondary-container` / `on-secondary-container` (violet tint) | #E9DDFF / #4D3D75 · on: #210F47 / #E9DDFF | `accent` `lighter` (hue 100) | `--mat-sys-secondary-container` / `--mat-sys-on-secondary-container` |
-| `tertiary` / `on-tertiary` (copper, Run) | #773200 / #FFB68F · on: #FFFFFF / #542100 | no slot → `.dt-run` scoped theme | `--mat-sys-tertiary` / `--mat-sys-on-tertiary`; `.dt-run` via `mat.button-overrides` |
-| `tertiary-container` | #FFDBCA / #773200 | `.dt-run` `lighter` | `--mat-sys-tertiary-container` |
+| `primary` / `on-primary` | #35307E / #C4C0FF · on: #FFFFFF / #2A2473 | `primary` palette hue 800 (tone 25, light) · 200 (dark); `color="primary"` | `--mat-sys-primary` / `--mat-sys-on-primary` (pinned by `theme-overrides`) |
+| `primary-container` / `on-primary-container` | #E3DFFF / #413C8A · on: #14085E / #E3DFFF | `primary` palette `lighter` (hue 100) | `--mat-sys-primary-container` / `--mat-sys-on-primary-container` |
+| `secondary` (violet) | #514F71 / #C6C2EA | `accent` palette 700 / 200; `color="accent"` for the violet text/icon role only | `--mat-sys-secondary` |
+| `secondary-container` / `on-secondary-container` (violet tint) | #E3DFFF / #454364 · on: #191836 / #E3DFFF | `accent` `lighter` (hue 100) | `--mat-sys-secondary-container` / `--mat-sys-on-secondary-container` |
+| `tertiary` / `on-tertiary` (neon green, Run) | #006C44 / #00F29E · on: #FFFFFF / #002111 | no slot → `.dt-run` scoped theme | `--mat-sys-tertiary` / `--mat-sys-on-tertiary`; `.dt-run` via `mat.button-overrides` |
+| `tertiary-container` | #50FFAF / #005232 | `.dt-run` `lighter` | `--mat-sys-tertiary-container` |
 | `error` / `on-error` / `error-container` / `on-error-container` | #BA1A1A / #FFB4AB · on: #FFFFFF / #690005 / #FFDAD6 / #93000A · on: #410002 / #FFDAD6 | `warn` palette 600 / 200; `color="warn"` | `--mat-sys-error`, `--mat-sys-on-error`, `--mat-sys-error-container`, `--mat-sys-on-error-container` |
 | `ai` / `on-ai` (light teal, both themes) | #80D5D4 / #80D5D4 · on: #003737 / #003737 | no slot → `.dt-ai` scoped theme (teal hue 200) | `--md-sys-color-ai` / `--md-sys-color-on-ai` + `.dt-ai` overrides |
 | `ai-container` / `on-ai-container` | #9CF1F0 / #004F50 · on: #002020 / #9CF1F0 | same | `--md-sys-color-ai-container` / `--md-sys-color-on-ai-container` |
 | `success`, `warning` families | #1B5F1F / #91D888 · #6A4E00 / #FCBC00 (+ containers) | no slot → `.dt-chip-*` classes, own banners | same custom properties, same classes |
-| `surface` | #FBF8FD / #1F1F23 | `background.background` | `--mat-sys-surface` |
-| `surface-container-lowest … highest` | #FFFFFF…#D5D4D8 / #17171B…#424245 | M2 knows four steps only: `card` = lowest (light) / low (dark), `dialog` = high, `app-bar` = container | `--mat-sys-surface-container-lowest` … `-highest` |
-| `on-surface` / `on-surface-variant` | #1B1B1F / #E9E7EC · on: #44464F / #C5C6D0 | `foreground.text` / `foreground.secondary-text` | `--mat-sys-on-surface` / `--mat-sys-on-surface-variant` |
-| `outline` / `outline-variant` | #696A73 / #9C9DA7 · on: #B7B8C2 / #53545D | — / `foreground.divider` | `--mat-sys-outline` / `--mat-sys-outline-variant` |
-| `inverse-surface` / `inverse-on-surface` / `inverse-primary` | #303034 / #E4E2E6 · on: #F2F0F4 / #303034 · action: #B1C5FF / #3F5CA1 | `mat.snack-bar-overrides` (M2 hard-codes a dark snackbar) | `--mat-sys-inverse-surface`, `--mat-sys-inverse-on-surface`, `--mat-sys-inverse-primary` |
+| `logo-box` / `on-logo-box` / `logo-cursor` (logo family only) | #0D0B14 / #C4C0FF · on: #FFFFFF / #0D0B14 · cursor: #00F29E / #006C44 | no slot → `--md-sys-color-logo-*` custom properties (inline SVG) | same custom properties; never on a UI surface |
+| `surface` | #FDF7FF / #14121E | `background.background` | `--mat-sys-surface` |
+| `surface-container-lowest … highest` | #FFFFFF…#D8D1E4 / #0F0C19…#363341 | M2 knows four steps only: `card` = lowest (light) / low (dark), `dialog` = high, `app-bar` = container | `--mat-sys-surface-container-lowest` … `-highest` |
+| `on-surface` / `on-surface-variant` | #1D1A27 / #ECE5F8 · on: #494458 / #CAC3DC | `foreground.text` / `foreground.secondary-text` | `--mat-sys-on-surface` / `--mat-sys-on-surface-variant` |
+| `outline` / `outline-variant` | #6D677D / #948DA5 · on: #BCB5CE / #494458 | — / `foreground.divider` | `--mat-sys-outline` / `--mat-sys-outline-variant` |
+| `inverse-surface` / `inverse-on-surface` / `inverse-primary` | #322E3C / #E6DFF2 · on: #F5EEFF / #322E3C · action: #C4C0FF / #5955A4 | `mat.snack-bar-overrides` (M2 hard-codes a dark snackbar) | `--mat-sys-inverse-surface`, `--mat-sys-inverse-on-surface`, `--mat-sys-inverse-primary` |
 | Type: display / headline / title / label (BNPP Type 500) | tokens.json type scale | `m2-define-typography-config` levels `headline-1…6`, `subtitle-1/2`, `button` | `brand-family` of `mat.theme` → `--mat-sys-display-*`, `-headline-*`, `-title-*`, `-label-*` |
 | Type: body, code (Open Sans 400 / 600) | body-large 16/24 · medium 14/20 · small 12/16; code 13/20 at 600 | `body-1`, `body-2`, `caption`; code = custom class | `plain-family` → `--mat-sys-body-*`; code = custom class |
-| Shape: `radius-xs/sm/md/lg/xl/full` | 4 / 8 / 12 / 16 / 28 / 9999 px | `*-overrides` shape tokens (same as M3) | `--mat-sys-corner-extra-small` (4), `-small` (8), `-medium` (12), `-large` (16), `-extra-large` (28), `-full`; per-component shape tokens pinned |
+| Shape: `radius-xs/sm/md/lg/xl/full` | 4 / 8 / 12 / 16 / 16 / 9999 px — Large (16) is the ceiling; `xl` is pinned to it and `full` is for circles only (icon buttons, avatars, badges, radio, switch) | `*-overrides` shape tokens (same as M3) | `--mat-sys-corner-extra-small` (4), `-small` (8), `-medium` (12), `-large` (16), `-extra-large` (16), `-full` (circles); per-component shape tokens pinned |
 | Elevation 1–5 | tokens.json shadows | `mat.core()` elevation classes | `--mat-sys-level1` … `--mat-sys-level5` |
 
 Dark mode: M2 file = `html.dark` block (`mat.all-component-colors($dt-dark)`); M3 file = `color-scheme: light dark` with `light-dark()` values, or the `html.light` / `html.dark` classes.
@@ -70,8 +71,8 @@ Dark mode: M2 file = `html.dark` block (`mat.all-component-colors($dt-dark)`); M
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-background-color` | #E9E7EC / #303034 | `background.app-bar` (injected as surface-container) | `--mat-sys-surface-container` via overrides (Angular default is `surface`) |
-| `container-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
+| `container-background-color` | #ECE5F8 / #23202D | `background.app-bar` (injected as surface-container) | `--mat-sys-surface-container` via overrides (Angular default is `surface`) |
+| `container-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
 | `standard-height` | 80px for this bar (64px for the TopAppBar) | density 0 → 64px; set 80px on the bar | same |
 
 FAB inside the bar: `mat.fab-overrides((container-elevation-shadow: none))` scoped to the bar.
@@ -80,44 +81,44 @@ FAB inside the bar: `mat.fab-overrides((container-elevation-shadow: none))` scop
 
 **Angular Material:** `MatBottomSheet`
 
-- `surface-container-low`, radius-xl (28 px) top corners, 32×4 px drag handle in `outline`.
+- `surface-container-low`, radius-lg (16 px) top corners, 32×4 px drag handle in `outline`.
 - Modal (scrim) for a short list of actions on one item; standard (no scrim) for persistent content. Tablet/desktop → SideSheet or Dialog.
 
 `mat.bottom-sheet-overrides((…))` sets these in **both** files; the CSS variable is `--mat-bottom-sheet-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-background-color` | #F5F3F7 / #27282B | `background.dialog` (surface-container-high) → override to low | `--mat-sys-surface-container-low` (Angular default) |
-| `container-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
-| `container-shape` | 28px 28px 0 0 | override | `--mat-sys-corner-extra-large` top |
+| `container-background-color` | #F8F1FF / #1D1A27 | `background.dialog` (surface-container-high) → override to low | `--mat-sys-surface-container-low` (Angular default) |
+| `container-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
+| `container-shape` | 16px 16px 0 0 | `mat.bottom-sheet-overrides` | `--mat-sys-corner-large` top (override, default 28) |
 
 
 ### Button
 
 **Angular Material:** `mat-button` (text), `mat-flat-button` (filled; tonal with the `tonal` appearance / `mat-tonal-button` in 21+), `mat-stroked-button` (outlined), `mat-raised-button` (elevated = "protected")
 
-- 40 px, full-round, label-large; horizontal padding 24 px (16 px with a leading icon). Icon-only buttons are 40 px circles with an `aria-label`.
+- 40 px, radius-lg (16 px — never full-round), label-large; horizontal padding 24 px (16 px with a leading icon). Icon-only buttons stay 40 px circles with an `aria-label`.
 - Filled `primary` = the one decision on a screen; tonal `secondary-container` beside it; elevated on tinted grounds (elevation-1); outlined / text = low emphasis, text is the dialog dismiss.
-- Run `.dt-run` (copper `tertiary`): the single action that starts work, leading play icon, at most one per screen, never in a dialog.
+- Run `.dt-run` (neon green `tertiary`): the single action that starts work, leading play icon, at most one per screen, never in a dialog.
 - Destructive = text button in `error`, never a filled red. Disabled = on-surface 12 % fill / 38 % text.
 
 `mat.button-overrides((…))` sets these in **both** files; the CSS variable is `--mat-button-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `filled-container-color` | #254487 / #B1C5FF | `primary` palette default hue | `--mat-sys-primary` |
-| `filled-label-text-color` | #FFFFFF / #042C70 | palette contrast | `--mat-sys-on-primary` |
-| `tonal-container-color` | #E9DDFF / #4D3D75 | `accent` lighter (M2 tonal = `mat-flat-button color="accent"` on the lighter hue, or the tonal appearance on 21) | `--mat-sys-secondary-container` |
-| `tonal-label-text-color` | #210F47 / #E9DDFF | contrast of the lighter hue | `--mat-sys-on-secondary-container` |
-| `protected-container-color` | #FFFFFF / #17171B | `background.card` | `--mat-sys-surface` by default → surface-container-lowest |
-| `outlined-outline-color` | #696A73 / #9C9DA7 | `foreground.divider` → set `outline` | `--mat-sys-outline` |
-| `text-label-text-color` | #254487 / #B1C5FF | `primary` | `--mat-sys-primary` |
-| `filled-container-shape` | 9999px (`radius-full`) | `mat.button-overrides` (also outlined / text / protected / tonal shapes) | `--mat-sys-corner-full` (default) |
+| `filled-container-color` | #35307E / #C4C0FF | `primary` palette default hue | `--mat-sys-primary` |
+| `filled-label-text-color` | #FFFFFF / #2A2473 | palette contrast | `--mat-sys-on-primary` |
+| `tonal-container-color` | #E3DFFF / #454364 | `accent` lighter (M2 tonal = `mat-flat-button color="accent"` on the lighter hue, or the tonal appearance on 21) | `--mat-sys-secondary-container` |
+| `tonal-label-text-color` | #191836 / #E3DFFF | contrast of the lighter hue | `--mat-sys-on-secondary-container` |
+| `protected-container-color` | #FFFFFF / #0F0C19 | `background.card` | `--mat-sys-surface` by default → surface-container-lowest |
+| `outlined-outline-color` | #6D677D / #948DA5 | `foreground.divider` → set `outline` | `--mat-sys-outline` |
+| `text-label-text-color` | #35307E / #C4C0FF | `primary` | `--mat-sys-primary` |
+| `filled-container-shape` | 16px (`radius-lg`) | `mat.button-overrides` (also outlined / text / protected / tonal shapes) | `mat.button-overrides` (default is `--mat-sys-corner-full`) |
 | `filled-container-height` | 40px | density 0 → 40px | 40px |
 | `filled-horizontal-padding` | 24px | default 24px (v21: 24px; text buttons 12px) | default 24px |
 | `filled-label-text-size` | 14px (label-large) | typography level `button` | `--mat-sys-label-large-size` |
 
-`.dt-run`: `filled-container-color: tertiary`, `filled-label-text-color: on-tertiary`, `filled-state-layer-color: on-tertiary` (M3) · scoped `mat.button-color($dt-run-light)` theme on the copper palette (M2). Destructive text button: `text-label-text-color: error` on a `.dt-danger` class in both.
+`.dt-run`: `filled-container-color: tertiary`, `filled-label-text-color: on-tertiary`, `filled-state-layer-color: on-tertiary` (M3) · scoped `mat.button-color($dt-run-light)` theme on the neon green palette (M2). Destructive text button: `text-label-text-color: error` on a `.dt-danger` class in both.
 
 ### Card
 
@@ -131,10 +132,10 @@ FAB inside the bar: `mat.fab-overrides((container-elevation-shadow: none))` scop
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `elevated-container-color` | #FFFFFF / #17171B | `background.card` | `--mat-sys-surface-container-low` by default → override to lowest |
-| `filled-container-color` | #DEDCE0 / #39393C | override (M2 has no filled default) | `--mat-sys-surface-container-highest` by default → override to high |
-| `outlined-container-color` | #FBF8FD / #1F1F23 | `background.card` → override to surface | `--mat-sys-surface` |
-| `outlined-outline-color` | #B7B8C2 / #53545D | `foreground.divider` | `--mat-sys-outline-variant` |
+| `elevated-container-color` | #FFFFFF / #0F0C19 | `background.card` | `--mat-sys-surface-container-low` by default → override to lowest |
+| `filled-container-color` | #E1DAEC / #2B2836 | override (M2 has no filled default) | `--mat-sys-surface-container-highest` by default → override to high |
+| `outlined-container-color` | #FDF7FF / #14121E | `background.card` → override to surface | `--mat-sys-surface` |
+| `outlined-outline-color` | #BCB5CE / #494458 | `foreground.divider` | `--mat-sys-outline-variant` |
 | `elevated-container-shape` | 12px (`radius-md`) | override (also filled / outlined) | `--mat-sys-corner-medium` |
 | `elevated-container-elevation` | elevation-1 | level 1 | `--mat-sys-level1` |
 | `title-text-size` | 16px (title-medium) | `subtitle-1` | `--mat-sys-title-medium-size` |
@@ -144,10 +145,10 @@ FAB inside the bar: `mat.fab-overrides((container-elevation-shadow: none))` scop
 
 **Angular Material:** no Angular Material component — CDK scrolling (`cdk-virtual-scroll` / `cdkScrollable`) with the AIToolbox markup
 
-- Multi-browse layout: one large item, one medium, small items at the edge, 8 px gaps, radius-xl.
+- Multi-browse layout: one large item, one medium, small items at the edge, 8 px gaps, radius-lg (16 px).
 - Items are `*-container` tones or images; title bottom-left in title-medium. For equal items use List or a grid of Cards.
 
-Tokens: none of Angular's; use `--md-sys-color-*-container`, `--md-sys-shape-corner-extra-large` from `css/tokens.css`.
+Tokens: none of Angular's; use `--md-sys-color-*-container`, `--md-sys-shape-corner-large` from `css/tokens.css`.
 
 ### Checkbox
 
@@ -161,10 +162,10 @@ Tokens: none of Angular's; use `--md-sys-color-*-container`, `--md-sys-shape-cor
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `selected-icon-color` | #254487 / #B1C5FF | `color="primary"` (set as default) | `--mat-sys-primary` |
-| `selected-checkmark-color` | #FFFFFF / #042C70 | palette contrast | `--mat-sys-on-primary` |
-| `unselected-icon-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
-| `label-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
+| `selected-icon-color` | #35307E / #C4C0FF | `color="primary"` (set as default) | `--mat-sys-primary` |
+| `selected-checkmark-color` | #FFFFFF / #2A2473 | palette contrast | `--mat-sys-on-primary` |
+| `unselected-icon-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
+| `label-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
 | `touch-target-size` | 48px | default | default |
 
 Error state: `mat-checkbox` has no error appearance — add `.dt-error { @include mat.checkbox-overrides((selected-icon-color: error, unselected-icon-color: error)); }`.
@@ -183,10 +184,10 @@ Error state: `mat-checkbox` has no error appearance — add `.dt-error { @includ
 |---|---|---|---|
 | `container-height` | 32px | default 32px | default |
 | `container-shape-radius` | 8px (`radius-sm`) | `mat.chips-overrides` | `--mat-sys-corner-small` |
-| `outline-color` | #696A73 / #9C9DA7 | `foreground.divider` → set `outline` | `--mat-sys-outline` |
-| `label-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface-variant` by default → override to on-surface |
-| `elevated-selected-container-color` | #E9DDFF / #4D3D75 | `accent` lighter (selected `mat-chip-option` uses the `accent` palette with `color="accent"`) | `--mat-sys-secondary-container` |
-| `selected-label-text-color` | #210F47 / #E9DDFF | contrast | `--mat-sys-on-secondary-container` |
+| `outline-color` | #6D677D / #948DA5 | `foreground.divider` → set `outline` | `--mat-sys-outline` |
+| `label-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface-variant` by default → override to on-surface |
+| `elevated-selected-container-color` | #E3DFFF / #454364 | `accent` lighter (selected `mat-chip-option` uses the `accent` palette with `color="accent"`) | `--mat-sys-secondary-container` |
+| `selected-label-text-color` | #191836 / #E3DFFF | contrast | `--mat-sys-on-secondary-container` |
 | `with-avatar-avatar-size` | 18px (tile glyph of StateMark C in status chips) | default 24px → 18px | same |
 | `label-text-size` | 14px (label-large) | `button` level | `--mat-sys-label-large-size` |
 
@@ -196,41 +197,41 @@ Error state: `mat-checkbox` has no error appearance — add `.dt-error { @includ
 
 **Angular Material:** `mat-datepicker` (+ `mat-date-range-picker`)
 
-- Modal picker 328 px, radius-xl, `surface-container-high`, elevation-3. Header: label-medium supporting text, selected date in headline-large, edit icon to switch to input.
+- Modal picker 328 px, radius-lg (16 px), `surface-container-high`, elevation-3. Header: label-medium supporting text, selected date in headline-large, edit icon to switch to input.
 - 40 px day cells; today outlined in `primary`, selection filled `primary`; text buttons Cancel / OK. Ranges: full-screen range picker; dense forms: docked picker. Week starts Monday, ISO dates in the field.
 
 `mat.datepicker-overrides((…))` sets these in **both** files; the CSS variable is `--mat-datepicker-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `calendar-container-background-color` | #DEDCE0 / #39393C | `background.card` → override | `--mat-sys-surface-container-high` |
-| `calendar-container-shape` | 28px (`radius-xl`) | override | `--mat-sys-corner-large` by default → 28px |
-| `calendar-date-selected-state-background-color` | #254487 / #B1C5FF | `primary` | `--mat-sys-primary` |
-| `calendar-date-selected-state-text-color` | #FFFFFF / #042C70 | contrast | `--mat-sys-on-primary` |
-| `calendar-date-today-outline-color` | #254487 / #B1C5FF | `primary` | `--mat-sys-primary` |
-| `calendar-date-in-range-state-background-color` | #DAE2FF / #254487 | `primary` lighter | `--mat-sys-primary-container` |
-| `toggle-active-state-icon-color` | #254487 / #B1C5FF | `primary` | `--mat-sys-primary` |
+| `calendar-container-background-color` | #E1DAEC / #2B2836 | `background.card` → override | `--mat-sys-surface-container-high` |
+| `calendar-container-shape` | 16px (`radius-lg`) | `mat.datepicker-overrides` | `--mat-sys-corner-large` (default; pinned) |
+| `calendar-date-selected-state-background-color` | #35307E / #C4C0FF | `primary` | `--mat-sys-primary` |
+| `calendar-date-selected-state-text-color` | #FFFFFF / #2A2473 | contrast | `--mat-sys-on-primary` |
+| `calendar-date-today-outline-color` | #35307E / #C4C0FF | `primary` | `--mat-sys-primary` |
+| `calendar-date-in-range-state-background-color` | #E3DFFF / #413C8A | `primary` lighter | `--mat-sys-primary-container` |
+| `toggle-active-state-icon-color` | #35307E / #C4C0FF | `primary` | `--mat-sys-primary` |
 
 
 ### Dialog
 
 **Angular Material:** `MatDialog` (`mat-dialog-title`, `mat-dialog-content`, `mat-dialog-actions`)
 
-- 280–560 px, radius-xl (28 px), `surface-container-high`, elevation-3, 24 px padding, scrim at 32 %.
+- 280–560 px, radius-lg (16 px), `surface-container-high`, elevation-3, 24 px padding, scrim at 32 %.
 - Title headline-small; one line of body-medium supporting text on `on-surface-variant`. Fields: TextField with the label background on the dialog colour; 24 px between rows.
-- Actions right-aligned: text dismiss + one filled `primary` confirm. Never copper, never a filled destructive button (delete = text in `error`). Focus to the first field, Esc = Cancel; more than ~6 fields → full-screen or page.
+- Actions right-aligned: text dismiss + one filled `primary` confirm. Never neon green, never a filled destructive button (delete = text in `error`). Focus to the first field, Esc = Cancel; more than ~6 fields → full-screen or page.
 - State-driven popin: 32 px StateMark A next to the title.
 
 `mat.dialog-overrides((…))` sets these in **both** files; the CSS variable is `--mat-dialog-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-color` | #DEDCE0 / #39393C | `background.dialog` (injected) | `--mat-sys-surface-container-high` (default) |
-| `container-shape` | 28px | `mat.dialog-overrides` | `--mat-sys-corner-extra-large` (default) |
+| `container-color` | #E1DAEC / #2B2836 | `background.dialog` (injected) | `--mat-sys-surface-container-high` (default) |
+| `container-shape` | 16px | `mat.dialog-overrides` | `mat.dialog-overrides` (default is `--mat-sys-corner-extra-large`, 28) |
 | `container-max-width` | 560px | default 560px | default |
 | `container-min-width` | 280px | default 280px | default |
 | `subhead-size` | 24px (headline-small) | `headline-6` | `--mat-sys-headline-small-size` |
-| `supporting-text-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
+| `supporting-text-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
 | `content-padding` | 24px | default 20px 24px → 24px | default 20px 24px → 24px |
 
 Scrim: `cdk-overlay-dark-backdrop` → `$overlay-backdrop-color` (v21 rename) = `scrim` at 32 %.
@@ -246,7 +247,7 @@ Scrim: `cdk-overlay-dark-backdrop` → `$overlay-backdrop-color` (v21 rename) = 
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `color` | #B7B8C2 / #53545D | `foreground.divider` | `--mat-sys-outline-variant` |
+| `color` | #BCB5CE / #494458 | `foreground.divider` | `--mat-sys-outline-variant` |
 | `width` | 1px | default | default |
 
 
@@ -254,18 +255,18 @@ Scrim: `cdk-overlay-dark-backdrop` → `$overlay-backdrop-color` (v21 rename) = 
 
 **Angular Material:** `mat-fab`, `mat-mini-fab`, `mat-fab extended`
 
-- Small 40 px radius-md · default 56 px radius-lg · large 96 px radius-xl · extended 56 px with a label.
-- Fill `primary-container` with `on-primary-container` content, elevation-3; the small copper FAB (`tertiary-container`) only as a "run" entry point.
+- Small 40 px radius-md · default 56 px radius-lg · large 96 px radius-lg (16 px, the ceiling) · extended 56 px with a label.
+- Fill `primary-container` with `on-primary-container` content, elevation-3; the small neon green FAB (`tertiary-container`) only as a "run" entry point.
 - One per screen, bottom-right, 16 px from the edges; lowers to elevation-1 when a dialog opens.
 
 `mat.fab-overrides((…))` sets these in **both** files; the CSS variable is `--mat-fab-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-color` | #DAE2FF / #254487 | `primary` lighter (M2 default is `primary` → set `color="primary"` + override) | `--mat-sys-primary-container` (default) |
-| `foreground-color` | #001847 / #DAE2FF | contrast | `--mat-sys-on-primary-container` |
+| `container-color` | #E3DFFF / #413C8A | `primary` lighter (M2 default is `primary` → set `color="primary"` + override) | `--mat-sys-primary-container` (default) |
+| `foreground-color` | #14085E / #E3DFFF | contrast | `--mat-sys-on-primary-container` |
 | `container-shape` | 16px (`radius-lg`) | override | `--mat-sys-corner-large` (default) |
-| `small-container-color` | #FFDBCA / #773200 (run entry) / primary-container otherwise | `.dt-run` theme on `mat-mini-fab` | `.dt-run` via `mat.fab-overrides` |
+| `small-container-color` | #50FFAF / #005232 (run entry) / primary-container otherwise | `.dt-run` theme on `mat-mini-fab` | `.dt-run` via `mat.fab-overrides` |
 | `small-container-shape` | 12px (`radius-md`) | override | `--mat-sys-corner-medium` (default) |
 | `extended-container-height` | 56px | default | default |
 
@@ -281,7 +282,7 @@ Scrim: `cdk-overlay-dark-backdrop` → `$overlay-backdrop-color` (v21 rename) = 
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `icon-color` | #44464F / #C5C6D0 | `foreground.icon` | `--mat-sys-on-surface-variant` |
+| `icon-color` | #494458 / #CAC3DC | `foreground.icon` | `--mat-sys-on-surface-variant` |
 | `icon-size` | 24px | default | default |
 | `state-layer-size` | 40px | default 40px | default |
 | `touch-target-size` | 48px | default | default |
@@ -300,14 +301,14 @@ Filled / tonal / outlined variants are plain CSS on the class (`background: var(
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `list-item-label-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
-| `list-item-supporting-text-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
+| `list-item-label-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
+| `list-item-supporting-text-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
 | `list-item-one-line-container-height` | 56px | default 48px → 56px | default 56px |
 | `list-item-two-line-container-height` | 72px | default 64px → 72px | default 72px |
 | `list-item-three-line-container-height` | 88px | default 88px | default |
-| `active-indicator-color` | #E9DDFF / #4D3D75 | `accent` lighter (nav list active item via class) | `--mat-sys-secondary-container` |
-| `active-indicator-shape` | 9999px | override | `--mat-sys-corner-full` |
-| `list-item-selected-container-color` | #E9E7EC / #303034 | override | no default → surface-container |
+| `active-indicator-color` | #E3DFFF / #454364 | `accent` lighter (nav list active item via class) | `--mat-sys-secondary-container` |
+| `active-indicator-shape` | 16px | `mat.list-overrides` | `mat.list-overrides` (default is `--mat-sys-corner-full`) |
+| `list-item-selected-container-color` | #ECE5F8 / #23202D | override | no default → surface-container |
 | `list-item-leading-avatar-size` | 40px | default | default |
 
 
@@ -316,9 +317,9 @@ Filled / tonal / outlined variants are plain CSS on the class (`background: var(
 **Angular Material:** no Angular Material component — inline SVG from `loading-states/` (`brand-loader.svg`, `ait-loader` classes) + `css/loading-states.css`
 
 - Constructor: the AI badge arrives alone, construction guides appear, the teal pen draws the toolbox and goes home, the toolbox fills; 4.4 s loop, `ait-once` for a splash. 96 px splash / workspace boot, 40 px minimum, app-level waits only.
-- Colours from the tokens: `primary`, `on-primary`, `tertiary-container`, `ai`, `on-ai` — the markup is theme-agnostic.
+- Colours from the tokens: `logo-box` (night box on light, lavender on dark), `on-logo-box`, `logo-cursor`, `ai`, `on-ai` — the markup is theme-agnostic.
 
-Tokens: `--md-sys-color-primary`, `-on-primary`, `-tertiary-container`, `-ai`, `-on-ai` through `.ait-loader .ait-*` in `loading-states.css` (identical under M2 and M3).
+Tokens: `--md-sys-color-logo-box`, `-on-logo-box`, `-logo-cursor`, `-ai`, `-on-ai` through `.ait-loader .ait-*` in `loading-states.css` (identical under M2 and M3).
 
 ### Menu
 
@@ -332,13 +333,13 @@ Tokens: `--md-sys-color-primary`, `-on-primary`, `-tertiary-container`, `-ai`, `
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-color` | #E9E7EC / #303034 | `background.card` → override | `--mat-sys-surface-container` (default) |
+| `container-color` | #ECE5F8 / #23202D | `background.card` → override | `--mat-sys-surface-container` (default) |
 | `container-shape` | 4px (`radius-xs`) | `mat.menu-overrides` | `--mat-sys-corner-extra-small` (default) |
-| `item-label-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
-| `item-icon-color` | #44464F / #C5C6D0 | `foreground.icon` | `--mat-sys-on-surface-variant` |
+| `item-label-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
+| `item-icon-color` | #494458 / #CAC3DC | `foreground.icon` | `--mat-sys-on-surface-variant` |
 | `item-icon-size` | 20px | default 24px → 20px | default 24px → 20px |
 | `item-hover-state-layer-color` | on-surface at 8 % (reads as surface-container-highest) | default | default |
-| `divider-color` | #B7B8C2 / #53545D | `foreground.divider` | `--mat-sys-outline-variant` |
+| `divider-color` | #BCB5CE / #494458 | `foreground.divider` | `--mat-sys-outline-variant` |
 
 
 ### NavigationBar
@@ -354,20 +355,20 @@ Tokens: `toolbar-container-background-color: surface-container`; the pill is pla
 
 **Angular Material:** `mat-sidenav` (`mode="over"` on phones, `"side"` on desktop) + `mat-nav-list`
 
-- 360 px (300 shown) on `surface-container-low`, 12 px inset, 56 px full-round items. Active `secondary-container` + `on-secondary-container`; others `on-surface-variant`; trailing counts label-medium.
+- 360 px (300 shown) on `surface-container-low`, 12 px inset, 56 px items at radius-lg (16 px) — hover and active indicators share that shape. Active `secondary-container` + `on-secondary-container`; others `on-surface-variant`; trailing counts label-medium.
 - Section headers label-medium `on-surface-variant` after an inset divider.
 
 `mat.sidenav-overrides((…))` sets these in **both** files; the CSS variable is `--mat-sidenav-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-background-color` | #F5F3F7 / #27282B | `background.card` → override | `--mat-sys-surface` by default → override to low |
-| `container-text-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
+| `container-background-color` | #F8F1FF / #1D1A27 | `background.card` → override | `--mat-sys-surface` by default → override to low |
+| `container-text-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
 | `container-shape` | 0 16px 16px 0 | override | `--mat-sys-corner-large` on the open side (default) |
 | `container-width` | 360px | default 360px | default |
 | `scrim-color` | scrim at 32 % | default | default |
 
-Items: `mat.list-overrides((active-indicator-color: secondary-container, active-indicator-shape: 9999px, list-item-one-line-container-height: 56px))`.
+Items: `mat.list-overrides((active-indicator-color: secondary-container, active-indicator-shape: 16px, list-item-one-line-container-height: 56px))`.
 
 ### NavigationRail
 
@@ -381,16 +382,16 @@ Tokens: list overrides as for the drawer (`active-indicator-color: secondary-con
 
 **Angular Material:** `mat-progress-spinner` (pen orbit) and `mat-progress-bar` (guide line) keep their slots and APIs — the AIToolbox skins are the inline SVGs from `loading-states/` with `loading-states.css`, or a thin wrapper around the Material components bound to `value`
 
-- Pen orbit (circular): navy arc with the teal pen at its head on a `primary-container` track; 48 px content, 24 px inline, 18 px in a button.
-- Guide line (linear, 4 px): dashed teal guide as the track, navy bar with the pen on its edge; determinate = navy to the value. Indeterminate at the top of the app bar during navigation.
-- Constructor determinate (`brand-progress.svg`, `--p`): long operations with a known value, 64–96 px. Working dots: copper = a command runs, teal = a model thinks.
+- Pen orbit (circular): violet arc with the teal pen at its head on a `primary-container` track; 48 px content, 24 px inline, 18 px in a button.
+- Guide line (linear, 4 px): dashed teal guide as the track, violet bar with the pen on its edge; determinate = violet to the value. Indeterminate at the top of the app bar during navigation.
+- Constructor determinate (`brand-progress.svg`, `--p`): long operations with a known value, 64–96 px. Working dots: neon green = a command runs, teal = a model thinks.
 
 `mat.progress-bar-overrides((…))` sets these in **both** files; the CSS variable is `--mat-progress-bar-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `active-indicator-color` | #254487 / #B1C5FF | `color="primary"` | `--mat-sys-primary` |
-| `track-color` | #DAE2FF / #254487 (when the Material bar is kept) | `primary` lighter | `--mat-sys-surface-variant` by default → primary-container |
+| `active-indicator-color` | #35307E / #C4C0FF | `color="primary"` | `--mat-sys-primary` |
+| `track-color` | #E3DFFF / #413C8A (when the Material bar is kept) | `primary` lighter | `--mat-sys-surface-variant` by default → primary-container |
 | `track-height` | 4px | default | default |
 | `active-indicator-height` | 4px | default | default |
 
@@ -398,7 +399,7 @@ Tokens: list overrides as for the drawer (`active-indicator-color: secondary-con
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `active-indicator-color` | #254487 / #B1C5FF | `color="primary"` | `--mat-sys-primary` |
+| `active-indicator-color` | #35307E / #C4C0FF | `color="primary"` | `--mat-sys-primary` |
 | `active-indicator-width` | 4px (5px at 24 / 18 px) | `strokeWidth` | `strokeWidth` |
 | `size` | 48 / 24 / 18px | `diameter` | `diameter` |
 
@@ -415,9 +416,9 @@ AI tasks: `.dt-ai` → `active-indicator-color: ai`. The dashed guide and the pe
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `selected-icon-color` | #254487 / #B1C5FF | `color="primary"` (set as default; M2 default is `accent`) | `--mat-sys-primary` |
-| `unselected-icon-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
-| `label-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
+| `selected-icon-color` | #35307E / #C4C0FF | `color="primary"` (set as default; M2 default is `accent`) | `--mat-sys-primary` |
+| `unselected-icon-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
+| `label-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
 | `touch-target-size` | 48px | default | default |
 
 
@@ -425,34 +426,34 @@ AI tasks: `.dt-ai` → `active-indicator-color: ai`. The dashed guide and the pe
 
 **Angular Material:** no Angular Material component — `mat-form-field appearance="fill"` styled as the bar + `mat-autocomplete` as the view
 
-- Search bar 56 px, full-round, `surface-container-high`, leading menu/back icon, placeholder `on-surface-variant`, trailing avatar or action.
-- Search view below, radius-xl, same container tone; rows are 48 px list items with a type hint in label-medium; results grouped by kind, identifiers in Open Sans 600.
+- Search bar 56 px, radius-lg (16 px), `surface-container-high`, leading menu/back icon, placeholder `on-surface-variant`, trailing avatar or action.
+- Search view below, radius-lg, same container tone; rows are 48 px list items with a type hint in label-medium; results grouped by kind, identifiers in Open Sans 600.
 
 `mat.autocomplete-overrides((…))` sets these in **both** files; the CSS variable is `--mat-autocomplete-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `background-color` | #DEDCE0 / #39393C | `background.card` → override | `--mat-sys-surface-container` by default → high |
-| `container-shape` | 28px | override | `--mat-sys-corner-extra-small` by default → 28px |
+| `background-color` | #E1DAEC / #2B2836 | `background.card` → override | `--mat-sys-surface-container` by default → high |
+| `container-shape` | 16px | override | `--mat-sys-corner-extra-small` by default → 16px |
 
-Bar: `mat.form-field-overrides((filled-container-color: surface-container-high, filled-container-shape: 9999px, filled-active-indicator-height: 0))`.
+Bar: `mat.form-field-overrides((filled-container-color: surface-container-high, filled-container-shape: 16px, filled-active-indicator-height: 0))`.
 
 ### SegmentedButton
 
 **Angular Material:** `mat-button-toggle-group` (`appearance="standard"`; `hideSingleSelectionIndicator=false` for the leading check)
 
-- 2–5 options, 40 px, full-round outer corners, `outline` dividers. Selected `secondary-container` with a leading check; others transparent, `on-surface` text.
+- 2–5 options, 40 px, radius-lg (16 px) outer corners, `outline` dividers. Selected `secondary-container` with a leading check; others transparent, `on-surface` text.
 - Views of the same data (Day / Week / Month, List / Grid); navigation → Tabs, filters → chips.
 
 `mat.button-toggle-overrides((…))` sets these in **both** files; the CSS variable is `--mat-button-toggle-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `selected-state-background-color` | #E9DDFF / #4D3D75 | `accent` lighter | `--mat-sys-secondary-container` |
-| `selected-state-text-color` | #210F47 / #E9DDFF | contrast | `--mat-sys-on-secondary-container` |
-| `text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
-| `divider-color` | #696A73 / #9C9DA7 | `foreground.divider` → `outline` | `--mat-sys-outline` |
-| `shape` | 9999px | override | `--mat-sys-corner-full` (default) |
+| `selected-state-background-color` | #E3DFFF / #454364 | `accent` lighter | `--mat-sys-secondary-container` |
+| `selected-state-text-color` | #191836 / #E3DFFF | contrast | `--mat-sys-on-secondary-container` |
+| `text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
+| `divider-color` | #6D677D / #948DA5 | `foreground.divider` → `outline` | `--mat-sys-outline` |
+| `shape` | 16px | `mat.button-toggle-overrides` | `mat.button-toggle-overrides` (default is `--mat-sys-corner-full`) |
 | `height` | 40px | default 40px | default |
 
 
@@ -467,8 +468,8 @@ Bar: `mat.form-field-overrides((filled-container-color: surface-container-high, 
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-background-color` | #FBF8FD / #1F1F23 (standard) · #F5F3F7 / #27282B (modal) | `background.background` / `card` | `--mat-sys-surface` / `-surface-container-low` |
-| `container-divider-color` | #B7B8C2 / #53545D | `foreground.divider` | `--mat-sys-outline-variant` |
+| `container-background-color` | #FDF7FF / #14121E (standard) · #F8F1FF / #1D1A27 (modal) | `background.background` / `card` | `--mat-sys-surface` / `-surface-container-low` |
+| `container-divider-color` | #BCB5CE / #494458 | `foreground.divider` | `--mat-sys-outline-variant` |
 | `container-shape` | 0 (docked edge) | override | `--mat-sys-corner-large` by default → 0 on the docked edge |
 
 
@@ -483,12 +484,12 @@ Bar: `mat.form-field-overrides((filled-container-color: surface-container-high, 
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `active-track-color` | #254487 / #B1C5FF | `color="primary"` | `--mat-sys-primary` |
-| `inactive-track-color` | #DAE2FF / #254487 | `primary` lighter | `--mat-sys-primary-container` by default → keep |
-| `handle-color` | #254487 / #B1C5FF | `primary` | `--mat-sys-primary` |
+| `active-track-color` | #35307E / #C4C0FF | `color="primary"` | `--mat-sys-primary` |
+| `inactive-track-color` | #E3DFFF / #413C8A | `primary` lighter | `--mat-sys-primary-container` by default → keep |
+| `handle-color` | #35307E / #C4C0FF | `primary` | `--mat-sys-primary` |
 | `handle-width` | 4px | default 20px → 4px | default 20px → 4px |
 | `handle-height` | 24px | default 20px → 24px | default 20px → 24px |
-| `label-container-color` | #303034 / #E4E2E6 | override | `--mat-sys-primary` by default → inverse-surface |
+| `label-container-color` | #322E3C / #E6DFF2 | override | `--mat-sys-primary` by default → inverse-surface |
 | `active-track-height` | 4px | default 6px → 4px | default 6px → 4px |
 | `inactive-track-height` | 4px | default 4px | default |
 
@@ -504,9 +505,9 @@ Bar: `mat.form-field-overrides((filled-container-color: surface-container-high, 
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-color` | #303034 / #E4E2E6 | `mat.snack-bar-overrides` (M2 hard-codes a dark container) | `--mat-sys-inverse-surface` (default) |
-| `supporting-text-color` | #F2F0F4 / #303034 | same override | `--mat-sys-inverse-on-surface` |
-| `button-color` | #B1C5FF / #3F5CA1 | same override | `--mat-sys-inverse-primary` |
+| `container-color` | #322E3C / #E6DFF2 | `mat.snack-bar-overrides` (M2 hard-codes a dark container) | `--mat-sys-inverse-surface` (default) |
+| `supporting-text-color` | #F5EEFF / #322E3C | same override | `--mat-sys-inverse-on-surface` |
+| `button-color` | #C4C0FF / #5955A4 | same override | `--mat-sys-inverse-primary` |
 | `container-shape` | 4px | override | `--mat-sys-corner-extra-small` (default) |
 | `supporting-text-size` | 14px (body-medium) | `body-2` | `--mat-sys-body-medium-size` |
 
@@ -515,11 +516,11 @@ Bar: `mat.form-field-overrides((filled-container-color: surface-container-high, 
 
 **Angular Material:** inline SVG from `assets/States` (never `mat-icon`); hosts: `matChipAvatar` (tile, 18 px), the leading element of a snackbar component (badge, 24 px), first element of a table status column (tile, 20 px), empty-state templates (circle, 56–96 px)
 
-- One construction: the toolbox never changes (navy with its `>_`), the corner badge carries the state role and symbol (✓ success · i info = `primary` · ! warning · ✕ error).
+- One construction: the toolbox never changes (the night `logo-box` with its `>_`, lavender on dark), the corner badge carries the state role and symbol (✓ success · i info = `primary` · ! warning · ✕ error).
 - A · alone 24–40 px (snackbars, popin headers, inline alerts) · B · circle 56–96 px (empty states, table-/panel-/popin-level errors: disc in the state role, dark on light and light on dark, toolbox reversed, badge in the state container) · C · tile glyph 18–20 px (chips, cells, options).
 - Loading is not a state: the slot shows the pen-orbit ring around the plain mark and takes the state in place when the request resolves (warning after a timeout, error with Retry). No entrance animation; never below 18 px; never recoloured.
 
-Tokens: `--md-sys-color-success | warning | error | primary` and their `on-*`, `*-container`, `on-*-container` for the badge, disc and tile; `--md-sys-color-primary` / `-on-primary` / `-tertiary-container` for the toolbox; `-ai` for the pending pen. Identical under M2 and M3.
+Tokens: `--md-sys-color-success | warning | error | primary` and their `on-*`, `*-container`, `on-*-container` for the badge, disc and tile; `--md-sys-color-logo-box` / `-on-logo-box` / `-logo-cursor` for the toolbox; `-ai` for the pending pen. Identical under M2 and M3.
 
 ### StatusChip
 
@@ -532,7 +533,7 @@ Tokens: `--md-sys-color-success | warning | error | primary` and their `on-*`, `
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `elevated-container-color` | state container: #ACF4A2 / #0B5314 · #FFDEA0 / #5C4300 · #FFDAD6 / #93000A · #DAE2FF / #254487 | `.dt-chip-*` → `mat.chips-overrides` (same as M3) | `.dt-chip-*` → `mat.chips-overrides` |
+| `elevated-container-color` | state container: #ACF4A2 / #0B5314 · #FFDEA0 / #5C4300 · #FFDAD6 / #93000A · #E3DFFF / #413C8A | `.dt-chip-*` → `mat.chips-overrides` (same as M3) | `.dt-chip-*` → `mat.chips-overrides` |
 | `label-text-color` | on-state-container | same | same |
 | `container-shape-radius` | 4px (`radius-xs`) on status chips | class override | class override |
 | `with-avatar-avatar-size` | 18px | override | override |
@@ -549,12 +550,12 @@ Tokens: `--md-sys-color-success | warning | error | primary` and their `on-*`, `
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `selected-track-color` | #254487 / #B1C5FF | `color="primary"` | `--mat-sys-primary` |
-| `selected-handle-color` | #FFFFFF / #042C70 | contrast | `--mat-sys-on-primary` |
-| `selected-icon-color` | #254487 / #B1C5FF | default | `--mat-sys-on-primary-container` by default → primary |
-| `unselected-track-color` | #D5D4D8 / #424245 | override | `--mat-sys-surface-variant` by default → surface-container-highest |
-| `unselected-handle-color` | #696A73 / #9C9DA7 | override | `--mat-sys-outline` (default) |
-| `track-outline-color` | #696A73 / #9C9DA7 | override | `--mat-sys-outline` (default) |
+| `selected-track-color` | #35307E / #C4C0FF | `color="primary"` | `--mat-sys-primary` |
+| `selected-handle-color` | #FFFFFF / #2A2473 | contrast | `--mat-sys-on-primary` |
+| `selected-icon-color` | #35307E / #C4C0FF | default | `--mat-sys-on-primary-container` by default → primary |
+| `unselected-track-color` | #D8D1E4 / #363341 | override | `--mat-sys-surface-variant` by default → surface-container-highest |
+| `unselected-handle-color` | #6D677D / #948DA5 | override | `--mat-sys-outline` (default) |
+| `track-outline-color` | #6D677D / #948DA5 | override | `--mat-sys-outline` (default) |
 | `track-width` | 52px | default | default |
 | `track-height` | 32px | default | default |
 | `selected-handle-size` | 24px | default | default |
@@ -572,13 +573,13 @@ Tokens: `--md-sys-color-success | warning | error | primary` and their `on-*`, `
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `active-indicator-color` | #254487 / #B1C5FF | `color="primary"` | `--mat-sys-primary` |
-| `active-label-text-color` | #254487 / #B1C5FF | `primary` | `--mat-sys-on-surface` by default → primary |
-| `inactive-label-text-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface` by default → on-surface-variant |
+| `active-indicator-color` | #35307E / #C4C0FF | `color="primary"` | `--mat-sys-primary` |
+| `active-label-text-color` | #35307E / #C4C0FF | `primary` | `--mat-sys-on-surface` by default → primary |
+| `inactive-label-text-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface` by default → on-surface-variant |
 | `active-indicator-height` | 3px (primary) · 2px (secondary) | default 2px → 3px | default 2px → 3px |
 | `active-indicator-shape` | 3px 3px 0 0 (primary) | override | `--mat-sys-corner-full` top (default) |
 | `container-height` | 48px | default 48px | default |
-| `divider-color` | #B7B8C2 / #53545D | `foreground.divider` | `--mat-sys-surface-variant` by default → outline-variant |
+| `divider-color` | #BCB5CE / #494458 | `foreground.divider` | `--mat-sys-surface-variant` by default → outline-variant |
 | `label-text-size` | 14px (label-large) | `button` | `--mat-sys-label-large-size` |
 
 
@@ -594,14 +595,14 @@ Tokens: `--md-sys-color-success | warning | error | primary` and their `on-*`, `
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
 | `container-height` | 56px | density 0 → 56px | 56px |
-| `outlined-outline-color` | #696A73 / #9C9DA7 | `foreground.divider` → set `outline` | `--mat-sys-outline` |
+| `outlined-outline-color` | #6D677D / #948DA5 | `foreground.divider` → set `outline` | `--mat-sys-outline` |
 | `outlined-outline-width` | 1px | default | default |
-| `outlined-label-text-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
+| `outlined-label-text-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
 | `outlined-container-shape` | 4px (`radius-xs`) | `mat.form-field-overrides` | `--mat-sys-corner-extra-small` (default) |
-| `outlined-input-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
+| `outlined-input-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
 | `error-text-color` | #BA1A1A / #FFB4AB | `warn` | `--mat-sys-error` |
 | `outlined-error-outline-color` | #BA1A1A / #FFB4AB | `warn` | `--mat-sys-error` |
-| `filled-container-color` | #D5D4D8 / #424245 (dense tables) | override | `--mat-sys-surface-container-highest` (default) |
+| `filled-container-color` | #D8D1E4 / #363341 (dense tables) | override | `--mat-sys-surface-container-highest` (default) |
 | `subscript-text-size` | 12px (body-small) | `caption` | `--mat-sys-body-small-size` |
 
 Focused 2 px `primary` outline: `focus-outline-color` is not a token — it follows `--mat-sys-primary` (M3) / the `primary` palette (M2) automatically. Select panel: `mat.select-overrides((panel-background-color: surface-container))`, selected option `mat.option-overrides((selected-state-layer-color: secondary-container, selected-state-label-text-color: on-secondary-container))`.
@@ -616,8 +617,8 @@ Focused 2 px `primary` outline: `focus-outline-color` is not a token — it foll
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-background-color` | #DEDCE0 / #39393C | override | `--mat-sys-surface-container` by default → high |
-| `container-shape` | 28px | override | `--mat-sys-corner-extra-small` by default → 28px |
+| `container-background-color` | #E1DAEC / #2B2836 | override | `--mat-sys-surface-container` by default → high |
+| `container-shape` | 16px | `mat.timepicker-overrides` | `--mat-sys-corner-extra-small` by default → 16px |
 
 
 ### Tooltip
@@ -631,8 +632,8 @@ Focused 2 px `primary` outline: `focus-outline-color` is not a token — it foll
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-color` | #303034 / #E4E2E6 | override | `--mat-sys-inverse-surface` (default) |
-| `supporting-text-color` | #F2F0F4 / #303034 | override | `--mat-sys-inverse-on-surface` |
+| `container-color` | #322E3C / #E6DFF2 | override | `--mat-sys-inverse-surface` (default) |
+| `supporting-text-color` | #F5EEFF / #322E3C | override | `--mat-sys-inverse-on-surface` |
 | `container-shape` | 4px | override | `--mat-sys-corner-extra-small` (default) |
 | `supporting-text-size` | 12px (label-medium) | `caption` | `--mat-sys-body-small-size` by default → label-medium |
 
@@ -643,14 +644,14 @@ Focused 2 px `primary` outline: `focus-outline-color` is not a token — it foll
 **Angular Material:** `mat-toolbar` (never `color="primary"`)
 
 - Small 64 px: leading navigation icon, title-large, up to three trailing icon buttons; at rest `surface`, scrolled `surface-container`. Medium / large 112 / 152 px with the title under the icons in headline-medium / -large, collapsing to small on scroll.
-- Icon buttons 40 px in a 48 px slot; titles truncate, never wrap in the small bar. Navy is for actions, not the bar.
+- Icon buttons 40 px in a 48 px slot; titles truncate, never wrap in the small bar. Violet is for actions, not the bar.
 
 `mat.toolbar-overrides((…))` sets these in **both** files; the CSS variable is `--mat-toolbar-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-background-color` | #FBF8FD / #1F1F23 at rest · #E9E7EC / #303034 scrolled | `background.app-bar` + a `.scrolled` class | `--mat-sys-surface` / `-surface-container` via a class |
-| `container-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
+| `container-background-color` | #FDF7FF / #14121E at rest · #ECE5F8 / #23202D scrolled | `background.app-bar` + a `.scrolled` class | `--mat-sys-surface` / `-surface-container` via a class |
+| `container-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
 | `standard-height` | 64px | default 64px | default |
 | `mobile-height` | 64px (56px on phones) | default 56px | default |
 | `title-text-size` | 22px (title-large) | `headline-6` at 22px | `--mat-sys-title-large-size` |
@@ -660,38 +661,38 @@ Focused 2 px `primary` outline: `focus-outline-color` is not a token — it foll
 
 Angular Material components AIToolbox has not designed yet; the tokens exist in both generations and the rules below are the starting point.
 
-`mat.table-overrides((…))` sets these in **both** files; the CSS variable is `--mat-table-<token>`. Status column = 20 px tile glyph (StateMark C); row loading = 20 px pen orbit; row failed = error tile + Retry; table-level error = StateMark B circle 56–64 px; pending = the pending ring in the same slot.
+`mat.table-overrides((…))` sets these in **both** files; the CSS variable is `--mat-table-<token>`. Wrapper: `surface-container-lowest`, 1 px `outline-variant`, 12 px radius (`radius-md`), rows square; row hover = `on-surface` state layer at 8 %. Status column = 20 px tile glyph (StateMark C); row loading = 20 px pen orbit; row failed = error tile + Retry; table-level error = StateMark B circle 56–64 px; pending = the pending ring in the same slot.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `background-color` | #FFFFFF / #17171B | `background.card` | `--mat-sys-surface` by default → lowest |
-| `header-headline-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
+| `background-color` | #FFFFFF / #0F0C19 | `background.card` | `--mat-sys-surface` by default → lowest |
+| `header-headline-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
 | `header-headline-size` | 12px (label-medium, uppercase) | `caption` | `--mat-sys-title-small-size` by default → label-medium |
 | `header-container-height` | 48px | default 56px → 48px | default 56px → 48px |
 | `row-item-container-height` | 52px (40px dense) | default 52px | default |
-| `row-item-outline-color` | #B7B8C2 / #53545D | `foreground.divider` | `--mat-sys-outline` by default → outline-variant |
-| `row-item-label-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
+| `row-item-outline-color` | #BCB5CE / #494458 | `foreground.divider` | `--mat-sys-outline` by default → outline-variant |
+| `row-item-label-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
 
 `mat.paginator-overrides((…))` sets these in **both** files; the CSS variable is `--mat-paginator-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-background-color` | #FFFFFF / #17171B | `background.card` | `--mat-sys-surface` |
-| `container-text-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
+| `container-background-color` | #FFFFFF / #0F0C19 | `background.card` | `--mat-sys-surface` |
+| `container-text-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
 | `container-size` | 56px | default | default |
 
 `mat.sort-overrides((…))` sets these in **both** files; the CSS variable is `--mat-sort-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `arrow-color` | #44464F / #C5C6D0 | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
+| `arrow-color` | #494458 / #CAC3DC | `foreground.secondary-text` | `--mat-sys-on-surface-variant` |
 
 `mat.expansion-overrides((…))` sets these in **both** files; the CSS variable is `--mat-expansion-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-background-color` | #F5F3F7 / #27282B | `background.card` | `--mat-sys-surface` by default → low |
-| `header-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
+| `container-background-color` | #F8F1FF / #1D1A27 | `background.card` | `--mat-sys-surface` by default → low |
+| `header-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
 | `header-collapsed-state-height` | 48px | default | default |
 | `container-shape` | 12px | override | `--mat-sys-corner-medium` (default) |
 
@@ -699,17 +700,17 @@ Angular Material components AIToolbox has not designed yet; the tokens exist in 
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `header-selected-state-icon-background-color` | #254487 / #B1C5FF | `primary` | `--mat-sys-primary` |
-| `header-done-state-icon-background-color` | #254487 / #B1C5FF | `primary` | `--mat-sys-primary` |
+| `header-selected-state-icon-background-color` | #35307E / #C4C0FF | `primary` | `--mat-sys-primary` |
+| `header-done-state-icon-background-color` | #35307E / #C4C0FF | `primary` | `--mat-sys-primary` |
 | `header-error-state-icon-foreground-color` | #BA1A1A / #FFB4AB | `warn` | `--mat-sys-error` |
-| `line-color` | #B7B8C2 / #53545D | `foreground.divider` | `--mat-sys-outline` by default → outline-variant |
+| `line-color` | #BCB5CE / #494458 | `foreground.divider` | `--mat-sys-outline` by default → outline-variant |
 
 `mat.tree-overrides((…))` sets these in **both** files; the CSS variable is `--mat-tree-<token>`.
 
 | Token | AIToolbox value (light / dark) | M2 · v21 default | M3 · v22 default |
 |---|---|---|---|
-| `container-background-color` | #FBF8FD / #1F1F23 | `background.card` | `--mat-sys-surface` |
-| `node-text-color` | #1B1B1F / #E9E7EC | `foreground.text` | `--mat-sys-on-surface` |
+| `container-background-color` | #FDF7FF / #14121E | `background.card` | `--mat-sys-surface` |
+| `node-text-color` | #1D1A27 / #ECE5F8 | `foreground.text` | `--mat-sys-on-surface` |
 | `node-min-height` | 40px | default 48px → 40px | default 48px → 40px |
 
 
@@ -717,7 +718,7 @@ Angular Material components AIToolbox has not designed yet; the tokens exist in 
 
 ## Putting it in a project
 
-**Angular Material 21, M2 (`angular/theme.m2.scss`)** — `mat.m2-define-palette` on the seven generated palettes (700 = tone 30 light, 200 = tone 80 dark, 100 = containers), `mat.m2-define-light-theme` / `-dark-theme` with the typography config, surfaces injected into `background` / `foreground`, then the per-component `mat.*-overrides` blocks above for everything M2 does not model (snackbar, shapes, health chips). Dark mode by the `html.dark` class.
+**Angular Material 21, M2 (`angular/theme.m2.scss`)** — `mat.m2-define-palette` on the seven generated palettes (800 = tone 25 for the light primary, 600 = tone 40 for the light tertiary, 200 = tone 80 dark, A200 = tone 85 the neon, 100 = containers), `mat.m2-define-light-theme` / `-dark-theme` with the typography config, surfaces injected into `background` / `foreground`, then the per-component `mat.*-overrides` blocks above for everything M2 does not model (snackbar, shapes, health chips). Dark mode by the `html.dark` class.
 
 **Angular Material 22, M3 (`angular/_theme-colors.scss` + `angular/theme.m3.scss`)** — `mat.theme((color: (primary: dt.$primary-palette, tertiary: dt.$tertiary-palette, theme-type: color-scheme), typography: (brand-family, plain-family), density: 0))`, then `mat.theme-overrides` pinning the roles to the AIToolbox hex, then the same `mat.*-overrides` blocks. Dark mode by `color-scheme: light dark` (or the `html.light` / `html.dark` classes).
 
