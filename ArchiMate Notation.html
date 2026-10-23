@@ -1,0 +1,498 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>ArchiMate Notation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: AIToolbox design-system page — header band · components · element cards per layer · relationships · overlay · usage. */
+/* AIToolbox token bridge — only for pages that do not load css/tokens.css. Same values as tokens 4.5.0. */
+:root, html.light, :root[data-theme="light"] { color-scheme: light;
+  --md-sys-color-primary:#35307E;
+  --md-sys-color-on-primary:#FFFFFF;
+  --md-sys-color-secondary-container:#E3DFFF;
+  --md-sys-color-on-secondary-container:#191836;
+  --md-sys-color-surface:#FDF8FD;
+  --md-sys-color-surface-container-lowest:#FFFFFF;
+  --md-sys-color-surface-container-highest:#ECE5F4;
+  --md-sys-color-on-surface:#1C1B1E;
+  --md-sys-color-on-surface-variant:#48454E;
+  --md-sys-color-outline:#79757F;
+  --md-sys-color-outline-variant:#CAC4CF;
+  --md-sys-color-focus-ring:#35307E;
+  --md-sys-color-success:#1B5F1F;
+  --md-sys-color-on-success:#FFFFFF;
+  --md-sys-color-success-container:#ACF4A2;
+  --md-sys-color-on-success-container:#1B5F1F;
+  --md-sys-color-warning:#6A4E00;
+  --md-sys-color-on-warning:#FFFFFF;
+  --md-sys-color-warning-container:#FFDEA0;
+  --md-sys-color-on-warning-container:#6A4E00;
+  --md-sys-color-error:#93000A;
+  --md-sys-color-on-error:#FFFFFF;
+  --md-sys-color-error-container:#FFDAD6;
+  --md-sys-color-on-error-container:#410002;
+  --md-sys-color-surface-container-low:#FAF4FF; --md-sys-color-surface-container:#F8F1FF; --md-sys-color-surface-container-high:#F2EBFA;
+  --md-sys-color-nav-container:#EDE4FF; --md-sys-color-nav-active:#D4D0F9; --md-sys-color-inverse-surface:#313033; --md-sys-color-inverse-on-surface:#F4EFF4;
+  --md-sys-elevation-level1: 0 1px 2px rgba(0,0,0,.30), 0 1px 3px 1px rgba(0,0,0,.15);
+  --md-sys-typescale-brand-family: 'BNPP Type', 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  --md-sys-typescale-plain-family: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not(.light):not([data-theme="light"]) { color-scheme: dark;
+  --md-sys-color-primary:#C4C0FF;
+  --md-sys-color-on-primary:#2A2473;
+  --md-sys-color-secondary-container:#454364;
+  --md-sys-color-on-secondary-container:#E3DFFF;
+  --md-sys-color-surface:#14121E;
+  --md-sys-color-surface-container-lowest:#0F0C19;
+  --md-sys-color-surface-container-highest:#363341;
+  --md-sys-color-on-surface:#ECE5F8;
+  --md-sys-color-on-surface-variant:#CAC3DC;
+  --md-sys-color-outline:#948DA5;
+  --md-sys-color-outline-variant:#494458;
+  --md-sys-color-focus-ring:#C4C0FF;
+  --md-sys-color-success:#91D888;
+  --md-sys-color-on-success:#0B3910;
+  --md-sys-color-success-container:#0B5314;
+  --md-sys-color-on-success-container:#ACF4A2;
+  --md-sys-color-warning:#FCBC00;
+  --md-sys-color-on-warning:#3F2E00;
+  --md-sys-color-warning-container:#5C4300;
+  --md-sys-color-on-warning-container:#FFDEA0;
+  --md-sys-color-error:#FFB4AB;
+  --md-sys-color-on-error:#690005;
+  --md-sys-color-error-container:#93000A;
+  --md-sys-color-on-error-container:#FFDAD6;
+  --md-sys-color-surface-container-low:#1D1A27; --md-sys-color-surface-container:#23202D; --md-sys-color-surface-container-high:#2B2836;
+  --md-sys-color-nav-container:#1D1A27; --md-sys-color-nav-active:#454364; --md-sys-color-inverse-surface:#E6DFF2; --md-sys-color-inverse-on-surface:#322E3C;
+} }
+html.dark, :root[data-theme="dark"] { color-scheme: dark;
+  --md-sys-color-primary:#C4C0FF;
+  --md-sys-color-on-primary:#2A2473;
+  --md-sys-color-secondary-container:#454364;
+  --md-sys-color-on-secondary-container:#E3DFFF;
+  --md-sys-color-surface:#14121E;
+  --md-sys-color-surface-container-lowest:#0F0C19;
+  --md-sys-color-surface-container-highest:#363341;
+  --md-sys-color-on-surface:#ECE5F8;
+  --md-sys-color-on-surface-variant:#CAC3DC;
+  --md-sys-color-outline:#948DA5;
+  --md-sys-color-outline-variant:#494458;
+  --md-sys-color-focus-ring:#C4C0FF;
+  --md-sys-color-success:#91D888;
+  --md-sys-color-on-success:#0B3910;
+  --md-sys-color-success-container:#0B5314;
+  --md-sys-color-on-success-container:#ACF4A2;
+  --md-sys-color-warning:#FCBC00;
+  --md-sys-color-on-warning:#3F2E00;
+  --md-sys-color-warning-container:#5C4300;
+  --md-sys-color-on-warning-container:#FFDEA0;
+  --md-sys-color-error:#FFB4AB;
+  --md-sys-color-on-error:#690005;
+  --md-sys-color-error-container:#93000A;
+  --md-sys-color-on-error-container:#FFDAD6;
+  --md-sys-color-surface-container-low:#1D1A27; --md-sys-color-surface-container:#23202D; --md-sys-color-surface-container-high:#2B2836;
+  --md-sys-color-nav-container:#1D1A27; --md-sys-color-nav-active:#454364; --md-sys-color-inverse-surface:#E6DFF2; --md-sys-color-inverse-on-surface:#322E3C;
+}
+
+/* ArchiMate notation — AIToolbox design system 4.5 · generated by tools/build_notation.py.
+   Tokens: --ax-<layer>-fill / -ink (notation colours = content colours, never status) on html.light / html.dark like
+   css/tokens.css; everything else is an AIToolbox role (--md-sys-color-*). Load after tokens.css. */
+:root, html.light {
+  --ax-strategy-fill:#F8E5C4; --ax-strategy-ink:#6E4A0E;
+  --ax-business-fill:#FFF2B3; --ax-business-ink:#5E5000;
+  --ax-application-fill:#CFEDFA; --ax-application-ink:#0A5570;
+  --ax-technology-fill:#D5EDC7; --ax-technology-ink:#2C5A1C;
+  --ax-physical-fill:#CBE7D4; --ax-physical-ink:#1C5631;
+  --ax-motivation-fill:#ECDDF6; --ax-motivation-ink:#5A2C80;
+  --ax-implementation-fill:#F6DCEB; --ax-implementation-ink:#7A2457;
+  --ax-other-fill:#FBE3C8; --ax-other-ink:#7A4000;
+}
+@media (prefers-color-scheme: dark) { :root:not(.light):not([data-theme="light"]) {
+  --ax-strategy-fill:#3F2E12; --ax-strategy-ink:#F0CB8E;
+  --ax-business-fill:#3D3500; --ax-business-ink:#F2DC6E;
+  --ax-application-fill:#0C3646; --ax-application-ink:#90D2EC;
+  --ax-technology-fill:#1E3A15; --ax-technology-ink:#A8D795;
+  --ax-physical-fill:#163B23; --ax-physical-ink:#96D2A8;
+  --ax-motivation-fill:#3A2150; --ax-motivation-ink:#D6B4EE;
+  --ax-implementation-fill:#4A1E37; --ax-implementation-ink:#EFB3D4;
+  --ax-other-fill:#4A2D10; --ax-other-ink:#F2BE84;
+} }
+html.dark, :root[data-theme="dark"] {
+  --ax-strategy-fill:#3F2E12; --ax-strategy-ink:#F0CB8E;
+  --ax-business-fill:#3D3500; --ax-business-ink:#F2DC6E;
+  --ax-application-fill:#0C3646; --ax-application-ink:#90D2EC;
+  --ax-technology-fill:#1E3A15; --ax-technology-ink:#A8D795;
+  --ax-physical-fill:#163B23; --ax-physical-ink:#96D2A8;
+  --ax-motivation-fill:#3A2150; --ax-motivation-ink:#D6B4EE;
+  --ax-implementation-fill:#4A1E37; --ax-implementation-ink:#EFB3D4;
+  --ax-other-fill:#4A2D10; --ax-other-ink:#F2BE84;
+}
+[data-mantine-color-scheme="dark"] {   /* inside a LikeC4 view */
+  --ax-strategy-fill:#3F2E12; --ax-strategy-ink:#F0CB8E;
+  --ax-business-fill:#3D3500; --ax-business-ink:#F2DC6E;
+  --ax-application-fill:#0C3646; --ax-application-ink:#90D2EC;
+  --ax-technology-fill:#1E3A15; --ax-technology-ink:#A8D795;
+  --ax-physical-fill:#163B23; --ax-physical-ink:#96D2A8;
+  --ax-motivation-fill:#3A2150; --ax-motivation-ink:#D6B4EE;
+  --ax-implementation-fill:#4A1E37; --ax-implementation-ink:#EFB3D4;
+  --ax-other-fill:#4A2D10; --ax-other-ink:#F2BE84;
+}
+.ax-l-strategy { --ax-fill:var(--ax-strategy-fill); --ax-ink:var(--ax-strategy-ink); }
+.ax-l-business { --ax-fill:var(--ax-business-fill); --ax-ink:var(--ax-business-ink); }
+.ax-l-application { --ax-fill:var(--ax-application-fill); --ax-ink:var(--ax-application-ink); }
+.ax-l-technology { --ax-fill:var(--ax-technology-fill); --ax-ink:var(--ax-technology-ink); }
+.ax-l-physical { --ax-fill:var(--ax-physical-fill); --ax-ink:var(--ax-physical-ink); }
+.ax-l-motivation { --ax-fill:var(--ax-motivation-fill); --ax-ink:var(--ax-motivation-ink); }
+.ax-l-implementation { --ax-fill:var(--ax-implementation-fill); --ax-ink:var(--ax-implementation-ink); }
+.ax-l-other { --ax-fill:var(--ax-other-fill); --ax-ink:var(--ax-other-ink); }
+
+/* Type tile: 20 px (32 large), layer fill, layer ink glyph, before an element name in lists, tables, chips. */
+.ax-tile { width:20px; height:20px; border-radius:4px; display:inline-grid; place-items:center; flex:none;
+  background:var(--ax-fill); color:var(--ax-ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ax-ink) 35%, transparent); }
+.ax-tile svg { width:16px; height:16px; }
+.ax-tile.lg { width:32px; height:32px; border-radius:8px; } .ax-tile.lg svg { width:24px; height:24px; }
+.ax-tile.ax-neutral { --ax-fill:var(--md-sys-color-surface-container-highest); --ax-ink:var(--md-sys-color-on-surface-variant); }
+
+/* Figure: outer = ink (1 px border), inner = fill; clipped shapes keep the border through two clip-paths. */
+.ax-box { position:relative; width:var(--ax-w,176px); height:var(--ax-h,72px); background:var(--ax-ink); padding:1px; flex:none; box-sizing:border-box; }
+.ax-box > .ax-in { position:relative; width:100%; height:100%; background:var(--ax-fill); color:var(--md-sys-color-on-surface); box-sizing:border-box;
+  display:flex; align-items:center; justify-content:center; text-align:center; padding:8px 26px 8px 10px;
+  font:600 13px/16px var(--md-sys-typescale-plain-family, 'Open Sans', 'Segoe UI', system-ui, sans-serif); }
+.ax-box .ax-glyph { position:absolute; top:5px; right:5px; width:18px; height:18px; color:var(--ax-ink); }
+.ax-shape-rounded, .ax-shape-rounded > .ax-in { border-radius:12px; }
+.ax-shape-ellipse, .ax-shape-ellipse > .ax-in { border-radius:50%; }
+.ax-shape-chamfer { clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px); }
+.ax-shape-chamfer > .ax-in { clip-path:polygon(9.6px 0,calc(100% - 9.6px) 0,100% 9.6px,100% calc(100% - 9.6px),calc(100% - 9.6px) 100%,9.6px 100%,0 calc(100% - 9.6px),0 9.6px); }
+.ax-shape-object > .ax-in { background:linear-gradient(var(--ax-ink),var(--ax-ink)) 0 28px/100% 1px no-repeat, var(--ax-fill); align-items:flex-start; padding:5px 26px 0 8px; }
+.ax-shape-object .ax-name, .ax-shape-contract .ax-name { display:block; width:100%; height:22px; line-height:18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-top:1px; }
+.ax-shape-contract > .ax-in { background:linear-gradient(var(--ax-ink),var(--ax-ink)) 0 28px/100% 1px no-repeat,
+  linear-gradient(var(--ax-ink),var(--ax-ink)) 0 calc(100% - 14px)/100% 1px no-repeat, var(--ax-fill); align-items:flex-start; padding:5px 26px 0 8px; }
+.ax-shape-wave, .ax-shape-wave > .ax-in { clip-path:polygon(0 0, 100% 0, 100.00% calc(100% - 4.00px), 95.83% calc(100% - 5.04px), 91.67% calc(100% - 6.00px), 87.50% calc(100% - 6.83px), 83.33% calc(100% - 7.46px), 79.17% calc(100% - 7.86px), 75.00% calc(100% - 8.00px), 70.83% calc(100% - 7.86px), 66.67% calc(100% - 7.46px), 62.50% calc(100% - 6.83px), 58.33% calc(100% - 6.00px), 54.17% calc(100% - 5.04px), 50.00% calc(100% - 4.00px), 45.83% calc(100% - 2.96px), 41.67% calc(100% - 2.00px), 37.50% calc(100% - 1.17px), 33.33% calc(100% - 0.54px), 29.17% calc(100% - 0.14px), 25.00% calc(100% - 0.00px), 20.83% calc(100% - 0.14px), 16.67% calc(100% - 0.54px), 12.50% calc(100% - 1.17px), 8.33% calc(100% - 2.00px), 4.17% calc(100% - 2.96px), 0.00% calc(100% - 4.00px)); }
+.ax-shape-wave > .ax-in { padding-bottom:12px; }
+.ax-shape-artifact { clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%); }
+.ax-shape-artifact > .ax-in { clip-path:polygon(0 0, calc(100% - 13.6px) 0, 100% 13.6px, 100% 100%, 0 100%); }
+.ax-shape-artifact::after { content:""; position:absolute; top:0; right:0; width:14px; height:14px; box-sizing:border-box;
+  border-left:1px solid var(--ax-ink); border-bottom:1px solid var(--ax-ink);
+  background:linear-gradient(to bottom left, transparent 50%, color-mix(in srgb, var(--ax-ink) 22%, var(--ax-fill)) 50%); }
+.ax-shape-artifact .ax-glyph { right:20px; }
+.ax-shape-product > .ax-in { background:linear-gradient(var(--ax-ink),var(--ax-ink)) 0 16px/45% 1px no-repeat,
+  linear-gradient(var(--ax-ink),var(--ax-ink)) 45% 0/1px 16px no-repeat, var(--ax-fill); padding-top:18px; }
+.ax-shape-chamfer .ax-glyph { top:8px; right:9px; }
+.ax-shape-ellipse .ax-glyph { right:auto; left:50%; top:7px; transform:translateX(-50%); }
+.ax-shape-ellipse > .ax-in { padding:22px 18px 6px; }
+.ax-shape-group { background:transparent; padding:0; }
+.ax-shape-group > .ax-in { background:transparent; border:1.5px dashed var(--ax-ink); align-items:flex-start; justify-content:flex-start; padding:8px 10px; }
+.ax-box.ax-shape-junction { --ax-w:20px; --ax-h:20px; border-radius:50%; }
+.ax-shape-junction > .ax-in { border-radius:50%; padding:0; }
+.ax-shape-junction .ax-glyph, .ax-shape-junction .ax-name { display:none; }
+.ax-and > .ax-in { background:var(--ax-ink); }
+
+/* Figure sizes and states */
+.ax-box.ax-s { --ax-w:128px; --ax-h:52px; } .ax-box.ax-s > .ax-in { font-size:12px; line-height:15px; }
+.ax-box.ax-m { --ax-w:176px; --ax-h:72px; }
+.ax-box.ax-l { --ax-w:224px; --ax-h:96px; } .ax-box.ax-l > .ax-in { font-size:14px; line-height:18px; }
+a.ax-box, button.ax-box { border:0; cursor:pointer; text-decoration:none; font:inherit; display:block; color:inherit; }
+a.ax-box > .ax-in::before, button.ax-box > .ax-in::before { content:""; position:absolute; inset:0; background:var(--md-sys-color-primary); opacity:0; pointer-events:none; }
+a.ax-box:hover > .ax-in::before, button.ax-box:hover > .ax-in::before { opacity:.06; }
+a.ax-box:active > .ax-in::before, button.ax-box:active > .ax-in::before { opacity:.10; }
+.ax-box[aria-current="true"], .ax-box[aria-selected="true"], .ax-box.ax-selected { outline:2px solid var(--md-sys-color-primary); outline-offset:2px; }
+.ax-box:focus-visible { outline:2px solid var(--md-sys-color-focus-ring); outline-offset:2px; }
+.ax-shape-chamfer:focus-visible, .ax-shape-wave:focus-visible, .ax-shape-artifact:focus-visible { outline:none; filter:drop-shadow(0 0 0 var(--md-sys-color-focus-ring)) drop-shadow(0 0 1.5px var(--md-sys-color-focus-ring)); }
+.ax-box.ax-retired { opacity:.45; } .ax-box.ax-retired > .ax-in { text-decoration:line-through; }
+
+/* Change chip (gap overlay): glyph + word on the state containers. */
+.ax-change { display:inline-flex; align-items:center; gap:6px; height:24px; padding:0 8px 0 4px; border-radius:4px; font:600 12px/16px var(--md-sys-typescale-brand-family, 'BNPP Type', 'Manrope', 'Segoe UI', system-ui, sans-serif); white-space:nowrap; }
+.ax-change b { width:16px; height:16px; border-radius:3px; display:inline-grid; place-items:center; font:700 12px/1 var(--md-sys-typescale-plain-family, 'Open Sans', 'Segoe UI', system-ui, sans-serif); }
+.ax-change.new { background:var(--md-sys-color-success-container); color:var(--md-sys-color-on-success-container); } .ax-change.new b { background:var(--md-sys-color-success); color:var(--md-sys-color-on-success); }
+.ax-change.changed { background:var(--md-sys-color-warning-container); color:var(--md-sys-color-on-warning-container); } .ax-change.changed b { background:var(--md-sys-color-warning); color:var(--md-sys-color-on-warning); }
+.ax-change.retired { background:var(--md-sys-color-error-container); color:var(--md-sys-color-on-error-container); } .ax-change.retired b { background:var(--md-sys-color-error); color:var(--md-sys-color-on-error); }
+.ax-change.unchanged { background:var(--md-sys-color-surface-container-highest); color:var(--md-sys-color-on-surface-variant); } .ax-change.unchanged b { background:var(--md-sys-color-outline); color:var(--md-sys-color-surface-container-lowest); }
+
+/* Plateau track: one cell per plateau, filled when the element belongs to it. */
+.ax-track { display:inline-flex; gap:3px; }
+.ax-track span { min-width:24px; height:20px; padding:0 4px; border-radius:4px; font:600 11px/18px var(--md-sys-typescale-brand-family, 'BNPP Type', 'Manrope', 'Segoe UI', system-ui, sans-serif); box-sizing:border-box;
+  text-align:center; color:var(--md-sys-color-on-surface-variant); border:1px dashed var(--md-sys-color-outline-variant); }
+.ax-track span.on { background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); border:1px solid transparent; }
+
+/* Relationship line (SVG): .ax-rel on the <svg>, .hi when highlighted. */
+.ax-rel { color:var(--md-sys-color-on-surface); } .ax-rel.association { color:var(--md-sys-color-on-surface-variant); }
+.ax-rel line, .ax-rel path.line { stroke:currentColor; stroke-width:1.6; fill:none; }
+.ax-rel.hi { color:var(--md-sys-color-primary); } .ax-rel.hi line, .ax-rel.hi path.line { stroke-width:2.2; }
+.ax-rel .mk-fill { fill:currentColor; } .ax-rel .mk-open { fill:var(--md-sys-color-surface); stroke:currentColor; stroke-width:1.4; }
+
+* { box-sizing:border-box; }
+body { background:var(--md-sys-color-surface); color:var(--md-sys-color-on-surface); font:14px/20px var(--md-sys-typescale-plain-family); }
+h1,h2,h3 { font-family:var(--md-sys-typescale-brand-family); margin:0; text-wrap:balance; }
+code { font:600 13px/20px var(--md-sys-typescale-plain-family); background:var(--md-sys-color-surface-container-highest); padding:1px 5px; border-radius:4px; }
+:focus-visible { outline:2px solid var(--md-sys-color-primary); outline-offset:2px; }
+.band { background:var(--md-sys-color-nav-container); }
+.wrap { max-width:1280px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); }
+@media (min-width:600px) { .wrap { padding-left:max(24px, env(safe-area-inset-left,0px)); padding-right:max(24px, env(safe-area-inset-right,0px)); } }
+.band .wrap { padding-block:28px 24px; display:grid; gap:8px; }
+.eyebrow { font:600 12px/16px var(--md-sys-typescale-brand-family); letter-spacing:.06em; text-transform:uppercase; color:var(--md-sys-color-on-surface-variant); }
+h1 { font-size:28px; line-height:36px; font-weight:800; }
+.lead { max-width:76ch; color:var(--md-sys-color-on-surface-variant); margin:0; }
+main.wrap { padding-block:24px 64px; display:grid; gap:40px; }
+main.wrap > section { min-width:0; }
+section > h2 { font-size:22px; line-height:28px; font-weight:700; margin-bottom:6px; }
+section > p.sub { margin:0 0 16px; color:var(--md-sys-color-on-surface-variant); max-width:80ch; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; }
+.chip { height:32px; padding:0 12px; border-radius:8px; border:1px solid var(--md-sys-color-outline); background:transparent; color:var(--md-sys-color-on-surface); font:600 14px/1 var(--md-sys-typescale-brand-family); display:inline-flex; align-items:center; gap:8px; cursor:pointer; }
+.chip:hover { background:color-mix(in srgb, var(--md-sys-color-primary) 6%, transparent); }
+.chip[aria-pressed="true"] { background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); border-color:transparent; }
+.search { height:40px; min-width:min(100%,280px); border:1px solid var(--md-sys-color-outline); border-radius:16px; padding:0 14px; background:var(--md-sys-color-surface-container-lowest); color:var(--md-sys-color-on-surface); font:inherit; }
+.search:focus { outline:none; border:2px solid var(--md-sys-color-primary); padding:0 13px; }
+.toolbar { display:flex; flex-wrap:wrap; gap:12px; align-items:center; position:sticky; top:env(safe-area-inset-top,0px); z-index:3; background:var(--md-sys-color-surface); padding-block:10px; }
+body::before { content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:10; background:var(--md-sys-color-surface); }
+.layer { margin-top:28px; }
+.layer h3 { display:flex; align-items:center; gap:10px; font-size:16px; line-height:24px; font-weight:700; margin-bottom:12px; }
+.swatch { width:28px; height:20px; border-radius:4px; background:var(--ax-fill); box-shadow: inset 0 0 0 1px var(--ax-ink); }
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap:16px; }
+.card { background:var(--md-sys-color-surface-container-lowest); border-radius:12px; box-shadow:var(--md-sys-elevation-level1, 0 1px 2px rgba(0,0,0,.3), 0 1px 3px 1px rgba(0,0,0,.15)); padding:16px; display:grid; grid-template-columns:auto minmax(0,1fr); gap:12px 16px; align-items:start; }
+.card .preview { grid-row:span 2; }
+.card h4 { margin:0; font:600 16px/24px var(--md-sys-typescale-brand-family); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.card p { margin:0; color:var(--md-sys-color-on-surface-variant); font-size:13px; line-height:18px; }
+.meta { grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:6px 12px; font-size:12px; color:var(--md-sys-color-on-surface-variant); }
+.meta code { font-size:12px; }
+.copy { border:0; background:transparent; color:var(--md-sys-color-primary); font:600 12px/16px var(--md-sys-typescale-brand-family); padding:4px 6px; border-radius:8px; cursor:pointer; }
+.copy:hover { background:color-mix(in srgb, var(--md-sys-color-primary) 6%, transparent); }
+.preview .ax-box { --ax-w:152px; --ax-h:64px; }
+.preview .ax-box.ax-shape-junction { --ax-w:20px; --ax-h:20px; }
+.tbl { background:var(--md-sys-color-surface-container-lowest); border:1px solid var(--md-sys-color-outline-variant); border-radius:12px; overflow-x:auto; }
+table { border-collapse:collapse; width:100%; min-width:720px; }
+th { text-align:left; height:48px; padding:0 14px; font:600 12px/16px var(--md-sys-typescale-brand-family); letter-spacing:.06em; text-transform:uppercase; color:var(--md-sys-color-on-surface-variant); border-bottom:1px solid var(--md-sys-color-outline-variant); }
+td { padding:10px 14px; border-bottom:1px solid var(--md-sys-color-outline-variant); vertical-align:middle; }
+tbody tr:last-child td { border-bottom:0; }
+.rel svg { display:block; width:150px; height:24px; color:var(--md-sys-color-on-surface); }
+.rules { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%,320px),1fr)); gap:16px; }
+.rule { border-radius:12px; padding:16px; background:var(--md-sys-color-surface-container-high); }
+.rule h4 { margin:0 0 8px; font:600 14px/20px var(--md-sys-typescale-brand-family); display:flex; gap:8px; align-items:center; }
+.rule ul { margin:0; padding-left:18px; color:var(--md-sys-color-on-surface-variant); }
+.rule.do h4 b { color:var(--md-sys-color-success); } .rule.dont h4 b { color:var(--md-sys-color-error); }
+.demo { display:flex; flex-wrap:wrap; gap:20px; align-items:center; padding:20px; background:var(--md-sys-color-surface-container-low); border-radius:12px; }
+.counts { color:var(--md-sys-color-on-surface-variant); font-size:12px; }
+.empty { color:var(--md-sys-color-on-surface-variant); padding:24px 0; }
+
+.jump { display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:6px; }
+.jump a { color:var(--md-sys-color-primary); font:600 14px/20px var(--md-sys-typescale-brand-family); text-decoration:none; }
+.jump a:hover { text-decoration:underline; }
+section { scroll-margin-top:16px; }
+.comp-group > h3 { font:700 16px/24px var(--md-sys-typescale-brand-family); margin:28px 0 12px; display:flex; gap:10px; align-items:baseline; }
+.comp { display:grid; grid-template-columns:minmax(0,1fr); gap:16px; padding:20px; border-radius:12px; background:var(--md-sys-color-surface-container-lowest); box-shadow:var(--md-sys-elevation-level1, 0 1px 2px rgba(0,0,0,.3), 0 1px 3px 1px rgba(0,0,0,.15)); margin-bottom:16px; }
+@media (min-width:1000px) { .comp { grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); } }
+.comp-demo { background:var(--md-sys-color-surface-container-low); border-radius:12px; padding:20px; display:flex; flex-wrap:wrap; gap:16px 20px; align-items:flex-start; align-content:flex-start; min-width:0; }
+.comp-demo .cap { display:grid; gap:6px; justify-items:start; font-size:12px; color:var(--md-sys-color-on-surface-variant); }
+.comp-demo .col { display:grid; gap:10px; width:100%; }
+.comp h4 { margin:0; font:700 18px/24px var(--md-sys-typescale-brand-family); }
+.comp p { margin:6px 0 0; color:var(--md-sys-color-on-surface-variant); }
+.comp .css { margin-top:8px; }
+.comp ul { margin:6px 0 0; padding-left:18px; }
+.comp li { margin:2px 0; }
+.comp .lbl { font:600 12px/16px var(--md-sys-typescale-brand-family); letter-spacing:.06em; text-transform:uppercase; color:var(--md-sys-color-on-surface-variant); margin-top:14px; display:block; }
+.comp details { margin-top:12px; border-top:1px solid var(--md-sys-color-outline-variant); padding-top:8px; }
+.comp summary { cursor:pointer; font:600 14px/20px var(--md-sys-typescale-brand-family); color:var(--md-sys-color-primary); }
+.comp summary:focus-visible { outline:2px solid var(--md-sys-color-primary); outline-offset:2px; border-radius:4px; }
+/* AIToolbox StatusChip (as in the product) for the review demos */
+.status { display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 10px 0 5px; border-radius:4px; font:600 12px/16px var(--md-sys-typescale-brand-family); white-space:nowrap; }
+.status .tile, .tile.solo { width:18px; height:18px; border-radius:4px; display:inline-grid; place-items:center; font:700 12px/1 var(--md-sys-typescale-plain-family); }
+.tile.solo { width:20px; height:20px; }
+.st-success { background:var(--md-sys-color-success-container); color:var(--md-sys-color-on-success-container); } .st-success .tile { background:var(--md-sys-color-success); color:var(--md-sys-color-on-success); }
+.st-warning { background:var(--md-sys-color-warning-container); color:var(--md-sys-color-on-warning-container); } .st-warning .tile { background:var(--md-sys-color-warning); color:var(--md-sys-color-on-warning); }
+.st-error { background:var(--md-sys-color-error-container); color:var(--md-sys-color-on-error-container); } .st-error .tile { background:var(--md-sys-color-error); color:var(--md-sys-color-on-error); }
+.st-info { background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); } .st-info .tile { background:var(--md-sys-color-primary); color:var(--md-sys-color-on-primary); }
+.st-neutral { background:var(--md-sys-color-surface-container-highest); color:var(--md-sys-color-on-surface-variant); } .st-neutral .tile { background:var(--md-sys-color-outline); color:var(--md-sys-color-surface-container-lowest); }
+.check { display:flex; gap:10px; padding:10px 0; border-top:1px solid var(--md-sys-color-outline-variant); width:100%; }
+.check:first-child { border-top:0; padding-top:0; }
+.check b { font:600 14px/20px var(--md-sys-typescale-brand-family); } .check .id { font:600 12px/16px var(--md-sys-typescale-brand-family); color:var(--md-sys-color-on-surface-variant); margin-left:8px; }
+.check ul { margin:4px 0 0; padding-left:18px; color:var(--md-sys-color-on-surface-variant); font-size:13px; }
+.check a { color:var(--md-sys-color-primary); }
+.asd-head { display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding-bottom:8px; border-bottom:1px solid var(--md-sys-color-outline-variant); width:100%; }
+.asd-head h5 { margin:0; font:700 16px/24px var(--md-sys-typescale-brand-family); display:flex; align-items:center; gap:10px; }
+.asd-head .num { width:28px; height:28px; border-radius:8px; background:var(--md-sys-color-surface-container-highest); display:grid; place-items:center; font-size:13px; }
+.src-badge { display:inline-flex; gap:4px; align-items:center; height:24px; padding:0 8px; border-radius:4px; font:600 12px/16px var(--md-sys-typescale-brand-family); }
+.src-badge.model { background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
+.src-badge.ok { background:var(--md-sys-color-success-container); color:var(--md-sys-color-on-success-container); }
+.src-badge.warn { background:var(--md-sys-color-warning-container); color:var(--md-sys-color-on-warning-container); }
+.src-badge.err { background:var(--md-sys-color-error-container); color:var(--md-sys-color-on-error-container); }
+.sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.snack { position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); background:#313033; color:#F4EFF4; border-radius:4px; padding:12px 16px; font:500 14px/20px var(--md-sys-typescale-plain-family); box-shadow:0 4px 8px 3px rgba(0,0,0,.15); z-index:20; }
+html.dark .snack, :root[data-theme="dark"] .snack { background:#E6DFF2; color:#322E3C; }
+@media (prefers-color-scheme: dark) { :root:not(.light):not([data-theme="light"]) .snack { background:#E6DFF2; color:#322E3C; } }
+</style>
+
+<header class="band"><div class="wrap">
+  <span class="eyebrow">AIToolbox design system · Notation</span>
+  <h1>ArchiMate notation</h1>
+  <p class="lead">Every ArchiMate 3.2 element and relationship type available in Archi, drawn with AIToolbox tokens. Use it to rebuild architecture visuals by type: the layer sets the colour, the aspect sets the shape, the glyph names the type. The same definitions drive the CSS classes, the 24&nbsp;px icons and the LikeC4 element kinds.</p>
+  <p class="counts" id="counts"></p>
+  <nav class="jump" aria-label="Sections"><a href="#components">Components</a><a href="#elements">Element types</a><a href="#relationships">Relationships</a><a href="#overlay">Plateaus and gaps</a><a href="#usage">Usage</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section aria-labelledby="h-comp" id="components">
+    <h2 id="h-comp">Components</h2>
+    <p class="sub">Built on the notation and on the AIToolbox components. Notation components draw the architecture; review components prepare the ARB submission and the ASD. Each one lists its anatomy, sizes, states, rules, accessibility and Angular mapping.</p>
+    <div id="comps"></div>
+  </section>
+
+  <section aria-labelledby="h-el" id="elements">
+    <h2 id="h-el">Elements</h2>
+    <p class="sub">Box = the figure in diagrams (176 × 72, layer fill, 1 px layer ink, glyph top-right). Tile = the 20 px type mark in lists and tables. Active structure is square, behaviour is rounded, passive structure has a header line, motivation has cut corners.</p>
+    <div class="toolbar">
+      <div class="chips" role="group" aria-label="Filter by layer" id="filters"></div>
+      <input class="search" id="q" type="search" placeholder="Find a type (e.g. interface, plateau)" aria-label="Find a type">
+    </div>
+    <div id="layers"></div>
+  </section>
+
+  <section aria-labelledby="h-rel" id="relationships">
+    <h2 id="h-rel">Relationships</h2>
+    <p class="sub">Line style and end markers follow ArchiMate. The LikeC4 column is the relationship kind declared in <code>archimate.c4</code>; LikeC4 draws the same markers.</p>
+    <div class="tbl"><table><thead><tr><th>Relationship</th><th>Figure</th><th>Meaning</th><th>LikeC4</th></tr></thead><tbody id="rels"></tbody></table></div>
+  </section>
+
+  <section aria-labelledby="h-gap" id="overlay">
+    <h2 id="h-gap">Plateaus and gap overlay</h2>
+    <p class="sub">Every building block is tagged with the plateaus it belongs to (<code>#baseline</code>, <code>#transition-1</code>, <code>#target</code>). Gap views compare two plateaus with a change chip: glyph and word, on the AIToolbox state containers. The layer colour never carries the change.</p>
+    <div class="demo" id="gapdemo"></div>
+  </section>
+
+  <section aria-labelledby="h-use" id="usage">
+    <h2 id="h-use">Usage</h2>
+    <div class="rules">
+      <div class="rule do"><h4><b aria-hidden="true">✓</b>Do</h4><ul>
+        <li>Pick the element type first; colour, shape and glyph follow from it.</li>
+        <li>Show the type tile before an element name wherever several types are listed together.</li>
+        <li>Use Grouping for model folders (ABB, SBB, an Application) and for views that frame a scope.</li>
+        <li>Keep one relationship type per line; use a junction to split or merge paths.</li>
+      </ul></div>
+      <div class="rule dont"><h4><b aria-hidden="true">✕</b>Don’t</h4><ul>
+        <li>Use a layer colour for a status, a selection or an action. Status stays a glyph + word chip.</li>
+        <li>Recolour a glyph, or draw a glyph without its box or tile.</li>
+        <li>Mix a UML diagram into a building-block view: detailed design lives in the DD files.</li>
+        <li>Invent a type: extend with a specialization of an existing type and a tag.</li>
+      </ul></div>
+      <div class="rule"><h4>In code</h4><ul>
+        <li>HTML: <code>&lt;span class="ax-tile ax-l-application"&gt;svg&lt;/span&gt;</code>, box: <code>.ax-box.ax-shape-rect.ax-l-application</code>.</li>
+        <li>LikeC4: <code>deployment-api = application-interface 'Deployment API'</code>.</li>
+        <li>Agents: <code>notation.json</code> lists every type with its layer, aspect, shape and glyph.</li>
+        <li>Angular: the same CSS classes; the icons as an SVG sprite or inline.</li>
+      </ul></div>
+    </div>
+  </section>
+</main>
+<div class="snack" id="snack" role="status" hidden></div>
+
+<script>
+const N = {"name": "AIToolbox · ArchiMate 3.2 notation", "layers": [{"id": "strategy", "label": "Strategy", "light": {"fill": "#F8E5C4", "ink": "#6E4A0E"}, "dark": {"fill": "#3F2E12", "ink": "#F0CB8E"}}, {"id": "business", "label": "Business", "light": {"fill": "#FFF2B3", "ink": "#5E5000"}, "dark": {"fill": "#3D3500", "ink": "#F2DC6E"}}, {"id": "application", "label": "Application", "light": {"fill": "#CFEDFA", "ink": "#0A5570"}, "dark": {"fill": "#0C3646", "ink": "#90D2EC"}}, {"id": "technology", "label": "Technology", "light": {"fill": "#D5EDC7", "ink": "#2C5A1C"}, "dark": {"fill": "#1E3A15", "ink": "#A8D795"}}, {"id": "physical", "label": "Physical", "light": {"fill": "#CBE7D4", "ink": "#1C5631"}, "dark": {"fill": "#163B23", "ink": "#96D2A8"}}, {"id": "motivation", "label": "Motivation", "light": {"fill": "#ECDDF6", "ink": "#5A2C80"}, "dark": {"fill": "#3A2150", "ink": "#D6B4EE"}}, {"id": "implementation", "label": "Implementation & migration", "light": {"fill": "#F6DCEB", "ink": "#7A2457"}, "dark": {"fill": "#4A1E37", "ink": "#EFB3D4"}}, {"id": "other", "label": "Other", "light": {"fill": "#FBE3C8", "ink": "#7A4000"}, "dark": {"fill": "#4A2D10", "ink": "#F2BE84"}}], "aspects": [{"id": "active", "label": "Active structure"}, {"id": "behaviour", "label": "Behaviour"}, {"id": "passive", "label": "Passive structure"}, {"id": "motivation", "label": "Motivation"}, {"id": "composite", "label": "Composite"}], "elements": [{"id": "resource", "name": "Resource", "layer": "strategy", "aspect": "active", "shape": "rect", "glyph": "resource", "definition": "An asset owned or controlled by the organisation: people, money, information, know-how.", "likec4Kind": "resource", "icon": "icons/resource.svg", "svg": "<rect x=\"2.5\" y=\"7\" width=\"16\" height=\"10\" rx=\"2.5\"/><path d=\"M18.5 10h2.5v4h-2.5M7 9.5v5M10.5 9.5v5M14 9.5v5\"/>"}, {"id": "capability", "name": "Capability", "layer": "strategy", "aspect": "behaviour", "shape": "rounded", "glyph": "capability", "definition": "What the organisation is able to do, independent of how it is done.", "likec4Kind": "capability", "icon": "icons/capability.svg", "svg": "<rect x=\"3.5\" y=\"15\" width=\"5\" height=\"5\"/><rect x=\"8.5\" y=\"15\" width=\"5\" height=\"5\"/><rect x=\"13.5\" y=\"15\" width=\"5\" height=\"5\"/><rect x=\"8.5\" y=\"10\" width=\"5\" height=\"5\"/><rect x=\"13.5\" y=\"10\" width=\"5\" height=\"5\"/><rect x=\"13.5\" y=\"5\" width=\"5\" height=\"5\"/>"}, {"id": "value-stream", "name": "Value stream", "layer": "strategy", "aspect": "behaviour", "shape": "rounded", "glyph": "value-stream", "definition": "A sequence of stages that creates an overall result for a customer or stakeholder.", "likec4Kind": "value-stream", "icon": "icons/value-stream.svg", "svg": "<path d=\"M2.5 6.5h13.5l5.5 5.5-5.5 5.5H2.5l5-5.5z\"/>"}, {"id": "course-of-action", "name": "Course of action", "layer": "strategy", "aspect": "behaviour", "shape": "rounded", "glyph": "course-of-action", "definition": "An approach or plan for configuring capabilities and resources to reach a goal.", "likec4Kind": "course-of-action", "icon": "icons/course-of-action.svg", "svg": "<circle cx=\"15.5\" cy=\"8.5\" r=\"5.5\"/><circle cx=\"15.5\" cy=\"8.5\" r=\"1.8\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M3 21c1.5-5.5 5-9 10-10.5\"/><path d=\"M10 8.8l3 1.7-1.8 3\"/>"}, {"id": "business-actor", "name": "Business actor", "layer": "business", "aspect": "active", "shape": "rect", "glyph": "actor", "definition": "A person, team or organisation that performs behaviour.", "likec4Kind": "business-actor", "icon": "icons/business-actor.svg", "svg": "<circle cx=\"12\" cy=\"5.5\" r=\"2.8\"/><path d=\"M12 8.3v7.2M5.5 11.2h13M12 15.5 7.5 21.5M12 15.5l4.5 6\"/>"}, {"id": "business-role", "name": "Business role", "layer": "business", "aspect": "active", "shape": "rect", "glyph": "role", "definition": "A responsibility that an actor can be assigned to, such as Environment holder.", "likec4Kind": "business-role", "icon": "icons/business-role.svg", "svg": "<path d=\"M8 6.5h9.5a3 5.5 0 0 1 0 11H8\"/><ellipse cx=\"8\" cy=\"12\" rx=\"3\" ry=\"5.5\"/>"}, {"id": "business-collaboration", "name": "Business collaboration", "layer": "business", "aspect": "active", "shape": "rect", "glyph": "collaboration", "definition": "Two or more roles working together on shared behaviour.", "likec4Kind": "business-collaboration", "icon": "icons/business-collaboration.svg", "svg": "<circle cx=\"9\" cy=\"12\" r=\"5.5\"/><circle cx=\"15\" cy=\"12\" r=\"5.5\"/>"}, {"id": "business-interface", "name": "Business interface", "layer": "business", "aspect": "active", "shape": "rect", "glyph": "interface", "definition": "A channel through which a business service is offered: portal, desk, API for partners.", "likec4Kind": "business-interface", "icon": "icons/business-interface.svg", "svg": "<circle cx=\"15.5\" cy=\"12\" r=\"5\"/><path d=\"M2.5 12h8\"/>"}, {"id": "business-process", "name": "Business process", "layer": "business", "aspect": "behaviour", "shape": "rounded", "glyph": "process", "definition": "Ordered behaviour that produces a defined result, such as Request Deployment.", "likec4Kind": "business-process", "icon": "icons/business-process.svg", "svg": "<path d=\"M2.5 9.5h11.5V5.5l7.5 6.5-7.5 6.5v-4H2.5z\"/>"}, {"id": "business-function", "name": "Business function", "layer": "business", "aspect": "behaviour", "shape": "rounded", "glyph": "function", "definition": "Behaviour grouped by skill, resource or knowledge, without a required order.", "likec4Kind": "business-function", "icon": "icons/business-function.svg", "svg": "<path d=\"M5.5 21V8.5L12 3l6.5 5.5V21L12 16z\"/>"}, {"id": "business-interaction", "name": "Business interaction", "layer": "business", "aspect": "behaviour", "shape": "rounded", "glyph": "interaction", "definition": "Behaviour performed together by a collaboration.", "likec4Kind": "business-interaction", "icon": "icons/business-interaction.svg", "svg": "<path d=\"M10.5 5.5a6.5 6.5 0 0 0 0 13z\"/><path d=\"M13.5 5.5a6.5 6.5 0 0 1 0 13z\"/>"}, {"id": "business-event", "name": "Business event", "layer": "business", "aspect": "behaviour", "shape": "rounded", "glyph": "event", "definition": "Something that happens and triggers or interrupts behaviour.", "likec4Kind": "business-event", "icon": "icons/business-event.svg", "svg": "<path d=\"M3 6.5h12.5a5.5 5.5 0 0 1 0 11H3l3.5-5.5z\"/>"}, {"id": "business-service", "name": "Business service", "layer": "business", "aspect": "behaviour", "shape": "rounded", "glyph": "service", "definition": "Behaviour offered to the environment, defined by its value, not its implementation.", "likec4Kind": "business-service", "icon": "icons/business-service.svg", "svg": "<rect x=\"2.5\" y=\"7.5\" width=\"19\" height=\"9\" rx=\"4.5\"/>"}, {"id": "business-object", "name": "Business object", "layer": "business", "aspect": "passive", "shape": "object", "glyph": "object", "definition": "A concept the business works with, such as Reservation or Placement.", "likec4Kind": "business-object", "icon": "icons/business-object.svg", "svg": "<rect x=\"3.5\" y=\"5.5\" width=\"17\" height=\"13\"/><path d=\"M3.5 9.5h17\"/>"}, {"id": "contract", "name": "Contract", "layer": "business", "aspect": "passive", "shape": "contract", "glyph": "contract", "definition": "A business object holding an agreement, for example a service level.", "likec4Kind": "contract", "icon": "icons/contract.svg", "svg": "<rect x=\"3.5\" y=\"5.5\" width=\"17\" height=\"13\"/><path d=\"M3.5 9.5h17M3.5 14h17\"/>"}, {"id": "representation", "name": "Representation", "layer": "business", "aspect": "passive", "shape": "wave", "glyph": "representation", "definition": "A perceptible form of a business object: a form, a report, a message.", "likec4Kind": "representation", "icon": "icons/representation.svg", "svg": "<path d=\"M3.5 5.5h17v11c-2.8-1.8-5.7 1.8-8.5 0s-5.7-1.8-8.5 0z\"/><path d=\"M3.5 9.5h17\"/>"}, {"id": "product", "name": "Product", "layer": "business", "aspect": "passive", "shape": "product", "glyph": "product", "definition": "A coherent bundle of services and objects offered as a whole.", "likec4Kind": "product", "icon": "icons/product.svg", "svg": "<rect x=\"3.5\" y=\"5.5\" width=\"17\" height=\"13\"/><path d=\"M3.5 9.5h8v-4\"/>"}, {"id": "application-component", "name": "Application component", "layer": "application", "aspect": "active", "shape": "rect", "glyph": "component", "definition": "A deployable, replaceable part of a software system: a Module, a service.", "likec4Kind": "application-component", "icon": "icons/application-component.svg", "svg": "<rect x=\"7.5\" y=\"4.5\" width=\"13\" height=\"15\"/><rect x=\"4\" y=\"7.5\" width=\"7\" height=\"3\"/><rect x=\"4\" y=\"13.5\" width=\"7\" height=\"3\"/>"}, {"id": "application-collaboration", "name": "Application collaboration", "layer": "application", "aspect": "active", "shape": "rect", "glyph": "collaboration", "definition": "Components working together on shared behaviour.", "likec4Kind": "application-collaboration", "icon": "icons/application-collaboration.svg", "svg": "<circle cx=\"9\" cy=\"12\" r=\"5.5\"/><circle cx=\"15\" cy=\"12\" r=\"5.5\"/>"}, {"id": "application-interface", "name": "Application interface", "layer": "application", "aspect": "active", "shape": "rect", "glyph": "interface", "definition": "A point of access to application services: REST API, UI, CLI.", "likec4Kind": "application-interface", "icon": "icons/application-interface.svg", "svg": "<circle cx=\"15.5\" cy=\"12\" r=\"5\"/><path d=\"M2.5 12h8\"/>"}, {"id": "application-function", "name": "Application function", "layer": "application", "aspect": "behaviour", "shape": "rounded", "glyph": "function", "definition": "Automated behaviour grouped by what it does, performed by a component.", "likec4Kind": "application-function", "icon": "icons/application-function.svg", "svg": "<path d=\"M5.5 21V8.5L12 3l6.5 5.5V21L12 16z\"/>"}, {"id": "application-interaction", "name": "Application interaction", "layer": "application", "aspect": "behaviour", "shape": "rounded", "glyph": "interaction", "definition": "Automated behaviour performed together by an application collaboration.", "likec4Kind": "application-interaction", "icon": "icons/application-interaction.svg", "svg": "<path d=\"M10.5 5.5a6.5 6.5 0 0 0 0 13z\"/><path d=\"M13.5 5.5a6.5 6.5 0 0 1 0 13z\"/>"}, {"id": "application-process", "name": "Application process", "layer": "application", "aspect": "behaviour", "shape": "rounded", "glyph": "process", "definition": "An ordered sequence of automated behaviour.", "likec4Kind": "application-process", "icon": "icons/application-process.svg", "svg": "<path d=\"M2.5 9.5h11.5V5.5l7.5 6.5-7.5 6.5v-4H2.5z\"/>"}, {"id": "application-event", "name": "Application event", "layer": "application", "aspect": "behaviour", "shape": "rounded", "glyph": "event", "definition": "A change of state in an application, such as a published integration message.", "likec4Kind": "application-event", "icon": "icons/application-event.svg", "svg": "<path d=\"M3 6.5h12.5a5.5 5.5 0 0 1 0 11H3l3.5-5.5z\"/>"}, {"id": "application-service", "name": "Application service", "layer": "application", "aspect": "behaviour", "shape": "rounded", "glyph": "service", "definition": "Automated behaviour exposed to users or other applications.", "likec4Kind": "application-service", "icon": "icons/application-service.svg", "svg": "<rect x=\"2.5\" y=\"7.5\" width=\"19\" height=\"9\" rx=\"4.5\"/>"}, {"id": "data-object", "name": "Data object", "layer": "application", "aspect": "passive", "shape": "object", "glyph": "object", "definition": "Data structured for automated processing: a table, a record, a message schema.", "likec4Kind": "data-object", "icon": "icons/data-object.svg", "svg": "<rect x=\"3.5\" y=\"5.5\" width=\"17\" height=\"13\"/><path d=\"M3.5 9.5h17\"/>"}, {"id": "node", "name": "Node", "layer": "technology", "aspect": "active", "shape": "rect", "glyph": "node", "definition": "A computational or physical resource that hosts or runs artifacts.", "likec4Kind": "node", "icon": "icons/node.svg", "svg": "<path d=\"M3.5 8.5h12.5v12H3.5z\"/><path d=\"M3.5 8.5 7.5 4.5h13v12l-4.5 4M16 8.5l4.5-4\"/>"}, {"id": "device", "name": "Device", "layer": "technology", "aspect": "active", "shape": "rect", "glyph": "device", "definition": "Physical hardware on which software is deployed.", "likec4Kind": "device", "icon": "icons/device.svg", "svg": "<rect x=\"4.5\" y=\"4\" width=\"15\" height=\"11\" rx=\"1\"/><path d=\"M2.5 20h19l-2.5-5H5z\"/>"}, {"id": "system-software", "name": "System software", "layer": "technology", "aspect": "active", "shape": "rect", "glyph": "system-software", "definition": "Software that provides an environment for other software: OS, database, runtime.", "likec4Kind": "system-software", "icon": "icons/system-software.svg", "svg": "<circle cx=\"13.5\" cy=\"10.5\" r=\"6.5\"/><path d=\"M7.6 7.8a6.5 6.5 0 1 0 8.6 8.6\"/>"}, {"id": "technology-collaboration", "name": "Technology collaboration", "layer": "technology", "aspect": "active", "shape": "rect", "glyph": "collaboration", "definition": "Nodes working together on shared behaviour.", "likec4Kind": "technology-collaboration", "icon": "icons/technology-collaboration.svg", "svg": "<circle cx=\"9\" cy=\"12\" r=\"5.5\"/><circle cx=\"15\" cy=\"12\" r=\"5.5\"/>"}, {"id": "technology-interface", "name": "Technology interface", "layer": "technology", "aspect": "active", "shape": "rect", "glyph": "interface", "definition": "A point of access to technology services: a protocol endpoint, a port.", "likec4Kind": "technology-interface", "icon": "icons/technology-interface.svg", "svg": "<circle cx=\"15.5\" cy=\"12\" r=\"5\"/><path d=\"M2.5 12h8\"/>"}, {"id": "path", "name": "Path", "layer": "technology", "aspect": "active", "shape": "rect", "glyph": "path", "definition": "A link between nodes over which they exchange data or material.", "likec4Kind": "path", "icon": "icons/path.svg", "svg": "<path d=\"M8 12h8\" stroke-dasharray=\"1.6 2.2\"/><path d=\"M6.5 8 2.5 12l4 4M17.5 8l4 4-4 4\"/>"}, {"id": "communication-network", "name": "Communication network", "layer": "technology", "aspect": "active", "shape": "rect", "glyph": "network", "definition": "A set of structures that connects nodes for transmission and routing.", "likec4Kind": "communication-network", "icon": "icons/communication-network.svg", "svg": "<path d=\"M7 17 10 7h10.5l-3 10z\"/><circle cx=\"7\" cy=\"17\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"10\" cy=\"7\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"20.5\" cy=\"7\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"17.5\" cy=\"17\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/>"}, {"id": "technology-function", "name": "Technology function", "layer": "technology", "aspect": "behaviour", "shape": "rounded", "glyph": "function", "definition": "Infrastructure behaviour grouped by what it does.", "likec4Kind": "technology-function", "icon": "icons/technology-function.svg", "svg": "<path d=\"M5.5 21V8.5L12 3l6.5 5.5V21L12 16z\"/>"}, {"id": "technology-process", "name": "Technology process", "layer": "technology", "aspect": "behaviour", "shape": "rounded", "glyph": "process", "definition": "An ordered sequence of infrastructure behaviour.", "likec4Kind": "technology-process", "icon": "icons/technology-process.svg", "svg": "<path d=\"M2.5 9.5h11.5V5.5l7.5 6.5-7.5 6.5v-4H2.5z\"/>"}, {"id": "technology-interaction", "name": "Technology interaction", "layer": "technology", "aspect": "behaviour", "shape": "rounded", "glyph": "interaction", "definition": "Infrastructure behaviour performed together by nodes.", "likec4Kind": "technology-interaction", "icon": "icons/technology-interaction.svg", "svg": "<path d=\"M10.5 5.5a6.5 6.5 0 0 0 0 13z\"/><path d=\"M13.5 5.5a6.5 6.5 0 0 1 0 13z\"/>"}, {"id": "technology-event", "name": "Technology event", "layer": "technology", "aspect": "behaviour", "shape": "rounded", "glyph": "event", "definition": "A change of state in the infrastructure, such as a rollout completed.", "likec4Kind": "technology-event", "icon": "icons/technology-event.svg", "svg": "<path d=\"M3 6.5h12.5a5.5 5.5 0 0 1 0 11H3l3.5-5.5z\"/>"}, {"id": "technology-service", "name": "Technology service", "layer": "technology", "aspect": "behaviour", "shape": "rounded", "glyph": "service", "definition": "Infrastructure capability exposed to applications: Git connector, event bus.", "likec4Kind": "technology-service", "icon": "icons/technology-service.svg", "svg": "<rect x=\"2.5\" y=\"7.5\" width=\"19\" height=\"9\" rx=\"4.5\"/>"}, {"id": "artifact", "name": "Artifact", "layer": "technology", "aspect": "passive", "shape": "artifact", "glyph": "artifact", "definition": "A piece of data produced or used by development or deployment: a file, an image, a descriptor.", "likec4Kind": "artifact", "icon": "icons/artifact.svg", "svg": "<path d=\"M5.5 2.5h9l4 4v15h-13z\"/><path d=\"M14.5 2.5v4h4\"/>"}, {"id": "equipment", "name": "Equipment", "layer": "physical", "aspect": "active", "shape": "rect", "glyph": "equipment", "definition": "Physical machinery, tools or instruments that create or use material.", "likec4Kind": "equipment", "icon": "icons/equipment.svg", "svg": "<circle cx=\"9.5\" cy=\"14\" r=\"4\"/><circle cx=\"9.5\" cy=\"14\" r=\"1.2\"/><path d=\"M9.5 8.5v1.5M9.5 18v1.5M4 14h1.5M13.5 14H15\"/><circle cx=\"17\" cy=\"7\" r=\"2.6\"/><path d=\"M17 3v1.4M17 9.6V11M13 7h1.4M19.6 7H21\"/>"}, {"id": "facility", "name": "Facility", "layer": "physical", "aspect": "active", "shape": "rect", "glyph": "facility", "definition": "A physical structure or environment: a data centre, a plant.", "likec4Kind": "facility", "icon": "icons/facility.svg", "svg": "<path d=\"M3 20.5V10l5 3v-3l5 3V4.5h4v16z\"/>"}, {"id": "distribution-network", "name": "Distribution network", "layer": "physical", "aspect": "active", "shape": "rect", "glyph": "distribution", "definition": "A physical network used to transport material or energy.", "likec4Kind": "distribution-network", "icon": "icons/distribution-network.svg", "svg": "<path d=\"M3 9.5h15M6 14.5h15\"/><path d=\"M15 6.5l3 3-3 3M9 11.5l-3 3 3 3\"/>"}, {"id": "material", "name": "Material", "layer": "physical", "aspect": "passive", "shape": "rect", "glyph": "material", "definition": "Tangible physical matter or energy.", "likec4Kind": "material", "icon": "icons/material.svg", "svg": "<path d=\"M8 4h8l4 8-4 8H8l-4-8z\"/><path d=\"M9.5 7.5h5M9.5 16.5h5\"/>"}, {"id": "stakeholder", "name": "Stakeholder", "layer": "motivation", "aspect": "motivation", "shape": "chamfer", "glyph": "stakeholder", "definition": "A role, person or group with interests in the outcome of the architecture.", "likec4Kind": "stakeholder", "icon": "icons/stakeholder.svg", "svg": "<path d=\"M8 6.5h9.5a3 5.5 0 0 1 0 11H8\"/><ellipse cx=\"8\" cy=\"12\" rx=\"3\" ry=\"5.5\"/>"}, {"id": "driver", "name": "Driver", "layer": "motivation", "aspect": "motivation", "shape": "chamfer", "glyph": "driver", "definition": "An internal or external condition that motivates change.", "likec4Kind": "driver", "icon": "icons/driver.svg", "svg": "<circle cx=\"12\" cy=\"12\" r=\"8\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/><path d=\"M12 4v6M12 14v6M4 12h6M14 12h6M6.3 6.3l4.3 4.3M13.4 13.4l4.3 4.3M17.7 6.3l-4.3 4.3M10.6 13.4l-4.3 4.3\"/>"}, {"id": "assessment", "name": "Assessment", "layer": "motivation", "aspect": "motivation", "shape": "chamfer", "glyph": "assessment", "definition": "The result of analysing a driver: a finding, a measurement, a SWOT item.", "likec4Kind": "assessment", "icon": "icons/assessment.svg", "svg": "<circle cx=\"10\" cy=\"10\" r=\"6\"/><path d=\"M14.5 14.5 21 21\"/>"}, {"id": "goal", "name": "Goal", "layer": "motivation", "aspect": "motivation", "shape": "chamfer", "glyph": "goal", "definition": "A high-level statement of intent or direction.", "likec4Kind": "goal", "icon": "icons/goal.svg", "svg": "<circle cx=\"12\" cy=\"12\" r=\"8.5\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1.8\" fill=\"currentColor\" stroke=\"none\"/>"}, {"id": "outcome", "name": "Outcome", "layer": "motivation", "aspect": "motivation", "shape": "chamfer", "glyph": "outcome", "definition": "A measurable end result that has been reached or is targeted.", "likec4Kind": "outcome", "icon": "icons/outcome.svg", "svg": "<circle cx=\"11\" cy=\"13\" r=\"7.5\"/><circle cx=\"11\" cy=\"13\" r=\"4\"/><circle cx=\"11\" cy=\"13\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M11 13 20.5 3.5M16.5 3.5h4v4\"/>"}, {"id": "principle", "name": "Principle", "layer": "motivation", "aspect": "motivation", "shape": "chamfer", "glyph": "principle", "definition": "A statement of intent that applies to every architecture in its scope.", "likec4Kind": "principle", "icon": "icons/principle.svg", "svg": "<rect x=\"5\" y=\"3.5\" width=\"14\" height=\"17\"/><path d=\"M12 7.5v7\"/><circle cx=\"12\" cy=\"17.3\" r=\"1.1\" fill=\"currentColor\" stroke=\"none\"/>"}, {"id": "requirement", "name": "Requirement", "layer": "motivation", "aspect": "motivation", "shape": "chamfer", "glyph": "requirement", "definition": "A statement of need that the architecture must realise.", "likec4Kind": "requirement", "icon": "icons/requirement.svg", "svg": "<path d=\"M7.5 6h14l-5 12h-14z\"/>"}, {"id": "constraint", "name": "Constraint", "layer": "motivation", "aspect": "motivation", "shape": "chamfer", "glyph": "constraint", "definition": "A limitation on how the architecture may be realised.", "likec4Kind": "constraint", "icon": "icons/constraint.svg", "svg": "<path d=\"M7.5 6h14l-5 12h-14z\"/><path d=\"M11 6 6 18\"/>"}, {"id": "meaning", "name": "Meaning", "layer": "motivation", "aspect": "motivation", "shape": "chamfer", "glyph": "meaning", "definition": "The interpretation or knowledge that a concept carries in a given context.", "likec4Kind": "meaning", "icon": "icons/meaning.svg", "svg": "<path d=\"M7 18a4 4 0 0 1-.7-7.9A5.5 5.5 0 0 1 16.8 8.6 4.7 4.7 0 0 1 17 18z\"/>"}, {"id": "value", "name": "Value", "layer": "motivation", "aspect": "motivation", "shape": "ellipse", "glyph": "value", "definition": "The relative worth or importance of a concept for a stakeholder.", "likec4Kind": "value", "icon": "icons/value.svg", "svg": "<ellipse cx=\"12\" cy=\"12\" rx=\"9.5\" ry=\"5.5\"/>"}, {"id": "work-package", "name": "Work package", "layer": "implementation", "aspect": "behaviour", "shape": "rounded", "glyph": "work-package", "definition": "A series of actions with a defined result, owner and timeline: a Work item.", "likec4Kind": "work-package", "icon": "icons/work-package.svg", "svg": "<path d=\"M18.2 9A7 7 0 1 0 19 14.5\"/><path d=\"M19.5 4.5v5h-5\"/>"}, {"id": "deliverable", "name": "Deliverable", "layer": "implementation", "aspect": "passive", "shape": "wave", "glyph": "deliverable", "definition": "A precisely defined result of a work package: a document, a release, a contract.", "likec4Kind": "deliverable", "icon": "icons/deliverable.svg", "svg": "<path d=\"M3.5 4.5h17v12c-2.8-1.8-5.7 1.8-8.5 0s-5.7-1.8-8.5 0z\"/>"}, {"id": "implementation-event", "name": "Implementation event", "layer": "implementation", "aspect": "behaviour", "shape": "rounded", "glyph": "event", "definition": "A state change in the implementation: a milestone, a go-live.", "likec4Kind": "implementation-event", "icon": "icons/implementation-event.svg", "svg": "<path d=\"M3 6.5h12.5a5.5 5.5 0 0 1 0 11H3l3.5-5.5z\"/>"}, {"id": "plateau", "name": "Plateau", "layer": "implementation", "aspect": "composite", "shape": "rect", "glyph": "plateau", "definition": "A relatively stable state of the architecture: Baseline, Transition, Target.", "likec4Kind": "plateau", "icon": "icons/plateau.svg", "svg": "<path d=\"M8 6.5h13.5M5.2 12h13.5M2.5 17.5H16\"/>"}, {"id": "gap", "name": "Gap", "layer": "implementation", "aspect": "composite", "shape": "rect", "glyph": "gap", "definition": "The difference between two plateaus: what is added, changed or removed.", "likec4Kind": "gap", "icon": "icons/gap.svg", "svg": "<circle cx=\"12\" cy=\"12\" r=\"6.5\"/><path d=\"M2.5 10h19M2.5 14h19\"/>"}, {"id": "location", "name": "Location", "layer": "other", "aspect": "composite", "shape": "rect", "glyph": "location", "definition": "A place or position where elements are located or behaviour happens.", "likec4Kind": "location", "icon": "icons/location.svg", "svg": "<path d=\"M12 21.5s-6.5-6.2-6.5-11.5a6.5 6.5 0 0 1 13 0c0 5.3-6.5 11.5-6.5 11.5z\"/><circle cx=\"12\" cy=\"10\" r=\"2.3\"/>"}, {"id": "grouping", "name": "Grouping", "layer": "other", "aspect": "composite", "shape": "group", "glyph": "grouping", "definition": "Any set of elements that belong together; also the folders of the model.", "likec4Kind": "grouping", "icon": "icons/grouping.svg", "svg": "<path d=\"M3 9h18v11.5H3zM3 9V4.5h8.5V9\" stroke-dasharray=\"2.2 1.8\"/>"}, {"id": "and-junction", "name": "And junction", "layer": "other", "aspect": "composite", "shape": "junction", "glyph": "junction-and", "definition": "Joins or splits relationships of the same type: all paths apply.", "likec4Kind": "and-junction", "icon": "icons/and-junction.svg", "svg": "<circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"currentColor\" stroke=\"none\"/>"}, {"id": "or-junction", "name": "Or junction", "layer": "other", "aspect": "composite", "shape": "junction", "glyph": "junction-or", "definition": "Joins or splits relationships of the same type: one path applies.", "likec4Kind": "or-junction", "icon": "icons/or-junction.svg", "svg": "<circle cx=\"12\" cy=\"12\" r=\"5\"/>"}], "relationships": [{"id": "composition", "name": "Composition", "line": "solid", "source": "diamond", "target": "none", "likec4": {"line": "solid", "tail": "diamond", "head": "none"}, "definition": "The whole is made of the part; the part does not exist without it."}, {"id": "aggregation", "name": "Aggregation", "line": "solid", "source": "odiamond", "target": "none", "likec4": {"line": "solid", "tail": "odiamond", "head": "none"}, "definition": "The whole groups the part; the part may belong to other wholes."}, {"id": "assignment", "name": "Assignment", "line": "solid", "source": "dot", "target": "arrow", "likec4": {"line": "solid", "tail": "dot", "head": "normal"}, "definition": "Who or what performs the behaviour, or where an artifact is deployed."}, {"id": "realization", "name": "Realization", "line": "dotted", "source": "none", "target": "triangle", "likec4": {"line": "dotted", "tail": "none", "head": "onormal"}, "definition": "A more concrete element implements a more abstract one: SBB realises ABB."}, {"id": "serving", "name": "Serving", "line": "solid", "source": "none", "target": "open", "likec4": {"line": "solid", "tail": "none", "head": "open"}, "definition": "An element provides its functionality to another."}, {"id": "access", "name": "Access", "line": "dotted", "source": "none", "target": "small", "likec4": {"line": "dotted", "tail": "none", "head": "vee"}, "definition": "Behaviour reads or writes a passive element."}, {"id": "influence", "name": "Influence", "line": "dashed", "source": "none", "target": "open", "likec4": {"line": "dashed", "tail": "none", "head": "open"}, "definition": "An element affects a motivation element, positively (+) or negatively (−)."}, {"id": "triggering", "name": "Triggering", "line": "solid", "source": "none", "target": "arrow", "likec4": {"line": "solid", "tail": "none", "head": "normal"}, "definition": "A temporal or causal sequence between behaviours."}, {"id": "flow", "name": "Flow", "line": "dashed", "source": "none", "target": "arrow", "likec4": {"line": "dashed", "tail": "none", "head": "normal"}, "definition": "Transfer of information, value or material between behaviours."}, {"id": "specialization", "name": "Specialization", "line": "solid", "source": "none", "target": "triangle", "likec4": {"line": "solid", "tail": "none", "head": "onormal"}, "definition": "An element is a particular kind of another."}, {"id": "association", "name": "Association", "line": "solid", "source": "none", "target": "none", "likec4": {"line": "solid", "tail": "none", "head": "none"}, "definition": "An unspecified link; directed when a half arrow is drawn."}], "change": [{"id": "new", "label": "New", "glyph": "+", "role": "success", "meaning": "Exists in the target only."}, {"id": "changed", "label": "Changed", "glyph": "Δ", "role": "warning", "meaning": "Exists in both plateaus with a different realisation."}, {"id": "retired", "label": "Retired", "glyph": "−", "role": "error", "meaning": "Exists in the baseline only; drawn dashed at 40 % in gap views."}, {"id": "unchanged", "label": "Unchanged", "glyph": "=", "role": "neutral", "meaning": "Exists in both plateaus as is."}], "components": [{"id": "figure", "group": "notation", "name": "ArchiMate figure", "css": ".ax-box .ax-shape-<shape> .ax-l-<layer> [.ax-s|.ax-m|.ax-l]", "purpose": "One architecture element drawn in its ArchiMate figure: layer fill, 1 px layer ink, type glyph top-right, name.", "anatomy": ["Container: layer fill, 1 px layer-ink border, shape from the aspect", "Glyph: 18 px, layer ink, top-right (in the header band for objects)", "Name: Open Sans 600, 13 / 16, centred, two lines max", "Optional change chip below the figure (gap views)"], "sizes": ["S 128 × 52 (dense diagrams, 12 / 15 text)", "M 176 × 72 (default)", "L 224 × 96 (posters, 14 / 18 text)"], "states": ["Default", "Hover (clickable figure): primary state layer 6 %, pressed 10 %", "Selected / current: 2 px primary ring, 2 px gap", "Retired (gap views): 45 % opacity, name struck through, with the Retired chip"], "rules": ["The type decides colour, shape and glyph; never pick them separately.", "Shapes: active structure square, behaviour rounded, business/data object header band, contract two lines, representation and deliverable wavy bottom, artifact folded corner, product tab, motivation cut corners, value ellipse, grouping dashed.", "A clickable figure is a link or a button with the element name as its label; a static figure is role=img.", "Never use the layer colour for status: status stays a StatusChip next to the figure."], "a11y": ["Name = element name + type (\"Reservation, business object\").", "Focus ring 2 px primary outside the figure; on clipped shapes it follows the outline.", "Retired state also carries the word Retired (chip), never opacity alone."], "angular": "<atb-ax-figure [type]=\"'business-object'\" [name]=\"…\" size=\"m\" [state]=\"…\"> — custom component, no Angular Material equivalent; renders the .ax-box markup."}, {"id": "tile", "group": "notation", "name": "Type tile", "css": ".ax-tile .ax-l-<layer> [.lg]", "purpose": "The type mark before an element name wherever several types are listed: tables, lists, chips, search results.", "anatomy": ["20 × 20 tile (32 × 32 large), radius-xs 4 (8 large)", "Layer fill with a 1 px inset of the layer ink at 35 %", "16 px glyph (24 large) in layer ink"], "sizes": ["20 px in rows and chips", "32 px in page headers (element page)"], "states": ["Static only: the row or chip around it carries hover and selection."], "rules": ["Always followed by the element name; a tile alone is not a label.", "One tile per element; DD files and ADRs use the neutral code / document tile."], "a11y": ["aria-hidden; the type name is in the row (column Type) or the tooltip."], "angular": "<atb-ax-tile [type]=\"…\" [large]=\"false\"> or the .ax-tile class inside mat-list items and table cells."}, {"id": "change", "group": "notation", "name": "Change chip", "css": ".ax-change.new | .changed | .retired | .unchanged", "purpose": "What happens to a building block between two plateaus.", "anatomy": ["24 px high, radius-xs, label-medium", "16 px glyph square: + Δ − =", "AIToolbox state containers: success, warning, error, neutral"], "sizes": ["One size (24 px)."], "states": ["New (success) · Changed (warning) · Retired (error) · Unchanged (neutral)"], "rules": ["Shown in gap tables, gap legends, element headers; never inside a figure.", "Computed from plateau membership, never typed by hand."], "a11y": ["The glyph is aria-hidden; the word is the name."], "angular": "mat-chip with .dt-chip-success | -warning | -error and the glyph avatar, or <atb-ax-change [change]=\"…\">."}, {"id": "track", "group": "notation", "name": "Plateau track", "css": ".ax-track > span[.on]", "purpose": "Which plateaus an element belongs to, in one glance: B · T1 · T.", "anatomy": ["One 24 × 20 cell per plateau, in plateau order", "Member: secondary-container fill; absent: dashed outline-variant"], "sizes": ["One size."], "states": ["Present · Absent"], "rules": ["Same order everywhere: baseline, transitions, target.", "The full plateau name is the cell tooltip."], "a11y": ["aria-label on the track: \"In Baseline, Transition 1\"."], "angular": "<atb-ax-track [plateaus]=\"…\" [member]=\"…\">."}, {"id": "relationship", "group": "notation", "name": "Relationship line", "css": "SVG markers: composition, aggregation, assignment, realization, serving, access, influence, triggering, flow, specialization, association", "purpose": "An ArchiMate relationship between two figures, with its line style and end markers.", "anatomy": ["1.6 px line in on-surface (on-surface-variant for association)", "Solid, dashed 6/4 or dotted 2/3 by type", "Source and target markers by type", "Optional label: label-medium on the surface colour"], "sizes": ["One stroke width; markers scale with it."], "states": ["Default · Highlighted (selected element's relationships): 2.2 px primary"], "rules": ["One relationship type per line; split or merge paths with a junction.", "In LikeC4 the same types are relationship kinds with the same markers."], "a11y": ["Diagrams have a text alternative: the Relationships list of the element page."], "angular": "Rendered by LikeC4 (<likec4-view>) or <atb-ax-relationship [type]=\"…\">."}, {"id": "readiness", "group": "review", "name": "Readiness chip", "css": ".status.st-success | .st-warning | .st-error", "purpose": "Whether an ARB submission can go to the board.", "anatomy": ["StatusChip: radius-xs, state container, 18 px tile glyph + word"], "sizes": ["StatusChip size."], "states": ["Ready for the board (success ✓) · Needs attention (warning !) · Blocked (error ✕)"], "rules": ["Blocked: a blocking check fails on the scope, or a required ASD section is missing.", "Needs attention: warnings, a pending reviewer, a change request or an open condition."], "a11y": ["The word is the name; the glyph is aria-hidden."], "angular": "mat-chip.dt-chip-success | -warning | -error with the tile glyph (StatusChip)."}, {"id": "check", "group": "review", "name": "Check row", "css": ".check.pass | .warn | .fail", "purpose": "One rule of tools/validate.py with its result and the elements that fail it.", "anatomy": ["20 px status tile", "Title (title-small) + id and level (label-medium, on-surface-variant)", "Findings: one line each, element name as a link + message"], "sizes": ["Full width of its card; rows grouped under label-medium headers (Structure, Traceability, Plateaus & gaps, Ownership & contracts, Decisions)."], "states": ["Passed · Warning · Failed"], "rules": ["Blocking checks fail the pull request; warnings are shown to the board.", "Each finding links to the element page."], "a11y": ["The status word is in a visually hidden span next to the title."], "angular": "mat-list with three-line items, or <atb-check-row [check]=\"…\">."}, {"id": "asd-section", "group": "review", "name": "ASD section header", "css": ".asd-head + .src-badge.model | .ok | .warn | .err", "purpose": "Title of one ASD section and where its content comes from.", "anatomy": ["28 px number square (surface-container-highest)", "Title: title-medium", "Source badge: From the model (secondary-container) · Written (success) · Too short (warning) · Missing (error)", "1 px outline-variant divider under the header"], "sizes": ["One size."], "states": ["From the model · Written · Too short · Missing"], "rules": ["Sections built from the model are never edited in the page: change the model.", "Missing sections block the submission."], "a11y": ["The header is an h2; the table of contents links move focus to it."], "angular": "<atb-asd-section [title]=\"…\" [source]=\"…\">."}, {"id": "decision", "group": "review", "name": "Reviewer decision", "css": ".status.st-*", "purpose": "A board member's decision on a submission, recorded as a Checkpoint.", "anatomy": ["StatusChip with glyph + word"], "sizes": ["StatusChip size."], "states": ["Approved · Approved with conditions (success) · Changes requested (warning) · Rejected (error) · Pending (info) · Not required (neutral)"], "rules": ["Recorded only through the Decision panel (CMD-DECIDE-CHECKPOINT); an agent never records or changes one (INV-12).", "Approve is unavailable while blocking checks fail; the reason is shown."], "a11y": ["Disabled actions use aria-disabled and keep a visible reason."], "angular": "mat-chip.dt-chip-* in a mat-table column; actions are mat-flat-button / tonal / stroked."}]};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const SVG = (inner, cls) => `<svg class="${cls||""}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+const box = e => `<div class="ax-box ax-shape-${e.shape} ax-l-${e.layer}${e.id==="and-junction"?" ax-and":""}" role="img" aria-label="${esc(e.name)} figure"><div class="ax-in">${SVG(e.svg,"ax-glyph")}<span class="ax-name">${esc(e.name)}</span></div></div>`;
+const tile = e => `<span class="ax-tile ax-l-${e.layer}" aria-hidden="true">${SVG(e.svg)}</span>`;
+let filter = "all", q = "";
+document.getElementById("counts").textContent = `${N.elements.length} element types · ${N.relationships.length} relationships · ${N.layers.length} layers · light and dark`;
+function renderFilters() {
+  const mk = (id, label, n) => `<button class="chip" type="button" data-f="${id}" aria-pressed="${filter===id}">${id!=="all"?`<span class="swatch ax-l-${id}" style="width:16px;height:12px" aria-hidden="true"></span>`:""}${esc(label)} <span style="opacity:.7">${n}</span></button>`;
+  document.getElementById("filters").innerHTML = mk("all","All",N.elements.length) + N.layers.map(l => mk(l.id, l.label, N.elements.filter(e=>e.layer===l.id).length)).join("");
+  document.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { filter = b.dataset.f; renderFilters(); renderLayers(); document.querySelector(`[data-f="${filter}"]`).focus(); });
+}
+function renderLayers() {
+  const out = [];
+  for (const l of N.layers) {
+    if (filter !== "all" && filter !== l.id) continue;
+    const items = N.elements.filter(e => e.layer === l.id && (!q || (e.name+" "+e.id+" "+e.definition).toLowerCase().includes(q)));
+    if (!items.length) continue;
+    out.push(`<div class="layer"><h3><span class="swatch ax-l-${l.id}" aria-hidden="true"></span>${esc(l.label)}
+      <span class="counts">light ${l.light.fill} / ${l.light.ink} · dark ${l.dark.fill} / ${l.dark.ink}</span></h3>
+      <div class="grid">${items.map(e => `<article class="card">
+        <div class="preview">${box(e)}</div>
+        <h4>${tile(e)}${esc(e.name)}</h4>
+        <p>${esc(e.definition)}</p>
+        <div class="meta"><span>${esc(N.aspects.find(a=>a.id===e.aspect).label)}</span><span>LikeC4 <code>${esc(e.likec4Kind)}</code></span><span>CSS <code>ax-l-${esc(e.layer)}</code></span>
+          <button class="copy" type="button" data-copy="${esc(e.svg)}" data-name="${esc(e.name)}">Copy SVG</button></div>
+      </article>`).join("")}</div></div>`);
+  }
+  document.getElementById("layers").innerHTML = out.join("") || `<p class="empty">No type matches “${esc(q)}”. Clear the search or choose another layer.</p>`;
+  document.querySelectorAll("[data-copy]").forEach(b => b.onclick = () => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${b.dataset.copy}</svg>`;
+    try { navigator.clipboard.writeText(svg).then(() => toast(`${b.dataset.name} glyph copied`), () => toast("Copy is blocked here. Use icons/ in the package.")); } catch (_) { toast("Copy is blocked here. Use icons/ in the package."); }
+  });
+}
+function marker(kind, end) {
+  const x = end === "s" ? 4 : 146, d = end === "s" ? 1 : -1;
+  switch (kind) {
+    case "diamond":  return `<path d="M${x} 12 l${6*d} -4 l${6*d} 4 l${-6*d} 4z" fill="currentColor"/>`;
+    case "odiamond": return `<path d="M${x} 12 l${6*d} -4 l${6*d} 4 l${-6*d} 4z" fill="var(--md-sys-color-surface-container-lowest)" stroke="currentColor"/>`;
+    case "dot":      return `<circle cx="${x+3*d}" cy="12" r="3" fill="currentColor"/>`;
+    case "arrow":    return `<path d="M${x} 12 l${10*d} -5 v10z" fill="currentColor"/>`;
+    case "triangle": return `<path d="M${x} 12 l${11*d} -6 v12z" fill="var(--md-sys-color-surface-container-lowest)" stroke="currentColor"/>`;
+    case "open":     return `<path d="M${x+10*d} 6 L${x} 12 L${x+10*d} 18" fill="none" stroke="currentColor" stroke-width="1.6"/>`;
+    case "small":    return `<path d="M${x+7*d} 8 L${x} 12 L${x+7*d} 16" fill="none" stroke="currentColor" stroke-width="1.6"/>`;
+    default: return "";
+  }
+}
+function renderRels() {
+  document.getElementById("rels").innerHTML = N.relationships.map(r => {
+    const dash = r.line === "dotted" ? 'stroke-dasharray="2 3"' : r.line === "dashed" ? 'stroke-dasharray="6 4"' : "";
+    return `<tr><td><b style="font-family:var(--md-sys-typescale-brand-family)">${esc(r.name)}</b></td>
+      <td class="rel"><svg viewBox="0 0 150 24" aria-label="${esc(r.name)}: ${esc(r.line)} line"><line x1="6" y1="12" x2="144" y2="12" stroke="currentColor" stroke-width="1.6" ${dash}/>${marker(r.source,"s")}${marker(r.target,"t")}</svg></td>
+      <td style="color:var(--md-sys-color-on-surface-variant)">${esc(r.definition)}</td>
+      <td><code>${esc(r.id)}</code> <span class="counts">line ${esc(r.likec4.line)} · tail ${esc(r.likec4.tail)} · head ${esc(r.likec4.head)}</span></td></tr>`;
+  }).join("");
+}
+function renderGap() {
+  const e = id => N.elements.find(x => x.id === id);
+  const fig = (el, cls, label) => `<div style="display:grid;gap:8px;justify-items:start"><div class="ax-box ax-shape-${el.shape} ax-l-${el.layer} ${cls}" role="img" aria-label="${esc(label)}"><div class="ax-in">${SVG(el.svg,"ax-glyph")}<span class="ax-name">${esc(label)}</span></div></div>`;
+  const chip = c => `<span class="ax-change ${c.id}"><b aria-hidden="true">${esc(c.glyph)}</b>${esc(c.label)}</span>`;
+  const C = Object.fromEntries(N.change.map(c => [c.id, c]));
+  document.getElementById("gapdemo").innerHTML =
+    fig(e("application-interface"), "", "Deployment API") + chip(C.new) + "</div>" +
+    fig(e("application-component"), "", "Jenkins descriptor job") + chip(C.changed) + "</div>" +
+    fig(e("application-component"), "ax-retired", "Booking sheet") + chip(C.retired) + "</div>" +
+    fig(e("artifact"), "", "Environment descriptor") + chip(C.unchanged) + "</div>" +
+    fig(e("plateau"), "", "Target · 2027-Q1") + `<span class="counts">plateau</span></div>` +
+    fig(e("gap"), "", "Manual PR → self-service") + `<span class="counts">gap</span></div>`;
+}
+let tt; function toast(m) { const s = document.getElementById("snack"); s.textContent = m; s.hidden = false; clearTimeout(tt); tt = setTimeout(() => s.hidden = true, 3000); }
+document.getElementById("q").addEventListener("input", ev => { q = ev.target.value.trim().toLowerCase(); renderLayers(); });
+
+const E = id => N.elements.find(x => x.id === id);
+const fig = (el, cls, name, extra) => `<div class="ax-box ax-shape-${el.shape} ax-l-${el.layer} ${cls||""}" role="img" aria-label="${esc(name||el.name)}, ${esc(el.name.toLowerCase())}"${extra||""}><div class="ax-in">${SVG(el.svg,"ax-glyph")}<span class="ax-name">${esc(name||el.name)}</span></div></div>`;
+const cap = (inner, label) => `<div class="cap">${inner}<span>${esc(label)}</span></div>`;
+const sc = (cls, g, w) => `<span class="status st-${cls}"><span class="tile" aria-hidden="true">${g}</span>${esc(w)}</span>`;
+const DEMOS = {
+  figure: () => `<div class="col">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end">${cap(fig(E("application-component"),"ax-s","environments Module"),"S 128 × 52")}${cap(fig(E("business-object"),"ax-m","Reservation"),"M 176 × 72")}${cap(fig(E("business-process"),"ax-l","Request Deployment"),"L 224 × 96")}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">${cap(fig(E("artifact"),"","Environment descriptor"),"Default")}${cap(`<button type="button" class="ax-box ax-shape-rect ax-l-application" aria-label="Deployment API, application interface"><div class="ax-in">${SVG(E("application-interface").svg,"ax-glyph")}<span class="ax-name">Deployment API</span></div></button>`,"Clickable (hover, focus)")}${cap(fig(E("data-object"),"ax-selected","Deployment record"),"Selected")}${cap(fig(E("application-component"),"ax-retired","Booking sheet")+sc("error","−","Retired"),"Retired")}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px">${["contract","representation","deliverable","product","goal","value"].map(i => cap(fig(E(i),"ax-s"), E(i).name)).join("")}</div></div>`,
+  tile: () => N.layers.map(l => { const el = N.elements.find(x => x.layer === l.id && x.shape !== "group" && x.shape !== "junction"); return cap(`<span style="display:flex;gap:8px;align-items:center"><span class="ax-tile ax-l-${l.id}" aria-hidden="true">${SVG(el.svg)}</span><span class="ax-tile lg ax-l-${l.id}" aria-hidden="true">${SVG(el.svg)}</span></span>`, `${l.label} · ${el.name}`); }).join(""),
+  change: () => N.change.map(c => cap(`<span class="ax-change ${c.id}"><b aria-hidden="true">${esc(c.glyph)}</b>${esc(c.label)}</span>`, c.meaning)).join(""),
+  track: () => [["Baseline only", ["B"]], ["Transition 1 and Target", ["T1","T"]], ["All plateaus", ["B","T1","T"]]].map(([l, on]) => cap(`<span class="ax-track" aria-label="In ${esc(l)}">${["B","T1","T"].map(x => `<span class="${on.includes(x)?"on":""}">${x}</span>`).join("")}</span>`, l)).join(""),
+  relationship: () => `<div class="col">${["realization","serving","assignment","composition","flow","influence"].map(id => { const r = N.relationships.find(x => x.id === id); const dash = r.line === "dotted" ? 'stroke-dasharray="2 3"' : r.line === "dashed" ? 'stroke-dasharray="6 4"' : "";
+      return `<div style="display:flex;align-items:center;gap:12px"><span class="rel"><svg viewBox="0 0 150 24" style="width:150px;height:24px;color:var(--md-sys-color-on-surface)" aria-hidden="true"><line x1="6" y1="12" x2="144" y2="12" stroke="currentColor" stroke-width="1.6" ${dash}/>${marker(r.source,"s")}${marker(r.target,"t")}</svg></span><b style="font-family:var(--md-sys-typescale-brand-family)">${esc(r.name)}</b></div>`; }).join("")}</div>`,
+  readiness: () => cap(sc("success","✓","Ready for the board"),"No blocking check, decisions in, conditions met") + cap(sc("warning","!","Needs attention"),"Warnings, pending reviewer or open condition") + cap(sc("error","✕","Blocked"),"Blocking check fails or ASD section missing"),
+  check: () => `<div class="col" style="gap:0">
+      <div class="check"><span class="st-success" style="background:none"><span class="tile solo" aria-hidden="true">✓</span></span><div><b>Every requirement is realized by at least one ABB</b><span class="id">T4 · blocking</span><span class="sr">Passed</span></div></div>
+      <div class="check"><span class="st-warning" style="background:none"><span class="tile solo" aria-hidden="true">!</span></span><div><b>Every new or changed application SBB has a detailed design</b><span class="id">T6 · warning</span><span class="sr">Warning</span><ul><li><a href="#components">Jenkins descriptor job</a> · no detailed design yet</li></ul></div></div>
+      <div class="check"><span class="st-error" style="background:none"><span class="tile solo" aria-hidden="true">✕</span></span><div><b>Interfaces and events reference a contract file that exists</b><span class="id">O2 · blocking</span><span class="sr">Failed</span><ul><li><a href="#components">Reservation API</a> · contract 'contracts/reservations.openapi.yaml' not found</li></ul></div></div></div>`,
+  "asd-section": () => `<div class="col">${[["4","Baseline","model","From the model"],["2","Business need","ok","Written"],["11","Security","warn","Too short"],["12","Risks","err","Missing"]].map(([n,t,c,w]) => `<div class="asd-head"><h5><span class="num">${n}</span>${esc(t)}</h5><span class="src-badge ${c}">${esc(w)}</span></div>`).join("")}</div>`,
+  decision: () => [["success","✓","Approved"],["success","✓","Approved with conditions"],["warning","!","Changes requested"],["error","✕","Rejected"],["info","i","Pending"],["neutral","–","Not required"]].map(([c,g,w]) => sc(c,g,w)).join(""),
+};
+function renderComponents() {
+  const groups = [["notation","Notation components","draw the architecture"],["review","Review components","prepare the ARB and the ASD"]];
+  const li = xs => `<ul>${xs.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  document.getElementById("comps").innerHTML = groups.map(([g, title, sub]) => `<div class="comp-group"><h3>${esc(title)} <span class="counts">${esc(sub)}</span></h3>
+    ${N.components.filter(c => c.group === g).map(c => `<article class="comp" id="c-${esc(c.id)}">
+      <div class="comp-demo">${DEMOS[c.id] ? DEMOS[c.id]() : ""}</div>
+      <div><h4>${esc(c.name)}</h4><p>${esc(c.purpose)}</p><div class="css"><code>${esc(c.css)}</code></div>
+        <span class="lbl">States</span>${li(c.states)}
+        <span class="lbl">Rules</span>${li(c.rules)}
+        <details><summary>Anatomy, sizes, accessibility, Angular</summary>
+          <span class="lbl">Anatomy</span>${li(c.anatomy)}<span class="lbl">Sizes</span>${li(c.sizes)}
+          <span class="lbl">Keyboard and screen reader</span>${li(c.a11y)}<span class="lbl">Angular</span><p><code>${esc(c.angular)}</code></p></details></div>
+    </article>`).join("")}</div>`).join("");
+}
+
+renderComponents(); renderFilters(); renderLayers(); renderRels(); renderGap();
+</script>
+
+</body></html>
