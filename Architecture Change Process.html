@@ -257,6 +257,27 @@ tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
 td code { white-space: nowrap; }
 .foot-note { font-size: 13px; color: var(--md-sys-color-on-surface-variant); padding-top: 32px; max-width: 80ch; }
 
+
+/* parallel changes */
+.overlap { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; font-size: 13px; background: var(--md-sys-color-surface-container); border-radius: 8px; padding: 10px; }
+.overlap > span:last-child { flex: 1 1 220px; min-width: 0; }
+.levels td:first-child, .levels th:first-child { width: 18%; }
+.opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.opt { background: var(--md-sys-color-surface-container-lowest); border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.opt h4 { color: var(--md-sys-color-on-surface); font-size: 15px; letter-spacing: 0; text-transform: none; }
+.opt p { font-size: 14px; color: var(--md-sys-color-on-surface-variant); }
+.opt p b { color: var(--md-sys-color-on-surface); font-weight: 600; }
+.sub-h { font: 700 17px/1.3 var(--atb-brand); margin-top: 12px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+pre.code { margin: 0; overflow-x: auto; background: var(--md-sys-color-surface-container); border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; padding: 14px 16px; font: 500 12.5px/1.6 var(--atb-mono); color: var(--md-sys-color-on-surface); min-width: 0; }
+.code-cap { font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 6px; }
+ul.plain { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 14.5px; }
+.outlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.outlist li { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 12px; align-items: start; font-size: 14px; }
+.git .g-br2 { fill: none; stroke: var(--md-sys-color-on-surface-variant); stroke-width: 3; }
+.git .g-upd { fill: none; stroke: var(--md-sys-color-outline); stroke-width: 2.5; stroke-dasharray: 6 5; }
+@media (max-width: 900px) { .opts, .two { grid-template-columns: minmax(0, 1fr); } .outlist li { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
+
 @media (max-width: 900px) {
   .hero { grid-template-columns: minmax(0, 1fr); }
   .cols, .meta { grid-template-columns: minmax(0, 1fr); }
@@ -294,6 +315,7 @@ html { scroll-behavior: smooth; }
           <li class="now" aria-current="step"><span class="s-name">Review</span><span class="chip c-warn"><span class="tile" aria-hidden="true">!</span>Needs attention</span><span class="s-sub">Security requested changes</span></li>
           <li><span class="s-name">Deliver</span><span class="chip c-off"><span class="tile" aria-hidden="true">–</span>Not started</span><span class="s-sub">2 conditions to come</span></li>
         </ol>
+        <div class="overlap" role="note"><span class="chip c-info"><span class="tile" aria-hidden="true">i</span>Overlap</span><span>Shares 2 building blocks with <b>WP-REQ-05</b> (Request team, in Design). Order declared: WP-REQ-05 depends on this change.</span></div>
         <p class="foot">12 checks · 4 reviewers · 2 conditions · 3 asks to the board · reviewed at <code>7c1e9a0</code>, updated since review</p>
       </div>
       <p class="mock-note">Example change from the Corporate credit worked example, as it appears in Process › Changes.</p>
@@ -505,7 +527,7 @@ html { scroll-behavior: smooth; }
   </header>
   <dl class="meta"><div><dt>TOGAF deliverable</dt><dd>Statement of Architecture Work (scope, plateaus, stakeholders)</dd></div><div><dt>Who</dt><dd>Change owner. The portfolio architect confirms the class.</dd></div></dl>
   <div class="cols">
-    <section><h4>In the toolbox</h4><ul class="pairs"><li><b>Process › Changes › New change</b><span>Class: simplification, incremental or re-architecting. It decides the path below.</span></li><li><b>Scope</b><span>Portfolio and Applications, from plateau → to plateau, work package (new or existing).</span></li><li><b>Reviewers</b><span>Suggested by role from the class and CODEOWNERS; the owner adjusts.</span></li><li><b>Process › Decisions</b><span>A draft ADR for each decision the change needs.</span></li></ul></section>
+    <section><h4>In the toolbox</h4><ul class="pairs"><li><b>Process › Changes › New change</b><span>Class: simplification, incremental or re-architecting. It decides the path below.</span></li><li><b>Scope</b><span>Portfolio and Applications, from plateau → to plateau, work package (new or existing).</span></li><li><b>Reviewers</b><span>Suggested by role from the class and CODEOWNERS; the owner adjusts.</span></li><li><b>Process › Decisions</b><span>A draft ADR for each decision the change needs.</span></li><li><b>Overlap</b><span>Open changes on the same building blocks are listed; the owner sequences, combines or runs them in parallel.</span></li></ul></section>
     <section><h4>In Git</h4><ul class="git-l"><li>CTX-INT creates change/WP-FAC-02 in the central repository.</li><li>First commit: work package, gap stub, ADR drafts, ARB record draft (incremental and re-architecting).</li><li>Draft PR #88 opens; CI publishes preview pr-88.</li></ul></section>
   </div>
   <p class="done"><span class="tile" aria-hidden="true">✓</span><span><b>Done when</b> Scope saved, draft PR open, preview available.</span></p>
@@ -532,7 +554,7 @@ html { scroll-behavior: smooth; }
   <dl class="meta"><div><dt>TOGAF deliverable</dt><dd>Board decision and, when approved, the Architecture Contract (conditions)</dd></div><div><dt>Who</dt><dd>Reviewers by role, the board chair. Decisions are Checkpoints (INV-12); agents never decide.</dd></div></dl>
   <div class="cols">
     <section><h4>In the toolbox</h4><ul class="pairs"><li><b>Process › Reviews › arb.facility.2026-14</b><span>Submit: the readiness gate runs, the ASD is generated and frozen at the commit.</span></li><li><b>Reviewers</b><span>Each records Approve, Approve with conditions, Request changes or Not required, with a note.</span></li><li><b>Conditions and asks</b><span>Owner, due date and status per condition; the decisions only the board can take.</span></li><li><b>Updated since review</b><span>If the branch moves after submission, a banner shows the diff since the pinned commit.</span></li></ul></section>
-    <section><h4>In Git</h4><ul class="git-l"><li>PR #88 leaves draft; the reviewed sha is pinned; the arb-decision check stays pending.</li><li>When the Checkpoint is decided, the bot commits the ARB record (status, decision, conditions, decidedAt, reviewedSha).</li><li>arb-decision turns green; the owner merges with a merge commit (no squash) so the reviewed sha stays in history.</li><li>The merge commit is tagged arb/facility-2026-14.</li></ul><div class="outcomes"><h4>Outcomes</h4><ul><li><span class="chip c-ok"><span class="tile" aria-hidden="true">✓</span>Approve, Approve with conditions</span><span>merge; conditions move to Deliver.</span></li><li><span class="chip c-warn"><span class="tile" aria-hidden="true">!</span>Request changes</span><span>back to Design, then re-submit; the ASD is frozen again.</span></li><li><span class="chip c-err"><span class="tile" aria-hidden="true">✕</span>Reject</span><span>PR closed; the bot commits only the ARB record to main, so the decision is kept.</span></li></ul></div></section>
+    <section><h4>In Git</h4><ul class="git-l"><li>PR #88 leaves draft; the reviewed sha is pinned; the arb-decision check stays pending.</li><li>When the Checkpoint is decided, the bot commits the ARB record (status, decision, conditions, decidedAt, reviewedSha).</li><li>arb-decision turns green; the owner merges with a merge commit (no squash) so the reviewed sha stays in history.</li><li>The merge goes through the merge queue: arch-validate runs on the branch plus the latest main.</li><li>The merge commit is tagged arb/facility-2026-14.</li></ul><div class="outcomes"><h4>Outcomes</h4><ul><li><span class="chip c-ok"><span class="tile" aria-hidden="true">✓</span>Approve, Approve with conditions</span><span>merge; conditions move to Deliver.</span></li><li><span class="chip c-warn"><span class="tile" aria-hidden="true">!</span>Request changes</span><span>back to Design, then re-submit; the ASD is frozen again.</span></li><li><span class="chip c-err"><span class="tile" aria-hidden="true">✕</span>Reject</span><span>PR closed; the bot commits only the ARB record to main, so the decision is kept.</span></li></ul></div></section>
   </div>
   <p class="done"><span class="tile" aria-hidden="true">✓</span><span><b>Done when</b> Decision recorded in Git and the change merged (or closed).</span></p>
 </article>
@@ -613,10 +635,128 @@ html { scroll-behavior: smooth; }
   </div>
 </section>
 
+
+<div class="wrap">
+  <section class="block" aria-labelledby="par-h">
+    <h2 id="par-h">Parallel changes</h2>
+    <p class="intro">Several changes can be open on the same Application at once. They can collide at three levels; each level has its own guard, and most of the work is preventing collisions rather than resolving them.</p>
+    <div class="tbl"><table class="levels"><thead><tr><th scope="col">Level</th><th scope="col">Example</th><th scope="col">Caught by</th><th scope="col">When</th></tr></thead><tbody>
+      <tr><th scope="row">Scope overlap</th><td>WP-FAC-02 and WP-REQ-05 both touch <code>sbb.facility.facility-api</code></td><td>The toolbox, intersecting the scope and the diff of open changes</td><td>Decide, then on every push</td></tr>
+      <tr><th scope="row">Text conflict</th><td>Both branches edit the same lines of an element file</td><td>Git, on the merge preview of each pull request</td><td>Design, before review</td></tr>
+      <tr><th scope="row">Meaning conflict</th><td>Git merges cleanly, but one change retires a block the other now uses</td><td>The validator, on the merged result in the merge queue (P5, C2–C4)</td><td>At every merge</td></tr>
+    </tbody></table></div>
+
+    <h3 class="sub-h">1. Detect overlap when the change is opened</h3>
+    <p class="intro">When a change is opened, its scope (elements, plateaus, Applications) is compared with every open change; while designing, the comparison uses each branch's actual diff. The change card shows the overlap, and the owner picks one of three answers.</p>
+    <div class="opts">
+      <div class="opt"><h4>Sequence</h4><p>B depends on A. B's branch builds on A's preview and cannot enter the merge queue before A is merged.</p><p><b>Recorded as</b> <code>dependsOn</code> on B's work package.</p></div>
+      <div class="opt"><h4>Combine</h4><p>Both become one change with one work package, one branch and one review.</p><p><b>Recorded as</b> one change file; the other change is closed with a link.</p></div>
+      <div class="opt"><h4>Run in parallel</h4><p>Both go on. The owner who merges second integrates, and the board can approve with an order condition.</p><p><b>Recorded as</b> a note on both changes; C4 warns until an order is declared.</p></div>
+    </div>
+
+    <h3 class="sub-h">2. One file per change</h3>
+    <div class="two">
+      <div style="display:grid;gap:12px;align-content:start;min-width:0">
+        <ul class="plain">
+          <li>A change's work package, the blocks it introduces (inside <code>extend abb.&lt;app&gt; { … }</code>) and its relationships live in <code>model/bb/changes/&lt;work package&gt;.c4</code>. Two changes adding blocks never edit the same lines.</li>
+          <li>Plateau membership is made of relationships, never tags: the baseline aggregates what exists; each later plateau is the previous one, plus what its work packages realize, minus what they retire. New, changed and retired are derived.</li>
+          <li>Editing an existing block (description, owner, metadata) still happens in its own file. A conflict there is a real one, and a person resolves it.</li>
+          <li>When the plateau is promoted, the bot folds the change files into the model and deletes them.</li>
+        </ul>
+        <pre class="code" tabindex="0" aria-label="Folder layout">model/bb/
+├─ environments.c4        approved model + baseline membership
+└─ changes/
+   ├─ reservations-v1.c4         → transition-1
+   ├─ retire-booking-sheet.c4    → transition-1
+   └─ request-deployment-v1.c4   → target, dependsOn reservations-v1</pre>
+      </div>
+      <div style="min-width:0">
+        <pre class="code" tabindex="0" aria-label="Example change file">model {
+  extend imp.environments {
+    retire-booking-sheet = work-package &#x27;Retire the booking sheet&#x27; {
+      #draft
+      metadata {
+        workItemId &#x27;WI-322&#x27;
+        start &#x27;2026-11-02&#x27;
+        end &#x27;2026-11-13&#x27;
+        owner &#x27;team-platform&#x27;
+      }
+    }
+  }
+
+  imp.environments.retire-booking-sheet -[realization]-&gt; imp.environments.transition-1
+  imp.environments.retire-booking-sheet -[association]-&gt; sbb.environments.booking-sheet &#x27;retires&#x27;
+  imp.environments.retire-booking-sheet -[association]-&gt; abb.environments.booking-entry &#x27;retires&#x27;
+}</pre>
+        <p class="code-cap"><code>changes/retire-booking-sheet.c4</code> from the example model: the whole change in one file.</p>
+      </div>
+    </div>
+
+    <h3 class="sub-h">3. Merge one at a time, and keep approvals honest</h3>
+    <p class="intro">Each merge goes through the merge queue (GitLab merge train or GitHub merge queue): <code>arch-validate</code> runs on the branch plus the latest <code>main</code>, so the second change is checked against the first.</p>
+  </section>
+</div>
+<section class="block wide" aria-label="Timeline of two parallel changes" style="padding-top:0">
+  <div class="scroll" tabindex="0" aria-label="Timeline of two parallel changes, scrolls sideways on small screens">
+<svg class="git" viewBox="0 0 1180 300" role="img" aria-labelledby="par-t par-d">
+<title id="par-t">Two approved changes merging one after the other</title>
+<desc id="par-d">Change WP-FAC-02 and change WP-REQ-05 both branch from main and are both approved by the board. WP-FAC-02 merges first through the merge queue. WP-REQ-05 then takes main in, the conflict is resolved, and its own diff is compared with the diff the board approved at the pinned commit. It then goes through the merge queue, where checks run on the branch plus the latest main, and merges.</desc>
+<defs><marker id="p-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk mk-e"/></marker></defs>
+<text class="g-l" x="16" y="66">main</text><text class="g-s" x="16" y="83">central repository</text>
+<text class="g-l" x="16" y="161">change/WP-FAC-02</text><text class="g-s" x="16" y="178">Facility · merges first</text>
+<text class="g-l" x="16" y="246">change/WP-REQ-05</text><text class="g-s" x="16" y="263">Request · merges second</text>
+<path class="g-main" d="M200,70 L1160,70" marker-end="url(#p-ar)"/>
+<path class="g-br" d="M240,70 C275,70 275,165 310,165 L560,165 C600,165 600,70 640,70"/>
+<path class="g-br2" d="M270,70 C320,70 320,250 370,250 L920,250 C960,250 960,70 1000,70"/>
+<path class="g-upd" d="M700,70 C730,70 730,250 760,250"/>
+<circle class="g-c" cx="360" cy="165" r="7"/>
+<text class="g-t" x="360" y="149" text-anchor="middle">model + gap</text>
+<circle class="g-pin" cx="470" cy="165" r="7"/>
+<text class="g-t" x="470" y="149" text-anchor="middle">ARB approved</text>
+<circle class="g-merge" cx="640" cy="70" r="7"/>
+<g class="g-tag"><rect x="580.8" y="26" width="118.4" height="22" rx="4"/><text x="640" y="41" text-anchor="middle">WP-FAC-02 merged</text></g>
+<circle class="g-c" cx="440" cy="250" r="7"/>
+<text class="g-t" x="440" y="276" text-anchor="middle">model + gap</text>
+<circle class="g-pin" cx="560" cy="250" r="7"/>
+<text class="g-t" x="560" y="276" text-anchor="middle">ARB approved</text>
+<text class="g-t" x="560" y="291" text-anchor="middle">pinned 5d2e8f1</text>
+<circle class="g-warn" cx="760" cy="250" r="7"/>
+<text class="g-t warn" x="760" y="276" text-anchor="middle">main taken in,</text>
+<text class="g-t warn" x="760" y="291" text-anchor="middle">conflict resolved</text>
+<circle class="g-c" cx="880" cy="250" r="7"/>
+<text class="g-t" x="880" y="276" text-anchor="middle">own diff</text>
+<text class="g-t" x="880" y="291" text-anchor="middle">compared</text>
+<circle class="g-merge" cx="1000" cy="70" r="7"/>
+<g class="g-tag"><rect x="940.8" y="26" width="118.4" height="22" rx="4"/><text x="1000" y="41" text-anchor="middle">WP-REQ-05 merged</text></g>
+</svg>
+  </div>
+</section>
+<div class="wrap">
+  <section class="block" aria-label="What happens to the second approval" style="padding-top:16px">
+    <p class="intro">The board approved WP-REQ-05's own diff at commit <code>5d2e8f1</code>. After <code>main</code> is taken in, the toolbox compares that diff with the new one:</p>
+    <ul class="outlist">
+      <li><span class="chip c-ok"><span class="tile" aria-hidden="true">✓</span>Same diff, checks green</span><span>The approval stands and <code>arb-decision</code> stays green. No new review.</span></li>
+      <li><span class="chip c-warn"><span class="tile" aria-hidden="true">!</span>Updated since review</span><span>The resolution changed blocks in the reviewed scope. The chair chooses a review of the delta only, or a full review.</span></li>
+      <li><span class="chip c-err"><span class="tile" aria-hidden="true">✕</span>Back to Design</span><span>The result contradicts the target: it uses a block the other change retires (P5) or changes a retired one (C2).</span></li>
+    </ul>
+    <p class="intro">The owner of the change that merges second resolves conflicts. Agents may propose the resolution as a commit; a person accepts it. Only the bot writes ARB records, so nobody resolves a conflict in one.</p>
+
+    <h3 class="sub-h">Checks that guard parallel changes</h3>
+    <div class="tbl"><table><thead><tr><th scope="col">Check</th><th scope="col">Rule</th><th scope="col">Effect</th></tr></thead><tbody>
+      <tr><th scope="row">P5</th><td>No building block uses a block retired by another change</td><td>Blocks the merge</td></tr>
+      <tr><th scope="row">C1</th><td>Each change file declares one work package, named after the file</td><td>Blocks the merge</td></tr>
+      <tr><th scope="row">C2</th><td>No building block is retired twice or changed after it is retired</td><td>Blocks the merge</td></tr>
+      <tr><th scope="row">C3</th><td><code>dependsOn</code> targets exist, have no cycle and follow plateau order</td><td>Blocks the merge</td></tr>
+      <tr><th scope="row">C4</th><td>Blocks touched by two changes have a <code>dependsOn</code> between them</td><td>Warning to the board</td></tr>
+      <tr><th scope="row">LikeC4</th><td>Two changes creating the same id fail <code>likec4 validate</code></td><td>Blocks the merge</td></tr>
+    </tbody></table></div>
+  </section>
+</div>
+
 <div class="wrap">
   <section class="block" aria-labelledby="rules-h">
     <h2 id="rules-h">Git conventions</h2>
-<div class="tbl"><table><thead><tr><th scope="col">Rule</th><th scope="col">Convention</th><th scope="col">Why</th></tr></thead><tbody><tr><th scope="row">Branch</th><td><code>change/&lt;work package&gt;</code></td><td>One branch and one PR per change, in the central repository.</td></tr><tr><th scope="row">PR title</th><td><code>[WP-FAC-02] Extract facility-service</code></td><td>The work package id links the PR, the change and the ARB record.</td></tr><tr><th scope="row">Preview</th><td><code>?ref=pr-88</code></td><td>Each push publishes a preview build; the toolbox shows the gap on it.</td></tr><tr><th scope="row">Linked repos</th><td><code>change: WP-FAC-02</code></td><td>Frontmatter on DD files changed in Application repositories.</td></tr><tr><th scope="row">Required checks</th><td><code>arch-validate · arb-decision</code></td><td>Validator errors block; arb-decision is set by the toolbox from the Checkpoint (green for simplification once CODEOWNERS approve).</td></tr><tr><th scope="row">Review pin</th><td><code>reviewedSha</code></td><td>The board decides on one commit; later commits flag &quot;updated since review&quot;.</td></tr><tr><th scope="row">Bot commits</th><td><code>atb-arch-bot</code></td><td>Only the ARB record and lock bumps; credentials stay in CTX-INT (INV-07).</td></tr><tr><th scope="row">Merge</th><td><code>merge commit</code></td><td>No squash, so the reviewed commit stays reachable.</td></tr><tr><th scope="row">Tags</th><td><code>arb/&lt;portfolio&gt;-&lt;year&gt;-&lt;n&gt; · plateau/&lt;portfolio&gt;/&lt;plateau&gt;</code></td><td>A decision and a reached plateau are both findable in history.</td></tr><tr><th scope="row">Undo</th><td><code>revert PR</code></td><td>A revert is itself a change: simplification if it restores an approved state, otherwise a new review.</td></tr></tbody></table></div>
+<div class="tbl"><table><thead><tr><th scope="col">Rule</th><th scope="col">Convention</th><th scope="col">Why</th></tr></thead><tbody><tr><th scope="row">Branch</th><td><code>change/&lt;work package&gt;</code></td><td>One branch and one PR per change, in the central repository.</td></tr><tr><th scope="row">PR title</th><td><code>[WP-FAC-02] Extract facility-service</code></td><td>The work package id links the PR, the change and the ARB record.</td></tr><tr><th scope="row">Preview</th><td><code>?ref=pr-88</code></td><td>Each push publishes a preview build; the toolbox shows the gap on it.</td></tr><tr><th scope="row">Linked repos</th><td><code>change: WP-FAC-02</code></td><td>Frontmatter on DD files changed in Application repositories.</td></tr><tr><th scope="row">Required checks</th><td><code>arch-validate · arb-decision</code></td><td>Validator errors block; arb-decision is set by the toolbox from the Checkpoint (green for simplification once CODEOWNERS approve).</td></tr><tr><th scope="row">Review pin</th><td><code>reviewedSha</code></td><td>The board decides on one commit; later commits flag &quot;updated since review&quot;.</td></tr><tr><th scope="row">Bot commits</th><td><code>atb-arch-bot</code></td><td>Only the ARB record and lock bumps; credentials stay in CTX-INT (INV-07).</td></tr><tr><th scope="row">Merge</th><td><code>merge commit</code></td><td>No squash, so the reviewed commit stays reachable.</td></tr><tr><th scope="row">Tags</th><td><code>arb/&lt;portfolio&gt;-&lt;year&gt;-&lt;n&gt; · plateau/&lt;portfolio&gt;/&lt;plateau&gt;</code></td><td>A decision and a reached plateau are both findable in history.</td></tr><tr><th scope="row">Change file</th><td><code>model/bb/changes/&lt;work package&gt;.c4</code></td><td>The work package, the blocks it introduces and its relationships; folded into the model when the plateau is promoted.</td></tr><tr><th scope="row">Order</th><td><code>dependsOn</code></td><td>Work package metadata. A change cannot enter the merge queue before the change it depends on is merged.</td></tr><tr><th scope="row">Merge queue</th><td><code>merge train / merge queue</code></td><td>Checks run on the result of the branch plus the latest main, one change at a time.</td></tr><tr><th scope="row">Undo</th><td><code>revert PR</code></td><td>A revert is itself a change: simplification if it restores an approved state, otherwise a new review.</td></tr></tbody></table></div>
     <p class="foot-note">Based on the AIToolbox project notes: architecture knowledge base (DEC-KB-01 to 06), delivery and repositories (central model, CI/CD, ARB loop), docs way in and architecture navigation (Process area, ARB coverage). Board decisions are Checkpoints (INV-12); automated Git writes go through CTX-INT (INV-07).</p>
   </section>
 </div>
