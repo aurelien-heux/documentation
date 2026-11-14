@@ -25,7 +25,7 @@ product and architecture documents. The live versions are Claude artifacts (link
 
 ## History
 
-Until 2026-11-14 this repository held uploaded zips, exports and loose pages. That state is kept under the tag
+Until 2026-11-14 this repository held uploaded zips, exports and loose pages. That state is kept on the branch
 `archive/2026-11-14-uploads` (zips of the brand 3.3 / 4.1 / 4.5 packages, the 2026-10-28…30 exports, the
 architecture, vision-review and intake-tracks updates, the `@aitoolbox/ui` 1.0.0 tarball, the 4.5 mockups and
 storybook).
