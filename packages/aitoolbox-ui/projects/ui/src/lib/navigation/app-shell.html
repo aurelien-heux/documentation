@@ -1,0 +1,145 @@
+<ng-content select="ait-app-header, [aitShellHeader]" />
+
+<ng-template #icon let-item>
+  @if (item.icon) {
+    <mat-icon [svgIcon]="item.icon" aria-hidden="true" />
+  } @else if (item.fontIcon) {
+    <mat-icon [fontIcon]="item.fontIcon" aria-hidden="true" />
+  }
+</ng-template>
+
+<div class="body">
+  @if (layout() === 'rail') {
+    <nav class="rail dt-nav" aria-label="Primary">
+      <button mat-icon-button type="button" class="rail__menu" [attr.aria-label]="nav() === 'drawer' ? 'Expand navigation' : 'Open navigation'"
+        [attr.aria-expanded]="overlayOpen()" (click)="toggleFromMenu()">
+        <mat-icon svgIcon="ait:menu" />
+      </button>
+      @for (item of items(); track item.label) {
+        @if (item.route) {
+          <a class="rail__item" [routerLink]="item.route" routerLinkActive="rail__item--active" #rla="routerLinkActive" [matTooltip]="item.label" matTooltipPosition="right" [matTooltipShowDelay]="500"
+            [routerLinkActiveOptions]="{ exact: !!item.exact }" [attr.aria-current]="rla.isActive ? 'page' : null">
+            <span class="rail__pill"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" />
+              @if (badgeText(item.badge)) { <span class="badge" aria-hidden="true">{{ badgeText(item.badge) }}</span> }</span>
+            <span class="rail__label">{{ item.label }}</span>
+          </a>
+        } @else {
+          <a class="rail__item" [href]="item.href" [class.rail__item--active]="item.active" [matTooltip]="item.label" matTooltipPosition="right" [matTooltipShowDelay]="500" [attr.aria-current]="item.active ? 'page' : null">
+            <span class="rail__pill"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" />
+              @if (badgeText(item.badge)) { <span class="badge" aria-hidden="true">{{ badgeText(item.badge) }}</span> }</span>
+            <span class="rail__label">{{ item.label }}</span>
+          </a>
+        }
+      }
+      <span class="spacer"></span>
+      @for (item of bottomItems(); track item.label) {
+        @if (item.route) {
+          <a class="rail__item" [routerLink]="item.route" routerLinkActive="rail__item--active" #rlb="routerLinkActive" [attr.aria-current]="rlb.isActive ? 'page' : null">
+            <span class="rail__pill"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" /></span>
+            <span class="rail__label">{{ item.label }}</span>
+          </a>
+        } @else {
+          <a class="rail__item" [href]="item.href">
+            <span class="rail__pill"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" /></span>
+            <span class="rail__label">{{ item.label }}</span>
+          </a>
+        }
+      }
+      <button type="button" class="rail__item" [matMenuTriggerFor]="legalMenu" aria-haspopup="menu">
+        <span class="rail__pill"><mat-icon svgIcon="ait:shield" aria-hidden="true" /></span>
+        <span class="rail__label">Privacy</span>
+      </button>
+      <mat-menu #legalMenu="matMenu" xPosition="after" yPosition="above">
+        @for (link of legalLinks(); track link.href) {
+          <a mat-menu-item [href]="link.href" target="_blank" rel="noopener">{{ link.label }}</a>
+        }
+      </mat-menu>
+      @if (version()) { <span class="rail__version">{{ version() }}</span> }
+    </nav>
+  }
+
+  <mat-sidenav-container class="container" [hasBackdrop]="drawerMode() === 'over'">
+    <mat-sidenav class="drawer dt-nav" [mode]="drawerMode()" [opened]="drawerOpened()" (openedChange)="onOpenedChange($event)"
+      [autoFocus]="drawerMode() === 'over' ? 'first-tabbable' : false" [disableClose]="drawerMode() === 'side'">
+      <nav class="drawer__inner" aria-label="Primary">
+        <button mat-icon-button type="button" class="drawer__menu" (click)="toggleFromMenu()"
+          [attr.aria-label]="drawerMode() === 'side' ? 'Collapse navigation to the rail' : 'Close navigation'">
+          <mat-icon [svgIcon]="drawerMode() === 'side' ? 'ait:menu' : 'ait:close'" />
+        </button>
+        <mat-nav-list>
+          @for (item of items(); track item.label) {
+            @if (item.section) {
+              <mat-divider class="drawer__divider" />
+              <div class="drawer__section">{{ item.section }}</div>
+            }
+            @if (item.route) {
+              <a mat-list-item [routerLink]="item.route" routerLinkActive="dt-nav-active" #rla="routerLinkActive"
+                [routerLinkActiveOptions]="{ exact: !!item.exact }" [activated]="rla.isActive" [attr.aria-current]="rla.isActive ? 'page' : null" (click)="onNavigate()">
+                <span matListItemIcon class="drawer__icon"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" />
+                  @if (badgeText(item.badge)) { <span class="badge" aria-hidden="true">{{ badgeText(item.badge) }}</span> }</span>
+                <span matListItemTitle>{{ item.label }}</span>
+                @if (item.count != null) { <span matListItemMeta class="drawer__count">{{ item.count }}</span> }
+              </a>
+            } @else {
+              <a mat-list-item [href]="item.href" [class.dt-nav-active]="item.active" [activated]="!!item.active" [attr.aria-current]="item.active ? 'page' : null" (click)="onNavigate()">
+                <span matListItemIcon class="drawer__icon"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" />
+                  @if (badgeText(item.badge)) { <span class="badge" aria-hidden="true">{{ badgeText(item.badge) }}</span> }</span>
+                <span matListItemTitle>{{ item.label }}</span>
+                @if (item.count != null) { <span matListItemMeta class="drawer__count">{{ item.count }}</span> }
+              </a>
+            }
+          }
+        </mat-nav-list>
+        <span class="spacer"></span>
+        @if (bottomItems().length) {
+          <mat-nav-list>
+            @for (item of bottomItems(); track item.label) {
+              @if (item.route) {
+                <a mat-list-item [routerLink]="item.route" routerLinkActive="dt-nav-active" #rla2="routerLinkActive" [activated]="rla2.isActive"
+                  [attr.aria-current]="rla2.isActive ? 'page' : null" (click)="onNavigate()">
+                  <span matListItemIcon class="drawer__icon"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" /></span>
+                  <span matListItemTitle>{{ item.label }}</span>
+                </a>
+              } @else {
+                <a mat-list-item [href]="item.href">
+                  <span matListItemIcon class="drawer__icon"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" /></span>
+                  <span matListItemTitle>{{ item.label }}</span>
+                </a>
+              }
+            }
+          </mat-nav-list>
+        }
+        <p class="drawer__footer">
+          @for (link of legalLinks(); track link.href; let last = $last) {
+            <a [href]="link.href" target="_blank" rel="noopener">{{ link.label }}</a>@if (!last || version()) { <span aria-hidden="true"> · </span> }
+          }
+          @if (version()) { <span>{{ version() }}</span> }
+        </p>
+      </nav>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content">
+      <ng-content />
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+@if (layout() === 'bar') {
+  <nav class="bar dt-nav" aria-label="Primary">
+    @for (item of barItems(); track item.label) {
+      @if (item.route) {
+        <a class="bar__item" [routerLink]="item.route" routerLinkActive="bar__item--active" #rla="routerLinkActive"
+          [routerLinkActiveOptions]="{ exact: !!item.exact }" [attr.aria-current]="rla.isActive ? 'page' : null">
+          <span class="bar__pill"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" />
+            @if (badgeText(item.badge)) { <span class="badge" aria-hidden="true">{{ badgeText(item.badge) }}</span> }</span>
+          <span class="bar__label">{{ item.label }}</span>
+        </a>
+      } @else {
+        <a class="bar__item" [href]="item.href" [class.bar__item--active]="item.active" [attr.aria-current]="item.active ? 'page' : null">
+          <span class="bar__pill"><ng-container *ngTemplateOutlet="icon; context: { $implicit: item }" /></span>
+          <span class="bar__label">{{ item.label }}</span>
+        </a>
+      }
+    }
+  </nav>
+}

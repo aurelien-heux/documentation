@@ -1,0 +1,56 @@
+// AIToolbox — base rules and layout helpers (window size classes, page area). Shared by both theme entry files.
+// Mirrors the helpers the design system documents for css/tokens.css: .ait-page, .ait-grid, .ait-kpis, .ait-split,
+// .ait-col-p2 / -p3, .ait-reading, .ait-form.
+
+html {
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font: var(--ait-type-body-medium);
+  letter-spacing: var(--ait-type-body-medium-tracking);
+  -webkit-font-smoothing: antialiased;
+}
+body { margin: 0; }
+
+// Focus (WCAG 2.4.7) for your own markup: Material draws its strong focus indicators itself.
+:focus-visible { outline: 2px solid var(--md-sys-color-focus-ring); outline-offset: 2px; }
+:is(input, select, textarea):focus-visible { outline: none; }
+[role='tab']:focus-visible { outline-offset: -3px; }
+
+// Identifiers, keys, paths, timestamps: Open Sans 600, never a monospace face.
+.ait-data, code, kbd, samp { font-family: var(--ait-font-body); font-weight: 600; }
+.ait-muted { color: var(--md-sys-color-on-surface-variant); }
+.ait-visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+// The page area: content rules are written against its width, not the window's.
+.ait-page {
+  container: ait-page / inline-size;
+  box-sizing: border-box;
+  padding: 24px var(--ait-page-margin) 48px;
+  min-width: 0;
+}
+.ait-grid { display: grid; grid-template-columns: repeat(var(--ait-grid-columns), minmax(0, 1fr)); gap: var(--ait-grid-gutter); }
+.ait-kpis { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@container ait-page (min-width: 300px) { .ait-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container ait-page (min-width: 720px) { .ait-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.ait-split { display: flex; flex-direction: column; gap: 24px; }
+.ait-split > .ait-split-side { display: flex; flex-direction: column; gap: 16px; }
+@container ait-page (min-width: 1040px) {
+  .ait-split { flex-direction: row; align-items: flex-start; }
+  .ait-split > .ait-split-main { flex: 1 1 auto; min-width: 0; }
+  .ait-split > .ait-split-side { flex: 0 0 360px; }
+}
+@container ait-page (min-width: 1380px) { .ait-split > .ait-split-side { flex-basis: 400px; } }
+// Table columns by priority: priority-2 from 600 px of page area, priority-3 from 800 px.
+.ait-col-p2, .ait-col-p3 { display: none; }
+@container ait-page (min-width: 600px) { .ait-col-p2 { display: table-cell; } }
+@container ait-page (min-width: 800px) { .ait-col-p3 { display: table-cell; } }
+.ait-reading { max-width: 840px; margin-inline: auto; }
+.ait-form { max-width: 600px; display: flex; flex-direction: column; gap: 24px; }
+
+// Reduced motion (WCAG 2.3.3): every AIToolbox animation stops on its rest frame; the label carries the state.
+@media (prefers-reduced-motion: reduce) {
+  .ait-motion, .ait-motion * { animation: none !important; transition: none !important; }
+}

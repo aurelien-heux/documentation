@@ -1,0 +1,43 @@
+openapi: 3.1.0
+info:
+  title: Devtoolbox Environments — Reservations
+  version: 0.9.0
+  x-model-id: sbb.environments.reservation-api
+paths:
+  /environments/{env}/reservations:
+    post:
+      operationId: reserve
+      summary: Reserve an Environment, an Application on it, or one Module on it (CMD-RESERVE-ENVIRONMENT)
+      parameters:
+        - { name: env, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [scope, durationMinutes, reason]
+              properties:
+                scope: { type: string, enum: [environment, application, module] }
+                target: { type: string, description: 'applicationSlug or applicationSlug/moduleName' }
+                durationMinutes: { type: integer, minimum: 15, maximum: 1440 }
+                reason: { type: string }
+      responses:
+        '201': { description: Reservation active }
+        '409': { description: Overlaps another Holder's Reservation (INV-ENV-05) }
+        '422': { description: Duration over 24 h or production tier }
+  /reservations/{id}:
+    patch:
+      operationId: extend
+      summary: Extend a Reservation (Holder only)
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: Extended }
+    delete:
+      operationId: release
+      summary: Release a Reservation (Holder) or force-release (admin)
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '204': { description: Released }

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ideas layout lab, six ways to give the discussion room</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;display=swap">
+<style>
+<!--CSS-->
+.tile{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:4px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+.tile i{width:8px;height:8px;border-radius:2px;background:currentColor}
+.ok{background:#C3F4DC;color:#00391E}.wn{background:#FFDEA0;color:#261900}.in{background:#E3DFFF;color:#14085E}.ne{background:#ECE5F4;color:#1C1B1E}
+.ttab{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px;border-radius:12px;border:1px solid #CAC4CF;background:#FDF8FD;text-align:left;cursor:pointer;min-width:0}
+.ttab:hover{background:rgba(53,48,126,.06)}
+.ttab-on{border-color:#35307E;box-shadow:inset 0 0 0 1px #35307E;background:#F2EBFA}
+.cmp td,.cmp th{padding:10px 12px;font-size:13px;line-height:18px;vertical-align:top;border-top:1px solid #CAC4CF}
+.cmp th{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#48454E;text-align:left;border-top:0}
+.cmp tr.on td{background:#F2EBFA}
+.vote{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:56px;height:56px;flex:none;border-radius:12px;border:1px solid #79757F;background:transparent;color:#35307E;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:700}
+.vote-on{background:#E3DFFF;border-color:#E3DFFF;color:#191836}
+.vbtn{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:16px;background:#E3DFFF;color:#191836;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:700}
+.cmt{display:flex;gap:12px;padding:12px 0;border-top:1px solid #CAC4CF}
+.cmt p{margin:4px 0 0;font-size:14px;line-height:20px;color:#1C1B1E;max-width:72ch}
+.lnk{background:transparent;border:0;padding:0;color:#35307E;font-family:'Open Sans',system-ui,sans-serif;font-size:13px;font-weight:600}
+.row{display:flex;align-items:center;gap:12px}
+.sel{height:32px;box-sizing:border-box;padding:0 12px;border:1px solid #79757F;border-radius:8px;background:#FDF8FD;color:#1C1B1E;font:500 13px Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;display:inline-flex;align-items:center}
+.irow{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid #CAC4CF;background:#FFFFFF}
+.irow-on{border-color:#35307E;box-shadow:inset 0 0 0 1px #35307E;background:#F2EBFA}
+.ttl{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-weight:600;color:#1C1B1E}
+.meta{font-size:12px;color:#48454E;white-space:nowrap}
+.steps{display:flex;flex-wrap:wrap;align-items:center;gap:6px 0;padding:10px 12px;border-radius:8px;background:#F2EBFA}
+.step{display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap}
+.step b{width:10px;height:10px;border-radius:50%;flex:none}
+.stepline{flex:1;height:2px;background:#CAC4CF;min-width:10px;margin:0 6px}
+.detail{display:flex;flex-direction:column;gap:12px}
+.composer{display:flex;gap:12px;align-items:center;padding:12px 0 0;border-top:1px solid #CAC4CF}
+.scrim{position:absolute;inset:0;background:rgba(13,11,20,.32);z-index:5}
+.sheet{position:absolute;top:0;right:0;bottom:0;width:640px;box-sizing:border-box;padding:20px 24px;overflow:hidden;background:#FAF4FF;box-shadow:0 1px 3px rgba(0,0,0,.3),0 4px 8px 3px rgba(0,0,0,.15);z-index:6;border-radius:16px 0 0 16px}
+.filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+<!--SIMCSS-->
+<!--QACSS-->
+.lab-tabs{flex:none}.lab-tabs .tab{flex:none}
+.lay-back.only-narrow{display:none!important}
+@container win (max-width: 1199px){
+.lay-a{flex-direction:column!important;align-items:stretch!important}
+.lay-aside{width:auto!important}
+.lay-b>.lay-list,.lay-e>.lay-list{display:none!important}
+.lay-back.only-narrow{display:flex!important}
+}
+@container win (max-width: 839px){
+.sheet{width:100%!important;border-radius:0!important;overflow:auto!important}
+.lab-tabs{overflow-x:auto;scrollbar-width:none}
+}
+@container win (max-width: 599px){
+.xdetail{padding-left:0!important}
+.irow{padding:12px!important}
+.sheet{padding:16px!important}
+}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1700px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column">
+
+  <div style="padding: 20px 32px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; align-items: center; gap: 16px">
+      <h1 class="ui" style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 700">Ideas layout lab</h1>
+      <span style="font-size: 14px; color: #48454E">Same content and components in every layout: the idea row, and the detail block (status, title, text, vote, follow, progress, team note, then the Discussion panel). Only the arrangement changes. Set the window width to see each one from Compact to Extra-large.</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="6">
+        <button type="button" class="ttab {{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}"><span class="row" style="gap: 8px"><span style="width: 24px; height: 24px; border-radius: 999px; background: {{t.numBg}}; color: {{t.numFg}}; font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">{{t.k}}</span><span class="ui" style="font-size: 14px; font-weight: 600">{{t.name}}</span></span><span style="font-size: 12px; line-height: 16px; color: #48454E">{{t.sub}}</span><sc-if value="{{t.rec}}" hint-placeholder-val="{{false}}"><span class="tile ok"><i></i>Adopted</span></sc-if><sc-if value="{{t.cur}}" hint-placeholder-val="{{false}}"><span class="tile ne"><i></i>Today</span></sc-if></button>
+      </sc-for>
+    </div>
+    <!--SIMBAR-->
+  </div>
+
+  <div style="margin: 0 32px; border-radius: 12px; overflow: hidden; border: 1px solid #CAC4CF">
+  <!--SIMOPEN-->
+  <div style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; background: #FDF8FD; overflow: hidden">
+    <!--HEADER-->
+    <div style="flex: 1; display: flex; min-height: 0">
+      <!--RAIL-->
+      <main style="position: relative; flex: 1; min-width: 0; padding: 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; overflow: auto">
+        <sc-if value="{{notC}}" hint-placeholder-val="{{true}}">
+        <div role="tablist" class="lab-tabs" style="display: flex; align-items: center; border-bottom: 1px solid #CAC4CF"><span class="tab">What's new<span class="n">3</span></span><span class="tab">Guides<span class="n">4 left</span></span><span class="tab tab-on">Ideas<span class="n">6</span></span><span style="flex: 1"></span><span class="btn f btn-i" style="margin-bottom: 4px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New idea</span></div>
+        </sc-if>
+        <sc-if value="{{showBack}}" hint-placeholder-val="{{false}}">
+        <div class="subhdr lay-back {{backCls}}"><span role="button" tabindex="0" class="ib sh-back" aria-label="Back to all ideas" title="Back to all ideas"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><div class="sh-txt"><h2 class="sh-t">Re-run only the failed checks</h2><span class="sh-c">Sweep idea · 48 votes</span></div></div>
+        </sc-if>
+
+        <!-- A · side column (today) -->
+        <sc-if value="{{isA}}" hint-placeholder-val="{{true}}">
+        <div class="lay-a" style="display: flex; gap: 24px; align-items: flex-start; flex: 1; min-height: 0">
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px"><!--FILTERS--><!--LIST--></div>
+          <aside class="card lay-aside" style="width: 420px; flex: none; padding: 20px; box-sizing: border-box"><!--DETAIL--></aside>
+        </div>
+        </sc-if>
+
+        <!-- B · master–detail -->
+        <sc-if value="{{isB}}" hint-placeholder-val="{{false}}">
+        <div class="lay-b" style="display: flex; gap: 24px; align-items: flex-start; flex: 1; min-height: 0">
+          <div class="lay-list" style="width: 440px; flex: none; display: flex; flex-direction: column; gap: 10px"><!--FILTERS--><!--LIST--></div>
+          <section class="card" style="flex: 1; min-width: 0; padding: 20px 24px; box-sizing: border-box"><!--DETAIL--></section>
+        </div>
+        </sc-if>
+
+        <!-- C · idea page -->
+        <sc-if value="{{isC}}" hint-placeholder-val="{{false}}">
+        <section class="card" style="padding: 20px 24px; max-width: 960px"><!--DETAIL--></section>
+        </sc-if>
+
+        <!-- D · side sheet -->
+        <sc-if value="{{isD}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0"><!--FILTERS--><!--LIST--></div>
+        </sc-if>
+
+        <!-- E · stack + detail -->
+        <sc-if value="{{isE}}" hint-placeholder-val="{{false}}">
+        <div class="lay-e" style="display: flex; gap: 24px; align-items: flex-start; flex: 1; min-height: 0">
+          <div class="lay-list" style="width: 320px; flex: none; display: flex; flex-direction: column; gap: 10px"><!--FILTERS--><!--LIST--></div>
+          <section class="card" style="flex: 1; min-width: 0; padding: 20px 24px; box-sizing: border-box"><!--DETAIL--></section>
+        </div>
+        </sc-if>
+
+        <!-- F · expanded row -->
+        <sc-if value="{{isF}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0"><!--FILTERS--><!--LISTX--></div>
+        </sc-if>
+      </main>
+    </div>
+    <!--NAVBAR-->
+
+    <sc-if value="{{isD}}" hint-placeholder-val="{{false}}">
+      <div class="scrim"></div>
+      <div class="sheet" role="dialog" aria-label="Idea"><!--DETAIL--></div>
+    </sc-if>
+  </div>
+  <!--SIMCLOSE-->
+  </div>
+
+  <div style="padding: 20px 32px 32px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start">
+    <div class="card" style="padding: 0; overflow: hidden">
+      <table class="cmp" style="width: 100%; border-collapse: collapse">
+        <thead><tr><th style="width: 36px"></th><th style="width: 140px">Layout</th><th>Discussion width · Large (1440)</th><th style="width: 140px">List stays visible</th><th style="width: 120px">Deep link</th><th>Medium (600–839) and Expanded (840–1199)</th><th>Trade-off</th></tr></thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+            <tr class="{{r.cls}}"><td><span class="ui" style="font-weight: 700">{{r.k}}</span></td><td><span class="ui" style="font-weight: 600">{{r.name}}</span></td><td>{{r.width}}</td><td><span class="tile {{r.ltile}}"><i></i>{{r.list}}</span></td><td><span class="tile {{r.dtile}}"><i></i>{{r.deep}}</span></td><td style="color: #48454E">{{r.small}}</td><td style="color: #48454E">{{r.trade}}</td></tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px">
+        <div class="row" style="justify-content: space-between"><span class="h2">Adopted · E</span><span class="tile ok"><i></i>Stack + detail</span></div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E">A 320 px stack of ideas on the left, the selected idea beside it at about 860 px: the widest side-by-side layout, so the list stays in view while the discussion gets room. Below 1200 px the idea takes the page and a chip leads back to all ideas. Applied to the live Community prototype.</div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E"><b style="color: #1C1B1E">One discussion.</b> An idea has a single Discussion panel, shared with What's new: questions, use cases and workarounds are threads with replies, so there is no second thread to keep in sync.</div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E"><b style="color: #1C1B1E">Deep links.</b> An idea URL opens the list with that idea selected (the idea page below 1200 px), so notifications, release notes and the assistant can still point at one idea.</div>
+      </div>
+      <div class="ocard" style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 18px; color: #48454E">
+        <span class="ui" style="font-size: 14px; font-weight: 700; color: #1C1B1E">Rules kept in every layout</span>
+        <span>Row: vote box 56 px, status tile, area tag, author · date, title, one line of text, message count and Follow. Detail: the same header, text, vote and Follow, the progress stepper (wraps when narrow), the team note, then the Discussion expansion panel shared with What's new (summary bar as header; open: threads by three with Show more, opening message and replies with role chips, Reply, new-message field).</span>
+        <span>Question measure 72 characters at most; cards radius 12; a selected row shows the 2 px primary inset. Side sheet (D): `surface-container-low`, 640 px, 16 px left corners, scrim 32 %.</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1940}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.simHostId = 'sim-host-il'; this.simDefault = 1374; this.state = { v: 'E', simW: null, simAvail: 0 }; }
+/*SIMJS*/
+/*QAJS*/
+  componentDidMount() { var self = this; this.simSync(); if (typeof window !== 'undefined') window.addEventListener('resize', function () { self.simSync(); }); }
+  componentDidUpdate() { this.simSync(); this.qaFocusSync(); }
+  renderVals() {
+    var s = this.state, self = this, sim = this.simVals(), QA = this.qaSeed();
+    var set = function (o) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState(o); }; };
+    var defs = [
+      { k: 'A', name: 'Side column', sub: 'List + 420 px panel.', width: '~380 px, panel scrolls on its own', list: 'Yes', ltile: 'ok', deep: 'Yes', dtile: 'ok', small: 'Panel drops under the list', trade: 'One screen, but the least room and the panel scrolls inside a short box.' },
+      { k: 'B', name: 'Master–detail', sub: '440 px list, detail beside it.', width: '~740 px', list: 'Yes', ltile: 'ok', deep: 'Yes', dtile: 'ok', small: 'Becomes C below 1200 px', trade: 'List rows keep their text but wrap more; good for triage sessions.' },
+      { k: 'C', name: 'Idea page', sub: 'The idea is its own page.', width: '~910 px (capped at 960)', list: 'No', ltile: 'ne', deep: 'Yes', dtile: 'ok', small: 'Unchanged', trade: 'One click back to the list; own URL and tab title.' },
+      { k: 'D', name: 'Side sheet', sub: 'List full width, 640 px sheet.', width: '~590 px', list: 'Behind a scrim', ltile: 'wn', deep: 'With a page', dtile: 'wn', small: 'Sheet goes full screen', trade: 'Quick look; a sheet is modal, so a long discussion needs a page behind it.' },
+      { k: 'E', name: 'Stack + detail', sub: '320 px stack, detail beside it.', width: '~860 px', list: 'Yes', ltile: 'ok', deep: 'Yes', dtile: 'ok', small: 'Becomes C below 1200 px', trade: 'Rows at 320 px wrap on three lines; widest side-by-side option.', rec: true },
+      { k: 'F', name: 'Expanded row', sub: 'The row opens in place.', width: '~1 180 px, the full list width', list: 'Yes, around it', ltile: 'ok', deep: 'Yes', dtile: 'ok', small: 'Unchanged: the row still opens in place', trade: 'A long thread makes a tall row; one open at a time.' }
+    ];
+    var tabs = defs.map(function (d) { var on = s.v === d.k; return { k: d.k, name: d.name, sub: d.sub, on: on, cls: on ? 'ttab-on' : '', numBg: on ? '#35307E' : '#E3DFFF', numFg: on ? '#FFFFFF' : '#14085E', rec: !!d.rec, cur: !!d.cur, pick: set({ v: d.k }) }; });
+    var rows = defs.map(function (d) { return Object.assign({}, d, { cls: s.v === d.k ? 'on' : '' }); });
+    var ideas = [
+      { title: 'Re-run only the failed checks', body: 'When one check fails on a big PR, I have to re-run the whole sweep. A partial re-run from the PR page would save 10 minutes each time.', votes: 48, status: 'Planned', tile: 'in', area: 'Sweep', who: 'Marta Kowalski', when: '12 Sep', n: 2, cls: 'irow-on', vcls: 'vote-on', open: true },
+      { title: 'Slack digest of what’s new', body: 'A weekly digest in our team channel so nobody misses a release.', votes: 36, status: 'Delivered', tile: 'ok', area: 'Community', who: 'Nadia Rahal', when: '2 Jul', n: 0, cls: '', vcls: '', open: false },
+      { title: 'Export an assistant conversation to the pull request', body: 'When the assistant helps me understand a failure, I want to attach that conversation to the PR as a comment.', votes: 31, status: 'Under review', tile: 'in', area: 'Assistant', who: 'Yann Dupont', when: '3 Oct', n: 1, cls: '', vcls: '', open: false },
+      { title: 'Promotion window calendar in Environments', body: 'Show the next promotion windows as a calendar so teams can plan releases around them.', votes: 19, status: 'In progress', tile: 'wn', area: 'Environments', who: 'Aurélien Heux', when: '28 Aug', n: 1, cls: '', vcls: '', open: false }
+    ];
+    var track = [['Proposed', '12 Sep'], ['Under review', '19 Sep'], ['Planned', '2 Oct'], ['In progress', ''], ['Delivered', '']].map(function (t, i) { var reached = i <= 2; return { label: t[0], when: t[1], hasWhen: !!t[1], notLast: i < 4, dot: reached ? (i === 2 ? '#35307E' : '#00A56B') : '#CAC4CF', color: reached ? '#1C1B1E' : '#79757F' }; });
+    var comments = [ { ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', when: '20 Sep', text: 'Same here on monorepos — a re-run is 25 minutes for us. If the partial re-run could also skip the Test phase when only docs changed, that would cover most of our cases.' }, { ini: 'SB', bg: '#FFDEA0', who: 'Sami Ben Ali', team: true, when: '2 Oct', text: 'Taking it. First version: re-run failed steps only, from the PR page. Docs-only detection is a separate idea, worth opening.' } ];
+    var idq = this.qaVals('i1', QA.i1, 'Ask the author, add a use case or a workaround…', { who: 'Aurélien Heux', role: 'Platform team' }, false);
+    var qid = ['i1', 'i6', 'i2', 'i4'], msgs = function (ts) { return (ts || []).reduce(function (n, t) { return n + 1 + (t.r || []).length; }, 0); };
+    ideas.forEach(function (i, k) { i.nq = k === 0 ? idq.qaMsgCount : msgs(QA[qid[k]]); });
+    return Object.assign(sim, { tabs: tabs, rows: rows, ideas: ideas, track: track, comments: comments, idq: idq,
+      showBack: s.v === 'C' || s.v === 'B' || s.v === 'E', backCls: s.v === 'C' ? '' : 'only-narrow',
+      isA: s.v === 'A', isB: s.v === 'B', isC: s.v === 'C', isD: s.v === 'D', isE: s.v === 'E', isF: s.v === 'F', notC: s.v !== 'C' });
+  }
+}
+</script>
+</body>
+</html>

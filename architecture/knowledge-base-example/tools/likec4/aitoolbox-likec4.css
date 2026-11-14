@@ -1,0 +1,170 @@
+/* AIToolbox skin for a LikeC4 static site (likec4 1.41).
+   Injected by tools/build_likec4.py after `likec4 build`. Matches tools/site.template.html:
+   AIToolbox md-sys roles, BNPP Type (Manrope fallback) for titles and labels, Open Sans for text.
+
+   How it works
+   - LikeC4 writes one rule per colour: `:where(#likec4-<id> [data-likec4-color="<name>"]) { --likec4-palette-*: … }`.
+     `:where()` has no specificity, so the plain attribute selectors below win and pin the exact token.
+   - Dark mode follows the LikeC4 app toggle: `html[data-mantine-color-scheme="dark"]`, or, inside the
+     <likec4-view> web component, `div.likec4-shadow-root[data-mantine-color-scheme]` (the page injects this
+     file into the component's shadow root and keeps that attribute in step with its own theme).
+   - The UI chrome is Mantine: its CSS variables carry the page fonts, surfaces and primary. */
+
+/* ---------- tokens (same values as the page) ---------- */
+:root, [data-mantine-color-scheme="light"] {
+  --atb-primary:#35307E; --atb-on-primary:#FFFFFF; --atb-primary-container:#E3DFFF; --atb-on-primary-container:#14085E;
+  --atb-secondary-container:#E3DFFF; --atb-on-secondary-container:#191836;
+  --atb-surface:#FDF8FD; --atb-sc-lowest:#FFFFFF; --atb-sc-low:#FAF4FF; --atb-sc:#F8F1FF; --atb-sc-high:#F2EBFA; --atb-sc-highest:#ECE5F4;
+  --atb-on-surface:#1C1B1E; --atb-on-surface-variant:#48454E; --atb-outline:#79757F; --atb-outline-variant:#CAC4CF;
+  --atb-nav-container:#EDE4FF; --atb-nav-active:#D4D0F9;
+  --atb-inverse-surface:#313033; --atb-inverse-on-surface:#F4EFF4;
+  --atb-success-container:#ACF4A2; --atb-on-success-container:#1B5F1F;
+  --atb-warning-container:#FFDEA0; --atb-on-warning-container:#6A4E00;
+  --atb-error-container:#FFDAD6; --atb-on-error-container:#410002;
+  --atb-shadow-1: 0 1px 2px rgba(0,0,0,.30), 0 1px 3px 1px rgba(0,0,0,.15);
+  --atb-brand: 'BNPP Type', 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  --atb-plain: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+}
+[data-mantine-color-scheme="dark"] {
+  --atb-primary:#C4C0FF; --atb-on-primary:#2A2473; --atb-primary-container:#413C8A; --atb-on-primary-container:#E3DFFF;
+  --atb-secondary-container:#454364; --atb-on-secondary-container:#E3DFFF;
+  --atb-surface:#14121E; --atb-sc-lowest:#0F0C19; --atb-sc-low:#1D1A27; --atb-sc:#23202D; --atb-sc-high:#2B2836; --atb-sc-highest:#363341;
+  --atb-on-surface:#ECE5F8; --atb-on-surface-variant:#CAC3DC; --atb-outline:#948DA5; --atb-outline-variant:#494458;
+  --atb-nav-container:#1D1A27; --atb-nav-active:#454364;
+  --atb-inverse-surface:#E6DFF2; --atb-inverse-on-surface:#322E3C;
+  --atb-success-container:#0B5314; --atb-on-success-container:#ACF4A2;
+  --atb-warning-container:#5C4300; --atb-on-warning-container:#FFDEA0;
+  --atb-error-container:#93000A; --atb-on-error-container:#FFDAD6;
+}
+
+/* ---------- fonts, canvas, Mantine chrome ---------- */
+/* :root:root[…] outranks Mantine's own :root[data-mantine-color-scheme=…] variable blocks. */
+:root, :root:root[data-mantine-color-scheme],
+.likec4-shadow-root.likec4-shadow-root[data-mantine-color-scheme] {   /* same, inside the <likec4-view> web component */
+  --likec4-app-font: var(--atb-plain);
+  --likec4-app-font-default: var(--atb-plain);
+  --likec4-element-font: var(--atb-plain);
+  --likec4-compound-font: var(--atb-brand);
+  --likec4-relation-font: var(--atb-plain);
+  --mantine-font-family: var(--atb-plain);
+  --mantine-font-family-headings: var(--atb-brand);
+  --mantine-font-family-monospace: var(--atb-plain);
+  --likec4-background-color: var(--atb-surface);
+  --xy-background-color: var(--atb-surface);
+  --xy-background-color-default: var(--atb-surface);
+  --xy-background-pattern-color: var(--atb-outline-variant);
+  --mantine-color-body: var(--atb-surface);
+  --mantine-color-text: var(--atb-on-surface);
+  --mantine-color-dimmed: var(--atb-on-surface-variant);
+  --mantine-color-default: var(--atb-sc-lowest);
+  --mantine-color-default-hover: color-mix(in srgb, var(--atb-primary) 6%, var(--atb-sc-lowest));
+  --mantine-color-default-color: var(--atb-on-surface);
+  --mantine-color-default-border: var(--atb-outline-variant);
+  --mantine-primary-color-filled: var(--atb-primary);
+  --mantine-primary-color-filled-hover: color-mix(in srgb, var(--atb-on-primary) 6%, var(--atb-primary));
+  --mantine-primary-color-light: var(--atb-secondary-container);
+  --mantine-primary-color-light-hover: color-mix(in srgb, var(--atb-on-secondary-container) 6%, var(--atb-secondary-container));
+  --mantine-primary-color-light-color: var(--atb-on-secondary-container);
+  --mantine-primary-color-contrast: var(--atb-on-primary);
+  --mantine-color-anchor: var(--atb-primary);
+  /* LikeC4's accent is Mantine indigo (Share button, active controls); blue is used by a few panels. Both → AIToolbox roles. */
+  --mantine-color-blue-filled: var(--atb-primary);
+  --mantine-color-blue-filled-hover: color-mix(in srgb, var(--atb-on-primary) 6%, var(--atb-primary));
+  --mantine-color-blue-light: var(--atb-secondary-container);
+  --mantine-color-blue-light-hover: color-mix(in srgb, var(--atb-on-secondary-container) 6%, var(--atb-secondary-container));
+  --mantine-color-blue-light-color: var(--atb-on-secondary-container);
+  --mantine-color-blue-outline: var(--atb-primary);
+  --mantine-color-blue-outline-hover: color-mix(in srgb, var(--atb-primary) 6%, transparent);
+  --mantine-color-blue-text: var(--atb-primary);
+  --mantine-color-blue-6: var(--atb-primary);
+  --mantine-color-indigo-filled: var(--atb-primary);
+  --mantine-color-indigo-filled-hover: color-mix(in srgb, var(--atb-on-primary) 6%, var(--atb-primary));
+  --mantine-color-indigo-light: var(--atb-secondary-container);
+  --mantine-color-indigo-light-hover: color-mix(in srgb, var(--atb-on-secondary-container) 6%, var(--atb-secondary-container));
+  --mantine-color-indigo-light-color: var(--atb-on-secondary-container);
+  --mantine-color-indigo-outline: var(--atb-primary);
+  --mantine-color-indigo-outline-hover: color-mix(in srgb, var(--atb-primary) 6%, transparent);
+  --mantine-color-indigo-text: var(--atb-primary);
+  --mantine-color-indigo-6: var(--atb-primary);
+  --mantine-radius-default: 12px;
+  --mantine-radius-xs: 4px; --mantine-radius-sm: 8px; --mantine-radius-md: 12px; --mantine-radius-lg: 16px; --mantine-radius-xl: 16px;
+}
+/* Filled buttons (Mantine omits data-variant for "filled" and sets the label colour inline): on-primary in both themes. */
+.mantine-Button-root:not([data-variant]), .mantine-Button-root[data-variant="filled"] { color: var(--atb-on-primary) !important; }
+.mantine-Button-root { border-radius: 16px; font-family: var(--atb-brand); font-weight: 600; }
+html, body, #likec4-root, .likec4-shadow-root { background: var(--atb-surface); color: var(--atb-on-surface); font-family: var(--atb-plain); }
+.mantine-Title-root, h1, h2, h3, h4 { font-family: var(--atb-brand); }
+code, kbd, pre { font-family: var(--atb-plain); font-weight: 600; }
+
+/* ---------- element colours: exact tokens ---------- */
+/* fill / stroke / hiContrast (title) / loContrast (description, technology) / relation stroke, label, label background */
+[data-likec4-color="atb-card"] {
+  --likec4-palette-fill: var(--atb-sc-lowest);
+  --likec4-palette-stroke: var(--atb-outline-variant);
+  --likec4-palette-hiContrast: var(--atb-on-surface);
+  --likec4-palette-loContrast: var(--atb-on-surface-variant);
+  --likec4-palette-outline: var(--atb-primary);
+  --likec4-palette-relation-stroke: var(--atb-outline);
+  --likec4-palette-relation-label: var(--atb-on-surface-variant);
+  --likec4-palette-relation-label-bg: var(--atb-surface);
+}
+[data-likec4-color="atb-filled"] {
+  --likec4-palette-fill: var(--atb-sc-high);
+  --likec4-palette-stroke: var(--atb-outline-variant);
+  --likec4-palette-hiContrast: var(--atb-on-surface);
+  --likec4-palette-loContrast: var(--atb-on-surface-variant);
+  --likec4-palette-outline: var(--atb-primary);
+  --likec4-palette-relation-stroke: var(--atb-outline);
+  --likec4-palette-relation-label: var(--atb-on-surface-variant);
+  --likec4-palette-relation-label-bg: var(--atb-surface);
+}
+[data-likec4-color="atb-nav"] {
+  --likec4-palette-fill: var(--atb-nav-container);
+  --likec4-palette-stroke: var(--atb-nav-active);
+  --likec4-palette-hiContrast: var(--atb-on-surface);
+  --likec4-palette-loContrast: var(--atb-on-surface-variant);
+  --likec4-palette-outline: var(--atb-primary);
+  --likec4-palette-relation-stroke: var(--atb-outline);
+  --likec4-palette-relation-label: var(--atb-on-surface-variant);
+  --likec4-palette-relation-label-bg: var(--atb-surface);
+}
+[data-likec4-color="atb-primary"] {
+  --likec4-palette-fill: var(--atb-primary-container);
+  --likec4-palette-stroke: var(--atb-primary);
+  --likec4-palette-hiContrast: var(--atb-on-primary-container);
+  --likec4-palette-loContrast: var(--atb-on-primary-container);
+  --likec4-palette-outline: var(--atb-primary);
+  --likec4-palette-relation-stroke: var(--atb-primary);
+  --likec4-palette-relation-stroke-selected: var(--atb-primary);
+  --likec4-palette-relation-label: var(--atb-on-surface-variant);
+  --likec4-palette-relation-label-bg: var(--atb-surface);
+}
+[data-likec4-color="atb-outline"] {
+  --likec4-palette-fill: var(--atb-sc-lowest);
+  --likec4-palette-stroke: var(--atb-outline);
+  --likec4-palette-hiContrast: var(--atb-on-surface);
+  --likec4-palette-loContrast: var(--atb-on-surface-variant);
+  --likec4-palette-outline: var(--atb-primary);
+  --likec4-palette-relation-stroke: var(--atb-outline);
+  --likec4-palette-relation-stroke-selected: var(--atb-on-surface-variant);
+  --likec4-palette-relation-label: var(--atb-on-surface-variant);
+  --likec4-palette-relation-label-bg: var(--atb-surface);
+}
+
+/* Boxes: 8 px radius like the chain boxes, elevation-1 on hover like the page cards. */
+.react-flow__node [data-likec4-shape="rectangle"] { --likec4-element-radius: 8px; }
+.react-flow__node:hover [data-likec4-color="atb-card"],
+.react-flow__node:hover [data-likec4-color="atb-filled"] { filter: drop-shadow(0 1px 2px rgba(0,0,0,.18)); }
+
+/* Relationship labels: label-medium, surface chip. */
+.likec4-edge-label-container { font-family: var(--atb-brand); font-weight: 600; font-size: 12px; }
+
+/* Keyboard focus: the AIToolbox focus ring. */
+:focus-visible { outline: 2px solid var(--atb-primary); outline-offset: 2px; }
+
+/* "Open in AIToolbox" back link, added by build_likec4.py. */
+.atb-backlink { position: fixed; z-index: 1000; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 16px;
+  background: var(--atb-secondary-container); color: var(--atb-on-secondary-container); box-shadow: var(--atb-shadow-1);
+  font-family: var(--atb-brand); font-weight: 600; font-size: 14px; text-decoration: none; }
+.atb-backlink:hover { background: color-mix(in srgb, var(--atb-on-secondary-container) 6%, var(--atb-secondary-container)); }

@@ -1,0 +1,1281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assistant panel · live prototype</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<style>
+body { margin: 0; }
+
+/* Layout: a control strip over a full-height AIToolbox app frame; header · drawer/rail · runs page · assistant panel (inline, resizable) */
+.aiproto { --primary: #39235F; --on-primary: #FFFFFF; --primary-container: #E3DFFF; --on-primary-container: #14085E; --secondary-container: #E3DFFF; --on-secondary-container: #1D1A28; --tertiary: #404B23; --on-tertiary: #FFFFFF; --error: #93000A; --on-error: #FFFFFF; --error-container: #FFDAD6; --on-error-container: #410002; --success: #0B5314; --on-success: #FFFFFF; --success-container: #ACF4A2; --on-success-container: #002203; --warning: #5C4300; --on-warning: #FFFFFF; --warning-container: #FFDEA0; --on-warning-container: #261900; --surface: #FDF8FD; --on-surface: #1C1B1E; --on-surface-variant: #48454E; --surface-container-lowest: #FFFFFF; --surface-container-low: #FAF4FF; --surface-container: #F8F1FF; --surface-container-high: #F2EBFA; --surface-container-highest: #ECE5F4; --outline: #79757F; --outline-variant: #CAC4CF; --inverse-surface: #313033; --inverse-on-surface: #F4EFF4; --nav-container: #EDE4FF; --nav-active: #DED7EB; --ai: #80D5D4; --on-ai: #003737; --ai-container: #9CF1F0; --on-ai-container: #002020; --logo-box: #0D0B14; --on-logo-box: #FFFFFF; --logo-cursor: #00F29E; --scrim: #000000; --run: #DCEAB4; --on-run: #39235F; --run-icon: #39235F; --run-outline: #39235F; --field: #FFFFFF; --shadow-2: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15); --mark-a: #39235F; --mark-b: #008857; --logo-mark: #0D0B14; --logo-chev: #FFFFFF; --logo-cur: #00F29E; color-scheme: light;
+  --logo-mark: var(--logo-box); --logo-chev: var(--on-logo-box); --logo-cur: var(--logo-cursor);
+  --ui: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; --body: 'Open Sans', system-ui, sans-serif;
+  --k: 1; --open: calc(300ms * var(--k)); --close: calc(200ms * var(--k)); --fast: calc(150ms * var(--k));
+  --e-dec: cubic-bezier(.05,.7,.1,1); --e-acc: cubic-bezier(.3,0,.8,.15); --e-std: cubic-bezier(.2,0,0,1);
+  --pw: 400px; --navw: 280px; }
+.aiproto { background: var(--surface); color: var(--on-surface); font-family: var(--body); display: flex; flex-direction: column; overflow: hidden; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.ic { flex: none; }
+.data { font-family: var(--body); font-weight: 600; }
+.muted { color: var(--on-surface-variant); }
+@keyframes chatbot0run{0%{transform:scale(0)}38%{transform:scale(1.08)}52%{transform:scale(1)}100%{transform:scale(1)}}
+.fm-chatbot.run .cb-b{transform-origin:32px 56px;animation:chatbot0run 1.4s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes chatbot1run{0%{opacity:0}45%{opacity:0}65%{opacity:1}100%{opacity:1}}
+.fm-chatbot.run .cb-p{animation:chatbot1run 1.4s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes chatbot2run{0%{opacity:1}72%{opacity:1}80%{opacity:0}88%{opacity:1}100%{opacity:1}}
+.fm-chatbot.run .cb-u{animation:chatbot2run 1.4s linear 1 both}
+@media (prefers-reduced-motion: reduce){.fm-chatbot.run *{animation:none!important}}
+@keyframes chatbot1loop{0%{opacity:1}8%{opacity:1}14%{opacity:0}86%{opacity:0}94%{opacity:1}100%{opacity:1}}
+.fm-chatbot.loop .cb-p{animation:chatbot1loop 2.8s cubic-bezier(.2,0,0,1) infinite}
+@keyframes chatbot3loop{0%{transform:translateY(0) scale(.6);opacity:0}16%{transform:translateY(0) scale(.6);opacity:0}20%{transform:translateY(0) scale(1);opacity:1}24%{transform:translateY(0) scale(1);opacity:1}29%{transform:translateY(-5px) scale(1);opacity:1}34%{transform:translateY(0) scale(1);opacity:1}44%{transform:translateY(0) scale(1);opacity:1}49%{transform:translateY(-5px) scale(1);opacity:1}54%{transform:translateY(0) scale(1);opacity:1}64%{transform:translateY(0) scale(1);opacity:1}69%{transform:translateY(-5px) scale(1);opacity:1}74%{transform:translateY(0) scale(1);opacity:1}82%{transform:translateY(0) scale(1);opacity:1}88%{transform:translateY(0) scale(.6);opacity:0}100%{transform:translateY(0) scale(.6);opacity:0}}
+.fm-chatbot.loop .cb-d0{transform-box:fill-box;transform-origin:center;animation:chatbot3loop 2.8s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes chatbot4loop{0%{transform:translateY(0) scale(.6);opacity:0}16%{transform:translateY(0) scale(.6);opacity:0}20%{transform:translateY(0) scale(1);opacity:1}29%{transform:translateY(0) scale(1);opacity:1}34%{transform:translateY(-5px) scale(1);opacity:1}39%{transform:translateY(0) scale(1);opacity:1}49%{transform:translateY(0) scale(1);opacity:1}54%{transform:translateY(-5px) scale(1);opacity:1}59%{transform:translateY(0) scale(1);opacity:1}69%{transform:translateY(0) scale(1);opacity:1}74%{transform:translateY(-5px) scale(1);opacity:1}79%{transform:translateY(0) scale(1);opacity:1}82%{transform:translateY(0) scale(1);opacity:1}88%{transform:translateY(0) scale(.6);opacity:0}100%{transform:translateY(0) scale(.6);opacity:0}}
+.fm-chatbot.loop .cb-d1{transform-box:fill-box;transform-origin:center;animation:chatbot4loop 2.8s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes chatbot5loop{0%{transform:translateY(0) scale(.6);opacity:0}16%{transform:translateY(0) scale(.6);opacity:0}20%{transform:translateY(0) scale(1);opacity:1}34%{transform:translateY(0) scale(1);opacity:1}39%{transform:translateY(-5px) scale(1);opacity:1}44%{transform:translateY(0) scale(1);opacity:1}54%{transform:translateY(0) scale(1);opacity:1}59%{transform:translateY(-5px) scale(1);opacity:1}64%{transform:translateY(0) scale(1);opacity:1}74%{transform:translateY(0) scale(1);opacity:1}79%{transform:translateY(-5px) scale(1);opacity:1}84%{transform:translateY(0) scale(1);opacity:1}82%{transform:translateY(0) scale(1);opacity:1}88%{transform:translateY(0) scale(.6);opacity:0}100%{transform:translateY(0) scale(.6);opacity:0}}
+.fm-chatbot.loop .cb-d2{transform-box:fill-box;transform-origin:center;animation:chatbot5loop 2.8s cubic-bezier(.45,0,.55,1) infinite}
+@media (prefers-reduced-motion: reduce){.fm-chatbot.loop *{animation:none!important}}
+
+/* ---------- control strip (prototype only) ---------- */
+.ctl { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding-block: 8px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--surface-container-highest); color: var(--on-surface-variant); font-family: var(--ui); font-size: 12px; font-weight: 600; border-bottom: 1px solid var(--outline-variant); }
+.ctl b { color: var(--on-surface); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: 11px; }
+.seg { display: inline-flex; border: 1px solid var(--outline); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 4px 10px; font-family: var(--ui); font-size: 12px; font-weight: 600; color: var(--on-surface-variant); }
+.seg button[aria-pressed="true"] { background: var(--secondary-container); color: var(--on-secondary-container); }
+.seg button + button { border-left: 1px solid var(--outline); }
+
+/* ---------- app frame ---------- */
+.app { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--surface); color: var(--on-surface); position: relative; }
+.hdr { flex: none; height: 64px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 0 8px 0 20px; background: var(--nav-container); border-bottom: 2px solid var(--surface); }
+.hl { display: flex; align-items: center; min-width: 0; overflow: hidden; }
+.hctx { display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 0; margin-left: 16px; padding-left: 16px; border-left: 1px solid var(--outline-variant); }
+.hctx .hf { font: 600 14px/18px var(--ui); color: var(--on-surface); white-space: nowrap; }
+.hctx .hs { font: 400 12px/16px 'Open Sans', system-ui, sans-serif; color: var(--on-surface-variant); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 380px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: Manrope, sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -.035em; white-space: nowrap; }
+.brand .t { color: var(--primary); }
+.field { width: min(600px, 46vw); height: 44px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 6px 0 14px; border-radius: 16px; background: var(--field); color: var(--on-surface-variant); }
+.field:focus-within { outline: 2px solid var(--primary); outline-offset: -2px; }
+.field input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--on-surface); font: 14px var(--body); outline: none; }
+.field input::placeholder { color: var(--on-surface-variant); }
+.field input.sent { animation: sent var(--fast) var(--e-acc) both; }
+@keyframes sent { to { opacity: 0; transform: translateY(-8px); } }
+kbd { font: 600 11px var(--body); padding: 2px 8px; border-radius: 6px; border: 1px solid var(--outline-variant); color: var(--on-surface-variant); }
+.ask { height: 32px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px 0 6px; border: 0; border-radius: 12px; background: var(--ai-container); color: var(--on-ai-container); font: 700 12px var(--ui);
+  transition: transform var(--fast) var(--e-std), filter var(--fast); }
+.ask:hover { filter: brightness(.96); } .ask:active { transform: scale(.96); }
+.ask[aria-disabled="true"] { background: color-mix(in srgb, var(--on-surface) 10%, transparent); color: color-mix(in srgb, var(--on-surface) 50%, transparent); cursor: not-allowed; filter: grayscale(1); }
+.ask[aria-disabled="true"] svg { opacity: .5; }
+.right { justify-self: end; display: flex; align-items: center; }
+.ibtn { position: relative; width: 40px; height: 40px; margin: 4px; border: 0; border-radius: 999px; background: transparent; color: var(--on-surface-variant); display: inline-flex; align-items: center; justify-content: center;
+  transition: background-color var(--fast) var(--e-std); }
+.ibtn::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--primary); opacity: 0; transition: opacity var(--fast); }
+.ibtn:hover::after { opacity: .06; } .ibtn:active::after { opacity: .10; }
+/* the assistant toggle: selected = nav-active pill, like an active destination */
+#al-cb[aria-expanded="true"] { background: var(--nav-active); }
+#al-cb .st-loop, #al-cb.writing .st-idle { display: none; } #al-cb.writing .st-loop { display: inline-flex; }
+#al-cb .dot { position: absolute; top: 7px; right: 7px; width: 8px; height: 8px; border-radius: 50%; background: var(--tertiary); box-shadow: 0 0 0 2px var(--nav-container); transform: scale(0); transition: transform var(--fast) var(--e-dec); }
+#al-cb.unread .dot { transform: scale(1); }
+.badge { position: absolute; top: 3px; left: 22px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 9px; background: var(--error); color: var(--on-error); font: 700 11px/18px var(--ui); text-align: center; box-shadow: 0 0 0 2px var(--nav-container); }
+.div { width: 1px; height: 24px; background: var(--outline-variant); margin: 0 6px; }
+.user { display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 10px 0 6px; border: 0; border-radius: 16px; background: transparent; }
+.av { width: 32px; height: 32px; border-radius: 50%; background: var(--nav-active); color: var(--on-secondary-container); font: 700 13px var(--ui); display: inline-flex; align-items: center; justify-content: center; }
+.who { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15; }
+.who b { font: 700 13px var(--ui); white-space: nowrap; } .who span { font-size: 11px; color: var(--on-surface-variant); }
+
+.row { flex: 1; min-height: 0; display: flex; position: relative; }
+.nav { flex: none; width: var(--navw); box-sizing: border-box; padding: 12px; background: var(--nav-container); display: flex; flex-direction: column; gap: 2px; overflow: hidden;
+  transition: width var(--open) var(--e-dec); }
+.app.rail .nav { --navw: 80px; }
+.nv { display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 16px; border-radius: 16px; color: var(--on-surface-variant); text-decoration: none; font: 500 14px var(--ui); white-space: nowrap; }
+.nv:hover { background: color-mix(in srgb, var(--primary) 6%, transparent); }
+.nv.on { background: var(--nav-active); color: var(--on-secondary-container); font-weight: 700; }
+.nl { transition: opacity var(--fast); }
+.app.rail .nl { opacity: 0; }
+.app.rail .nv { padding: 0 17px; }
+
+.main { flex: 1; min-width: 0; overflow: auto; padding: 24px 28px; box-sizing: border-box; }
+.crumbs { font: 600 12px var(--ui); color: var(--on-surface-variant); letter-spacing: .02em; }
+h1 { margin: 4px 0 18px; font: 700 26px/32px var(--ui); letter-spacing: -.01em; }
+.bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.sel { height: 40px; display: inline-flex; align-items: center; gap: 24px; padding: 0 12px 0 16px; border: 1px solid var(--outline); border-radius: 4px; font-size: 14px; color: var(--on-surface); }
+.sp { flex: 1; }
+.runbtn { height: 40px; display: inline-flex; align-items: center; gap: 8px; padding: 0 20px 0 16px; border: 0; border-radius: 16px; background: var(--run); color: var(--on-run); box-shadow: inset 0 0 0 1px var(--run-outline); font: 600 14px var(--ui); transition: background-color var(--fast); }
+.runbtn .ic { color: var(--run-icon); } .runbtn:hover { background: color-mix(in srgb, var(--on-run) 6%, var(--run)); }
+.tbl { border: 1px solid var(--outline-variant); border-radius: 12px; overflow: auto; background: var(--surface-container-lowest); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; font: 600 12px var(--ui); color: var(--on-surface-variant); padding: 12px 16px; border-bottom: 1px solid var(--outline-variant); white-space: nowrap; }
+td { padding: 0 16px; height: 52px; border-top: 1px solid var(--outline-variant); white-space: nowrap; }
+tr:first-child td { border-top: 0; }
+tbody tr:hover { background: color-mix(in srgb, var(--primary) 6%, transparent); }
+tbody tr:active { background: color-mix(in srgb, var(--primary) 10%, transparent); }
+.num { font-variant-numeric: tabular-nums; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 6px; border-radius: 8px; font: 600 12px var(--ui); }
+.tile { width: 16px; height: 16px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
+.st-success { background: var(--success-container); color: var(--on-success-container); } .st-success .tile { background: var(--success); color: var(--on-success); }
+.st-warning { background: var(--warning-container); color: var(--on-warning-container); } .st-warning .tile { background: var(--warning); color: var(--on-warning); }
+.st-error { background: var(--error-container); color: var(--on-error-container); } .st-error .tile { background: var(--error); color: var(--on-error); }
+.empty { padding: 28px; text-align: center; color: var(--on-surface-variant); }
+
+/* ---------- split divider: the assistant is an inline block beside the page, the divider is its resize handle (grip always visible) ---------- */
+.handle { flex: none; width: 0; position: relative; z-index: 3; display: none; }
+.app.open:not(.stack) .handle { display: block; }
+.handle .hit { position: absolute; top: 0; bottom: 0; left: -6px; width: 12px; cursor: col-resize; touch-action: none; }
+.handle .line { position: absolute; top: 0; bottom: 0; left: -.5px; width: 1px; background: var(--outline-variant); transition: background-color var(--fast), width var(--fast), left var(--fast); }
+.handle .grip { position: absolute; top: 50%; left: -3px; width: 6px; height: 40px; margin-top: -20px; border-radius: 3px; background: var(--outline); opacity: .7; transition: background-color var(--fast), opacity var(--fast), height var(--fast) var(--e-dec), margin-top var(--fast) var(--e-dec); }
+.handle:is(.hover, .drag, :focus-visible) .line { background: var(--primary); width: 2px; left: -1px; }
+.handle:is(.hover, .drag, :focus-visible) .grip { opacity: 1; background: var(--primary); height: 48px; margin-top: -24px; }
+.handle:focus-visible { outline: none; }
+.handle .size { position: absolute; top: calc(50% + 26px); left: 10px; padding: 4px 8px; border-radius: 4px; background: var(--inverse-surface); color: var(--inverse-on-surface); font: 600 11px var(--body); white-space: nowrap; opacity: 0; transition: opacity var(--fast); pointer-events: none; }
+.handle.drag .size { opacity: 1; }
+.app.resizing, .app.resizing * { cursor: col-resize !important; user-select: none; }
+.app.resizing .panel, .app.resizing .nav { transition: none !important; }
+
+/* ---------- the assistant panel (inline, pushes the content) ---------- */
+.panel { flex: none; width: 0; overflow: hidden; background: var(--surface-container-low); transition: width var(--close) var(--e-acc); visibility: hidden; }
+.app.open .panel { width: var(--pw); visibility: visible; transition: width var(--open) var(--e-dec); }
+.app.closing .panel { visibility: visible; }
+.pin { width: var(--pw); height: 100%; display: flex; flex-direction: column; opacity: 0; transform: translateX(16px); transition: opacity calc(100ms * var(--k)) linear, transform var(--close) var(--e-acc); }
+.app.open .pin { opacity: 1; transform: none; transition: opacity calc(200ms * var(--k)) linear calc(80ms * var(--k)), transform var(--open) var(--e-dec) calc(40ms * var(--k)); }
+.app.snap .pin { opacity: .45; }
+
+/* ---------- panel header and views ---------- */
+.ph { flex: none; display: flex; align-items: center; gap: 4px; padding: 8px 6px 8px 14px; border-bottom: 1px solid var(--outline-variant); }
+.ph .ttl { flex: 1; min-width: 0; margin-left: 6px; }
+.ph h2 { margin: 0; font: 700 15px/20px var(--ui); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ph .ctx { font-size: 12px; color: var(--on-surface-variant); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ph .ibtn { margin: 0; width: 36px; height: 36px; }
+.ph .ibtn[aria-pressed="true"] { background: var(--nav-active); color: var(--on-secondary-container); }
+.views { flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column; }
+.chat { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.msgs { flex: 1; min-height: 0; overflow: auto; padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+
+/* ---------- messages ---------- */
+.turn { display: flex; flex-direction: column; gap: 10px; }
+.uq { align-self: flex-end; max-width: 88%; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.ub { padding: 10px 12px; border-radius: 16px 16px 4px 16px; background: var(--primary-container); color: var(--on-primary-container); font-size: 14px; line-height: 20px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.new { animation: rise calc(200ms * var(--k)) var(--e-dec) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+.acts { display: flex; align-items: center; gap: 2px; min-height: 28px; color: var(--on-surface-variant); }
+.uq .acts { opacity: 0; transition: opacity var(--fast); }
+.uq:hover .acts, .uq:focus-within .acts { opacity: 1; }
+.ab .acts.idle { opacity: 0; transition: opacity var(--fast); }
+.ab:hover .acts.idle, .ab:focus-within .acts.idle { opacity: 1; }
+.act { width: 28px; height: 28px; border: 0; border-radius: 8px; background: transparent; color: inherit; display: inline-flex; align-items: center; justify-content: center; position: relative; }
+.act:hover { background: color-mix(in srgb, var(--primary) 6%, transparent); color: var(--on-surface); }
+.act[aria-pressed="true"] { color: var(--primary); }
+.act.ok { color: var(--success); }
+.ver { display: inline-flex; align-items: center; gap: 0; font: 600 12px var(--body); color: var(--on-surface-variant); font-variant-numeric: tabular-nums; }
+.ver .act { width: 24px; }
+.ver .act:disabled { opacity: .38; pointer-events: none; }
+.ab { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; align-items: start; }
+.ab > .av24 { padding-top: 2px; }
+.abody { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.md { font-size: 14px; line-height: 21px; color: var(--on-surface); overflow-wrap: anywhere; }
+.md p { margin: 0 0 8px; } .md p:last-child { margin: 0; }
+.md code { font: 600 13px var(--body); }
+.md ol, .md ul { margin: 0 0 8px; padding-left: 20px; } .md li { margin: 2px 0; }
+.cblock { position: relative; margin: 6px 0 8px; border-radius: 12px; background: var(--surface-container-highest); border: 1px solid var(--outline-variant); }
+.cblock .cbh { display: flex; align-items: center; justify-content: space-between; padding: 4px 4px 0 12px; font: 600 11px var(--ui); color: var(--on-surface-variant); }
+.cblock pre { margin: 0; padding: 6px 12px 10px; overflow-x: auto; font: 600 13px/19px var(--body); color: var(--on-surface); }
+.caret { display: inline-block; width: 7px; height: 15px; margin-left: 2px; vertical-align: -2px; background: var(--primary); border-radius: 1px; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.note { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--on-surface-variant); }
+.note .lk, .lk { border: 0; background: none; padding: 0; color: var(--primary); font: 600 12px var(--ui); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+
+/* tool calls: a quiet, collapsible trace above the answer */
+.tools { border: 1px solid var(--outline-variant); border-radius: 12px; overflow: hidden; }
+.tools > button { width: 100%; display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 0; background: transparent; font: 600 12px var(--ui); color: var(--on-surface-variant); text-align: left; }
+.tools > button:hover { background: color-mix(in srgb, var(--primary) 6%, transparent); }
+.tools > button .chev { margin-left: auto; display: inline-flex; transition: transform var(--fast); }
+.tools.openl > button .chev { transform: rotate(180deg); }
+.tools ol { list-style: none; margin: 0; padding: 0 10px 8px; display: none; flex-direction: column; gap: 6px; }
+.tools.openl ol, .tools.running ol { display: flex; }
+.tools li { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 12px; color: var(--on-surface); }
+.tools li .src { font: 600 11px var(--ui); color: var(--on-surface-variant); }
+.tools li .st { display: inline-flex; color: var(--success); }
+.tools li.warn .st { color: var(--warning); }
+.tools li.run .st { color: var(--on-surface-variant); }
+.spin { width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin calc(.8s * var(--k)) linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.srcico { width: 18px; height: 18px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; font: 800 10px var(--ui); background: var(--secondary-container); color: var(--on-secondary-container); }
+.srcico.mcp { background: var(--surface-container-highest); color: var(--on-surface); border: 1px solid var(--outline-variant); }
+
+/* approval: any action that changes something waits for a person */
+.appr { border: 1px solid var(--outline); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; background: var(--surface-container); }
+.appr h4 { margin: 0; display: flex; align-items: center; gap: 8px; font: 700 14px/20px var(--ui); }
+.appr .args { font: 600 12px/18px var(--body); color: var(--on-surface-variant); padding: 8px 10px; border-radius: 8px; background: var(--surface-container-highest); white-space: pre-wrap; }
+.appr .row2 { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { height: 36px; padding: 0 16px; border: 0; border-radius: 16px; font: 600 13px var(--ui); display: inline-flex; align-items: center; gap: 6px; }
+.btn.fill { background: var(--primary); color: var(--on-primary); }
+.btn.runb { background: var(--run); color: var(--on-run); box-shadow: inset 0 0 0 1px var(--run-outline); padding: 0 16px 0 12px; } .btn.runb .ic { color: var(--run-icon); }
+.btn.tonal2 { background: var(--secondary-container); color: var(--on-secondary-container); }
+.btn.text { background: transparent; color: var(--primary); padding: 0 10px; }
+.btn.danger { background: var(--error); color: var(--on-error); }
+.btn.outl { background: transparent; color: var(--primary); border: 1px solid var(--outline); }
+
+/* feedback on an answer (ties to the Feedback feature) */
+.fb { border: 1px solid var(--outline-variant); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.fb .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fchip { height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--outline); background: transparent; font: 600 12px var(--ui); color: var(--on-surface); }
+.fchip[aria-pressed="true"] { background: var(--secondary-container); color: var(--on-secondary-container); border-color: transparent; }
+.fb textarea { width: 100%; box-sizing: border-box; min-height: 56px; resize: vertical; border: 1px solid var(--outline); border-radius: 4px; background: transparent; color: var(--on-surface); font: 13px var(--body); padding: 8px; }
+
+/* inline edit of a question */
+.editbox { align-self: stretch; display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 16px; background: var(--field); border: 1px solid var(--primary); }
+.editbox textarea { border: 0; background: transparent; color: var(--on-surface); font: 14px/20px var(--body); resize: none; outline: none; min-height: 40px; }
+.editbox .row2 { display: flex; justify-content: flex-end; gap: 6px; align-items: center; }
+.editbox .hint2 { margin-right: auto; font-size: 11px; color: var(--on-surface-variant); }
+
+/* empty conversation */
+.hello { display: flex; flex-direction: column; gap: 10px; padding: 8px 0; color: var(--on-surface-variant); font-size: 13px; line-height: 19px; }
+.hello h3 { margin: 0; font: 700 18px/24px var(--ui); color: var(--on-surface); }
+.sugg { display: flex; flex-direction: column; gap: 6px; }
+.sugg button { min-height: 36px; padding: 6px 12px; border: 1px solid var(--outline-variant); border-radius: 12px; background: transparent; font: 600 13px var(--ui); color: var(--on-surface); text-align: left; display: flex; gap: 8px; align-items: center; }
+.sugg button:hover { background: color-mix(in srgb, var(--primary) 6%, transparent); }
+
+/* composer */
+.compw { flex: none; padding: 4px 12px 8px; }
+.comp { display: flex; flex-direction: column; gap: 6px; padding: 8px 8px 8px 12px; border-radius: 16px; background: var(--field); border: 1px solid var(--outline-variant); }
+.comp:focus-within { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+.comp textarea { border: 0; background: transparent; color: var(--on-surface); font: 14px/20px var(--body); resize: none; outline: none; max-height: 140px; min-height: 20px; padding: 2px 0; }
+.comp textarea::placeholder { color: var(--on-surface-variant); }
+.crow { display: flex; align-items: center; gap: 6px; }
+.ctxchip { display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 4px 0 8px; border-radius: 6px; background: var(--secondary-container); color: var(--on-secondary-container); font: 600 11px var(--ui); align-self: flex-start; }
+.ctxchip button { width: 18px; height: 18px; border: 0; border-radius: 4px; background: transparent; color: inherit; display: inline-flex; align-items: center; justify-content: center; }
+.toolsbtn { height: 32px; padding: 0 10px 0 8px; border: 1px solid var(--outline-variant); border-radius: 10px; background: transparent; color: var(--on-surface-variant); font: 600 12px var(--ui); display: inline-flex; align-items: center; gap: 6px; }
+.toolsbtn[aria-expanded="true"], .toolsbtn:hover { background: color-mix(in srgb, var(--primary) 6%, transparent); color: var(--on-surface); }
+.toolsbtn .n { min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 8px; background: var(--secondary-container); color: var(--on-secondary-container); font-size: 10px; line-height: 16px; text-align: center; }
+.send { margin-left: auto; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--primary); color: var(--on-primary); display: inline-flex; align-items: center; justify-content: center; transition: background-color var(--fast); }
+.send:disabled { background: color-mix(in srgb, var(--on-surface) 12%, transparent); color: color-mix(in srgb, var(--on-surface) 38%, transparent); }
+.send.stop { background: var(--on-surface); color: var(--surface); }
+.disc { margin: 6px 4px 0; text-align: center; font-size: 11px; line-height: 15px; color: var(--on-surface-variant); }
+
+/* history view: slides over the chat from the left */
+.hist { position: absolute; inset: 0; z-index: 2; background: var(--surface-container-low); display: flex; flex-direction: column; transform: translateX(-100%); visibility: hidden;
+  transition: transform calc(250ms * var(--k)) var(--e-acc), visibility 0s linear calc(250ms * var(--k)); }
+.hist.on { transform: none; visibility: visible; transition: transform calc(300ms * var(--k)) var(--e-dec); }
+.hsearch { margin: 12px 12px 4px; height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-radius: 12px; background: var(--field); border: 1px solid var(--outline-variant); color: var(--on-surface-variant); }
+.hsearch input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--on-surface); font: 14px var(--body); outline: none; }
+.hlist { flex: 1; min-height: 0; overflow: auto; padding: 4px 8px 8px; }
+.hgrp { margin: 12px 8px 4px; font: 700 11px var(--ui); letter-spacing: .06em; text-transform: uppercase; color: var(--on-surface-variant); }
+.hit2 { position: relative; display: flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 4px 0 12px; border-radius: 12px; }
+.hit2:hover, .hit2:focus-within { background: color-mix(in srgb, var(--primary) 6%, transparent); }
+.hit2.cur { background: var(--nav-active); }
+.hit2 .go { flex: 1; min-width: 0; border: 0; background: transparent; text-align: left; padding: 6px 0; display: flex; flex-direction: column; gap: 1px; color: var(--on-surface); }
+.hit2 .go b { font: 600 13px/18px var(--ui); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hit2 .go span { font-size: 11px; color: var(--on-surface-variant); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hit2 .act { opacity: 0; } .hit2:hover .act, .hit2:focus-within .act, .hit2 .act[aria-expanded="true"] { opacity: 1; }
+.hit2 .pinned { color: var(--on-surface-variant); display: inline-flex; }
+.hit2 input { flex: 1; min-width: 0; height: 32px; border: 1px solid var(--primary); border-radius: 6px; background: var(--field); color: var(--on-surface); font: 600 13px var(--ui); padding: 0 8px; }
+.hfoot { flex: none; padding: 8px 16px 12px; font-size: 11px; color: var(--on-surface-variant); border-top: 1px solid var(--outline-variant); }
+.hempty { padding: 24px 16px; text-align: center; color: var(--on-surface-variant); font-size: 13px; }
+
+/* menus and popovers */
+.menu { position: fixed; z-index: 30; min-width: 180px; padding: 6px 0; border-radius: 4px; background: var(--surface-container); box-shadow: var(--shadow-2); display: none; }
+.menu.on { display: block; animation: pop calc(150ms * var(--k)) var(--e-dec) both; }
+@keyframes pop { from { opacity: 0; transform: scale(.96); } }
+.menu button { width: 100%; height: 40px; display: flex; align-items: center; gap: 12px; padding: 0 14px; border: 0; background: transparent; color: var(--on-surface); font: 14px var(--body); text-align: left; }
+.menu button:hover { background: color-mix(in srgb, var(--primary) 6%, transparent); }
+.menu button.dz { color: var(--error); }
+.pop { position: fixed; z-index: 30; width: 340px; max-height: min(520px, 70vh); overflow: auto; border-radius: 16px; background: var(--surface-container-high); box-shadow: var(--shadow-2); display: none; padding: 8px 0; }
+.pop.on { display: block; animation: pop calc(150ms * var(--k)) var(--e-dec) both; transform-origin: bottom left; }
+.pop h5 { margin: 10px 16px 4px; font: 700 11px var(--ui); letter-spacing: .06em; text-transform: uppercase; color: var(--on-surface-variant); display: flex; align-items: center; justify-content: space-between; }
+.prow { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 6px 16px; min-height: 40px; }
+.prow .nm { font: 600 13px/18px var(--ui); color: var(--on-surface); }
+.prow .ds { font-size: 11px; line-height: 15px; color: var(--on-surface-variant); }
+.prow .tag { font: 600 11px var(--ui); color: var(--on-surface-variant); }
+.pfoot { border-top: 1px solid var(--outline-variant); margin-top: 6px; padding: 8px 16px 4px; }
+.dotst { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+.sw { position: relative; width: 44px; height: 26px; flex: none; border-radius: 13px; border: 2px solid var(--outline); background: var(--surface-container-highest); box-sizing: border-box; padding: 0; transition: background-color var(--fast), border-color var(--fast); }
+.sw::after { content: ""; position: absolute; top: 4px; left: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--outline); transition: transform var(--fast) var(--e-std), width var(--fast), height var(--fast), top var(--fast), left var(--fast); }
+.sw[aria-checked="true"] { background: var(--primary); border-color: var(--primary); }
+.sw[aria-checked="true"]::after { top: 1px; left: 1px; width: 20px; height: 20px; background: var(--on-primary); transform: translateX(18px); }
+.sw:disabled { opacity: .38; }
+
+/* settings dialog */
+.dlgs { position: fixed; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center; padding: 16px; }
+.dlgs.on { display: flex; }
+.dlgs .scr { position: absolute; inset: 0; background: var(--scrim); opacity: .32; }
+.dlg { position: relative; width: min(760px, 100%); max-height: min(720px, 92vh); display: flex; flex-direction: column; border-radius: 16px; background: var(--surface-container-high); color: var(--on-surface); box-shadow: var(--shadow-2); animation: dlg calc(250ms * var(--k)) var(--e-dec) both; }
+@keyframes dlg { from { opacity: 0; transform: scale(.94); } }
+.dlg header { flex: none; display: flex; align-items: center; gap: 12px; padding: 20px 16px 8px 24px; }
+.dlg header h2 { flex: 1; margin: 0; font: 600 22px/28px var(--ui); }
+.tabs { flex: none; display: flex; gap: 0; padding: 0 16px; border-bottom: 1px solid var(--outline-variant); overflow-x: auto; }
+.tabs button { height: 44px; padding: 0 14px; border: 0; background: transparent; color: var(--on-surface-variant); font: 600 13px var(--ui); position: relative; white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--primary); }
+.tabs button[aria-selected="true"]::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; background: var(--primary); }
+.dbody { flex: 1; min-height: 0; overflow: auto; padding: 16px 24px 24px; }
+.lead { margin: 0 0 12px; font-size: 13px; line-height: 19px; color: var(--on-surface-variant); }
+.srow { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--outline-variant); }
+.srow:first-of-type { border-top: 0; }
+.srow .nm { font: 600 14px/20px var(--ui); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.srow .ds { font-size: 12px; line-height: 17px; color: var(--on-surface-variant); }
+.pill { height: 20px; padding: 0 8px; border-radius: 6px; font: 600 11px/20px var(--ui); background: var(--surface-container-highest); color: var(--on-surface-variant); }
+.pill.w { background: var(--warning-container); color: var(--on-warning-container); }
+.pill.ok { background: var(--success-container); color: var(--on-success-container); }
+.pill.err { background: var(--error-container); color: var(--on-error-container); }
+select.perm { height: 36px; border: 1px solid var(--outline); border-radius: 4px; background: var(--surface-container-high); color: var(--on-surface); font: 13px var(--body); padding: 0 8px; }
+.mcp { border: 1px solid var(--outline-variant); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
+.mcp .top { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.mcp .logo { width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font: 800 13px var(--ui); background: var(--surface-container-highest); border: 1px solid var(--outline-variant); }
+.mcp .url { font: 600 12px var(--body); color: var(--on-surface-variant); overflow-wrap: anywhere; }
+.mcp .tl { display: flex; flex-wrap: wrap; gap: 6px; }
+.mcp .tl span { height: 22px; padding: 0 8px; border-radius: 6px; font: 600 11px/22px var(--body); background: var(--surface-container-highest); }
+.mcp .tl span.wr { background: var(--warning-container); color: var(--on-warning-container); }
+.addf { border: 1px dashed var(--outline); border-radius: 12px; padding: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.addf label { display: flex; flex-direction: column; gap: 4px; font: 600 12px var(--ui); color: var(--on-surface-variant); }
+.addf input, .addf select { height: 40px; border: 1px solid var(--outline); border-radius: 4px; background: transparent; color: var(--on-surface); font: 14px var(--body); padding: 0 10px; }
+.addf .full { grid-column: 1 / -1; }
+.addf .err { color: var(--error); font: 12px var(--body); }
+.dfoot { flex: none; display: flex; justify-content: flex-end; gap: 8px; padding: 12px 24px 20px; }
+
+/* snackbar */
+.snack { position: fixed; left: 50%; bottom: 24px; z-index: 50; transform: translate(-50%, 16px); opacity: 0; pointer-events: none; display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 8px 0 16px; border-radius: 4px; background: var(--inverse-surface); color: var(--inverse-on-surface); font: 14px var(--body); box-shadow: var(--shadow-2); transition: opacity var(--fast), transform var(--fast) var(--e-dec); max-width: calc(100vw - 32px); }
+.snack.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.snack button { border: 0; background: transparent; color: var(--primary-container); font: 600 14px var(--ui); height: 36px; padding: 0 10px; }
+@media (prefers-reduced-motion: reduce) { .hist, .hist.on, .menu.on, .pop.on, .dlg, .new { animation: none !important; transition: none !important; } }
+
+/* accessibility fixes (design system v4.5 a11y pass) */
+.comp, .hsearch { border-color: var(--outline); }
+.hsearch:focus-within { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+:is(input, select, textarea):focus-visible { outline: none; }
+.addf :is(input, select):focus-visible, select.perm:focus-visible { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+.handle .grip { opacity: 1; }
+.tools { overflow: visible; } .tools > button { border-radius: 11px; } .tools > button:focus-visible { outline-offset: -2px; }
+.seg { overflow: visible; } .seg button:first-child { border-radius: 7px 0 0 7px; } .seg button:last-child { border-radius: 0 7px 7px 0; } .seg button:focus-visible { outline-offset: -2px; }
+.tabs button:focus-visible { outline-offset: -3px; }
+.disc { font-size: 12px; line-height: 16px; }
+.hit2 .go span { font-size: 12px; } .toolsbtn .n, .srcico { font-size: 11px; }
+.ctxchip button { width: 24px; height: 24px; }
+.nv.on { box-shadow: inset 3px 0 0 var(--primary); }
+.snack { visibility: hidden; } .snack.on { visibility: visible; }
+@media (prefers-reduced-motion: reduce) { .spin, .caret { animation: none !important; } }
+.soon { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 24px; text-align: center; }
+.soon h3 { margin: 8px 0 0; font: 700 18px/24px var(--ui); }
+.soon p { margin: 0; max-width: 30ch; color: var(--on-surface-variant); font-size: 14px; line-height: 20px; }
+.tonal { margin-top: 8px; height: 40px; display: inline-flex; align-items: center; gap: 8px; padding: 0 20px; border: 0; border-radius: 16px; background: var(--secondary-container); color: var(--on-secondary-container); font: 600 14px var(--ui); }
+.app.live .soon, .app:not(.live) .live-only { display: none; }
+
+/* stacked (narrow window, under 840 px): the block takes the whole content area inline; no drawer, no scrim, no resize */
+.app.stack.open .main { display: none; }
+.app.stack .panel { transition: none; }
+.app.stack.open .panel { flex: 1; width: auto; transition: none; }
+.app.stack .pin { width: 100%; }
+
+
+  background: var(--inverse-surface); color: var(--inverse-on-surface); font: 500 12px/16px var(--ui); opacity: 0; transform: scale(.8); transform-origin: top center; transition: opacity calc(75ms * var(--k)) linear, transform 0s calc(75ms * var(--k)); }
+
+@media (max-width: 900px) { .who { display: none; } .brand .wm { display: none; } }
+@media (max-width: 640px) { .field .hint, .field kbd, .ask .al { display: none; } .hdr { grid-template-columns: auto minmax(0, 1fr) auto; padding: 0 4px 0 12px; gap: 6px; } .field { width: auto; min-width: 0; padding: 0 4px 0 10px; gap: 6px; } .ask { padding: 0 6px; } .right .ibtn { margin: 0; } .user, .div, #helpBtn { display: none; } .nav { display: none; } .main { padding: 16px; } #log { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .panel, .app.open .panel, .nav { transition: none !important; }
+  .pin, .app.open .pin { transform: none !important; transition: opacity calc(150ms * var(--k)) linear !important; }
+  .b, .ai, .field input.sent { animation: none !important; }
+}
+@keyframes chatbot0run{0%{transform:scale(0)}38%{transform:scale(1.08)}52%{transform:scale(1)}100%{transform:scale(1)}}
+.fm-chatbot.run .cb-b{transform-origin:32px 56px;animation:chatbot0run 1.4s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes chatbot1run{0%{opacity:0}45%{opacity:0}65%{opacity:1}100%{opacity:1}}
+.fm-chatbot.run .cb-p{animation:chatbot1run 1.4s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes chatbot2run{0%{opacity:1}72%{opacity:1}80%{opacity:0}88%{opacity:1}100%{opacity:1}}
+.fm-chatbot.run .cb-u{animation:chatbot2run 1.4s linear 1 both}
+@media (prefers-reduced-motion: reduce){.fm-chatbot.run *{animation:none!important}}
+@keyframes chatbot1loop{0%{opacity:1}8%{opacity:1}14%{opacity:0}86%{opacity:0}94%{opacity:1}100%{opacity:1}}
+.fm-chatbot.loop .cb-p{animation:chatbot1loop 2.8s cubic-bezier(.2,0,0,1) infinite}
+@keyframes chatbot3loop{0%{transform:translateY(0) scale(.6);opacity:0}16%{transform:translateY(0) scale(.6);opacity:0}20%{transform:translateY(0) scale(1);opacity:1}24%{transform:translateY(0) scale(1);opacity:1}29%{transform:translateY(-5px) scale(1);opacity:1}34%{transform:translateY(0) scale(1);opacity:1}44%{transform:translateY(0) scale(1);opacity:1}49%{transform:translateY(-5px) scale(1);opacity:1}54%{transform:translateY(0) scale(1);opacity:1}64%{transform:translateY(0) scale(1);opacity:1}69%{transform:translateY(-5px) scale(1);opacity:1}74%{transform:translateY(0) scale(1);opacity:1}82%{transform:translateY(0) scale(1);opacity:1}88%{transform:translateY(0) scale(.6);opacity:0}100%{transform:translateY(0) scale(.6);opacity:0}}
+.fm-chatbot.loop .cb-d0{transform-box:fill-box;transform-origin:center;animation:chatbot3loop 2.8s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes chatbot4loop{0%{transform:translateY(0) scale(.6);opacity:0}16%{transform:translateY(0) scale(.6);opacity:0}20%{transform:translateY(0) scale(1);opacity:1}29%{transform:translateY(0) scale(1);opacity:1}34%{transform:translateY(-5px) scale(1);opacity:1}39%{transform:translateY(0) scale(1);opacity:1}49%{transform:translateY(0) scale(1);opacity:1}54%{transform:translateY(-5px) scale(1);opacity:1}59%{transform:translateY(0) scale(1);opacity:1}69%{transform:translateY(0) scale(1);opacity:1}74%{transform:translateY(-5px) scale(1);opacity:1}79%{transform:translateY(0) scale(1);opacity:1}82%{transform:translateY(0) scale(1);opacity:1}88%{transform:translateY(0) scale(.6);opacity:0}100%{transform:translateY(0) scale(.6);opacity:0}}
+.fm-chatbot.loop .cb-d1{transform-box:fill-box;transform-origin:center;animation:chatbot4loop 2.8s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes chatbot5loop{0%{transform:translateY(0) scale(.6);opacity:0}16%{transform:translateY(0) scale(.6);opacity:0}20%{transform:translateY(0) scale(1);opacity:1}34%{transform:translateY(0) scale(1);opacity:1}39%{transform:translateY(-5px) scale(1);opacity:1}44%{transform:translateY(0) scale(1);opacity:1}54%{transform:translateY(0) scale(1);opacity:1}59%{transform:translateY(-5px) scale(1);opacity:1}64%{transform:translateY(0) scale(1);opacity:1}74%{transform:translateY(0) scale(1);opacity:1}79%{transform:translateY(-5px) scale(1);opacity:1}84%{transform:translateY(0) scale(1);opacity:1}82%{transform:translateY(0) scale(1);opacity:1}88%{transform:translateY(0) scale(.6);opacity:0}100%{transform:translateY(0) scale(.6);opacity:0}}
+.fm-chatbot.loop .cb-d2{transform-box:fill-box;transform-origin:center;animation:chatbot5loop 2.8s cubic-bezier(.45,0,.55,1) infinite}
+@media (prefers-reduced-motion: reduce){.fm-chatbot.loop *{animation:none!important}}
+
+.aiproto.dark { --primary: #C4C0FF; --on-primary: #2A2473; --primary-container: #413C8A; --on-primary-container: #E3DFFF; --secondary-container: #484454; --on-secondary-container: #E3DFFF; --tertiary: #00F29E; --on-tertiary: #2A340F; --error: #FFB4AB; --on-error: #690005; --error-container: #93000A; --on-error-container: #FFDAD6; --success: #91D888; --on-success: #003908; --success-container: #0B5314; --on-success-container: #ACF4A2; --warning: #FCBC00; --on-warning: #402D00; --warning-container: #5C4300; --on-warning-container: #FFDEA0; --surface: #14121E; --on-surface: #ECE5F8; --on-surface-variant: #CAC3DC; --surface-container-lowest: #0F0C19; --surface-container-low: #1D1A27; --surface-container: #23202D; --surface-container-high: #2B2836; --surface-container-highest: #363341; --outline: #948DA5; --outline-variant: #494458; --inverse-surface: #E6DFF2; --inverse-on-surface: #322E3C; --nav-container: #1D1A27; --nav-active: #484454; --ai: #80D5D4; --on-ai: #003737; --ai-container: #004F50; --on-ai-container: #9CF1F0; --logo-box: #C4C0FF; --on-logo-box: #0D0B14; --logo-cursor: #006C44; --scrim: #000000; --run: #DCEAB4; --on-run: #39235F; --run-icon: #39235F; --run-outline: #DCEAB4; --field: #2B2836; --shadow-2: 0 1px 2px rgba(0,0,0,.6), 0 2px 6px 2px rgba(0,0,0,.35); --mark-a: #C4C0FF; --mark-b: #00F29E; --logo-mark: #C4C0FF; --logo-chev: #0D0B14; --logo-cur: #006C44; color-scheme: dark; }
+.aiproto { position: relative; height: 100vh; min-height: 560px; font-size: 14px; }
+.aiproto.slow { --k: 5; }
+.aiproto *, .aiproto *::before, .aiproto *::after { box-sizing: border-box; }
+.fm-chatbot .cb-o, .fm-chatbot .cb-c { stroke: var(--mark-a); } .fm-chatbot .cb-u { stroke: var(--mark-b); }
+.fm-chatbot .cb-d0, .fm-chatbot .cb-d1 { fill: var(--mark-a); } .fm-chatbot .cb-d2 { fill: var(--mark-b); }
+.lg-m { stroke: var(--logo-mark); } .lg-f { fill: var(--logo-mark); } .lg-c { stroke: var(--logo-chev); } .lg-u { stroke: var(--logo-cur); } .lg-ai { fill: var(--ai); } .lg-on { fill: var(--on-ai); }
+.ctl .log { margin-left: auto; font-family: var(--body); font-weight: 600; color: var(--on-surface); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 52ch; }
+.ctl .log span { color: var(--on-surface-variant); font-weight: 400; }
+.sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; }
+.sel { appearance: auto; background: transparent; font: 14px var(--body); cursor: pointer; }
+.menu { position: absolute; right: 4px; top: calc(100% - 2px); left: auto; }
+.compw { position: relative; }
+.pop { position: absolute; left: 12px; right: 12px; bottom: calc(100% - 4px); width: auto; max-width: 360px; max-height: min(460px, 60vh); }
+.dlgs, .snack { position: absolute; }
+.snack { visibility: hidden; transition: opacity var(--fast), transform var(--fast) var(--e-dec), visibility 0s linear var(--fast); }
+.snack.on { visibility: visible; transition: opacity var(--fast), transform var(--fast) var(--e-dec); }
+.dotst.ok { background: var(--success); } .dotst.w { background: var(--warning); }
+.views.hon .chat { visibility: hidden; transition: visibility 0s linear calc(300ms * var(--k)); }
+/* tooltips: CSS only, hoverable (WCAG 1.4.13), at once on keyboard focus, 500 ms on hover */
+[data-tip] { position: relative; }
+[data-tip]:is(:hover, :focus-visible)::before { content: attr(data-tip); position: absolute; z-index: 45; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); width: max-content; max-width: 240px;
+  padding: 4px 8px; border-radius: 4px; background: var(--inverse-surface); color: var(--inverse-on-surface); font: 500 12px/16px var(--ui); text-align: left; white-space: normal; letter-spacing: 0; text-transform: none;
+  animation: tipin var(--fast) linear calc(500ms * var(--k)) both; }
+[data-tip]:focus-visible::before { animation-delay: 0s; }
+[data-tip-pos~="end"]:is(:hover, :focus-visible)::before { left: auto; right: 0; transform: none; }
+[data-tip-pos~="start"]:is(:hover, :focus-visible)::before { left: 0; transform: none; }
+[data-tip-pos~="up"]:is(:hover, :focus-visible)::before { top: auto; bottom: calc(100% + 6px); }
+@keyframes tipin { from { opacity: 0; } to { opacity: 1; } }
+/* accessibility fixes from the audit */
+.comp, .hsearch { border-color: var(--outline); }
+.handle .grip { opacity: 1; }
+.tools { overflow: visible; } .tools > button { border-radius: 11px; } .tools > button:focus-visible { outline-offset: -2px; }
+.seg { overflow: visible; } .seg button:first-child { border-radius: 7px 0 0 7px; } .seg button:last-child { border-radius: 0 7px 7px 0; } .seg button:focus-visible { outline-offset: -2px; position: relative; z-index: 1; }
+.tabs button:focus-visible { outline-offset: -3px; }
+.disc { font-size: 12px; line-height: 16px; }
+.hit2 .go span { font-size: 12px; } .toolsbtn .n, .srcico { font-size: 11px; }
+.ctxchip button { width: 24px; height: 24px; }
+.nv.on { box-shadow: inset 3px 0 0 var(--primary); }
+.tgrid { min-width: 760px; }
+.tbl .tr { display: grid; grid-template-columns: minmax(130px, 1.2fr) minmax(120px, 1fr) minmax(110px, 1fr) minmax(130px, 1fr) 90px 110px; align-items: center; }
+.tbl .th { font: 600 12px var(--ui); color: var(--on-surface-variant); padding: 12px 16px; white-space: nowrap; }
+.tbl .thead { border-bottom: 1px solid var(--outline-variant); }
+.tbl .td { padding: 0 16px; height: 52px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; font-size: 13px; }
+.tbl .tbody .tr + .tr { border-top: 1px solid var(--outline-variant); }
+.tbl .tbody .tr:hover { background: color-mix(in srgb, var(--primary) 6%, transparent); }
+.ub, .md, .ab { scroll-margin: 16px; }
+.addf input[aria-invalid="true"] { border-color: var(--error); border-width: 2px; }
+/* fields: no outer ring, the border turns 2 px primary on focus */
+.aiproto :is(input, select, textarea):focus-visible { outline: none; }
+.addf :is(input, select):focus-visible, select.perm:focus-visible, .sel:focus-visible { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+.addf input[aria-invalid="true"]:focus-visible { border-color: var(--error); box-shadow: inset 0 0 0 1px var(--error); }
+.hsearch:focus-within { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+.hit2 input:focus-visible { box-shadow: inset 0 0 0 1px var(--primary); }
+@media (prefers-reduced-motion: reduce) { .spin, .caret { animation: none !important; } }
+@media (max-width: 640px) {
+  .row { flex-direction: column; }
+  .nav { display: flex !important; order: 3; width: 100% !important; height: 64px; flex: none; flex-direction: row; padding: 6px 4px; justify-content: space-around; border-top: 1px solid var(--outline-variant); }
+  .nv { flex-direction: column; gap: 2px; height: 52px; padding: 4px 8px !important; font-size: 11px; justify-content: center; }
+  .app.rail .nl, .nl { opacity: 1 !important; }
+  .nv.on { box-shadow: inset 0 3px 0 var(--primary); }
+  .main { flex: 1; min-height: 0; } .panel { flex: none; }
+  .app.stack.open .panel { flex: 1; min-height: 0; }
+  .user { display: inline-flex !important; padding: 0 4px; } .user .who, .user > svg { display: none; }
+}
+.mk-d { display: none; } .aiproto.dark .mk-l { display: none; } .aiproto.dark .mk-d { display: inline-block; }
+.nv-sp { flex: 1; }
+@media (max-width: 640px) { .nv-sp, .nv-ck, .nv-pl { display: none !important; } }
+</style>
+</helmet>
+<div id="al-root" class="{{rootCls}}" onKeyDown="{{onRootKey}}" onPointerDown="{{onRootDown}}">
+<div class="ctl" role="group" aria-label="Prototype controls">
+  <b>Prototype</b>
+  <span>Theme <span class="seg"><button type="button" aria-pressed="{{thL}}" onClick="{{setLight}}">Light</button><button type="button" aria-pressed="{{thD}}" onClick="{{setDark}}">Dark</button></span></span>
+  <span>Assistant <span class="seg"><button type="button" aria-pressed="{{live}}" onClick="{{setLive}}">Live</button><button type="button" aria-pressed="{{soon}}" onClick="{{setSoon}}">Coming soon</button></span></span>
+  <span>Speed <span class="seg"><button type="button" aria-pressed="{{fast}}" onClick="{{setFast}}">1×</button><button type="button" aria-pressed="{{slow}}" onClick="{{setSlow}}">Slow 5×</button></span></span>
+  <span class="log"><span>Last: </span>{{log}}</span>
+</div>
+<div class="{{appCls}}" aria-hidden="{{dlgOn}}">
+  <header class="hdr">
+    <div class="hl"><div class="brand"><svg width="32" height="28" viewBox="0 0 74 64" aria-hidden="true"><mask id="al-lgm" maskUnits="userSpaceOnUse" x="0" y="0" width="74" height="64"><rect width="74" height="64" fill="#fff"></rect><rect x="37" y="3" width="36" height="24" rx="7" fill="#000"></rect></mask><g mask="url(#al-lgm)"><path class="lg-m" d="M21 23v-6a6 6 0 0 1 6-6h10a6 6 0 0 1 6 6v6" fill="none" stroke-width="6" stroke-linecap="round"></path><rect class="lg-f" x="4" y="22" width="56" height="36" rx="10"></rect><path class="lg-c" d="M17.5 33l8 7-8 7" fill="none" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"></path><path class="lg-u" d="M33.5 47h13" fill="none" stroke-width="5.5" stroke-linecap="round"></path></g><rect class="lg-ai" x="39.5" y="5.5" width="31" height="19" rx="5"></rect><path class="lg-on" d="M48.567 20.04 51.647 9.959999999999999H54.489L57.569 20.04H55.609L54.958 17.939999999999998H51.164L50.527 20.04ZM54.412 16.162 53.047 11.745 51.702999999999996 16.162Z"></path><path class="lg-on" d="M58.689 20.04V9.959999999999999H60.593V20.04Z"></path></svg><span class="wm"><span>AI</span><span class="t">Toolbox</span></span></div><div class="hctx"><span class="hf">Sweep · Runs</span><span class="hs">staging · credit-request · 24 runs this week</span></div></div>
+    <form class="field" role="search" onSubmit="{{onSearch}}">
+      <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="al-q" class="{{qCls}}" type="text" autocomplete="off" placeholder="Search, or ask the assistant…" aria-label="Search, or ask the assistant" value="{{q}}" onChange="{{onQ}}" onKeyDown="{{onQKey}}">
+      <kbd class="hint">⌘K</kbd>
+      <button type="button" class="ask" aria-disabled="{{soon}}" aria-describedby="al-ask-d" data-tip="{{askTip}}" data-tip-pos="end" onClick="{{onAsk}}"><svg class="fm-chatbot" width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><g class="cb-b"><path class="cb-o" d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" pathLength="1" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><g class="cb-p"><path class="cb-c" d="M26 37l6 5-6 5" pathLength="1" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path><path class="cb-u" d="M35 49h5" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"></path></g><circle class="cb-d cb-d0" cx="24" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d1" cx="32" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d2" cx="40" cy="42" r="3.2" fill="currentColor" opacity="0"></circle></g></g></svg><span class="al">Ask</span></button>
+      <span id="al-ask-d" class="sr">{{askTip}}</span>
+    </form>
+    <div class="right">
+      <button type="button" id="al-cb" class="{{cbCls}}" aria-expanded="{{open}}" aria-controls="al-panel" aria-label="{{cbLabel}}" data-tip="{{cbTip}}" onClick="{{onCb}}"><sc-if value="{{cbIdle}}" hint-placeholder-val="{{ true }}"><svg class="fm-chatbot" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><g class="cb-b"><path class="cb-o" d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" pathLength="1" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><g class="cb-p"><path class="cb-c" d="M26 37l6 5-6 5" pathLength="1" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path><path class="cb-u" d="M35 49h5" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"></path></g><circle class="cb-d cb-d0" cx="24" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d1" cx="32" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d2" cx="40" cy="42" r="3.2" fill="currentColor" opacity="0"></circle></g></g></svg></sc-if><sc-if value="{{cbLoop}}" hint-placeholder-val="{{ false }}"><svg class="fm-chatbot loop" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><g class="cb-b"><path class="cb-o" d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" pathLength="1" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><g class="cb-p"><path class="cb-c" d="M26 37l6 5-6 5" pathLength="1" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path><path class="cb-u" d="M35 49h5" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"></path></g><circle class="cb-d cb-d0" cx="24" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d1" cx="32" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d2" cx="40" cy="42" r="3.2" fill="currentColor" opacity="0"></circle></g></g></svg></sc-if><span class="dot"></span></button>
+      <button type="button" class="ibtn" aria-label="Notifications, 3 unread" data-tip="Notifications · 3 unread"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" class="fm-notifications"><g class="nt-bell" style="transform-origin:32px 6px"><circle cx="32" cy="8" r="3.6" fill="currentColor"></circle><path d="M32 9C22 9 17 17 17 27V38L12 46Q11 48.5 13.5 48.5H50.5Q53 48.5 52 46L47 38V27C47 17 42 9 32 9Z" fill="currentColor"></path><circle class="nt-clap" cx="32" cy="53.5" r="5" fill="currentColor"></circle></g></svg><span class="badge" aria-hidden="true">3</span></button>
+      <button type="button" class="ibtn" aria-label="Help" data-tip="Help"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"></path></svg></button>
+      <span class="div"></span>
+      <button type="button" class="user" aria-label="Aurélien Heux, platform admin, account menu" aria-haspopup="menu" aria-expanded="false" data-tip="Account" data-tip-pos="end"><span class="av" aria-hidden="true">AH</span><span class="who"><b>Aurélien Heux</b><span>platform · admin</span></span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+    </div>
+  </header>
+  <div class="row">
+    <nav class="nav" aria-label="Main"><a class="nv on" href="#" aria-current="page"><svg class="mk-l" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nxswgl" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"></stop><stop offset="1" stop-color="#00A56B"></stop></linearGradient><mask id="nxswml" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"></rect><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"></path><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"></path><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"></path></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"></path><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"></rect><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nxswgl)" mask="url(#nxswml)"></path></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"></path><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"></path></g></svg><svg class="mk-d" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nxswgd" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#80D5D4"></stop><stop offset="1" stop-color="#00F29E"></stop></linearGradient><mask id="nxswmd" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"></rect><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"></path><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"></path><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"></path></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#A6A2F8" stroke-width="6.5" stroke-linecap="round"></path><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#A6A2F8"></rect><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nxswgd)" mask="url(#nxswmd)"></path></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00F29E"></path><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#80D5D4"></path></g></svg><span class="nl">Sweep</span></a><a class="nv" href="#" aria-current="false"><svg class="mk-l" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-0.2 0.2)"><path d="M12 50L32 32L52 14" stroke="#39235F" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"></path><circle cx="12" cy="50" r="7" fill="#FDF8FD" stroke="#39235F" stroke-width="5"></circle><circle cx="32" cy="32" r="7.5" fill="#FDF8FD" stroke="#278383" stroke-width="5"></circle><circle cx="52" cy="14" r="10" fill="#00A56B"></circle><path d="M47.5 14.2l3 3 6-6" fill="none" stroke="#FDF8FD" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg><svg class="mk-d" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-0.2 0.2)"><path d="M12 50L32 32L52 14" stroke="#A6A2F8" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"></path><circle cx="12" cy="50" r="7" fill="#14121E" stroke="#A6A2F8" stroke-width="5"></circle><circle cx="32" cy="32" r="7.5" fill="#14121E" stroke="#80D5D4" stroke-width="5"></circle><circle cx="52" cy="14" r="10" fill="#00F29E"></circle><path d="M47.5 14.2l3 3 6-6" fill="none" stroke="#14121E" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg><span class="nl">Environments</span></a><a class="nv" href="#" aria-current="false"><svg class="mk-l" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-2.7 -2.5)"><rect x="6" y="10" width="13" height="48" rx="3.5" fill="#39235F"></rect><path d="M9.5 20H15.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"></path><rect x="22" y="16" width="13" height="42" rx="3.5" fill="#278383"></rect><path d="M25.5 25H31.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"></path><rect x="38" y="13" width="13" height="46" rx="3.5" fill="#00A56B" transform="rotate(16 51 58)"></rect></g></svg><svg class="mk-d" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-2.7 -2.5)"><rect x="6" y="10" width="13" height="48" rx="3.5" fill="#A6A2F8"></rect><path d="M9.5 20H15.5" stroke="#14121E" stroke-width="2.6" stroke-linecap="round"></path><rect x="22" y="16" width="13" height="42" rx="3.5" fill="#80D5D4"></rect><path d="M25.5 25H31.5" stroke="#14121E" stroke-width="2.6" stroke-linecap="round"></path><rect x="38" y="13" width="13" height="46" rx="3.5" fill="#00F29E" transform="rotate(16 51 58)"></rect></g></svg><span class="nl">Docs</span></a><a class="nv" href="#" aria-current="false"><svg class="mk-l" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"></path><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"></path><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.530-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"></path><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"></path></svg><svg class="mk-d" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#A6A2F8"></path><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#80D5D4"></path><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00F29E"></path><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#80D5D4"></path></svg><span class="nl">Community</span></a><span class="nv-sp" aria-hidden="true"></span><a href="#admin" title="Admin" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M8.5 16.5c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Admin</span></a><a class="nv nv-ck" href="#cookies" target="_blank" rel="noopener" aria-current="false"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.3A9 9 0 1 1 11.7 3a3 3 0 0 0 3.3 3.6 3 3 0 0 0 3.4 3.4 3 3 0 0 0 2.6 2.3z"></path><path d="M8.5 9.5h.01M15.5 15.5h.01M9.5 15h.01M12.5 12h.01"></path></svg><span class="nl">Cookie policy</span></a></nav>
+    <main class="main">
+            <div class="bar">
+        <select class="sel" aria-label="Status" value="{{status}}" onChange="{{onStatus}}"><option value="all">All statuses</option><option value="success">Passed</option><option value="error">Failed</option><option value="warning">Degraded</option></select>
+        <span class="sp"></span>
+        <button type="button" class="ibtn" aria-label="Refresh" data-tip="Refresh"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 4v7h-7"></path></svg></button>
+        <button type="button" class="runbtn" onClick="{{onNewRun}}"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l12 7-12 7z"></path></svg>New run</button>
+      </div>
+      <div class="tbl"><div class="tgrid" role="table" aria-label="Runs">
+          <div role="rowgroup"><div class="tr thead" role="row"><span class="th" role="columnheader">Run</span><span class="th" role="columnheader">Pipeline</span><span class="th" role="columnheader">Branch</span><span class="th" role="columnheader">Status</span><span class="th" role="columnheader">Started</span><span class="th" role="columnheader">Duration</span></div></div>
+          <div class="tbody" role="rowgroup"><sc-for list="{{runs}}" as="r" hint-placeholder-count="7"><div class="tr" role="row"><span class="td" role="cell"><span class="data">{{r.id}}</span></span><span class="td" role="cell">{{r.p}}</span><span class="td" role="cell"><span class="data muted">{{r.b}}</span></span><span class="td" role="cell"><span class="{{r.chip}}"><span class="tile" aria-hidden="true">{{r.sym}}</span>{{r.l}}</span></span><span class="td num" role="cell">{{r.at}}</span><span class="td num" role="cell">{{r.d}}</span></div></sc-for></div>
+        </div>
+        <sc-if value="{{noRuns}}" hint-placeholder-val="{{ false }}"><div class="empty">No runs match “{{filterQ}}”. Press Esc in the search field to clear it.</div></sc-if>
+      </div>
+    </main>
+    <div class="{{handleCls}}" role="separator" aria-orientation="vertical" aria-controls="al-panel" aria-label="Resize assistant panel" tabindex="0" aria-valuemin="320" aria-valuemax="{{maxW}}" aria-valuenow="{{pw}}" onKeyDown="{{onHandleKey}}">
+      <span class="line"></span><span class="grip"></span>
+      <span class="hit" onPointerEnter="{{onHitEnter}}" onPointerLeave="{{onHitLeave}}" onPointerDown="{{onHitDown}}" onPointerMove="{{onHitMove}}" onPointerUp="{{onHitUp}}" onPointerCancel="{{onHitUp}}" onDoubleClick="{{onHitDbl}}"></span>
+      <span class="size">{{sizeLabel}}</span>
+    </div>
+    <aside id="al-panel" class="panel" aria-label="Assistant" style="width: {{panelW}}">
+      <div class="pin" style="width: {{pinW}}">
+        <div class="ph"><span class="phm"><svg class="fm-chatbot run" width="26" height="26" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><g class="cb-b"><path class="cb-o" d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" pathLength="1" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><g class="cb-p"><path class="cb-c" d="M26 37l6 5-6 5" pathLength="1" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path><path class="cb-u" d="M35 49h5" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"></path></g><circle class="cb-d cb-d0" cx="24" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d1" cx="32" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d2" cx="40" cy="42" r="3.2" fill="currentColor" opacity="0"></circle></g></g></svg></span><div class="ttl"><h2 id="al-ph" tabindex="-1">{{title}}</h2><div class="ctx">{{ctxLine}}</div></div>
+          <sc-if value="{{live}}" hint-placeholder-val="{{ true }}">
+            <button type="button" class="ibtn" aria-label="Conversation history" aria-pressed="{{hist}}" data-tip="History" onClick="{{onHistBtn}}"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5M12 7v5l3 2"></path></svg></button>
+            <button type="button" class="ibtn" aria-label="New conversation" data-tip="New conversation" onClick="{{onNew}}"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"></path><path d="M18 15v6M15 18h6"></path></svg></button>
+            <button type="button" class="ibtn" aria-label="Assistant settings" data-tip="Tools, skills and connections" data-tip-pos="end" onClick="{{onSet}}"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg></button>
+          </sc-if>
+          <button type="button" class="ibtn" aria-label="Close assistant" data-tip="Close · Esc" data-tip-pos="end" onClick="{{onClose}}"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+        </div>
+        <sc-if value="{{live}}" hint-placeholder-val="{{ true }}">
+        <div class="{{viewsCls}}">
+          <div class="chat">
+            <div class="msgs" id="al-msgs" onScroll="{{onMsgsScroll}}">
+              <sc-if value="{{empty}}" hint-placeholder-val="{{ true }}">
+                <div class="hello"><h3>What can I help with?</h3><span>I can read runs, logs and environments, and use the tools you allow. Anything that changes something waits for your approval.</span>
+                  <div class="sugg"><sc-for list="{{sugg}}" as="s" hint-placeholder-count="4"><button type="button" onClick="{{s.go}}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"></path></svg>{{s.t}}</button></sc-for></div></div>
+              </sc-if>
+              <sc-for list="{{turns}}" as="t" hint-placeholder-count="0">
+                <div class="turn">
+                  <sc-if value="{{t.editing}}" hint-placeholder-val="{{ false }}">
+                    <div class="editbox"><textarea id="al-edit" aria-label="Edit your question" value="{{t.ev}}" onChange="{{t.onEv}}" onKeyDown="{{t.onEvKey}}"></textarea>
+                      <div class="row2"><span class="hint2">Sending creates a new version; the earlier one stays available.</span><button type="button" class="btn text" onClick="{{t.onCancel}}">Cancel</button><button type="button" class="btn fill" onClick="{{t.onSave}}">Send</button></div></div>
+                  </sc-if>
+                  <sc-if value="{{t.notEditing}}" hint-placeholder-val="{{ true }}">
+                    <div class="uq new"><div class="ub">{{t.q}}</div><div class="acts">
+                      <sc-if value="{{t.qVer}}" hint-placeholder-val="{{ false }}"><span class="ver"><button type="button" class="act" aria-label="Previous version" disabled="{{t.qPrevDis}}" onClick="{{t.qPrev}}"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>{{t.qVerLbl}}<button type="button" class="act" aria-label="Next version" disabled="{{t.qNextDis}}" onClick="{{t.qNext}}"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button></span></sc-if>
+                      <button type="button" id="{{t.qId}}" class="act" aria-label="Edit" data-tip="Edit" onClick="{{t.onEdit}}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M14 6l4 4"></path></svg></button>
+                      <button type="button" class="act" aria-label="Copy" data-tip="Copy" onClick="{{t.onCopyQ}}"><sc-if value="{{t.copiedQ}}" hint-placeholder-val="{{ false }}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if><sc-if value="{{t.notCopiedQ}}" hint-placeholder-val="{{ true }}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg></sc-if></button>
+                    </div></div>
+                  </sc-if>
+                  <sc-if value="{{t.hasA}}" hint-placeholder-val="{{ true }}">
+                    <div class="ab new" aria-busy="{{t.busy}}">
+                      <span class="av24"><sc-if value="{{t.aIdle}}" hint-placeholder-val="{{ true }}"><svg class="fm-chatbot" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><g class="cb-b"><path class="cb-o" d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" pathLength="1" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><g class="cb-p"><path class="cb-c" d="M26 37l6 5-6 5" pathLength="1" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path><path class="cb-u" d="M35 49h5" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"></path></g><circle class="cb-d cb-d0" cx="24" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d1" cx="32" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d2" cx="40" cy="42" r="3.2" fill="currentColor" opacity="0"></circle></g></g></svg></sc-if><sc-if value="{{t.aLoop}}" hint-placeholder-val="{{ false }}"><svg class="fm-chatbot loop" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><g class="cb-b"><path class="cb-o" d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" pathLength="1" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><g class="cb-p"><path class="cb-c" d="M26 37l6 5-6 5" pathLength="1" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path><path class="cb-u" d="M35 49h5" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"></path></g><circle class="cb-d cb-d0" cx="24" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d1" cx="32" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d2" cx="40" cy="42" r="3.2" fill="currentColor" opacity="0"></circle></g></g></svg></sc-if></span>
+                      <div class="abody">
+                        <sc-if value="{{t.hasTools}}" hint-placeholder-val="{{ false }}">
+                          <div class="{{t.toolsCls}}"><button type="button" aria-expanded="{{t.toolsOpen}}" onClick="{{t.onTools}}"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 7a4 4 0 0 1 5 5l-9 9-3-3 9-9M5 19l-1 1"></path></svg><span>{{t.toolsLbl}}</span><sc-if value="{{t.toolsDone}}" hint-placeholder-val="{{ true }}"><span class="chev"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></sc-if></button>
+                            <ol><sc-for list="{{t.toolsItems}}" as="x" hint-placeholder-count="2"><li class="{{x.cls}}">
+                              <sc-if value="{{x.isMcp}}" hint-placeholder-val="{{ false }}"><span class="srcico mcp" aria-hidden="true">{{x.ini}}</span></sc-if><sc-if value="{{x.isSkill}}" hint-placeholder-val="{{ false }}"><span class="srcico"><svg class="ic" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"></path><path d="M9 10h6M9 14h6M9 18h3"></path></svg></span></sc-if><sc-if value="{{x.isTool}}" hint-placeholder-val="{{ true }}"><span class="srcico"><svg class="ic" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 7a4 4 0 0 1 5 5l-9 9-3-3 9-9M5 19l-1 1"></path></svg></span></sc-if>
+                              <span>{{x.label}}<span class="src"> · {{x.srcName}}</span></span>
+                              <span class="st"><sc-if value="{{x.isRun}}" hint-placeholder-val="{{ false }}"><span class="spin" role="img" aria-label="Running"></span></sc-if><sc-if value="{{x.isWarn}}" hint-placeholder-val="{{ false }}"><span role="img" aria-label="Warning" style="display: inline-flex"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"></path><path d="M12 10v4M12 17h.01"></path></svg></span></sc-if><sc-if value="{{x.isOk}}" hint-placeholder-val="{{ true }}"><span role="img" aria-label="Done" style="display: inline-flex"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span></sc-if></span>
+                            </li></sc-for></ol></div>
+                        </sc-if>
+                        <sc-if value="{{t.hasAppr}}" hint-placeholder-val="{{ false }}">
+                          <div class="appr" role="group" aria-label="Approval needed"><h4><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>{{t.apTitle}}</h4><div class="args">{{t.apArgs}}</div><span class="note">{{t.apWhy}}</span>
+                            <div class="row2"><sc-if value="{{t.apRun}}" hint-placeholder-val="{{ true }}"><button type="button" class="btn runb" onClick="{{t.onApprove}}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l12 7-12 7z"></path></svg>{{t.apCta}}</button></sc-if><sc-if value="{{t.apFill}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn fill" onClick="{{t.onApprove}}">{{t.apCta}}</button></sc-if><button type="button" class="btn text" onClick="{{t.onDeny}}">Don’t run</button></div></div>
+                        </sc-if>
+                        <sc-if value="{{t.hasMd}}" hint-placeholder-val="{{ true }}">
+                          <div class="md"><sc-for list="{{t.blocks}}" as="bl" hint-placeholder-count="1">
+                            <sc-if value="{{bl.isP}}" hint-placeholder-val="{{ true }}"><p><sc-for list="{{bl.segs}}" as="sg" hint-placeholder-count="1"><sc-if value="{{sg.isT}}" hint-placeholder-val="{{ true }}"><span>{{sg.t}}</span></sc-if><sc-if value="{{sg.isC}}" hint-placeholder-val="{{ false }}"><code>{{sg.t}}</code></sc-if><sc-if value="{{sg.isB}}" hint-placeholder-val="{{ false }}"><b>{{sg.t}}</b></sc-if><sc-if value="{{sg.isL}}" hint-placeholder-val="{{ false }}"><button type="button" class="lk" onClick="{{sg.go}}">{{sg.t}}</button></sc-if></sc-for><sc-if value="{{bl.caret}}" hint-placeholder-val="{{ false }}"><span class="caret"></span></sc-if></p></sc-if>
+                            <sc-if value="{{bl.isOl}}" hint-placeholder-val="{{ false }}"><ol><sc-for list="{{bl.items}}" as="it" hint-placeholder-count="3"><li><sc-for list="{{it.segs}}" as="sg" hint-placeholder-count="1"><sc-if value="{{sg.isT}}" hint-placeholder-val="{{ true }}"><span>{{sg.t}}</span></sc-if><sc-if value="{{sg.isC}}" hint-placeholder-val="{{ false }}"><code>{{sg.t}}</code></sc-if><sc-if value="{{sg.isB}}" hint-placeholder-val="{{ false }}"><b>{{sg.t}}</b></sc-if><sc-if value="{{sg.isL}}" hint-placeholder-val="{{ false }}"><button type="button" class="lk" onClick="{{sg.go}}">{{sg.t}}</button></sc-if></sc-for><sc-if value="{{it.caret}}" hint-placeholder-val="{{ false }}"><span class="caret"></span></sc-if></li></sc-for></ol></sc-if>
+                            <sc-if value="{{bl.isCode}}" hint-placeholder-val="{{ false }}"><div class="cblock"><div class="cbh">{{bl.lang}}<button type="button" class="act" aria-label="Copy code" data-tip="Copy" data-tip-pos="end" onClick="{{bl.onCopy}}"><sc-if value="{{bl.copied}}" hint-placeholder-val="{{ false }}"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if><sc-if value="{{bl.notCopied}}" hint-placeholder-val="{{ true }}"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg></sc-if></button></div><pre>{{bl.text}}</pre></div></sc-if>
+                          </sc-for></div>
+                        </sc-if>
+                        <sc-if value="{{t.stopped}}" hint-placeholder-val="{{ false }}"><span class="note"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"></rect></svg>Stopped.<button type="button" class="lk" onClick="{{t.onRetry}}">Retry</button></span></sc-if>
+                        <sc-if value="{{t.showActs}}" hint-placeholder-val="{{ true }}">
+                          <div class="{{t.actsCls}}">
+                            <button type="button" class="act" aria-label="Copy answer" data-tip="Copy" onClick="{{t.onCopy}}"><sc-if value="{{t.copiedA}}" hint-placeholder-val="{{ false }}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if><sc-if value="{{t.notCopiedA}}" hint-placeholder-val="{{ true }}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg></sc-if></button>
+                            <button type="button" class="act" aria-label="Retry" data-tip="Retry" onClick="{{t.onRetry}}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 4v7h-7"></path></svg></button>
+                            <button type="button" class="act" aria-label="Good answer" aria-pressed="{{t.up}}" data-tip="Good answer" onClick="{{t.onUp}}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11v9H4v-9zM7 11l4-8a2 2 0 0 1 3 2l-1 4h6a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.8 20H7"></path></svg></button>
+                            <button type="button" class="act" aria-label="Bad answer" aria-pressed="{{t.down}}" data-tip="Bad answer" onClick="{{t.onDown}}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 13V4H4v9zM7 13l4 8a2 2 0 0 0 3-2l-1-4h6a2 2 0 0 0 2-2.3l-1.2-7A2 2 0 0 0 17.8 4H7"></path></svg></button>
+                            <sc-if value="{{t.aVer}}" hint-placeholder-val="{{ false }}"><span class="ver"><button type="button" class="act" aria-label="Previous answer" disabled="{{t.aPrevDis}}" onClick="{{t.aPrev}}"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>{{t.aVerLbl}}<button type="button" class="act" aria-label="Next answer" disabled="{{t.aNextDis}}" onClick="{{t.aNext}}"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button></span></sc-if>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{t.fbOpen}}" hint-placeholder-val="{{ false }}">
+                          <div class="fb" role="group" aria-labelledby="{{t.fbId}}"><b id="{{t.fbId}}" tabindex="-1" style="font: 700 13px var(--ui)">What was wrong?</b>
+                            <div class="chips"><sc-for list="{{t.fbChips}}" as="fc" hint-placeholder-count="5"><button type="button" class="fchip" aria-pressed="{{fc.on}}" onClick="{{fc.toggle}}">{{fc.label}}</button></sc-for></div>
+                            <textarea aria-label="Optional details" placeholder="Optional details (the question and the answer are attached)" value="{{t.fbText}}" onChange="{{t.onFbText}}"></textarea>
+                            <div class="row2" style="display: flex; justify-content: flex-end; gap: 6px"><button type="button" class="btn text" onClick="{{t.onFbCancel}}">Cancel</button><button type="button" class="btn fill" onClick="{{t.onFbSend}}">Send feedback</button></div></div>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div class="compw">
+              <sc-if value="{{toolsOn}}" hint-placeholder-val="{{ false }}">
+                <div class="pop on" id="al-pop" role="dialog" aria-label="Tools for this conversation" tabindex="-1" onKeyDown="{{onPopKey}}">
+                  <h5>Tools<span style="font-weight: 600; text-transform: none; letter-spacing: 0">AIToolbox</span></h5>
+                  <sc-for list="{{popTools}}" as="pt" hint-placeholder-count="5"><div class="prow"><sc-if value="{{pt.write}}" hint-placeholder-val="{{ false }}"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l12 7-12 7z"></path></svg></sc-if><sc-if value="{{pt.read}}" hint-placeholder-val="{{ true }}"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 7a4 4 0 0 1 5 5l-9 9-3-3 9-9M5 19l-1 1"></path></svg></sc-if><div><div class="nm">{{pt.name}}</div><div class="ds">{{pt.ds}}</div></div><button type="button" class="sw" role="switch" aria-checked="{{pt.on}}" aria-label="{{pt.name}}" onClick="{{pt.toggle}}"></button></div></sc-for>
+                  <h5>Skills</h5>
+                  <sc-for list="{{popSkills}}" as="ps" hint-placeholder-count="5"><div class="prow"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"></path><path d="M9 10h6M9 14h6M9 18h3"></path></svg><div><div class="nm">{{ps.name}}</div><div class="ds">{{ps.src}}</div></div><button type="button" class="sw" role="switch" aria-checked="{{ps.on}}" aria-label="{{ps.name}}" onClick="{{ps.toggle}}"></button></div></sc-for>
+                  <h5>MCP servers</h5>
+                  <sc-for list="{{popMcp}}" as="pm" hint-placeholder-count="4"><div class="prow"><span class="srcico mcp" aria-hidden="true">{{pm.ini}}</span><div><div class="nm">{{pm.name}}</div><div class="ds"><span class="{{pm.dot}}"></span>{{pm.line}}</div></div>
+                    <sc-if value="{{pm.ok}}" hint-placeholder-val="{{ true }}"><button type="button" class="sw" role="switch" aria-checked="{{pm.on}}" aria-label="{{pm.name}}" onClick="{{pm.toggle}}"></button></sc-if><sc-if value="{{pm.needs}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn outl" style="height: 30px; padding: 0 12px" onClick="{{pm.connect}}">Connect</button></sc-if></div></sc-for>
+                  <div class="pfoot"><button type="button" class="lk" onClick="{{onManage}}">Manage tools, skills and MCP servers</button></div>
+                </div>
+              </sc-if>
+              <form class="comp" autocomplete="off" onSubmit="{{onComp}}">
+                <sc-if value="{{ctx}}" hint-placeholder-val="{{ true }}"><span class="ctxchip"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h5l3 5-3 5H4M12 12h8M17 9l3 3-3 3"></path></svg>Runs page<button type="button" aria-label="Remove the page from the context" onClick="{{onCtxX}}"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-if>
+                <textarea id="al-ci" rows="1" placeholder="Ask about these runs…" aria-label="Message the assistant" style="field-sizing: content" value="{{ci}}" onChange="{{onCi}}" onKeyDown="{{onCiKey}}"></textarea>
+                <div class="crow">
+                  <button type="button" id="al-tb" class="toolsbtn" aria-haspopup="dialog" aria-expanded="{{toolsOn}}" data-tip="Tools, skills and MCP servers" data-tip-pos="up start" onClick="{{onToolsBtn}}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 7a4 4 0 0 1 5 5l-9 9-3-3 9-9M5 19l-1 1"></path></svg>Tools<span class="n">{{toolsN}}</span></button>
+                  <sc-if value="{{gen}}" hint-placeholder-val="{{ false }}"><button type="submit" id="al-send" class="send stop" aria-label="Stop" data-tip="Stop" data-tip-pos="up end"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"></rect></svg></button></sc-if>
+                  <sc-if value="{{noGen}}" hint-placeholder-val="{{ true }}"><button type="submit" id="al-send" class="send" aria-label="Send" data-tip="Send" data-tip-pos="up end" disabled="{{sendDis}}"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"></path></svg></button></sc-if>
+                </div>
+              </form>
+              <div class="disc">The assistant can make mistakes. Check important information before you act on it.</div>
+            </div>
+          </div>
+          <div class="{{histCls}}" role="region" aria-label="Conversation history">
+            <sc-if value="{{hist}}" hint-placeholder-val="{{ false }}">
+            <div class="hsearch"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input id="al-hq" type="search" placeholder="Search conversations" aria-label="Search conversations" value="{{hq}}" onChange="{{onHq}}"></div>
+            <div class="hlist">
+              <sc-if value="{{noHist}}" hint-placeholder-val="{{ false }}"><div class="hempty">No conversation matches “{{hqShown}}”.</div></sc-if>
+              <sc-for list="{{groups}}" as="g" hint-placeholder-count="3"><h3 class="hgrp">{{g.name}}</h3>
+                <sc-for list="{{g.items}}" as="h" hint-placeholder-count="2"><div class="{{h.cls}}">
+                  <sc-if value="{{h.renaming}}" hint-placeholder-val="{{ false }}"><input id="{{h.rnId}}" aria-label="Conversation name" value="{{h.rn}}" onChange="{{h.onRn}}" onKeyDown="{{h.onRnKey}}" onBlur="{{h.onRnBlur}}"></sc-if>
+                  <sc-if value="{{h.notRenaming}}" hint-placeholder-val="{{ true }}">
+                    <button type="button" class="go" aria-current="{{h.cur}}" onClick="{{h.go}}"><b>{{h.title}}</b><span>{{h.first}}</span></button>
+                    <sc-if value="{{h.pinned}}" hint-placeholder-val="{{ false }}"><span class="pinned" role="img" aria-label="Pinned"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6l-1 6 4 4H6l4-4zM12 14v7"></path></svg></span></sc-if>
+                    <button type="button" id="{{h.moreId}}" class="act" aria-label="{{h.moreLbl}}" aria-haspopup="menu" aria-expanded="{{h.menuOn}}" onClick="{{h.onMore}}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="6" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="18" r="1.5"></circle></svg></button>
+                    <sc-if value="{{h.menuOn}}" hint-placeholder-val="{{ false }}"><div class="menu on" role="menu" aria-label="{{h.moreLbl}}" onKeyDown="{{h.onMenuKey}}">
+                      <button type="button" role="menuitem" id="{{h.mi0}}" onClick="{{h.onRename}}"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M14 6l4 4"></path></svg>Rename</button>
+                      <button type="button" role="menuitem" tabindex="-1" onClick="{{h.onPin}}"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6l-1 6 4 4H6l4-4zM12 14v7"></path></svg>{{h.pinLbl}}</button>
+                      <button type="button" role="menuitem" tabindex="-1" class="dz" onClick="{{h.onDel}}"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg>Delete</button></div></sc-if>
+                  </sc-if>
+                </div></sc-for>
+              </sc-for>
+            </div>
+            <div class="hfoot">Conversations are kept 90 days, visible only to you. <button type="button" class="lk" onClick="{{onHistSet}}">Change</button></div>
+            </sc-if>
+          </div>
+        </div>
+        </sc-if>
+        <sc-if value="{{soon}}" hint-placeholder-val="{{ false }}">
+          <div class="soon"><svg class="fm-chatbot run" width="64" height="64" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><g class="cb-b"><path class="cb-o" d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" pathLength="1" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><g class="cb-p"><path class="cb-c" d="M26 37l6 5-6 5" pathLength="1" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path><path class="cb-u" d="M35 49h5" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"></path></g><circle class="cb-d cb-d0" cx="24" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d1" cx="32" cy="42" r="3.2" fill="currentColor" opacity="0"></circle><circle class="cb-d cb-d2" cx="40" cy="42" r="3.2" fill="currentColor" opacity="0"></circle></g></g></svg><h3>The assistant is coming soon</h3><p>Ask about runs, logs and environments in plain words, right next to your work.</p>
+            <sc-if value="{{notNotify}}" hint-placeholder-val="{{ true }}"><button type="button" class="tonal" onClick="{{onNotify}}">Tell me when it’s ready</button></sc-if>
+            <sc-if value="{{notify}}" hint-placeholder-val="{{ false }}"><button type="button" class="tonal" aria-pressed="true"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>We’ll let you know</button></sc-if></div>
+        </sc-if>
+      </div>
+    </aside>
+  </div>
+</div>
+<div class="sr" role="status" aria-live="polite">{{announce}}</div>
+<div class="{{snackCls}}" role="status"><span>{{snackT}}</span><sc-if value="{{snackAct}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{onSnackA}}">{{snackA}}</button></sc-if></div>
+<sc-if value="{{dlgOn}}" hint-placeholder-val="{{ false }}">
+  <div class="dlgs on" onKeyDown="{{onDlgKey}}"><div class="scr" onClick="{{closeDlg}}"></div>
+    <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="al-dlgt">
+      <header><h2 id="al-dlgt">Assistant settings</h2><button type="button" class="ibtn" aria-label="Close settings" onClick="{{closeDlg}}"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></header>
+      <div class="tabs" role="tablist" aria-label="Settings sections" onKeyDown="{{onTabsKey}}"><sc-for list="{{tabs}}" as="tb" hint-placeholder-count="4"><button type="button" role="tab" id="{{tb.id}}" aria-selected="{{tb.on}}" aria-controls="al-tabpanel" tabindex="{{tb.ti}}" onClick="{{tb.go}}">{{tb.label}}</button></sc-for></div>
+      <div class="dbody" id="al-tabpanel" role="tabpanel" aria-labelledby="{{tabLb}}">
+        <sc-if value="{{tTools}}" hint-placeholder-val="{{ true }}">
+          <p class="lead">What the assistant may do in AIToolbox. Reading is safe; anything that changes something should ask first. Your admin sets the maximum; you can only be stricter.</p>
+          <sc-for list="{{setTools}}" as="st" hint-placeholder-count="5"><div class="srow"><sc-if value="{{st.write}}" hint-placeholder-val="{{ false }}"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l12 7-12 7z"></path></svg></sc-if><sc-if value="{{st.read}}" hint-placeholder-val="{{ true }}"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 7a4 4 0 0 1 5 5l-9 9-3-3 9-9M5 19l-1 1"></path></svg></sc-if>
+            <div><div class="nm">{{st.name}}<span class="{{st.pill}}">{{st.pillT}}</span></div><div class="ds">{{st.ds}}</div></div>
+            <select class="perm" aria-label="{{st.lbl}}" value="{{st.perm}}" onChange="{{st.onPerm}}"><option value="allow">Always allow</option><option value="ask">Ask first</option><option value="off">Off</option></select></div></sc-for>
+        </sc-if>
+        <sc-if value="{{tSkills}}" hint-placeholder-val="{{ false }}">
+          <p class="lead">Skills are packaged know-how the assistant loads when a question needs it: a procedure, a house style, a feature’s rules.</p>
+          <sc-for list="{{setSkills}}" as="sk" hint-placeholder-count="5"><div class="srow"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"></path><path d="M9 10h6M9 14h6M9 18h3"></path></svg><div><div class="nm">{{sk.name}}<span class="pill">{{sk.src}}</span></div><div class="ds">{{sk.ds}}</div></div><button type="button" class="sw" role="switch" aria-checked="{{sk.on}}" aria-label="{{sk.name}}" onClick="{{sk.toggle}}"></button></div></sc-for>
+          <div style="margin-top: 12px; display: flex; gap: 8px"><button type="button" class="btn outl" onClick="{{onSkNew}}"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Create a skill</button></div>
+        </sc-if>
+        <sc-if value="{{tMcp}}" hint-placeholder-val="{{ false }}">
+          <p class="lead">MCP servers give the assistant tools from other systems. Each server’s write tools ask first. Servers added by your organisation can be turned off but not removed.</p>
+          <sc-for list="{{setMcp}}" as="mc" hint-placeholder-count="4"><div class="mcp"><div class="top"><span class="logo" aria-hidden="true">{{mc.ini}}</span>
+              <div><h3 class="nm" style="margin: 0; font: 600 14px var(--ui); display: flex; gap: 8px; align-items: center; flex-wrap: wrap">{{mc.name}}
+                <sc-if value="{{mc.ok}}" hint-placeholder-val="{{ true }}"><span class="pill ok">Connected</span></sc-if><sc-if value="{{mc.connecting}}" hint-placeholder-val="{{ false }}"><span class="pill">Connecting…</span></sc-if><sc-if value="{{mc.needs}}" hint-placeholder-val="{{ false }}"><span class="pill w">Needs sign-in</span></sc-if><sc-if value="{{mc.managed}}" hint-placeholder-val="{{ false }}"><span class="pill"><svg class="ic" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg> Organisation</span></sc-if></h3>
+                <div class="url">{{mc.url}}</div></div>
+              <sc-if value="{{mc.ok}}" hint-placeholder-val="{{ true }}"><button type="button" class="sw" role="switch" aria-checked="{{mc.on}}" aria-label="{{mc.name}}" onClick="{{mc.toggle}}"></button></sc-if><sc-if value="{{mc.needs}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn fill" onClick="{{mc.connect}}">Connect</button></sc-if></div>
+            <div class="tl"><sc-for list="{{mc.tools}}" as="tt" hint-placeholder-count="3"><span class="{{tt.cls}}">{{tt.t}}<sc-if value="{{tt.w}}" hint-placeholder-val="{{ false }}"><span class="sr"> (changes something: asks first)</span></sc-if></span></sc-for></div>
+            <sc-if value="{{mc.removable}}" hint-placeholder-val="{{ true }}"><div><button type="button" class="lk" onClick="{{mc.remove}}">Remove</button></div></sc-if></div></sc-for>
+          <form class="addf" novalidate="" onSubmit="{{onAdd}}" aria-labelledby="al-addt"><h3 id="al-addt" class="full" style="margin: 0; font: 700 14px var(--ui)">Add an MCP server</h3>
+            <label>Name<input id="al-mn" placeholder="Monitoring" value="{{addN}}" onChange="{{onAddN}}" aria-invalid="{{nInvalid}}" aria-describedby="al-merr"></label>
+            <label>Authentication<select value="{{addA}}" onChange="{{onAddA}}"><option>OAuth</option><option>API key</option><option>None</option></select></label>
+            <label class="full">Server URL<input id="al-mu" placeholder="https://example.com/mcp" inputmode="url" value="{{addU}}" onChange="{{onAddU}}" aria-invalid="{{uInvalid}}" aria-describedby="al-merr"></label>
+            <span class="err full" id="al-merr" role="alert">{{addErr}}</span>
+            <div class="full" style="display: flex; justify-content: flex-end"><button type="submit" class="btn tonal2"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add server</button></div></form>
+        </sc-if>
+        <sc-if value="{{tData}}" hint-placeholder-val="{{ false }}">
+          <p class="lead">Your conversations are private to you. Admins see usage numbers, never the content.</p>
+          <div class="srow"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5M12 7v5l3 2"></path></svg><div><div class="nm">Keep conversations for</div><div class="ds">Older ones are deleted automatically. Pinned ones are kept.</div></div><select class="perm" aria-label="Keep conversations for" value="{{keep}}" onChange="{{onKeep}}"><option>30 days</option><option>90 days</option><option>1 year</option></select></div>
+          <div class="srow"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h5l3 5-3 5H4M12 12h8M17 9l3 3-3 3"></path></svg><div><div class="nm">Use the current page as context</div><div class="ds">Adds the page you are on (filters, selected run) to new questions. You can remove it per question.</div></div><button type="button" class="sw" role="switch" aria-checked="{{useCtx}}" aria-label="Use the current page as context" onClick="{{onUseCtx}}"></button></div>
+          <div class="srow"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg><div><div class="nm">Delete all conversations</div><div class="ds">{{nConvs}} conversations. This can’t be undone.</div></div>
+            <sc-if value="{{delNotSure}}" hint-placeholder-val="{{ true }}"><button type="button" class="btn outl" style="color: var(--error)" onClick="{{onDelAll}}">Delete all</button></sc-if><sc-if value="{{delSure}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn danger" onClick="{{onDelAll}}">Delete {{nConvs}} conversations</button></sc-if></div>
+        </sc-if>
+      </div>
+      <div class="dfoot"><button type="button" class="btn fill" onClick="{{closeDlg}}">Done</button></div>
+    </div>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1440, "height": 900}}'>
+// ---------- data ----------
+var RUNS = [
+  { id: 'run-7f3a9c2e', p: 'lint-api', b: 'main', s: 'error', l: 'Failed', at: '10:24', d: '1 m 12 s' },
+  { id: 'run-19bd04f1', p: 'build-web', b: 'main', s: 'success', l: 'Passed', at: '10:02', d: '4 m 40 s' },
+  { id: 'run-a4c1e877', p: 'deploy-staging', b: 'release/4.5', s: 'warning', l: 'Degraded', at: '09:51', d: '7 m 03 s' },
+  { id: 'run-5e20b9d3', p: 'search-index', b: 'main', s: 'success', l: 'Passed', at: '09:30', d: '12 m 18 s' },
+  { id: 'run-c88f0a12', p: 'lint-api', b: 'feat/tokens', s: 'success', l: 'Passed', at: '09:12', d: '1 m 05 s' },
+  { id: 'run-0b7d6e45', p: 'e2e-checkout', b: 'main', s: 'error', l: 'Failed', at: '08:47', d: '18 m 51 s' },
+  { id: 'run-e31c7f90', p: 'build-web', b: 'release/4.5', s: 'success', l: 'Passed', at: '08:20', d: '4 m 22 s' }];
+var SYM = { success: '✓', warning: '!', error: '✕' };
+var SUGG = ['Why did lint-api fail?', 'Is staging healthy?', 'Re-run lint-api on main', 'Summarise today’s runs'];
+var MIN_W = 320, DEF_W = 400, SNAP = 240, NAVW = 280, CONTENT_MIN = 720, STACK_BELOW = 840, DAY = 864e5;
+var FB_CHIPS = ['Wrong or inaccurate', 'Not helpful', 'Used the wrong tool', 'Unsafe', 'Other'];
+
+// answers in a tiny markup: blank line = new block, `code`, **bold**, [[link text|settings tab]], ```lang fenced code```, "1. " list
+var VARIANTS = {
+  lint: [
+    'Run `run-7f3a9c2e` on `lint-api` failed on rule `no-floating-promises` in `src/jobs/retry.ts:42`. The same rule broke 2 of the last 3 runs since eslint moved to 9.13.\n\nEither await the promise on line 42, or pin eslint until the code is fixed:\n\n```shell\nnpm i -D eslint@9.12.0',
+    'The failure is a lint error, not an infrastructure problem: `no-floating-promises` at `src/jobs/retry.ts:42` (an un-awaited `retryJob()`). It started with eslint 9.13 and also failed `run-c41d02aa` yesterday.\n\nFix: add `await` on line 42. Pinning eslint to 9.12 would hide it.'],
+  staging: [
+    '`deploy-staging` is degraded on `staging-eu` since 09:51: 3 of 5 health checks fail, all on the search service. The index mapping is v12 while the code expects v13.',
+    'Staging is partly down: the search service on `staging-eu` fails 3 health checks since 09:51 (mapping v12, code v13). Other services are healthy.'],
+  summary: [
+    'Today on this page: **7 runs** since 08:20, **2 failed** (`lint-api`, `e2e-checkout`) and **1 degraded** (`deploy-staging`). Median duration 4 m 40 s.',
+    '7 runs today: 4 passed, 2 failed, 1 degraded. The failures are unrelated: a lint rule on `lint-api` and a payment-mock timeout on `e2e-checkout`.'],
+  jira: ['I drafted the ticket. Creating it in Jira changes something, so I need your go-ahead.']
+};
+
+function inl(s) {
+  var out = [], re = /`([^`]+)`|\*\*([^*]+)\*\*|\[\[([^|\]]+)\|([^\]]+)\]\]/g, i = 0, m;
+  while ((m = re.exec(s))) {
+    if (m.index > i) out.push({ k: 't', t: s.slice(i, m.index) });
+    if (m[1]) out.push({ k: 'c', t: m[1] }); else if (m[2]) out.push({ k: 'b', t: m[2] }); else out.push({ k: 'l', t: m[3], tab: m[4] });
+    i = re.lastIndex;
+  }
+  if (i < s.length) out.push({ k: 't', t: s.slice(i) });
+  return out;
+}
+function parseMd(src) {
+  return src.split('\n\n').filter(function (b) { return b.length; }).map(function (b) {
+    if (b.indexOf('```') === 0) { var nl = b.indexOf('\n'); return { k: 'code', lang: b.slice(3, nl), text: b.slice(nl + 1) }; }
+    if (/^1\. /.test(b)) return { k: 'ol', items: b.split('\n').map(function (l) { return inl(l.replace(/^\d+\. /, '')); }) };
+    return { k: 'p', segs: inl(b) };
+  });
+}
+function segsLen(segs) { return segs.reduce(function (n, s) { return n + s.t.length; }, 0); }
+function mdLen(blocks) { return blocks.reduce(function (n, b) { return n + (b.k === 'code' ? b.text.length : b.k === 'ol' ? b.items.reduce(function (x, it) { return x + segsLen(it); }, 0) : segsLen(b.segs)); }, 0); }
+function cutSegs(segs, n) { var out = []; for (var i = 0; i < segs.length && n > 0; i++) { var s = segs[i]; if (s.t.length <= n) { out.push(s); n -= s.t.length; } else { out.push({ k: s.k, t: s.t.slice(0, n), tab: s.tab }); n = 0; } } return { segs: out, left: n }; }
+function cutMd(blocks, n) {
+  var out = [];
+  for (var i = 0; i < blocks.length && n > 0; i++) {
+    var b = blocks[i];
+    if (b.k === 'code') { out.push(b); n -= b.text.length; }
+    else if (b.k === 'p') { var r = cutSegs(b.segs, n); out.push({ k: 'p', segs: r.segs }); n = r.left; }
+    else { var items = []; for (var j = 0; j < b.items.length && n > 0; j++) { var c = cutSegs(b.items[j], n); items.push(c.segs); n = c.left; } out.push({ k: 'ol', items: items }); }
+  }
+  return out;
+}
+function mdText(blocks) { return blocks.map(function (b) { return b.k === 'code' ? b.text : b.k === 'ol' ? b.items.map(function (it, i) { return (i + 1) + '. ' + it.map(function (s) { return s.t; }).join(''); }).join('\n') : b.segs.map(function (s) { return s.t; }).join(''); }).join('\n\n'); }
+
+var uidN = 0; function uid() { uidN += 1; return 'u' + uidN; }
+function T1(q, src, tools) { return { vers: [{ q: q, answers: [{ id: uid(), src: src, shown: 1e9, tools: tools || [], status: 'done', fb: null }], ai: 0, tail: [] }], vi: 0 }; }
+
+function initModel() {
+  var now = Date.now();
+  return {
+    theme: 'light', live: true, slow: false, width: 1440,
+    open: false, closing: false, pw: DEF_W, rail: true, autoRail: false, hover: false, drag: null, snap: false,
+    writing: false, unread: false, ctx: true, useCtx: true, keep: '90 days',
+    q: '', filter: '', status: 'all', qSent: false, ci: '', hist: false, hq: '', menuFor: null, toolsOn: false,
+    dlg: null, snack: null, announce: '', copied: null, notify: false, delSure: false,
+    add: { n: '', a: 'OAuth', u: '', err: '', errField: '' },
+    log: 'Click the assistant button, type and press Ask, or press ⌘J.',
+    gen: null, conv: null,
+    TOOLS: [
+      { id: 'search_runs', name: 'Search runs', ds: 'Find Sweep runs by pipeline, branch, status or time.', kind: 'read', perm: 'allow' },
+      { id: 'read_logs', name: 'Read run logs', ds: 'Read the log of a run or a job.', kind: 'read', perm: 'allow' },
+      { id: 'query_env', name: 'Query environments', ds: 'Health checks, versions and config of an environment.', kind: 'read', perm: 'allow' },
+      { id: 'promote', name: 'Deploy environment', ds: 'Deploy a release or a branch to an environment and follow the first rollout.', kind: 'write', perm: 'ask' },
+      { id: 'reserve_env', name: 'Reserve environment', ds: 'Reserve an environment until a date, with a reason.', kind: 'write', perm: 'ask' },
+      { id: 'create_jira', name: 'Create Jira ticket', ds: 'Create a ticket in the project of the repository, with the run attached.', kind: 'write', perm: 'ask' }],
+    SKILLS: [
+      { id: 'sweep', name: 'Sweep', ds: 'Plans and follows agentic SDLC tasks.', src: 'Built-in', on: true },
+      { id: 'docs', name: 'Docs', ds: 'Answers from the platform documentation, with links.', src: 'Built-in', on: true },
+      { id: 'envs', name: 'Environments', ds: 'Knows promotion rules and windows.', src: 'Built-in', on: true },
+      { id: 'incident', name: 'Incident runbook', ds: 'Walks the on-call engineer through the checklist with the right runbook.', src: 'Organisation · Lucas Bernard', on: false },
+      { id: 'sb3', name: 'Spring Boot 3 migration', ds: 'Upgrades a service, runs the pipeline and opens a pull request.', src: 'Organisation · Marta Kowalski', on: false },
+      { id: 'relnotes', name: 'Release notes from changelog', ds: 'Drafts a What’s new entry from the changelog.', src: 'Organisation · Sami Ben Ali', on: false },
+      { id: 'stagedeploy', name: 'Deploy to staging with checks', ds: 'Checks the pipeline, reserves staging if needed, deploys.', src: 'Team · Request', on: false },
+      { id: 'flaky', name: 'Flaky test triage', ds: 'Groups flaky tests by cause and opens one ticket per cause.', src: 'Yours · draft', on: false }],
+    MCP: [
+      { id: 'devops', name: 'DevOps', ini: 'DO', url: 'https://devops.example.internal/mcp', auth: 'OAuth', status: 'ok', on: true, managed: true, tools: ['list_pipelines', 'get_pipeline_status', 'get_build_logs', '+run_pipeline', '+open_pull_request'] },
+      { id: 'kb', name: 'Knowledge base', ini: 'KB', url: 'https://kb.example.internal/mcp', auth: 'OAuth', status: 'ok', on: true, managed: true, tools: ['search', 'read_page', 'query_architecture', 'list_arb_decisions'] }],
+    CONVS: [
+      { id: 'c1', title: 'Release 4.5 checklist', pinned: true, at: now - 9 * DAY, turns: [T1('What is left before releasing 4.5?', 'Three items: the `search-index` mapping migration on prod, the e2e-checkout flake (2 failures this week) and the release notes. Everything else on the checklist is done.')] },
+      { id: 'c2', title: 'Staging health this morning', at: now - 3 * 36e5, turns: [T1('Is staging healthy?', '`staging-eu` was degraded from 09:51 to 10:20: 3 of 5 health checks on the search service. It is healthy now.', [{ src: 'query_env', label: 'Checked staging-eu health', st: 'ok' }])] },
+      { id: 'c3', title: 'Rotate the Jira API token', at: now - DAY - 2 * 36e5, turns: [T1('How do I rotate the Jira token?', 'Settings › Secrets › `JIRA_API_TOKEN` › Rotate. Pipelines pick up the new value on their next run.')] },
+      { id: 'c4', title: 'Explain the promotion window', at: now - 3 * DAY, turns: [T1('When can I promote to prod?', 'Monday to Thursday, 09:00–17:00 CET. Outside the window promotions wait in the queue.')] },
+      { id: 'c5', title: 'search-index reindex plan', at: now - 5 * DAY, turns: [T1('Plan a reindex of search-index', '1. Freeze writes on staging.\n2. Run `reindex --rebuild-schema`.\n3. Check the 5 health checks, then unfreeze.')] },
+      { id: 'c6', title: 'Flaky e2e-checkout tests', at: now - 18 * DAY, turns: [T1('Why is e2e-checkout flaky?', 'The payment mock times out after 5 s under load; 6 of the last 40 runs hit it.')] }]
+  };
+}
+
+class Component extends DCLogic {
+  // ---------- plumbing ----------
+  model() { if (!this.m) { this.m = initModel(); this.timers = []; this.stick = true; this.newConv(); } return this.m; }
+  up() { this.forceUpdate(); }
+  ms(n) { return n * (this.m.slow ? 5 : 1); }
+  later(fn, d) { var self = this; var t = setTimeout(function () { self.timers = self.timers.filter(function (x) { return x !== t; }); fn(); }, this.ms(d)); this.timers.push(t); return t; }
+  log(t) { this.m.log = t; }
+  say(t) { var m = this.m; m.announce = ''; this.up(); var self = this; setTimeout(function () { m.announce = t; self.up(); }, 50); }
+  focus(id, d) { var self = this; setTimeout(function () { var el = document.getElementById(id); if (el) el.focus({ preventScroll: true }); }, d === undefined ? 0 : self.ms(d)); }
+  el(id) { return document.getElementById(id); }
+  componentDidMount() {
+    var self = this, root = this.el('al-root');
+    if (root && typeof ResizeObserver !== 'undefined') {
+      this.ro = new ResizeObserver(function (es) { var w = Math.round(es[0].contentRect.width); if (Math.abs(w - self.m.width) > 1) { self.m.width = w; self.setW(self.m.pw); self.up(); } });
+      this.ro.observe(root);
+    }
+  }
+  componentWillUnmount() { if (this.ro) this.ro.disconnect(); (this.timers || []).forEach(clearTimeout); if (this.m && this.m.gen) this.m.gen.timers.forEach(clearTimeout); }
+  componentDidUpdate() { var b = this.el('al-msgs'); if (b && this.stick) b.scrollTop = b.scrollHeight; }
+
+  // ---------- layout ----------
+  stacked() { return this.m.width < STACK_BELOW; }
+  maxW() { return Math.max(MIN_W, Math.min(640, Math.round(this.m.width * 0.5))); }
+  setW(w) { this.m.pw = Math.max(MIN_W, Math.min(this.maxW(), Math.round(w))); }
+
+  // ---------- open / close ----------
+  openPanel(src, focusComposer) {
+    var m = this.m; if (focusComposer === undefined) focusComposer = true;
+    if (m.open) { if (focusComposer && m.live) this.focus('al-ci'); return; }
+    m.open = true; m.closing = false; m.unread = false; this.opener = document.activeElement;
+    if (!this.stacked() && m.width - NAVW - m.pw < CONTENT_MIN && !m.rail) { m.rail = true; m.autoRail = true; }
+    this.focus(m.live && focusComposer ? 'al-ci' : 'al-ph', 120);
+    this.log('Opened by ' + src + (m.autoRail ? ' · drawer folded to the rail' : '') + (m.live && focusComposer ? ' · focus in the composer' : ''));
+    this.up();
+  }
+  closePanel(src) {
+    var m = this.m, self = this; if (!m.open) return;
+    m.open = false; m.closing = true; m.snap = false; m.hist = false; m.toolsOn = false; m.menuFor = null;
+    var back = this.opener && document.contains(this.opener) && this.opener !== document.body && !this.el('al-panel').contains(this.opener) ? this.opener : this.el('al-cb');
+    if (back) back.focus({ preventScroll: true });
+    this.later(function () { if (!m.open) { m.closing = false; self.up(); } }, 220);
+    if (m.autoRail) { m.rail = false; m.autoRail = false; }
+    this.log('Closed by ' + src + ' · focus back on ' + (back === this.el('al-cb') ? 'the assistant button' : 'where you were'));
+    this.up();
+  }
+  toggle(src) { if (this.m.open) this.closePanel(src); else this.openPanel(src); }
+  ask(text, src) {
+    var m = this.m, self = this; text = text.trim(); var wasOpen = m.open;
+    this.openPanel(src, !text); m.hist = false;
+    if (text) this.later(function () { self.send(text); }, wasOpen ? 0 : 180);
+    this.log(text ? 'Asked from ' + src + (wasOpen ? '' : ' · panel opened') + ' · the question moves to the panel' : 'Opened from ' + src + ' · cursor in the composer');
+    this.up();
+  }
+
+  // ---------- conversation ----------
+  vcur(turn) { return turn.vers[turn.vi]; }
+  newConv() { this.m.conv = { id: uid(), title: '', at: Date.now(), turns: [], fresh: true }; }
+  tool(id) { return this.m.TOOLS.filter(function (t) { return t.id === id; })[0]; }
+  mcp(id) { return this.m.MCP.filter(function (x) { return x.id === id; })[0]; }
+  activeCount() { var m = this.m; return m.TOOLS.filter(function (t) { return t.perm !== 'off'; }).length + m.SKILLS.filter(function (s) { return s.on; }).length + m.MCP.filter(function (x) { return x.on && x.status === 'ok'; }).length; }
+  plan(q) {
+    var s = q.toLowerCase();
+    if (/re-?run|rerun|run lint|start|trigger/.test(s)) return { kind: 'devops' };
+    if (/promot|deploy .*to|ship/.test(s)) return { kind: 'action', tool: 'promote' };
+    if (/ticket|jira|issue/.test(s)) return { kind: 'jira' };
+    if (/fail|why|lint|7f3a|error/.test(s)) return { kind: 'lint' };
+    if (/staging|health|degrad|deploy/.test(s)) return { kind: 'staging' };
+    return { kind: 'summary' };
+  }
+  steps(kind) {
+    var self = this, off = function (id) { return self.tool(id).perm === 'off'; };
+    if (kind === 'lint') return [{ src: 'search_runs', label: 'Searched lint-api runs' }, off('read_logs') ? { src: 'read_logs', label: 'Read logs is off in your tools', st: 'warn' } : { src: 'read_logs', label: 'Read the log of run-7f3a9c2e' }];
+    if (kind === 'staging') {
+      var dd = this.mcp('kb'), sk = this.m.SKILLS.filter(function (s) { return s.id === 'envs'; })[0];
+      return [sk && sk.on ? { skill: 'envs', label: 'Using skill: Environments' } : null, { src: 'query_env', label: 'Checked staging-eu health' },
+        !dd || !dd.on ? null : dd.status !== 'ok' ? { mcp: 'kb', label: 'Knowledge base isn’t connected', st: 'warn' } : { mcp: 'kb', label: 'Read the staging-eu runbook' }].filter(Boolean);
+    }
+    if (kind === 'summary') return [{ src: 'search_runs', label: 'Searched today’s runs' }];
+    if (kind === 'jira') return [{ mcp: 'kb', label: 'Searched the knowledge base for similar issues' }];
+    return [];
+  }
+  send(text) {
+    var m = this.m; text = text.trim(); if (!text || m.gen) return;
+    var c = m.conv;
+    if (c.fresh) { c.fresh = false; m.CONVS.unshift(c); }
+    if (!c.title) c.title = text.length > 42 ? text.slice(0, 40) + '…' : text;
+    c.at = Date.now();
+    var turn = { vers: [{ q: text, answers: [], ai: 0, tail: [] }], vi: 0 };
+    c.turns.push(turn); this.generate(turn);
+  }
+  generate(turn) {
+    var m = this.m, self = this, v = this.vcur(turn), p = this.plan(v.q);
+    var a = { id: uid(), src: '', shown: 0, tools: [], status: 'thinking', fb: null, variant: v.answers.length };
+    v.answers.push(a); v.ai = v.answers.length - 1;
+    var g = { a: a, timers: [] }; m.gen = g; this.stick = true; m.writing = true;
+    var T = function (f, d) { g.timers.push(setTimeout(function () { if (m.gen === g) f(); }, self.ms(d))); };
+    var finishWait = function () { m.writing = false; m.gen = null; self.up(); };
+    this.up();
+    if (p.kind === 'action') {
+      var t = this.tool(p.tool);
+      var args = 'release: 4.5.0\nenvironment: prod-eu (from staging-eu)\nwindow: next promotion window';
+      if (t.perm === 'off') { a.tools = [{ src: p.tool, label: t.name + ' is off in your tools', st: 'warn' }]; T(function () { self.stream(a, 'I can’t do that here: **' + t.name + '** is turned off in your assistant tools. [[Open tool settings|tools]]'); }, 500); return; }
+      if (t.perm === 'allow') { a.tools = [{ src: p.tool, label: 'Deployment of 4.5.0 to prod-eu queued' }]; T(function () { self.stream(a, 'Deployment of 4.5.0 to `prod-eu` is queued for the next window (Monday 09:00 CET).'); }, 700); return; }
+      a.tools = [{ src: 'query_env', label: 'Checked prod-eu and the promotion window', st: 'ok' }];
+      T(function () {
+        a.status = 'approval';
+        a.approval = { tool: p.tool, title: 'Deploy 4.5.0 to prod-eu?', args: args, why: t.name + ' changes something, so it asks first. Change this in Tools.', cta: 'Deploy' };
+        self.log('Waiting for approval · actions that change something never run on their own'); self.say('Approval needed: ' + a.approval.title); finishWait();
+      }, 600);
+      return;
+    }
+    if (p.kind === 'devops') {
+      var dv = this.mcp('devops');
+      if (!dv || !dv.on) { a.tools = [{ mcp: 'devops', label: 'DevOps is off in your MCP servers', st: 'warn' }]; T(function () { self.stream(a, 'I can’t start a pipeline here: the **DevOps** MCP server is turned off. [[Open MCP servers|mcp]]'); }, 500); return; }
+      a.tools = [{ src: 'search_runs', label: 'Found the last lint-api run', st: 'ok' }];
+      T(function () {
+        a.status = 'approval';
+        a.approval = { tool: 'devops.run_pipeline', title: 'Run pipeline lint-api?', args: 'pipeline: lint-api\nbranch: main\ntrigger: manual (from the assistant)', why: 'run_pipeline changes something on DevOps (MCP server), so it asks first.', cta: 'Run pipeline' };
+        self.log('Waiting for approval · actions that change something never run on their own'); self.say('Approval needed: ' + a.approval.title); finishWait();
+      }, 600);
+      return;
+    }
+    if (p.kind === 'jira' && this.tool('create_jira').perm !== 'off') {
+      T(function () {
+        a.tools = [{ mcp: 'kb', label: 'Searched the knowledge base for similar issues', st: 'ok' }]; a.src = VARIANTS.jira[0]; a.shown = 1e9; a.status = 'approval';
+        a.approval = { tool: 'create_jira', title: 'Create a Jira ticket in PLAT?', args: 'project: PLAT\ntype: Bug\ntitle: lint-api fails on no-floating-promises (retry.ts:42)\nlinks: run-7f3a9c2e', why: 'Create Jira ticket changes something, so it asks first. Change this in Tools.', cta: 'Create ticket' };
+        self.say('Approval needed: ' + a.approval.title); finishWait();
+      }, 900);
+      return;
+    }
+    var ss = this.steps(p.kind), d = 300;
+    ss.forEach(function (s, k) {
+      T(function () { a.tools = ss.slice(0, k + 1).map(function (x, j) { return Object.assign({}, x, { st: j < k ? (x.st || 'ok') : (x.st === 'warn' ? 'warn' : 'run') }); }); self.up(); }, d);
+      d += 650;
+    });
+    T(function () {
+      a.tools = ss.map(function (x) { return Object.assign({}, x, { st: x.st || 'ok' }); });
+      var list = VARIANTS[p.kind] || VARIANTS.summary, src = list[a.variant % list.length];
+      if (p.kind === 'lint' && self.tool('read_logs').perm === 'off') src = 'I found that `run-7f3a9c2e` failed at the **lint** step, but I can’t read its log: **Read logs** is off. [[Turn it on|tools]]';
+      var dd = self.mcp('kb');
+      if (p.kind === 'staging' && dd && dd.on && dd.status !== 'ok') src += '\n\nI couldn’t read the staging runbook because the Knowledge base isn’t connected. [[Connect it|mcp]]';
+      self.stream(a, src);
+    }, d);
+  }
+  stream(a, src) {
+    var m = this.m, self = this;
+    if (!m.gen || m.gen.a !== a) m.gen = { a: a, timers: [] };
+    var g = m.gen; a.status = 'streaming'; a.src = src; var total = mdLen(parseMd(src)); m.writing = true;
+    var tick = function () {
+      if (m.gen !== g) return;
+      a.shown += 14;
+      if (a.shown >= total) {
+        a.shown = 1e9; a.status = 'done'; m.gen = null; m.writing = false;
+        if (!m.open) m.unread = true;
+        self.log(m.open ? 'Answer written' : 'Answer ready · dot on the assistant button');
+        self.say(m.open ? 'Answer ready.' : 'The assistant’s answer is ready. Press Command J to open it.');
+        self.up(); return;
+      }
+      self.up(); g.timers.push(setTimeout(tick, self.ms(35)));
+    };
+    tick();
+  }
+  stop() {
+    var m = this.m; if (!m.gen) return; m.gen.timers.forEach(clearTimeout); var a = m.gen.a; m.gen = null;
+    a.status = 'stopped'; a.tools = a.tools.map(function (x) { return x.st === 'run' ? Object.assign({}, x, { st: 'warn', label: x.label + ' (stopped)' }) : x; });
+    if (a.shown < 1e9) { var n = mdLen(parseMd(a.src)); if (a.shown > n) a.shown = n; }
+    m.writing = false; this.log('Stopped · the partial answer stays, Retry is one click away'); this.focus('al-send'); this.up();
+  }
+  retry(i) {
+    var m = this.m; if (m.gen) return; var c = m.conv, turn = c.turns[i], v = this.vcur(turn);
+    v.tail = c.turns.slice(i + 1); c.turns = c.turns.slice(0, i + 1);
+    this.generate(turn); this.log('Retry · answer ' + v.answers.length + ' of ' + v.answers.length + ', the earlier ones stay (‹ ›)');
+  }
+  approve(a, yes) {
+    var m = this.m, self = this, ap = a.approval; a.approval = null;
+    var isMcp = ap.tool.indexOf('.') > 0;
+    if (!yes) { a.status = 'denied'; a.tools.push({ src: isMcp ? null : ap.tool, mcp: isMcp ? ap.tool.split('.')[0] : null, label: 'Not run: you declined', st: 'warn' }); a.src = (a.src ? a.src + '\n\n' : '') + 'Okay, nothing was run.'; a.shown = 1e9; this.log('Declined · nothing ran'); this.focus('al-ci'); this.up(); return; }
+    var g = { a: a, timers: [] }; m.gen = g; m.writing = true; a.status = 'thinking';
+    a.tools.push({ src: isMcp ? null : ap.tool, mcp: isMcp ? ap.tool.split('.')[0] : null, label: /run_pipeline/.test(ap.tool) ? 'Starting lint-api on main' : ap.tool === 'promote' ? 'Deploying 4.5.0 to prod-eu' : 'Creating the ticket', st: 'run' });
+    g.timers.push(setTimeout(function () {
+      var last = a.tools[a.tools.length - 1]; last.st = 'ok'; last.label = /run_pipeline/.test(ap.tool) ? 'Started run-d41b7c09' : ap.tool === 'promote' ? 'Deployment queued' : 'Created PLAT-1287';
+      var prev = a.src ? a.src + '\n\n' : '';
+      a.shown = mdLen(parseMd(a.src || ''));
+      self.stream(a, prev + (/run_pipeline/.test(ap.tool) ? 'Started `run-d41b7c09` on `lint-api` (main). I’ll tell you here when it finishes.' : ap.tool === 'promote' ? 'Deployment of 4.5.0 to `prod-eu` is queued for the next window (Monday 09:00 CET).' : 'Created `PLAT-1287` and linked `run-7f3a9c2e`.'));
+    }, this.ms(900)));
+    this.log('Approved · the tool runs, its result shows in the trace'); this.focus('al-ci'); this.up();
+  }
+  startEdit(i) { var m = this.m; if (m.gen) return; m.conv.turns.forEach(function (t) { t.editing = false; }); var t = m.conv.turns[i]; t.editing = true; t.ev = this.vcur(t).q; this.focus('al-edit'); this.log('Editing · Enter sends a new version, Esc cancels'); this.up(); }
+  cancelEdit(i) { this.m.conv.turns[i].editing = false; this.focus('al-q-' + i); this.log('Edit cancelled'); this.up(); }
+  saveEdit(i) {
+    var m = this.m, c = m.conv, turn = c.turns[i], text = (turn.ev || '').trim(); turn.editing = false;
+    if (!text || text === this.vcur(turn).q) { this.up(); return; }
+    this.vcur(turn).tail = c.turns.slice(i + 1); c.turns = c.turns.slice(0, i + 1);
+    turn.vers.push({ q: text, answers: [], ai: 0, tail: [] }); turn.vi = turn.vers.length - 1;
+    this.generate(turn); this.log('Edited · version ' + (turn.vi + 1) + ' of ' + turn.vers.length + '; ‹ › switches back');
+  }
+  switchVersion(i, d) {
+    var m = this.m; if (m.gen) return; var c = m.conv, turn = c.turns[i], nv = turn.vi + d; if (nv < 0 || nv >= turn.vers.length) return;
+    this.vcur(turn).tail = c.turns.slice(i + 1); turn.vi = nv; c.turns = c.turns.slice(0, i + 1).concat(this.vcur(turn).tail);
+    this.log('Question version ' + (nv + 1) + ' of ' + turn.vers.length); this.up();
+  }
+  copy(text, key) {
+    var m = this.m, self = this;
+    var done = function () { m.copied = key; self.log('Copied to the clipboard'); self.say('Copied'); self.later(function () { if (m.copied === key) { m.copied = null; self.up(); } }, 1500); self.up(); };
+    try { navigator.clipboard.writeText(text).then(done, done); } catch (e) { done(); }
+  }
+  snack(t, action, fn) {
+    var m = this.m, self = this; m.snack = { t: t, action: action, fn: fn, id: uid() }; var id = m.snack.id;
+    this.later(function () { if (m.snack && m.snack.id === id) { m.snack = null; self.up(); } }, action ? 6000 : 3000);
+    this.up();
+  }
+  connect(x) {
+    var m = this.m, self = this; this.log('Signing in to ' + x.name + ' (OAuth window)…'); x.status = 'connecting';
+    this.later(function () { x.status = 'ok'; x.on = true; self.snack(x.name + ' connected · ' + x.tools.length + ' tools'); self.log(x.name + ' connected'); }, 900);
+    this.up();
+  }
+  openSettings(tab) { var m = this.m; this.dlgOpener = document.activeElement; m.dlg = tab || 'tools'; m.toolsOn = false; m.menuFor = null; m.delSure = false; this.focus('al-tab-' + m.dlg); this.log('Assistant settings · ' + m.dlg); this.up(); }
+  closeSettings() { var m = this.m; m.dlg = null; var o = this.dlgOpener; if (o && document.contains(o)) o.focus({ preventScroll: true }); else this.focus('al-cb'); this.up(); }
+  showHist(on) { var m = this.m; m.hist = on; m.menuFor = null; if (on) { m.hq = ''; this.focus('al-hq', 60); } else this.focus('al-ci'); this.up(); }
+  grp(c) { var d = (Date.now() - c.at) / DAY; return c.pinned ? 'Pinned' : d < 1 && new Date(c.at).getDate() === new Date().getDate() ? 'Today' : d < 2 ? 'Yesterday' : d < 7 ? 'Previous 7 days' : 'Previous 30 days'; }
+
+  // ---------- view helpers ----------
+  segView(segs) { var self = this; return segs.map(function (s) { return { t: s.t, isT: s.k === 't', isC: s.k === 'c', isB: s.k === 'b', isL: s.k === 'l', go: function () { self.openSettings(s.tab); } }; }); }
+  mdView(a, key) {
+    var self = this, m = this.m, all = parseMd(a.src || ''), blocks = a.shown >= 1e9 ? all : cutMd(all, a.shown), streaming = a.status === 'streaming';
+    return blocks.map(function (b, i) {
+      var last = i === blocks.length - 1, ck = key + '-c' + i;
+      return { isP: b.k === 'p', isOl: b.k === 'ol', isCode: b.k === 'code',
+        segs: b.k === 'p' ? self.segView(b.segs) : [], items: b.k === 'ol' ? b.items.map(function (it, j) { return { segs: self.segView(it), caret: streaming && last && j === b.items.length - 1 }; }) : [],
+        lang: b.lang || '', text: b.text || '', caret: streaming && last && b.k === 'p',
+        copied: m.copied === ck, notCopied: m.copied !== ck, onCopy: function () { self.copy(b.text, ck); } };
+    });
+  }
+  toolsView(a) {
+    var self = this;
+    return a.tools.map(function (x) {
+      var mm = x.mcp ? self.mcp(x.mcp) : null;
+      return { label: x.label, cls: x.st === 'run' ? 'run' : x.st === 'warn' ? 'warn' : '', isMcp: !!mm, ini: mm ? mm.ini : '', isSkill: !mm && !!x.skill, isTool: !mm && !x.skill,
+        srcName: mm ? mm.name + ' (MCP)' : x.skill ? 'Skill' : 'AIToolbox', isRun: x.st === 'run', isWarn: x.st === 'warn', isOk: x.st !== 'run' && x.st !== 'warn' };
+    });
+  }
+  turnView(turn, i, n) {
+    var self = this, m = this.m, v = this.vcur(turn), a = v.answers[v.ai], last = i === n - 1, key = 't' + i + 'v' + turn.vi;
+    var o = {
+      key: key, editing: !!turn.editing, notEditing: !turn.editing, q: v.q, qId: 'al-q-' + i, ev: turn.ev || '',
+      onEv: function (e) { turn.ev = e.target.value; self.up(); },
+      onEvKey: function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); self.saveEdit(i); } if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); self.cancelEdit(i); } },
+      onCancel: function () { self.cancelEdit(i); }, onSave: function () { self.saveEdit(i); },
+      qVer: turn.vers.length > 1, qVerLbl: (turn.vi + 1) + ' / ' + turn.vers.length, qPrevDis: turn.vi === 0, qNextDis: turn.vi === turn.vers.length - 1,
+      qPrev: function () { self.switchVersion(i, -1); }, qNext: function () { self.switchVersion(i, 1); },
+      onEdit: function () { self.startEdit(i); }, onCopyQ: function () { self.copy(v.q, key + 'q'); },
+      copiedQ: m.copied === key + 'q', notCopiedQ: m.copied !== key + 'q', hasA: !!a
+    };
+    if (!a) return o;
+    var running = a.tools.some(function (x) { return x.st === 'run'; }), nT = a.tools.length;
+    var runningLabel = running ? a.tools.filter(function (x) { return x.st === 'run'; })[0].label + '…' : '';
+    var done = a.status === 'done' || a.status === 'stopped' || a.status === 'denied';
+    var ap = a.approval && a.status === 'approval' ? a.approval : null;
+    Object.assign(o, {
+      busy: a.status === 'thinking' || a.status === 'streaming', aLoop: a.status === 'thinking' || a.status === 'streaming', aIdle: !(a.status === 'thinking' || a.status === 'streaming'),
+      hasTools: nT > 0, toolsCls: 'tools' + (running ? ' running' : '') + (a.toolsOpen ? ' openl' : ''), toolsOpen: !!a.toolsOpen, toolsDone: !running,
+      toolsLbl: running ? runningLabel : 'Used ' + nT + ' tool' + (nT > 1 ? 's' : ''), onTools: function () { a.toolsOpen = !a.toolsOpen; self.up(); }, toolsItems: this.toolsView(a),
+      hasAppr: !!ap, apTitle: ap ? ap.title : '', apArgs: ap ? ap.args : '', apWhy: ap ? ap.why : '', apCta: ap ? ap.cta : '',
+      apRun: !!ap && (/run_pipeline/.test(ap.tool) || ap.tool === 'promote'), apFill: !!ap && !(/run_pipeline/.test(ap.tool) || ap.tool === 'promote'),
+      onApprove: function () { self.approve(a, true); }, onDeny: function () { self.approve(a, false); },
+      hasMd: !!a.src || a.status === 'streaming', blocks: this.mdView(a, key), stopped: a.status === 'stopped',
+      showActs: done, actsCls: 'acts' + (last ? '' : ' idle'),
+      onCopy: function () { self.copy(mdText(parseMd(a.src || '')), key + 'a'); }, copiedA: m.copied === key + 'a', notCopiedA: m.copied !== key + 'a',
+      onRetry: function () { self.retry(i); }, up: a.fb === 'up', down: a.fb === 'down',
+      onUp: function () { a.fb = a.fb === 'up' ? null : 'up'; a.fbOpen = false; if (a.fb) self.snack('Thanks, this helps improve the assistant.'); self.up(); },
+      onDown: function () { a.fb = a.fb === 'down' ? null : 'down'; a.fbOpen = a.fb === 'down'; if (a.fbOpen) self.focus('al-fb-' + i); self.up(); },
+      aVer: v.answers.length > 1, aVerLbl: (v.ai + 1) + ' / ' + v.answers.length, aPrevDis: v.ai === 0, aNextDis: v.ai === v.answers.length - 1,
+      aPrev: function () { v.ai = Math.max(0, v.ai - 1); self.log('Answer ' + (v.ai + 1) + ' of ' + v.answers.length); self.up(); },
+      aNext: function () { v.ai = Math.min(v.answers.length - 1, v.ai + 1); self.log('Answer ' + (v.ai + 1) + ' of ' + v.answers.length); self.up(); },
+      fbOpen: !!a.fbOpen, fbId: 'al-fb-' + i, fbText: a.fbText || '', onFbText: function (e) { a.fbText = e.target.value; self.up(); },
+      fbChips: FB_CHIPS.map(function (c) { a.fbSel = a.fbSel || {}; return { label: c, on: !!a.fbSel[c], toggle: function () { a.fbSel[c] = !a.fbSel[c]; self.up(); } }; }),
+      onFbCancel: function () { a.fbOpen = false; self.up(); },
+      onFbSend: function () { a.fbOpen = false; self.snack('Feedback sent to the platform team. Thank you.'); self.log('Feedback sent (Feedback feature, profile “Assistant”)'); self.up(); }
+    });
+    return o;
+  }
+
+  renderVals() {
+    var self = this, m = this.model(), c = m.conv, stack = this.stacked(), dlg = m.dlg;
+    var f = m.filter.trim().toLowerCase();
+    var runs = RUNS.filter(function (r) { return (!f || (r.id + ' ' + r.p + ' ' + r.b + ' ' + r.l).toLowerCase().indexOf(f) >= 0) && (m.status === 'all' || r.s === m.status); })
+      .map(function (r) { return { id: r.id, p: r.p, b: r.b, l: r.l, at: r.at, d: r.d, sym: SYM[r.s], chip: 'chip st-' + r.s }; });
+    var hq = m.hq.trim().toLowerCase();
+    var hitems = m.CONVS.filter(function (x) { return !hq || x.title.toLowerCase().indexOf(hq) >= 0 || x.turns.some(function (t) { return self.vcur(t).q.toLowerCase().indexOf(hq) >= 0; }); })
+      .sort(function (a, b) { return b.at - a.at; });
+    var groups = ['Pinned', 'Today', 'Yesterday', 'Previous 7 days', 'Previous 30 days'].map(function (G) {
+      return { name: G, items: hitems.filter(function (x) { return self.grp(x) === G; }).map(function (x) {
+        var first = x.turns[0] ? self.vcur(x.turns[0]).q : '', menuOn = m.menuFor === x.id;
+        return { title: x.title, first: first, pinned: !!x.pinned, cls: 'hit2' + (c && x.id === c.id ? ' cur' : ''), cur: c && x.id === c.id,
+          renaming: !!x.renaming, notRenaming: !x.renaming, rn: x.rn === undefined ? x.title : x.rn, moreId: 'al-more-' + x.id, moreLbl: 'More for ' + x.title, menuOn: menuOn,
+          pinLbl: x.pinned ? 'Unpin' : 'Pin',
+          go: function () { m.conv = x; m.hist = false; self.log('Opened “' + x.title + '”'); self.focus('al-ci'); self.up(); },
+          onMore: function () { m.menuFor = menuOn ? null : x.id; if (!menuOn) self.focus('al-mi-' + x.id + '-0'); self.up(); },
+          onMenuKey: function (e) {
+            var items = Array.prototype.slice.call(e.currentTarget.querySelectorAll('[role=menuitem]')), k = items.indexOf(document.activeElement);
+            if (e.key === 'ArrowDown') { e.preventDefault(); items[(k + 1) % items.length].focus(); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); items[(k - 1 + items.length) % items.length].focus(); }
+            else if (e.key === 'Home') { e.preventDefault(); items[0].focus(); } else if (e.key === 'End') { e.preventDefault(); items[items.length - 1].focus(); }
+            else if (e.key === 'Escape' || e.key === 'Tab') { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); } m.menuFor = null; self.focus('al-more-' + x.id); self.up(); }
+          },
+          mi0: 'al-mi-' + x.id + '-0',
+          onRename: function () { m.menuFor = null; x.renaming = true; x.rn = x.title; self.focus('al-rn-' + x.id); self.up(); },
+          rnId: 'al-rn-' + x.id, onRn: function (e) { x.rn = e.target.value; self.up(); },
+          onRnKey: function (e) { if (e.key === 'Enter') { e.preventDefault(); self.doneRename(x, true); } if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); self.doneRename(x, false); } },
+          onRnBlur: function () { if (x.renaming) self.doneRename(x, true); },
+          onPin: function () { m.menuFor = null; x.pinned = !x.pinned; self.log(x.pinned ? 'Pinned to the top' : 'Unpinned'); self.focus('al-more-' + x.id); self.up(); },
+          onDel: function () {
+            m.menuFor = null; var k = m.CONVS.indexOf(x); m.CONVS.splice(k, 1); var was = c && c.id === x.id; if (was) self.newConv();
+            self.snack('Conversation deleted', 'Undo', function () { m.CONVS.splice(k, 0, x); if (was) m.conv = x; self.log('Restored'); });
+            self.log('Deleted · Undo for 6 s'); self.focus('al-hq'); self.up();
+          } };
+      }) };
+    }).filter(function (g) { return g.items.length; });
+    var turns = c.turns.map(function (t, i) { return self.turnView(t, i, c.turns.length); });
+    var permT = { allow: 'On', ask: 'Asks first', off: 'Off' };
+    var tabs = [['tools', 'Tools'], ['skills', 'Skills'], ['mcp', 'MCP servers'], ['data', 'History and data']];
+    var panelW = m.open ? (stack ? 'auto' : m.pw + 'px') : '0px';
+    var raw = m.drag ? m.drag.raw : m.pw;
+    return {
+      rootCls: 'aiproto ' + m.theme + (m.slow ? ' slow' : ''),
+      appCls: 'app' + (m.open ? ' open' : '') + (m.closing ? ' closing' : '') + (m.rail ? ' rail' : '') + (stack ? ' stack' : '') + (m.live ? ' live' : '') + (m.drag ? ' resizing' : '') + (m.snap ? ' snap' : ''),
+      // prototype controls
+      thL: m.theme === 'light', thD: m.theme === 'dark', live: m.live, soon: !m.live, fast: !m.slow, slow: m.slow, log: m.log,
+      setLight: function () { m.theme = 'light'; self.log('Theme: light'); self.up(); }, setDark: function () { m.theme = 'dark'; self.log('Theme: dark'); self.up(); },
+      setLive: function () { m.live = true; self.log('Assistant live'); self.up(); },
+      setSoon: function () { if (m.gen) self.stop(); m.live = false; m.hist = false; m.toolsOn = false; self.log('Assistant coming soon · Ask is disabled with its reason, the button opens the coming-soon panel'); self.up(); },
+      setFast: function () { m.slow = false; self.log('Normal speed'); self.up(); }, setSlow: function () { m.slow = true; self.log('Slow motion 5× to inspect the motion'); self.up(); },
+      // header
+      q: m.q, qCls: m.qSent ? 'sent' : '',
+      onQ: function (e) { m.q = e.target.value; self.up(); },
+      onQKey: function (e) { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); self.onAsk(); } else if (e.key === 'Escape') { m.q = ''; m.filter = ''; self.up(); } },
+      onSearch: function (e) { e.preventDefault(); m.filter = m.q; self.log(m.q.trim() ? 'Searched runs for “' + m.q.trim() + '” (Enter = search, ⌘↵ = ask)' : 'Search cleared'); self.up(); },
+      askTip: m.live ? 'Send to the assistant · ⌘↵' : 'The assistant isn’t available yet. It’s coming soon.',
+      onAsk: function () { self.onAsk(); },
+      cbCls: 'ibtn' + (m.writing && !m.open ? ' writing' : '') + (m.unread && !m.open ? ' unread' : ''),
+      cbLoop: m.writing && !m.open, cbIdle: !(m.writing && !m.open), open: m.open,
+      cbLabel: 'Assistant' + (m.writing && !m.open ? ', writing an answer' : m.unread && !m.open ? ', answer ready' : ''),
+      cbTip: (m.open ? 'Close assistant' : 'Open assistant') + ' · ⌘J',
+      onCb: function () { self.toggle('the assistant button'); },
+      // page
+      runs: runs, noRuns: runs.length === 0, someRuns: runs.length > 0, filterQ: m.filter.trim(), status: m.status,
+      onStatus: function (e) { m.status = e.target.value; self.up(); },
+      onNewRun: function () { self.snack('New run: choose a pipeline (not in this prototype)'); },
+      // split handle
+      handleCls: 'handle' + (m.hover || m.drag ? ' hover' : '') + (m.drag ? ' drag' : ''),
+      pw: m.pw, maxW: this.maxW(), sizeLabel: m.drag && raw < SNAP ? 'Release to close' : m.pw + ' px',
+      onHitEnter: function () { clearTimeout(self.hoverT); self.hoverT = setTimeout(function () { m.hover = true; self.up(); }, self.ms(100)); },
+      onHitLeave: function () { clearTimeout(self.hoverT); if (!m.drag) { m.hover = false; self.up(); } },
+      onHitDown: function (e) { e.preventDefault(); try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) { } m.drag = { x: e.clientX, w: m.pw, raw: m.pw }; m.hover = true; self.up(); },
+      onHitMove: function (e) { if (!m.drag) return; var r = m.drag.w + (m.drag.x - e.clientX); m.drag.raw = r; m.snap = r < SNAP; self.setW(r); self.up(); },
+      onHitUp: function (e) {
+        if (!m.drag) return; var r = m.drag.w + (m.drag.x - e.clientX), prev = m.drag.w; m.drag = null; m.hover = false; m.snap = false;
+        if (r < SNAP) { self.closePanel('dragging the edge past 240 px'); self.later(function () { self.setW(prev); self.up(); }, 220); return; }
+        self.log('Resized to ' + m.pw + ' px'); self.up();
+      },
+      onHitDbl: function () { self.setW(DEF_W); self.log('Double-click · width reset to 400 px'); self.up(); },
+      onHandleKey: function (e) {
+        var step = e.shiftKey ? 64 : 16, map = { ArrowLeft: m.pw + step, ArrowRight: m.pw - step, Home: self.maxW(), End: MIN_W };
+        if (e.key in map) { e.preventDefault(); self.setW(map[e.key]); self.log('Keyboard resize · ' + m.pw + ' px'); self.up(); }
+        if (e.key === 'Enter') { self.setW(DEF_W); self.up(); }
+      },
+      panelW: panelW, pinW: stack ? '100%' : m.pw + 'px',
+      // panel header
+      title: c.title || 'Assistant', ctxLine: (c.title ? 'Conversation' : 'New conversation') + (m.ctx ? ' · Sweep › Runs' : ''),
+      hist: m.hist, viewsCls: 'views' + (m.hist ? ' hon' : ''), histCls: 'hist' + (m.hist ? ' on' : ''),
+      onHistBtn: function () { self.showHist(!m.hist); },
+      onNew: function () { if (m.gen) self.stop(); self.newConv(); m.hist = false; self.focus('al-ci'); self.log('New conversation · the previous one is in History'); self.up(); },
+      onSet: function () { self.openSettings('tools'); }, onClose: function () { self.closePanel('the close button'); },
+      // conversation
+      empty: c.turns.length === 0, hasTurns: c.turns.length > 0, turns: turns,
+      sugg: SUGG.map(function (s) { return { t: s, go: function () { self.send(s); } }; }),
+      onMsgsScroll: function (e) { var b = e.currentTarget; self.stick = b.scrollHeight - b.scrollTop - b.clientHeight < 40; },
+      // composer
+      ctx: m.ctx, ci: m.ci, gen: !!m.gen, noGen: !m.gen, sendDis: !m.ci.trim(),
+      onCi: function (e) { m.ci = e.target.value; self.up(); },
+      onCiKey: function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!m.gen) self.submit(); }
+        if (e.key === 'ArrowUp' && !m.ci && c.turns.length) { e.preventDefault(); self.startEdit(c.turns.length - 1); }
+      },
+      onComp: function (e) { e.preventDefault(); if (m.gen) self.stop(); else self.submit(); },
+      onCtxX: function () { m.ctx = false; self.focus('al-ci'); self.log('Page removed from the context'); self.up(); },
+      toolsOn: m.toolsOn, toolsN: this.activeCount(),
+      onToolsBtn: function () { m.toolsOn = !m.toolsOn; if (m.toolsOn) { self.focus('al-pop'); self.log('Tools for this conversation'); } self.up(); },
+      onPopKey: function (e) { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); m.toolsOn = false; self.focus('al-tb'); self.up(); } },
+      popTools: m.TOOLS.map(function (t) { return { name: t.name, write: t.kind === 'write', read: t.kind !== 'write', on: t.perm !== 'off',
+        ds: t.kind === 'write' ? (t.perm === 'ask' ? 'Changes things · asks first' : t.perm === 'allow' ? 'Changes things · runs without asking' : 'Changes things') : 'Reads only',
+        toggle: function () { t.perm = t.perm === 'off' ? (t.kind === 'write' ? 'ask' : 'allow') : 'off'; self.log(t.name + ': ' + (t.perm === 'off' ? 'off' : t.perm === 'ask' ? 'on, asks first' : 'on')); self.up(); } }; }),
+      popSkills: m.SKILLS.map(function (s) { return { name: s.name, src: s.src, on: s.on, toggle: function () { s.on = !s.on; self.log('Skill ' + s.name + ' ' + (s.on ? 'on' : 'off')); self.up(); } }; }),
+      popMcp: m.MCP.map(function (x) { return { name: x.name, ini: x.ini, ok: x.status === 'ok', notOk: x.status !== 'ok', on: x.on, connecting: x.status === 'connecting', needs: x.status === 'auth',
+        line: x.status === 'ok' ? 'Connected · ' + x.tools.length + ' tools' + (x.managed ? ' · by your organisation' : '') : x.status === 'connecting' ? 'Connecting…' : 'Needs sign-in',
+        dot: x.status === 'ok' ? 'dotst ok' : 'dotst w',
+        toggle: function () { x.on = !x.on; self.log(x.name + ' ' + (x.on ? 'on' : 'off') + ' for the assistant'); self.up(); }, connect: function () { self.connect(x); } }; }),
+      onManage: function () { self.openSettings('tools'); },
+      onHq: function (e) { m.hq = e.target.value; self.up(); },
+      hq: m.hq, groups: groups, noHist: groups.length === 0, hqShown: m.hq.trim(),
+      onHistSet: function () { self.openSettings('data'); },
+      onNotify: function () { m.notify = true; self.log('Notify me when the assistant is ready'); self.up(); }, notify: m.notify, notNotify: !m.notify,
+      // live region and snackbar
+      announce: m.announce, snackCls: 'snack' + (m.snack ? ' on' : ''), snackT: m.snack ? m.snack.t : '', snackAct: !!(m.snack && m.snack.action), snackA: m.snack && m.snack.action ? m.snack.action : '',
+      onSnackA: function () { var s = m.snack; m.snack = null; if (s && s.fn) s.fn(); self.up(); },
+      // settings dialog
+      dlgOn: !!dlg, closeDlg: function () { self.closeSettings(); },
+      onDlgKey: function (e) {
+        if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); self.closeSettings(); return; }
+        if (e.key === 'Tab') {
+          var f = Array.prototype.slice.call(e.currentTarget.querySelectorAll('button:not([disabled]), select, input, textarea, [tabindex="0"]')).filter(function (x) { return x.offsetParent !== null; });
+          if (!f.length) return; var first = f[0], lastEl = f[f.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); lastEl.focus(); } else if (!e.shiftKey && document.activeElement === lastEl) { e.preventDefault(); first.focus(); }
+        }
+      },
+      tabs: tabs.map(function (t) { return { id: 'al-tab-' + t[0], label: t[1], on: dlg === t[0], ti: dlg === t[0] ? '0' : '-1', go: function () { m.dlg = t[0]; m.delSure = false; self.up(); } }; }),
+      onTabsKey: function (e) {
+        var ids = tabs.map(function (t) { return t[0]; }), k = ids.indexOf(dlg), n = null;
+        if (e.key === 'ArrowRight') n = (k + 1) % ids.length; else if (e.key === 'ArrowLeft') n = (k - 1 + ids.length) % ids.length; else if (e.key === 'Home') n = 0; else if (e.key === 'End') n = ids.length - 1;
+        if (n !== null) { e.preventDefault(); m.dlg = ids[n]; m.delSure = false; self.focus('al-tab-' + ids[n]); self.up(); }
+      },
+      tabLb: 'al-tab-' + (dlg || 'tools'), tTools: dlg === 'tools', tSkills: dlg === 'skills', tMcp: dlg === 'mcp', tData: dlg === 'data',
+      setTools: m.TOOLS.map(function (t) { return { name: t.name, ds: t.ds, write: t.kind === 'write', read: t.kind !== 'write', pill: t.kind === 'write' ? 'pill w' : 'pill', pillT: t.kind === 'write' ? 'Changes things' : 'Reads only',
+        perm: t.perm, lbl: 'Permission for ' + t.name, onPerm: function (e) { t.perm = e.target.value; self.log(t.name + ': ' + { allow: 'Always allow', ask: 'Ask first', off: 'Off' }[t.perm]); self.up(); } }; }),
+      setSkills: m.SKILLS.map(function (s) { return { name: s.name, ds: s.ds, src: s.src, on: s.on, toggle: function () { s.on = !s.on; self.up(); } }; }),
+      onSkNew: function () { self.snack('Skill editor: name, when to use it, instructions and files (not in this prototype)'); },
+      setMcp: m.MCP.map(function (x) { return { name: x.name, ini: x.ini, url: x.url + ' · ' + x.auth, ok: x.status === 'ok', connecting: x.status === 'connecting', needs: x.status === 'auth', managed: x.managed, removable: !x.managed, on: x.on,
+        tools: x.tools.map(function (t) { return { t: t.charAt(0) === '+' ? t.slice(1) : t, cls: t.charAt(0) === '+' ? 'wr' : '', w: t.charAt(0) === '+' }; }),
+        toggle: function () { x.on = !x.on; self.up(); }, connect: function () { self.connect(x); },
+        remove: function () { var k = m.MCP.indexOf(x); m.MCP.splice(k, 1); self.snack(x.name + ' removed', 'Undo', function () { m.MCP.splice(k, 0, x); }); self.up(); } }; }),
+      addN: m.add.n, addA: m.add.a, addU: m.add.u, addErr: m.add.err, hasAddErr: !!m.add.err, nInvalid: m.add.errField === 'n', uInvalid: m.add.errField === 'u',
+      onAddN: function (e) { m.add.n = e.target.value; self.up(); }, onAddA: function (e) { m.add.a = e.target.value; self.up(); }, onAddU: function (e) { m.add.u = e.target.value; self.up(); },
+      onAdd: function (e) {
+        e.preventDefault(); var n = m.add.n.trim(), u = m.add.u.trim();
+        if (!n) { m.add.err = 'Give the server a name.'; m.add.errField = 'n'; self.focus('al-mn'); self.up(); return; }
+        if (!/^https:\/\/[^\s/]+\.[^\s]+/.test(u)) { m.add.err = 'Enter the server’s https:// address, for example https://example.com/mcp.'; m.add.errField = 'u'; self.focus('al-mu'); self.up(); return; }
+        var auth = m.add.a, x = { id: uid(), name: n, ini: n.slice(0, 2).toUpperCase(), url: u, auth: auth, status: 'connecting', on: false, managed: false, tools: [] };
+        m.MCP.push(x); m.add = { n: '', a: 'OAuth', u: '', err: '', errField: '' }; self.log('Adding ' + n + ': checking the server and listing its tools…');
+        self.later(function () { x.status = auth === 'OAuth' ? 'auth' : 'ok'; x.tools = ['list_incidents', 'get_incident', '+acknowledge']; x.on = x.status === 'ok'; self.snack(n + ' added · 3 tools found'); }, 1100);
+        self.up();
+      },
+      keep: m.keep, onKeep: function (e) { m.keep = e.target.value; self.up(); },
+      useCtx: m.useCtx, onUseCtx: function () { m.useCtx = !m.useCtx; self.up(); },
+      nConvs: m.CONVS.length, delSure: m.delSure, delNotSure: !m.delSure,
+      onDelAll: function () { if (m.delSure) { m.CONVS = []; self.newConv(); m.delSure = false; self.snack('All conversations deleted'); } else { m.delSure = true; } self.up(); },
+      // root
+      onRootKey: function (e) {
+        var k = (e.key || '').toLowerCase(), mod = e.metaKey || e.ctrlKey, panel = self.el('al-panel');
+        if (mod && k === 'j') { e.preventDefault(); self.toggle('⌘J'); }
+        else if (mod && k === 'k') { e.preventDefault(); self.focus('al-q'); self.log('⌘K · focus in the search field'); self.up(); }
+        else if (e.key === 'Escape') {
+          if (m.menuFor) { var id = m.menuFor; m.menuFor = null; self.focus('al-more-' + id); self.up(); }
+          else if (m.toolsOn) { m.toolsOn = false; self.focus('al-tb'); self.up(); }
+          else if (m.open && panel && panel.contains(e.target)) { if (m.hist) { self.showHist(false); self.log('History closed'); } else self.closePanel('Esc'); }
+        }
+      },
+      onRootDown: function (e) {
+        var t = e.target, ch = false;
+        if (m.menuFor && !(t.closest && (t.closest('.menu') || t.closest('[aria-haspopup=menu]')))) { m.menuFor = null; ch = true; }
+        if (m.toolsOn && !(t.closest && (t.closest('#al-pop') || t.closest('#al-tb')))) { m.toolsOn = false; ch = true; }
+        if (ch) self.up();
+      }
+    };
+  }
+  onAsk() {
+    var m = this.m, self = this;
+    if (!m.live) { this.log('Ask is unavailable: the assistant is coming soon'); this.say('The assistant isn’t available yet. It’s coming soon.'); this.up(); return; }
+    var t = m.q;
+    if (t.trim()) { m.qSent = true; this.later(function () { m.q = ''; m.qSent = false; m.filter = ''; self.up(); }, 150); }
+    this.ask(t, 'the Ask chip');
+  }
+  submit() { var m = this.m, t = m.ci; m.ci = ''; this.send(t); this.up(); }
+  doneRename(x, ok) { var m = this.m; x.renaming = false; if (ok && (x.rn || '').trim()) { x.title = x.rn.trim(); this.log('Renamed'); } this.focus('al-more-' + x.id); this.up(); }
+}
+
+</script>
+</body>
+</html>

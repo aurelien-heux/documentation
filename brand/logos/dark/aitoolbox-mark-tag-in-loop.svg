@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="aitg aitg-loop" viewBox="0 0 74 64" width="74" height="64" role="img" aria-label="AIToolbox"><style>@keyframes aitg-once-hole{0%,12%{transform:scale(0)}38%{transform:scale(1.06)}46%,100%{transform:scale(1)}}
+@keyframes aitg-once-tile{0%,14%{transform:scale(0);opacity:0}32%{transform:scale(1.12);opacity:1}40%{transform:scale(.96)}46%,100%{transform:scale(1);opacity:1}}
+@keyframes aitg-once-la{0%,36%{transform:translateY(8px);opacity:0}54%{transform:translateY(-1px);opacity:1}60%,100%{transform:translateY(0);opacity:1}}
+@keyframes aitg-once-li{0%,46%{transform:translateY(8px);opacity:0}64%{transform:translateY(-1px);opacity:1}70%,100%{transform:translateY(0);opacity:1}}
+@keyframes aitg-once-sheen{0%,70%{transform:translateX(0);opacity:0}72%{opacity:.6}90%{transform:translateX(40px);opacity:.6}92%,100%{transform:translateX(40px);opacity:0}}
+.aitg-once .aitg-hole{transform-origin:55px 15px;animation:aitg-once-hole 1.4s cubic-bezier(.34,1.4,.64,1) 1 both}
+.aitg-once .aitg-tile{transform-origin:55px 15px;animation:aitg-once-tile 1.4s cubic-bezier(.34,1.4,.64,1) 1 both}
+.aitg-once .aitg-la{animation:aitg-once-la 1.4s cubic-bezier(.2,0,0,1) 1 both}
+.aitg-once .aitg-li{animation:aitg-once-li 1.4s cubic-bezier(.2,0,0,1) 1 both}
+.aitg-once .aitg-sheen{animation:aitg-once-sheen 1.4s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes aitg-loop-hole{0%,4%{transform:scale(0)}12%{transform:scale(1.06)}15%,85%{transform:scale(1)}94%,100%{transform:scale(0)}}
+@keyframes aitg-loop-tile{0%,5%{transform:scale(0);opacity:0}11%{transform:scale(1.12);opacity:1}13.5%{transform:scale(.96)}15.5%,84%{transform:scale(1);opacity:1}86%{transform:scale(1.06)}93%,100%{transform:scale(0);opacity:0}}
+@keyframes aitg-loop-la{0%,12%{transform:translateY(8px);opacity:0}18%{transform:translateY(-1px);opacity:1}20%,82%{transform:translateY(0);opacity:1}87%,100%{transform:translateY(8px);opacity:0}}
+@keyframes aitg-loop-li{0%,15.5%{transform:translateY(8px);opacity:0}21.5%{transform:translateY(-1px);opacity:1}23.5%,80%{transform:translateY(0);opacity:1}85%,100%{transform:translateY(8px);opacity:0}}
+@keyframes aitg-loop-sheen{0%,24%{transform:translateX(0);opacity:0}25%{opacity:.6}31%{transform:translateX(40px);opacity:.6}32%,58%{transform:translateX(40px);opacity:0}58.1%{transform:translateX(0);opacity:0}59%{opacity:.45}65%{transform:translateX(40px);opacity:.45}66%,100%{transform:translateX(40px);opacity:0}}
+.aitg-loop .aitg-hole{transform-origin:55px 15px;animation:aitg-loop-hole 4.0s cubic-bezier(.34,1.4,.64,1) infinite}
+.aitg-loop .aitg-tile{transform-origin:55px 15px;animation:aitg-loop-tile 4.0s cubic-bezier(.34,1.4,.64,1) infinite}
+.aitg-loop .aitg-la{animation:aitg-loop-la 4.0s cubic-bezier(.2,0,0,1) infinite}
+.aitg-loop .aitg-li{animation:aitg-loop-li 4.0s cubic-bezier(.2,0,0,1) infinite}
+.aitg-loop .aitg-sheen{animation:aitg-loop-sheen 4.0s cubic-bezier(.2,0,0,1) infinite}
+@keyframes aitg-preview-hole{0.00%,5.25%{transform:scale(0)}16.62%{transform:scale(1.06)}20.12%,100%{transform:scale(1)}}
+@keyframes aitg-preview-tile{0.00%,6.12%{transform:scale(0);opacity:0}14.00%{transform:scale(1.12);opacity:1}17.50%{transform:scale(.96)}20.12%,100%{transform:scale(1);opacity:1}}
+@keyframes aitg-preview-la{0.00%,15.75%{transform:translateY(8px);opacity:0}23.62%{transform:translateY(-1px);opacity:1}26.25%,100%{transform:translateY(0);opacity:1}}
+@keyframes aitg-preview-li{0.00%,20.12%{transform:translateY(8px);opacity:0}28.00%{transform:translateY(-1px);opacity:1}30.62%,100%{transform:translateY(0);opacity:1}}
+@keyframes aitg-preview-sheen{0.00%,30.62%{transform:translateX(0);opacity:0}31.50%{opacity:.6}39.37%{transform:translateX(40px);opacity:.6}40.25%,100%{transform:translateX(40px);opacity:0}}
+.aitg-preview .aitg-hole{transform-origin:55px 15px;animation:aitg-preview-hole 3.2s cubic-bezier(.34,1.4,.64,1) infinite}
+.aitg-preview .aitg-tile{transform-origin:55px 15px;animation:aitg-preview-tile 3.2s cubic-bezier(.34,1.4,.64,1) infinite}
+.aitg-preview .aitg-la{animation:aitg-preview-la 3.2s cubic-bezier(.2,0,0,1) infinite}
+.aitg-preview .aitg-li{animation:aitg-preview-li 3.2s cubic-bezier(.2,0,0,1) infinite}
+.aitg-preview .aitg-sheen{animation:aitg-preview-sheen 3.2s cubic-bezier(.2,0,0,1) infinite}
+@media (prefers-reduced-motion: reduce){.aitg *{animation:none!important}.aitg .aitg-sheen{opacity:0}}</style><defs><mask id="tg-dark-loop-hole" maskUnits="userSpaceOnUse" x="0" y="0" width="74" height="64"><rect width="74" height="64" fill="#fff"/><rect class="aitg-hole" x="37" y="3" width="36" height="24" rx="7" fill="#000"/></mask><clipPath id="tg-dark-loop-tag"><rect x="39.5" y="5.5" width="31" height="19" rx="5"/></clipPath></defs><g mask="url(#tg-dark-loop-hole)"><path d="M21 23v-6a6 6 0 0 1 6-6h10a6 6 0 0 1 6 6v6" fill="none" stroke="#C4C0FF" stroke-width="6" stroke-linecap="round"/><rect x="4" y="22" width="56" height="36" rx="10" fill="#C4C0FF"/><path d="M17.5 33l8 7-8 7" fill="none" stroke="#0D0B14" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M33.5 47h13" fill="none" stroke="#006C44" stroke-width="5.5" stroke-linecap="round"/></g><g class="aitg-tile"><rect x="39.5" y="5.5" width="31" height="19" rx="5" fill="#80D5D4"/><g clip-path="url(#tg-dark-loop-tag)"><g class="aitg-la"><path d="M48.567 20.04 51.647 9.959999999999999H54.489L57.569 20.04H55.609L54.958 17.939999999999998H51.164L50.527 20.04ZM54.412 16.162 53.047 11.745 51.702999999999996 16.162Z" fill="#003737"/></g><g class="aitg-li"><path d="M58.689 20.04V9.959999999999999H60.593V20.04Z" fill="#003737"/></g><g class="aitg-sheen" opacity="0"><rect x="34" y="2" width="6" height="28" fill="#FFFFFF" transform="skewX(-20)"/></g></g></g></svg>

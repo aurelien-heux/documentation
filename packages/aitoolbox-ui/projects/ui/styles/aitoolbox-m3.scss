@@ -1,0 +1,12 @@
+// AIToolbox for Angular Material 22 (also 21) — Material 3 theme (`mat.theme`).
+// angular.json → "styles": ["node_modules/@aitoolbox/ui/styles/aitoolbox-m3.scss"]  or  @use '@aitoolbox/ui/styles/aitoolbox-m3';
+// Dark mode follows the system; force it with <html class="dark"> or <html class="light">.
+@use './tokens';
+@use './layout';
+@use './theme-m3-core';
+@use './components';
+
+// Inverse surfaces flip back when the page is dark because of the system setting.
+@media (prefers-color-scheme: dark) {
+  html:not(.light) .ait-on-inverse { color-scheme: light; }
+}

@@ -1,0 +1,204 @@
+// AIToolbox — Angular Material 19+ theme (Material 3, `mat.theme`).
+// 1. mat.theme builds the system variables (--mat-sys-*) from the AIToolbox palettes.
+// 2. mat.theme-overrides pins every colour role to the design-system token values (the v2 contrast recipe:
+//    tokens 5.0: primary at the Sweep purple #39235F (tone 20) in light and the lavender #C4C0FF in dark, secondary from the pale purple #DED7EB,
+//    tertiary from the lime #DCEAB4 (tone 30 / 80, the container pinned to the lime in both themes); night surfaces at tones 4–22), so Angular and the
+//    tokens.css of the design system agree to the hex.
+// 3. Extended colours (ai, success, warning) have no Angular slot: they are plain custom properties plus
+//    scoped component overrides.
+@use '@angular/material' as mat;
+@use './theme-colors' as dt;
+
+html {
+  color-scheme: light dark; // or `light` / `dark`, or toggle a class — Angular does not read media queries itself
+
+  @include mat.theme((
+    color: (
+      primary: dt.$primary-palette,
+      tertiary: dt.$tertiary-palette,
+      theme-type: color-scheme,
+    ),
+    typography: (
+      brand-family: "'BNPP Type', 'Open Sans', system-ui, sans-serif", // display, headline, title, label
+      plain-family: "'Open Sans', system-ui, sans-serif",              // body, and code/identifiers at 600
+      regular-weight: 400,
+      medium-weight: 500,
+      bold-weight: 600,
+    ),
+    density: 0,
+  ));
+
+  // Pin the roles to the AIToolbox tokens (tokens.json / tokens.css of the design system).
+  @include mat.theme-overrides((
+    primary: light-dark(#39235f, #c4c0ff),
+    on-primary: light-dark(#ffffff, #2a2473),
+    primary-container: light-dark(#e3dfff, #413c8a),
+    on-primary-container: light-dark(#14085e, #e3dfff),
+    secondary: light-dark(#484454, #cac3d7),
+    on-secondary: light-dark(#ffffff, #322e3d),
+    secondary-container: light-dark(#ded7eb, #484454),
+    on-secondary-container: light-dark(#1d1a28, #e6dff3),
+    tertiary: light-dark(#404b23, #bfcc99),
+    on-tertiary: light-dark(#ffffff, #2a340f),
+    tertiary-container: light-dark(#dceab4, #dceab4),
+    on-tertiary-container: light-dark(#39235f, #39235f),
+    error: light-dark(#93000a, #ffb4ab),
+    on-error: light-dark(#ffffff, #690005),
+    error-container: light-dark(#ffdad6, #93000a),
+    on-error-container: light-dark(#410002, #ffdad6),
+    surface: light-dark(#fdf8fd, #14121e),
+    surface-dim: light-dark(#ddd9dd, #14121e),
+    surface-bright: light-dark(#fdf8fd, #484553),
+    surface-container-lowest: light-dark(#ffffff, #0f0c19),
+    surface-container-low: light-dark(#faf4ff, #1d1a27),
+    surface-container: light-dark(#f8f1ff, #23202d),
+    surface-container-high: light-dark(#f2ebfa, #2b2836),
+    surface-container-highest: light-dark(#ece5f4, #363341),
+    on-surface: light-dark(#1c1b1e, #ece5f8),
+    on-surface-variant: light-dark(#48454e, #cac3dc),
+    outline: light-dark(#79757f, #948da5),
+    outline-variant: light-dark(#cac4cf, #494458),
+    inverse-surface: light-dark(#313033, #e6dff2),
+    inverse-on-surface: light-dark(#f4eff4, #322e3c),
+    inverse-primary: light-dark(#c4c0ff, #413c8a),
+    surface-tint: light-dark(#39235f, #c4c0ff),
+    scrim: light-dark(#000000, #000000),
+    shadow: light-dark(#000000, #000000),
+  ));
+
+  // Extended colours — same names as the design-system tokens (logo-box / on-logo-box / logo-cursor / logo-ai / on-logo-ai: the brand group, for the logo family only).
+  --md-sys-color-ai: light-dark(#004f50, #80d5d4);
+  --md-sys-color-on-ai: light-dark(#ffffff, #003737);
+  --md-sys-color-ai-container: light-dark(#9cf1f0, #004f50);
+  --md-sys-color-on-ai-container: light-dark(#002020, #9cf1f0);
+  --md-sys-color-success: light-dark(#0b5314, #91d888);
+  --md-sys-color-on-success: light-dark(#ffffff, #003908);
+  --md-sys-color-success-container: light-dark(#acf4a2, #0b5314);
+  --md-sys-color-on-success-container: light-dark(#002203, #acf4a2);
+  --md-sys-color-warning: light-dark(#5c4300, #fcbc00);
+  --md-sys-color-on-warning: light-dark(#ffffff, #402d00);
+  --md-sys-color-warning-container: light-dark(#ffdea0, #5c4300);
+  --md-sys-color-on-warning-container: light-dark(#261900, #ffdea0);
+  --md-sys-color-nav-container: light-dark(#ede4ff, #1d1a27);
+  --md-sys-color-logo-box: light-dark(#0d0b14, #c4c0ff);
+  --md-sys-color-on-logo-box: light-dark(#ffffff, #0d0b14);
+  --md-sys-color-logo-cursor: light-dark(#00f29e, #006c44);
+  --md-sys-color-logo-ai: light-dark(#80d5d4, #80d5d4);
+  --md-sys-color-on-logo-ai: light-dark(#003737, #003737);
+}
+
+// Explicit light / dark blocks for a manual toggle (body.dark-mode) instead of color-scheme.
+html.light { color-scheme: light; }
+html.dark  { color-scheme: dark; }
+
+// ---- AIToolbox roles that Material 3 Angular does not model on its own ----
+
+// Run / Deploy / Apply / New run: the ONE Run button per screen = the tertiary container (the Sweep lime #DCEAB4, pinned in both
+// themes) with an on-tertiary-container label and play icon (the Sweep purple #39235F, pinned in both themes, 10.4 : 1). A tonal button: no edge, like every tonal fill.
+// <button mat-flat-button class="dt-run"><mat-icon>play_arrow</mat-icon>New run</button>
+.dt-run {
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-tertiary-container),
+    filled-label-text-color: var(--mat-sys-on-tertiary-container),
+    filled-state-layer-color: var(--mat-sys-on-tertiary-container),
+  ));
+  @include mat.fab-overrides((container-color: var(--mat-sys-tertiary-container), foreground-color: var(--mat-sys-on-tertiary-container), state-layer-color: var(--mat-sys-on-tertiary-container)));
+  .mat-icon, mat-icon, svg { color: var(--mat-sys-on-tertiary-container); }
+}
+// Row actions (Re-run in tables, cards): text buttons in primary with the play icon in a 22 px tertiary-container disc — never filled.
+// <button mat-button class="dt-run-text"><mat-icon>play_arrow</mat-icon>Re-run</button>
+.dt-run-text {
+  .mat-icon, mat-icon, svg {
+    width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box;
+    background: var(--mat-sys-tertiary-container); color: var(--mat-sys-on-tertiary-container);
+  }
+  .mat-icon, mat-icon { font-size: 16px; line-height: 22px; text-align: center; }
+  svg { padding: 4px; }
+}
+
+// AI features: teal, never for chrome.
+.dt-ai {
+  @include mat.button-overrides((
+    filled-container-color: var(--md-sys-color-ai),
+    filled-label-text-color: var(--md-sys-color-on-ai),
+    text-label-text-color: var(--md-sys-color-ai),
+  ));
+  @include mat.chips-overrides((
+    elevated-container-color: var(--md-sys-color-ai-container),
+    label-text-color: var(--md-sys-color-on-ai-container),
+  ));
+  @include mat.card-overrides((
+    elevated-container-color: var(--md-sys-color-ai-container),
+    outlined-container-color: var(--md-sys-color-ai-container),
+  ));
+}
+
+// Health chips: tinted container + on-container text, solid dot. Pair with the 20 px tinted state mark.
+.dt-chip-success { @include mat.chips-overrides((elevated-container-color: var(--md-sys-color-success-container), label-text-color: var(--md-sys-color-on-success-container))); }
+.dt-chip-warning { @include mat.chips-overrides((elevated-container-color: var(--md-sys-color-warning-container), label-text-color: var(--md-sys-color-on-warning-container))); }
+.dt-chip-error   { @include mat.chips-overrides((elevated-container-color: var(--mat-sys-error-container),       label-text-color: var(--mat-sys-on-error-container))); }
+.dt-chip-info    { @include mat.chips-overrides((elevated-container-color: var(--mat-sys-primary-container),     label-text-color: var(--mat-sys-on-primary-container))); }
+
+// Shape, from the design-system radius tokens. Large (16 px) is the ceiling: buttons, segmented buttons, navigation
+// items, dialogs, sheets and pickers all sit at 16 px (Material's full / extra-large defaults are overridden);
+// full stays only on circles (icon buttons, avatars, badges, radio, switch).
+html {
+  @include mat.button-overrides((filled-container-shape: 16px, outlined-container-shape: 16px, text-container-shape: 16px, protected-container-shape: 16px, tonal-container-shape: 16px));
+  @include mat.button-toggle-overrides((shape: 16px));
+  @include mat.chips-overrides((container-shape-radius: 8px));
+  @include mat.card-overrides((elevated-container-shape: 12px, outlined-container-shape: 12px));
+  @include mat.dialog-overrides((container-shape: 16px));
+  @include mat.bottom-sheet-overrides((container-shape: 16px));
+  @include mat.datepicker-overrides((calendar-container-shape: 16px));
+  @include mat.timepicker-overrides((container-shape: 16px));
+  @include mat.list-overrides((active-indicator-shape: 16px));
+  @include mat.form-field-overrides((outlined-container-shape: 4px));
+  @include mat.fab-overrides((container-shape: 16px));
+}
+
+// Navigation surfaces: class="dt-nav" on the drawer (mat-sidenav) and on the app bars (mat-toolbar: TopAppBar, BottomAppBar, NavigationBar) gives them the nav-container
+// colour, so header and drawer form one frame; side sheets stay on the containers.
+.dt-nav { @include mat.sidenav-overrides((container-background-color: var(--md-sys-color-nav-container))); @include mat.toolbar-overrides((container-background-color: var(--md-sys-color-nav-container))); @include mat.list-overrides((active-indicator-color: var(--mat-sys-secondary-container))); }
+
+// State layers — hover B: neutral surfaces take the primary violet at 6 % (pressed 10 %) instead of the grey on-surface
+// layer. Focus adds no layer (0): Material keeps the focus layer on after a mouse click, and the strong focus ring is the focus indicator; coloured components (filled, tonal, Run, AI, selected chips, active navigation) keep their own content colour.
+html {
+  --mat-sys-hover-state-layer-opacity: 0.06;
+  --mat-sys-focus-state-layer-opacity: 0;   // no tint left behind after a click; keyboard focus = the focus ring
+  --mat-sys-pressed-state-layer-opacity: 0.1;
+  @include mat.menu-overrides((item-hover-state-layer-color: color-mix(in srgb, var(--mat-sys-primary) 6%, transparent), item-focus-state-layer-color: transparent));
+  @include mat.list-overrides((list-item-hover-state-layer-color: var(--mat-sys-primary), list-item-focus-state-layer-color: var(--mat-sys-primary), list-item-hover-state-layer-opacity: 0.06, list-item-focus-state-layer-opacity: 0));
+  @include mat.option-overrides((hover-state-layer-color: color-mix(in srgb, var(--mat-sys-primary) 6%, transparent), focus-state-layer-color: transparent, selected-state-layer-color: var(--mat-sys-secondary-container), selected-state-label-text-color: var(--mat-sys-on-secondary-container)));
+  @include mat.icon-button-overrides((state-layer-color: var(--mat-sys-primary)));
+  @include mat.button-toggle-overrides((state-layer-color: var(--mat-sys-primary)));
+  @include mat.tabs-overrides((inactive-ripple-color: var(--mat-sys-primary), active-ripple-color: var(--mat-sys-primary)));
+  --mat-ripple-color: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+}
+// mat-table has no hover token: rows get the layer in CSS.
+.mat-mdc-row:hover { background: color-mix(in srgb, var(--mat-sys-primary) 6%, transparent); }
+.mat-mdc-row:active { background: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent); }
+
+// ---- Accessibility (WCAG 2.2 AA) ----
+// Focus (2.4.7): strong focus indicators — a 2 px primary ring that Material draws outside buttons, chips, tabs, list and menu items.
+// Form fields keep their own focus state (the outline turns 2 px primary); add no ring to them.
+@include mat.strong-focus-indicators((border-style: solid, border-width: 2px));
+html { --mat-focus-indicator-border-color: var(--mat-sys-primary); }
+
+// Options (select, multi-select, autocomplete): the keyboard-active option shows the focus ring only, no fill.
+// A select opened with the mouse marks its first option active without any key press: its ring stays hidden until a key
+// is pressed (the trigger then matches :focus-visible), so a mouse user never sees a ring or a second highlighted row.
+html:has(.mat-mdc-select:focus:not(:focus-visible)) .mat-mdc-select-panel .mat-mdc-option-active .mat-focus-indicator::before { content: none; }
+// The selected option keeps its secondary-container fill while it is also the active one (Material swaps it for the focus layer).
+.mat-mdc-option.mdc-list-item--selected.mat-mdc-option-active:not(.mat-mdc-option-multiple, .mdc-list-item--disabled) { background-color: var(--mat-option-selected-state-layer-color); }
+
+// Active navigation item (1.4.11): the secondary-container pill plus a 3 px primary leading bar (the pill alone is 1.1 : 1 on the band).
+// <a mat-list-item routerLinkActive="dt-nav-active"> in a mat-nav-list; on a bottom bar add dt-nav-active--bar.
+.mat-mdc-nav-list .mat-mdc-list-item.dt-nav-active, .mat-mdc-nav-list .mdc-list-item--activated {
+  background: var(--mat-sys-secondary-container); box-shadow: inset 3px 0 0 var(--mat-sys-primary); font-weight: 700;
+}
+.dt-nav-active--bar { box-shadow: inset 0 3px 0 var(--mat-sys-primary) !important; }
+
+// Reduced motion (2.3.3): spinners stop; the label next to them carries the state.
+@media (prefers-reduced-motion: reduce) {
+  .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-container, .mat-mdc-progress-bar .mdc-linear-progress__bar { animation: none !important; }
+}

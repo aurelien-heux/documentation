@@ -1,0 +1,392 @@
+// AIToolbox — Angular Material theme, Material 2 API (Angular Material 21; also compiles on 18–22).
+// The M2 APIs carry the `m2-` prefix since v18 and still ship in v22; the per-component `*-overrides`
+// mixins (v19+) set the same `--mat-<component>-*` tokens as the M3 file, so the token names below are shared.
+// Hue ↔ tone: 50←95, 100←90, 200←80, 300←70, 400←60, 500←50, 600←40, 700←30, 800←20, 900←10.
+// Defaults are the design-system tones (tokens 5.0): primary light = 800 (the Sweep purple #39235F, tone 20), lighter = 100 (tone 90), darker = 900; dark = 200 (the lavender #C4C0FF);
+// secondary ($dt-mauve) from the Sweep pale purple, 100 = #DED7EB; tertiary ($dt-lime) from the Sweep lime, 100 = #DCEAB4, light = 700 (tone 30), dark = A200 (tone 80).
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+$dt-violet: (
+  50: #f3eeff,
+  100: #e3dfff,
+  200: #c4c0ff,
+  300: #a6a2f8,
+  400: #8c87db,
+  500: #726ebf,
+  600: #5955a4,
+  700: #413c8a,
+  800: #39235f,
+  900: #14085e,
+  A100: #d3d0ff,
+  A200: #d3d0ff,
+  A400: #726ebf,
+  A700: #5955a4,
+  contrast: (
+    50: #14085e,
+    100: #14085e,
+    200: #14085e,
+    300: #14085e,
+    400: #14085e,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #14085e,
+    A200: #14085e,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$dt-mauve: (
+  50: #f5eeff,
+  100: #ded7eb,
+  200: #cac3d7,
+  300: #aea8bb,
+  400: #938ea0,
+  500: #797486,
+  600: #605c6d,
+  700: #484454,
+  800: #3d3949,
+  900: #1d1a28,
+  A100: #d8d1e5,
+  A200: #d8d1e5,
+  A400: #797486,
+  A700: #605c6d,
+  contrast: (
+    50: #1d1a28,
+    100: #1d1a28,
+    200: #1d1a28,
+    300: #1d1a28,
+    400: #1d1a28,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #1d1a28,
+    A200: #1d1a28,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$dt-lime: (
+  50: #e9f7c0,
+  100: #dceab4,
+  200: #bfcc99,
+  300: #a3b17f,
+  400: #899667,
+  500: #707c4f,
+  600: #576339,
+  700: #404b23,
+  800: #343f19,
+  900: #151f00,
+  A100: #bfcc99,
+  A200: #bfcc99,
+  A400: #707c4f,
+  A700: #576339,
+  contrast: (
+    50: #151f00,
+    100: #151f00,
+    200: #151f00,
+    300: #151f00,
+    400: #151f00,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #151f00,
+    A200: #151f00,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$dt-red: (
+  50: #ffedea,
+  100: #ffdad6,
+  200: #ffb4ab,
+  300: #ff897d,
+  400: #ff5449,
+  500: #de3730,
+  600: #ba1a1a,
+  700: #93000a,
+  800: #7e0007,
+  900: #410002,
+  A100: #ffc7c0,
+  A200: #ffc7c0,
+  A400: #de3730,
+  A700: #ba1a1a,
+  contrast: (
+    50: #410002,
+    100: #410002,
+    200: #410002,
+    300: #410002,
+    400: #410002,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #410002,
+    A200: #410002,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$dt-teal: (
+  50: #adfffe,
+  100: #9cf1f0,
+  200: #80d5d4,
+  300: #64b9b8,
+  400: #479e9d,
+  500: #278383,
+  600: #006a6a,
+  700: #004f50,
+  800: #004343,
+  900: #002020,
+  A100: #8ee3e2,
+  A200: #8ee3e2,
+  A400: #278383,
+  A700: #006a6a,
+  contrast: (
+    50: #002020,
+    100: #002020,
+    200: #002020,
+    300: #002020,
+    400: #002020,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #002020,
+    A200: #002020,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$dt-green: (
+  50: #c9ffbe,
+  100: #acf4a2,
+  200: #91d888,
+  300: #76bb6f,
+  400: #5ca057,
+  500: #438540,
+  600: #296b2a,
+  700: #0b5314,
+  800: #00460b,
+  900: #002203,
+  A100: #9ee695,
+  A200: #9ee695,
+  A400: #438540,
+  A700: #296b2a,
+  contrast: (
+    50: #002203,
+    100: #002203,
+    200: #002203,
+    300: #002203,
+    400: #002203,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #002203,
+    A200: #002203,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$dt-amber: (
+  50: #ffefd5,
+  100: #ffdea0,
+  200: #fcbc00,
+  300: #daa200,
+  400: #b88900,
+  500: #987100,
+  600: #795900,
+  700: #5c4300,
+  800: #4e3800,
+  900: #261900,
+  A100: #ffcd63,
+  A200: #ffcd63,
+  A400: #987100,
+  A700: #795900,
+  contrast: (
+    50: #261900,
+    100: #261900,
+    200: #261900,
+    300: #261900,
+    400: #261900,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #261900,
+    A200: #261900,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+// ---- Typography: the AIToolbox scale on the M2 levels ----
+$dt-ui: "'BNPP Type', 'Open Sans', system-ui, sans-serif";
+$dt-body: "'Open Sans', system-ui, sans-serif";
+$dt-typography: mat.m2-define-typography-config(
+  $font-family: $dt-body,
+  $headline-1: mat.m2-define-typography-level(57px, 64px, 500, $dt-ui, -0.25px),   // display-large
+  $headline-2: mat.m2-define-typography-level(45px, 52px, 500, $dt-ui, 0),         // display-medium
+  $headline-3: mat.m2-define-typography-level(36px, 44px, 500, $dt-ui, 0),         // display-small
+  $headline-4: mat.m2-define-typography-level(32px, 40px, 500, $dt-ui, 0),         // headline-large
+  $headline-5: mat.m2-define-typography-level(28px, 36px, 500, $dt-ui, 0),         // headline-medium
+  $headline-6: mat.m2-define-typography-level(24px, 32px, 500, $dt-ui, 0),         // headline-small
+  $subtitle-1: mat.m2-define-typography-level(16px, 24px, 500, $dt-ui, 0.15px),    // title-medium
+  $subtitle-2: mat.m2-define-typography-level(14px, 20px, 500, $dt-ui, 0.1px),     // title-small
+  $body-1:     mat.m2-define-typography-level(16px, 24px, 400, $dt-body, 0.5px),   // body-large
+  $body-2:     mat.m2-define-typography-level(14px, 20px, 400, $dt-body, 0.25px),  // body-medium
+  $caption:    mat.m2-define-typography-level(12px, 16px, 400, $dt-body, 0.4px),   // body-small
+  $button:     mat.m2-define-typography-level(14px, 20px, 500, $dt-ui, 0.1px),     // label-large
+);
+
+// ---- Palettes in their roles ----
+$dt-primary-light: mat.m2-define-palette($dt-violet, 800, 100, 900);
+$dt-accent-light:  mat.m2-define-palette($dt-mauve, 700, 100, 900);   // secondary-container is `lighter`
+$dt-warn-light:    mat.m2-define-palette($dt-red, 700, 100, 900);   // error tone 30 (8.9:1)
+$dt-primary-dark:  mat.m2-define-palette($dt-violet, 200, 700, 100);
+$dt-accent-dark:   mat.m2-define-palette($dt-mauve, 200, 700, 100);
+$dt-warn-dark:     mat.m2-define-palette($dt-red, 200, 800, 100);
+
+$dt-light: mat.m2-define-light-theme((color: (primary: $dt-primary-light, accent: $dt-accent-light, warn: $dt-warn-light), typography: $dt-typography, density: 0));
+$dt-dark:  mat.m2-define-dark-theme((color: (primary: $dt-primary-dark, accent: $dt-accent-dark, warn: $dt-warn-dark), typography: $dt-typography, density: 0));
+
+// ---- Surfaces: M2 hard-codes its background/foreground; replace them with the design-system surfaces ----
+@function dt-surfaces($theme, $bg, $fg) {
+  $color: map.get($theme, color);
+  $color: map.merge($color, (background: map.merge(map.get($color, background), $bg), foreground: map.merge(map.get($color, foreground), $fg)));
+  @return map.merge($theme, (color: $color, background: map.get($color, background), foreground: map.get($color, foreground)));
+}
+$dt-light: dt-surfaces($dt-light,
+  (background: #fdf8fd, card: #ffffff, dialog: #f2ebfa, app-bar: #f8f1ff, hover: rgba(57, 35, 95, 0.06), status-bar: #f8f1ff),
+  (text: #1c1b1e, secondary-text: #48454e, divider: #cac4cf, icon: #48454e));
+$dt-dark: dt-surfaces($dt-dark,
+  (background: #14121e, card: #1d1a27, dialog: #2b2836, app-bar: #23202d, hover: rgba(196, 192, 255, 0.06), status-bar: #23202d),
+  (text: #ece5f8, secondary-text: #cac3dc, divider: #494458, icon: #cac3dc));
+
+// ---- Apply ----
+@include mat.core();   // ripples, elevation classes, app background (still valid on 21/22; or mat.elevation-classes() + mat.app-background())
+html { @include mat.all-component-themes($dt-light); }
+html.dark { @include mat.all-component-colors($dt-dark); }   // or @media (prefers-color-scheme: dark)
+
+// ---- Roles M2 has no slot for: scoped themes ----
+// Run / Deploy / Apply / New run — one per screen: <button mat-flat-button class="dt-run">
+// The tertiary container: the Sweep lime #DCEAB4 (pinned in both themes) with a Sweep purple #39235F label and play icon (10.4 : 1); no edge.
+.dt-run {
+  @include mat.button-overrides((filled-container-color: #dceab4, filled-label-text-color: #39235f, filled-state-layer-color: #39235f));
+  @include mat.fab-overrides((container-color: #dceab4, foreground-color: #39235f, state-layer-color: #39235f));
+  .mat-icon, mat-icon, svg { color: #39235f; }
+}
+// Row actions (Re-run): text buttons in primary with the play icon in a 22 px tertiary-container disc, never filled: <button mat-button class="dt-run-text">
+.dt-run-text {
+  .mat-icon, mat-icon, svg { width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; background: #dceab4; color: #39235f; }
+  .mat-icon, mat-icon { font-size: 16px; line-height: 22px; text-align: center; }
+  svg { padding: 4px; }
+}
+
+// AI features — deep teal #004F50 in light, light teal in dark (Material tones): <button mat-flat-button class="dt-ai">, <mat-card class="dt-ai">
+$dt-ai-light: mat.m2-define-light-theme((color: (primary: mat.m2-define-palette($dt-teal, 700, 100, 900), accent: $dt-accent-light, warn: $dt-warn-light)));
+$dt-ai-dark:  mat.m2-define-dark-theme((color: (primary: mat.m2-define-palette($dt-teal, 200, 700, 100), accent: $dt-accent-dark, warn: $dt-warn-dark)));
+.dt-ai { @include mat.button-color($dt-ai-light); @include mat.chips-color($dt-ai-light); @include mat.progress-spinner-color($dt-ai-light); }
+html.dark .dt-ai { @include mat.button-color($dt-ai-dark); @include mat.chips-color($dt-ai-dark); @include mat.progress-spinner-color($dt-ai-dark); }
+
+// Health chips (container tint + on-container text) — the same `mat.chips-overrides` tokens as the M3 file.
+.dt-chip-success { @include mat.chips-overrides((elevated-container-color: #acf4a2, label-text-color: #002203)); }
+.dt-chip-warning { @include mat.chips-overrides((elevated-container-color: #ffdea0, label-text-color: #261900)); }
+.dt-chip-error   { @include mat.chips-overrides((elevated-container-color: #ffdad6,   label-text-color: #410002)); }
+.dt-chip-info    { @include mat.chips-overrides((elevated-container-color: #e3dfff, label-text-color: #14085e)); }
+html.dark .dt-chip-success { @include mat.chips-overrides((elevated-container-color: #0b5314, label-text-color: #acf4a2)); }
+html.dark .dt-chip-warning { @include mat.chips-overrides((elevated-container-color: #5c4300, label-text-color: #ffdea0)); }
+html.dark .dt-chip-error   { @include mat.chips-overrides((elevated-container-color: #93000a,   label-text-color: #ffdad6)); }
+html.dark .dt-chip-info    { @include mat.chips-overrides((elevated-container-color: #413c8a, label-text-color: #e3dfff)); }
+
+// Snackbar — M2 hard-codes a dark container; pin it to the inverse surface (same tokens as M3).
+html { @include mat.snack-bar-overrides((container-color: #313033, supporting-text-color: #f4eff4, button-color: #c4c0ff)); }
+html.dark { @include mat.snack-bar-overrides((container-color: #e6dff2, supporting-text-color: #322e3c, button-color: #413c8a)); }
+
+// Shape, from the design-system radius tokens — the `*-overrides` mixins emit the `--mat-*` shape tokens (v19+; the old `--mdc-*` names are gone since v20).
+html {
+  // Large (16 px) is the ceiling: buttons, segmented buttons, navigation items, dialogs, sheets and pickers at 16 px; full only on circles.
+  @include mat.button-overrides((filled-container-shape: 16px, outlined-container-shape: 16px, text-container-shape: 16px, protected-container-shape: 16px, tonal-container-shape: 16px));
+  @include mat.button-toggle-overrides((shape: 16px));
+  @include mat.chips-overrides((container-shape-radius: 8px));
+  @include mat.card-overrides((elevated-container-shape: 12px, outlined-container-shape: 12px, filled-container-shape: 12px));
+  @include mat.dialog-overrides((container-shape: 16px));
+  @include mat.bottom-sheet-overrides((container-shape: 16px));
+  @include mat.datepicker-overrides((calendar-container-shape: 16px));
+  @include mat.timepicker-overrides((container-shape: 16px));
+  @include mat.list-overrides((active-indicator-shape: 16px));
+  @include mat.form-field-overrides((outlined-container-shape: 4px));
+  @include mat.fab-overrides((container-shape: 16px, small-container-shape: 12px));
+  @include mat.menu-overrides((container-shape: 4px));
+  @include mat.tooltip-overrides((container-shape: 4px));
+}
+// Navigation surfaces: class="dt-nav" on the drawer (mat-sidenav) and on the app bars (mat-toolbar: TopAppBar, BottomAppBar, NavigationBar) gives them the nav-container
+// colour, so header and drawer form one frame; side sheets stay on the containers.
+.dt-nav { @include mat.sidenav-overrides((container-background-color: #ede4ff)); @include mat.toolbar-overrides((container-background-color: #ede4ff)); @include mat.list-overrides((active-indicator-color: #ded7eb)); }
+html.dark .dt-nav { @include mat.sidenav-overrides((container-background-color: #1d1a27)); @include mat.toolbar-overrides((container-background-color: #1d1a27)); @include mat.list-overrides((active-indicator-color: #484454)); }
+
+// State layers — hover B: neutral surfaces take the primary violet at 6 % (pressed 10 %, focus 0) instead of the grey;
+// coloured components keep their own content colour. M2 has no --mat-sys-* variables, so the violet is a custom property.
+html { --dt-state-layer: #39235f; --dt-option-selected: #ded7eb; --dt-on-option-selected: #1d1a28; }
+html.dark { --dt-state-layer: #c4c0ff; --dt-option-selected: #484454; --dt-on-option-selected: #e6dff3; }
+html, html.dark {   // html.dark too: the dark block re-emits Material's default (grey) layers with a stronger selector
+  @include mat.menu-overrides((item-hover-state-layer-color: color-mix(in srgb, var(--dt-state-layer) 6%, transparent), item-focus-state-layer-color: transparent));
+  @include mat.list-overrides((list-item-hover-state-layer-color: var(--dt-state-layer), list-item-focus-state-layer-color: var(--dt-state-layer), list-item-hover-state-layer-opacity: 0.06, list-item-focus-state-layer-opacity: 0));
+  @include mat.option-overrides((hover-state-layer-color: color-mix(in srgb, var(--dt-state-layer) 6%, transparent), focus-state-layer-color: transparent, selected-state-layer-color: var(--dt-option-selected), selected-state-label-text-color: var(--dt-on-option-selected)));
+  @include mat.icon-button-overrides((state-layer-color: var(--dt-state-layer)));
+  @include mat.button-toggle-overrides((state-layer-color: var(--dt-state-layer)));
+  // focus adds no layer: Material keeps it on after a mouse click; keyboard focus is shown by the strong focus ring
+  @include mat.button-overrides((filled-focus-state-layer-opacity: 0, outlined-focus-state-layer-opacity: 0, protected-focus-state-layer-opacity: 0, text-focus-state-layer-opacity: 0, tonal-focus-state-layer-opacity: 0));
+  @include mat.icon-button-overrides((focus-state-layer-opacity: 0));
+  @include mat.fab-overrides((focus-state-layer-opacity: 0, small-focus-state-layer-opacity: 0));
+  @include mat.chips-overrides((focus-state-layer-opacity: 0, selected-focus-state-layer-opacity: 0, trailing-action-focus-state-layer-opacity: 0));
+  @include mat.checkbox-overrides((selected-focus-state-layer-opacity: 0, unselected-focus-state-layer-opacity: 0));
+  @include mat.slide-toggle-overrides((selected-focus-state-layer-opacity: 0, unselected-focus-state-layer-opacity: 0));
+  @include mat.button-toggle-overrides((focus-state-layer-opacity: 0, legacy-focus-state-layer-opacity: 0));
+  --mat-ripple-color: color-mix(in srgb, var(--dt-state-layer) 10%, transparent);
+}
+.mat-mdc-row:hover { background: color-mix(in srgb, var(--dt-state-layer) 6%, transparent); }
+.mat-mdc-row:active { background: color-mix(in srgb, var(--dt-state-layer) 10%, transparent); }
+
+// ---- Accessibility (WCAG 2.2 AA) ----
+// Focus (2.4.7): strong focus indicators, a 2 px ring in primary drawn outside buttons, chips, tabs, list and menu items.
+// Form fields keep their own focus state (the outline turns 2 px primary); add no ring to them.
+@include mat.strong-focus-indicators((border-style: solid, border-width: 2px));
+html { --mat-focus-indicator-border-color: #39235f; }
+html.dark { --mat-focus-indicator-border-color: #c4c0ff; }
+
+// Options (select, multi-select, autocomplete): the keyboard-active option shows the focus ring only, no fill.
+// A select opened with the mouse marks its first option active without any key press: its ring stays hidden until a key
+// is pressed (the trigger then matches :focus-visible), so a mouse user never sees a ring or a second highlighted row.
+html:has(.mat-mdc-select:focus:not(:focus-visible)) .mat-mdc-select-panel .mat-mdc-option-active .mat-focus-indicator::before { content: none; }
+// The selected option keeps its secondary-container fill while it is also the active one (Material swaps it for the focus layer).
+.mat-mdc-option.mdc-list-item--selected.mat-mdc-option-active:not(.mat-mdc-option-multiple, .mdc-list-item--disabled) { background-color: var(--mat-option-selected-state-layer-color); }
+
+// Active navigation item (1.4.11): the secondary-container pill plus a 3 px primary leading bar. <a mat-list-item routerLinkActive="dt-nav-active">
+.mat-mdc-nav-list .mat-mdc-list-item.dt-nav-active, .mat-mdc-nav-list .mdc-list-item--activated { background: #ded7eb; box-shadow: inset 3px 0 0 #39235f; font-weight: 700; }
+html.dark .mat-mdc-nav-list .mat-mdc-list-item.dt-nav-active, html.dark .mat-mdc-nav-list .mdc-list-item--activated { background: #484454; box-shadow: inset 3px 0 0 #c4c0ff; }
+.dt-nav-active--bar { box-shadow: inset 0 3px 0 #39235f !important; }
+html.dark .dt-nav-active--bar { box-shadow: inset 0 3px 0 #c4c0ff !important; }
+
+// Reduced motion (2.3.3): spinners stop; the label next to them carries the state.
+@media (prefers-reduced-motion: reduce) {
+  .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-container, .mat-mdc-progress-bar .mdc-linear-progress__bar { animation: none !important; }
+}

@@ -1,0 +1,256 @@
+{
+  "$schema": "https://tr.designtokens.org/format/",
+  "ax": {
+    "$description": "ArchiMate notation of the AIToolbox design system (content colours, never status). CSS: --ax-<layer>-fill / -ink.",
+    "color": {
+      "layer": {
+        "strategy": {
+          "fill": {
+            "$type": "color",
+            "$value": "#F8E5C4",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#3F2E12"
+              }
+            },
+            "$description": "Strategy: figure and tile fill"
+          },
+          "ink": {
+            "$type": "color",
+            "$value": "#6E4A0E",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#F0CB8E"
+              }
+            },
+            "$description": "Strategy: border and glyph"
+          }
+        },
+        "business": {
+          "fill": {
+            "$type": "color",
+            "$value": "#FFF2B3",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#3D3500"
+              }
+            },
+            "$description": "Business: figure and tile fill"
+          },
+          "ink": {
+            "$type": "color",
+            "$value": "#5E5000",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#F2DC6E"
+              }
+            },
+            "$description": "Business: border and glyph"
+          }
+        },
+        "application": {
+          "fill": {
+            "$type": "color",
+            "$value": "#CFEDFA",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#0C3646"
+              }
+            },
+            "$description": "Application: figure and tile fill"
+          },
+          "ink": {
+            "$type": "color",
+            "$value": "#0A5570",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#90D2EC"
+              }
+            },
+            "$description": "Application: border and glyph"
+          }
+        },
+        "technology": {
+          "fill": {
+            "$type": "color",
+            "$value": "#D5EDC7",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#1E3A15"
+              }
+            },
+            "$description": "Technology: figure and tile fill"
+          },
+          "ink": {
+            "$type": "color",
+            "$value": "#2C5A1C",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#A8D795"
+              }
+            },
+            "$description": "Technology: border and glyph"
+          }
+        },
+        "physical": {
+          "fill": {
+            "$type": "color",
+            "$value": "#CBE7D4",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#163B23"
+              }
+            },
+            "$description": "Physical: figure and tile fill"
+          },
+          "ink": {
+            "$type": "color",
+            "$value": "#1C5631",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#96D2A8"
+              }
+            },
+            "$description": "Physical: border and glyph"
+          }
+        },
+        "motivation": {
+          "fill": {
+            "$type": "color",
+            "$value": "#ECDDF6",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#3A2150"
+              }
+            },
+            "$description": "Motivation: figure and tile fill"
+          },
+          "ink": {
+            "$type": "color",
+            "$value": "#5A2C80",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#D6B4EE"
+              }
+            },
+            "$description": "Motivation: border and glyph"
+          }
+        },
+        "implementation": {
+          "fill": {
+            "$type": "color",
+            "$value": "#F6DCEB",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#4A1E37"
+              }
+            },
+            "$description": "Implementation & migration: figure and tile fill"
+          },
+          "ink": {
+            "$type": "color",
+            "$value": "#7A2457",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#EFB3D4"
+              }
+            },
+            "$description": "Implementation & migration: border and glyph"
+          }
+        },
+        "other": {
+          "fill": {
+            "$type": "color",
+            "$value": "#FBE3C8",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#4A2D10"
+              }
+            },
+            "$description": "Other: figure and tile fill"
+          },
+          "ink": {
+            "$type": "color",
+            "$value": "#7A4000",
+            "$extensions": {
+              "aitoolbox": {
+                "dark": "#F2BE84"
+              }
+            },
+            "$description": "Other: border and glyph"
+          }
+        }
+      }
+    },
+    "shape": {
+      "figure-radius": {
+        "$type": "dimension",
+        "$value": "12px",
+        "$description": "Behaviour figures (rounded)"
+      },
+      "tile-radius": {
+        "$type": "dimension",
+        "$value": "4px"
+      },
+      "tile-radius-large": {
+        "$type": "dimension",
+        "$value": "8px"
+      },
+      "chamfer": {
+        "$type": "dimension",
+        "$value": "10px",
+        "$description": "Motivation cut corner"
+      }
+    },
+    "size": {
+      "figure-s": {
+        "$type": "dimension",
+        "$value": "128px 52px"
+      },
+      "figure-m": {
+        "$type": "dimension",
+        "$value": "176px 72px"
+      },
+      "figure-l": {
+        "$type": "dimension",
+        "$value": "224px 96px"
+      },
+      "tile": {
+        "$type": "dimension",
+        "$value": "20px"
+      },
+      "tile-large": {
+        "$type": "dimension",
+        "$value": "32px"
+      },
+      "glyph": {
+        "$type": "dimension",
+        "$value": "18px"
+      }
+    },
+    "stroke": {
+      "line": {
+        "$type": "dimension",
+        "$value": "1.6px"
+      },
+      "line-highlight": {
+        "$type": "dimension",
+        "$value": "2.2px"
+      },
+      "border": {
+        "$type": "dimension",
+        "$value": "1px"
+      }
+    },
+    "opacity": {
+      "retired": {
+        "$type": "number",
+        "$value": 0.45
+      },
+      "unchanged-in-gap": {
+        "$type": "number",
+        "$value": 0.45
+      }
+    }
+  }
+}

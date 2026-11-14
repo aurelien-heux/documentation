@@ -1,0 +1,328 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "AppShell.dc.html": {
+      "h": 1040,
+      "title": "Application · desktop, light · navigation rail (default) · page context in the header, no page title",
+      "w": 1520,
+      "x": 0,
+      "y": 8860
+    },
+    "AppShellDark.dc.html": {
+      "h": 1040,
+      "title": "Application · desktop, dark · navigation rail (default) · page context in the header, no page title",
+      "w": 1520,
+      "x": 1600,
+      "y": 8860
+    },
+    "AppShellMobile.dc.html": {
+      "h": 1120,
+      "title": "Application · phone, BottomAppBar and NavigationBar (light, dark)",
+      "w": 1864,
+      "x": 3200,
+      "y": 8860
+    },
+    "AppShellOverlays.dc.html": {
+      "h": 1150,
+      "title": "Application · overlays open: dialog, date picker, dropdown · light",
+      "w": 4480,
+      "x": 0,
+      "y": 10000
+    },
+    "AppShellOverlaysDark.dc.html": {
+      "h": 1150,
+      "title": "Application · overlays open: dialog, date picker, dropdown · dark",
+      "w": 4480,
+      "x": 0,
+      "y": 11240
+    },
+    "AppShellRail.dc.html": {
+      "h": 1040,
+      "title": "Application · drawer opened on demand from the rail menu (large screens) · light",
+      "w": 1520,
+      "x": 0,
+      "y": 12480
+    },
+    "AppShellRailDark.dc.html": {
+      "h": 1040,
+      "title": "Application · drawer opened on demand from the rail menu (large screens) · dark",
+      "w": 1520,
+      "x": 1600,
+      "y": 12480
+    },
+    "AssistantChat.dc.html": {
+      "h": 6420,
+      "title": "Assistant · conversation, message actions, tools / skills / MCP, history, disclaimer (spec, from the prototype)",
+      "w": 1560,
+      "x": 0,
+      "y": 35697
+    },
+    "AssistantPanel.dc.html": {
+      "h": 4570,
+      "title": "Assistant panel · inline split block: triggers, resize grip, open / close motion (spec, from the prototype)",
+      "w": 1560,
+      "x": 0,
+      "y": 30727
+    },
+    "Breakpoints.dc.html": {
+      "h": 2415,
+      "title": "Layout · breakpoints, five window size classes: shell per class, content by page area (final)",
+      "w": 2660,
+      "x": 0,
+      "y": 42637
+    },
+    "ChatbotMark.dc.html": {
+      "h": 1060,
+      "title": "Chatbot mark · brace box, one outline (final)",
+      "w": 1440,
+      "x": 2600,
+      "y": 3540
+    },
+    "Components.dc.html": {
+      "h": 1180,
+      "title": "Core components",
+      "w": 1440,
+      "x": 0,
+      "y": 1960
+    },
+    "ComponentsDialog.dc.html": {
+      "h": 1180,
+      "title": "Components · dialog with a form",
+      "w": 1000,
+      "x": 1520,
+      "y": 1960
+    },
+    "Cookies.dc.html": {
+      "h": 1180,
+      "title": "Navigation · rail by default, drawer on demand, Administration for admins, cookie policy, Settings in the account menu (final)",
+      "w": 1520,
+      "x": 0,
+      "y": 20051
+    },
+    "Favicon.dc.html": {
+      "h": 900,
+      "title": "Favicon & app icon",
+      "w": 1000,
+      "x": 1520,
+      "y": 3540
+    },
+    "Feedback.dc.html": {
+      "h": 4463,
+      "title": "Feedback · configurable per feature; profiles edited in Administration › Community › Feedback (admin only, scoped right per feature)",
+      "w": 1560,
+      "x": 0,
+      "y": 21773
+    },
+    "HeaderIdeas.dc.html": {
+      "h": 2765,
+      "title": "Header · logo, page context (feature name over a summary), centred search-or-ask, assistant · notifications · help · user chip (final)",
+      "w": 1520,
+      "x": 0,
+      "y": 17166
+    },
+    "Loader.dc.html": {
+      "h": 760,
+      "title": "Loaders · Constructor brand loader (final) + in-screen indicators",
+      "w": 1440,
+      "x": 0,
+      "y": 5400
+    },
+    "Logo.dc.html": {
+      "h": 1420,
+      "title": "Logo · AIToolbox, toolbox prompt + AI badge (final, Night & neon)",
+      "w": 1440,
+      "x": 0,
+      "y": 3540
+    },
+    "Main.dc.html": {
+      "h": 1560,
+      "title": "Color roles · M Night & neon (final)",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "ProgressMotion.dc.html": {
+      "h": 1180,
+      "title": "Progress indicators · pen orbit, guide line, Constructor determinate, working dots (final)",
+      "w": 1440,
+      "x": 1520,
+      "y": 5400
+    },
+    "States.dc.html": {
+      "h": 2080,
+      "title": "State marks · final — one construction, three containers, one slot",
+      "w": 1440,
+      "x": 0,
+      "y": 6460
+    },
+    "Sweep.dc.html": {
+      "h": 3086,
+      "title": "Feature marks · Sweep, Docs, Environments, Chatbot, Notifications · static, once, loop (final)",
+      "w": 1520,
+      "x": 0,
+      "y": 13960
+    },
+    "Tooltip.dc.html": {
+      "h": 3691,
+      "title": "Tooltips · plain, shortcut, data, status, disabled reason, rich, AI rich (proposal)",
+      "w": 1560,
+      "x": 0,
+      "y": 26636
+    },
+    "Typography.dc.html": {
+      "h": 1320,
+      "title": "Type scale & shape",
+      "w": 1000,
+      "x": 1520,
+      "y": 0
+    },
+    "Switch.dc.html": {
+      "title": "Switch · standard (52 × 32) and compact (36 × 20, menus and dense lists), states, tokens, switch or checkbox, writing, accessibility · live examples: settings list and the assistant's tools menu",
+      "x": 2600,
+      "y": 1960,
+      "w": 1440,
+      "h": 1320,
+      "is_interactive": true
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-05T17:32:00Z",
+    "v": 1
+  },
+  "designSystems": [
+    {
+      "artifact": "https://claude.ai/artifact/Vx3WX1dqVqxSQ466jAfKpP",
+      "copiedAt": "2026-10-19T11:21:00Z",
+      "namespace": "devtoolbox",
+      "title": "AIToolbox",
+      "version": "1792408268-287e"
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  },
+  "noteOrder": [
+    "t1",
+    "t2",
+    "t3",
+    "t4",
+    "t5",
+    "t6",
+    "t8",
+    "t9",
+    "t10",
+    "t11"
+  ],
+  "notes": {
+    "t1": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "AIToolbox · Material Design 3 foundations · tokens 5.0, the Sweep palette (purple primary, pale purple secondary, lime tertiary and Run)",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t10": {
+      "kind": "title1",
+      "maxW": 1560,
+      "text": "Application · assistant (inline block, spec)",
+      "w": 240,
+      "x": 0,
+      "y": 30467
+    },
+    "t11": {
+      "kind": "title1",
+      "maxW": 2660,
+      "text": "Layout · breakpoints",
+      "w": 240,
+      "x": 0,
+      "y": 42377
+    },
+    "t2": {
+      "kind": "title1",
+      "maxW": 2520,
+      "text": "Components",
+      "w": 240,
+      "x": 0,
+      "y": 1700
+    },
+    "t3": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Brand · logo, favicon & app icon",
+      "w": 240,
+      "x": 0,
+      "y": 3280
+    },
+    "t4": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Loaders & progress (static; animated versions on the Prototypes page)",
+      "w": 240,
+      "x": 0,
+      "y": 5140
+    },
+    "t5": {
+      "kind": "title1",
+      "maxW": 1440,
+      "text": "Brand · state marks",
+      "w": 240,
+      "x": 0,
+      "y": 6200
+    },
+    "t6": {
+      "kind": "title1",
+      "maxW": 6160,
+      "text": "Application · the system in use",
+      "w": 240,
+      "x": 0,
+      "y": 8600
+    },
+    "t8": {
+      "kind": "title1",
+      "maxW": 6000,
+      "text": "Feature marks · Sweep, Docs, Environments",
+      "w": 240,
+      "x": 0,
+      "y": 13700
+    },
+    "t9": {
+      "kind": "title1",
+      "maxW": 1560,
+      "text": "Components · tooltips (proposal)",
+      "w": 240,
+      "x": 0,
+      "y": 26376
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Typography.dc.html",
+    "Components.dc.html",
+    "ComponentsDialog.dc.html",
+    "Switch.dc.html",
+    "Logo.dc.html",
+    "Favicon.dc.html",
+    "ChatbotMark.dc.html",
+    "Loader.dc.html",
+    "ProgressMotion.dc.html",
+    "States.dc.html",
+    "AppShell.dc.html",
+    "AppShellDark.dc.html",
+    "AppShellMobile.dc.html",
+    "AppShellOverlays.dc.html",
+    "AppShellOverlaysDark.dc.html",
+    "AppShellRail.dc.html",
+    "AppShellRailDark.dc.html",
+    "Sweep.dc.html",
+    "HeaderIdeas.dc.html",
+    "Cookies.dc.html",
+    "Feedback.dc.html",
+    "Tooltip.dc.html",
+    "AssistantPanel.dc.html",
+    "AssistantChat.dc.html",
+    "Breakpoints.dc.html"
+  ],
+  "title": "AIToolbox design system"
+}

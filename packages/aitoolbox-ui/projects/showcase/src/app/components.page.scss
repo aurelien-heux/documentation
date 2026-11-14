@@ -1,0 +1,14 @@
+.title { margin: 4px 0 8px; }
+section { margin-top: 32px; }
+h2 { margin: 0 0 16px; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 16px; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.logs { display: inline-flex; gap: 14px; margin-left: 8px; }
+.marks { display: grid; gap: 8px; margin-top: 20px; max-width: 640px; }
+.marks__row { display: grid; grid-template-columns: 80px repeat(4, 1fr); align-items: center; gap: 12px; }
+.marks__head { font: var(--ait-type-label-medium); color: var(--md-sys-color-on-surface-variant); }
+.cards { align-items: stretch; }
+.card { flex: 1 1 320px; }
+.tabpad { padding-top: 16px; }
+.chip-input { width: 120px; flex: none !important; }
+.toggle { align-self: flex-start; }

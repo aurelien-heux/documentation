@@ -1,0 +1,456 @@
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1260}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.simHostId = 'sim-host-cl'; this.simDefault = 1440;
+    this.state = {
+      simW: null, simAvail: 0, qaExtra: {}, qaReplies: {}, qaReplying: {}, qaReplyDrafts: {}, qaEarlier: {}, qaDrafts: {}, ideaThr: 'disc',
+      screen: 'community', tab: 'new', mtab: 'releases', mview: 'list', role: 'platform', adminView: 'general', uf: 'all', usel: null, mod: null, ltab: 'feedback', fpEdit: null, sftab: 'profile', fp: null, cap: '7',
+      inFilter: 'all', inStatus: 'open', inState: {}, inReplying: {}, inDrafts: {}, inReplies: {}, inRoutes: {}, filter: 'all', navOpen: false,
+      helpful: {}, reasons: {}, acked: {}, open: { r1: true }, drafts: {}, cmts: {}, read: {},
+      ideaFilter: 'all', iSort: 'votes', ideaSel: 'i1', ideaDraft: '', votes: {}, follows: { i1: true }, ideaExtra: [], ideaCmts: {}, ideaStatus: {}, ideaNotes: {}, saved: {},
+      guideFilter: 'all', gDone: { tsweep: true, t46: true }, ck: {}, nps: null, npsWhy: '', npsSent: false, cal: false,
+      champ: null, champQ: '', champSent: false,
+      runClicks: 0, micro: false, microV: null, microWhy: '', microSent: false, tip: true, maint: false,
+      tourId: null, tourStep: 0, tourPreview: false, te: null, tePub: {},
+      c: { title: '', type: 'feature', aud: 'all', body: '', chan: { card: true, notif: true, digest: false, banner: false }, tour: '', video: '', ask: { helpful: true, ack: false, check: false } }, relExtra: [],
+      sb: { name: '', type: 'micro', q: '', scale: '5', comment: true, trigger: 'after', aud: 'all', cap: 'week' }, survExtra: [], srId: 's1', srTheme: 'all', verbDone: {},
+      merged: false, remind: {}, snack: { text: 'New in 4.6: approval cards and PR summaries.', action: 'Take the tour', act: 't46' }, panel: false, menu: false, help: false, video: null, newIdea: false, ni: { title: '', body: '', area: 'Sweep' }, niVoted: false
+    };
+  }
+/*SIMJS*/
+/*ADMINJS*/
+/*QAJS*/
+  measure() {
+    var s = this.state, self = this;
+    if (!s.tourAnchor) { if (s.tourRect) this.setState({ tourRect: null }); return; }
+    var root = document.getElementById('cl-root'); if (!root) return;
+    // the same anchor can exist twice (rail and bottom bar): use the one that is visible at this width
+    var els = root.querySelectorAll('[data-anchor="' + s.tourAnchor + '"]'), el = null;
+    for (var i = 0; i < els.length; i++) { var q = els[i].getBoundingClientRect(); if (q.width > 0 && q.height > 0) { el = els[i]; break; } }
+    if (!el) return;
+    var r = el.getBoundingClientRect(), b = root.getBoundingClientRect();
+    // bring the target into view once per step, then measure again
+    if (this._scrolledFor !== s.tourAnchor + ':' + s.tourStep && typeof window !== 'undefined' && (r.top < 72 || r.bottom > window.innerHeight - 16)) {
+      this._scrolledFor = s.tourAnchor + ':' + s.tourStep;
+      try { el.scrollIntoView({ block: 'center', behavior: 'auto' }); } catch (e) {}
+      setTimeout(function () { self.measure(); }, 30);
+      r = el.getBoundingClientRect(); b = root.getBoundingClientRect();
+    }
+    var z = this.simScale();
+    var rect = { k: s.tourAnchor, x: (r.left - b.left) / z, y: (r.top - b.top) / z, w: r.width / z, h: r.height / z, W: b.width / z, H: b.height / z };
+    var o = s.tourRect;
+    if (o && o.k === rect.k && Math.abs(o.x - rect.x) < .5 && Math.abs(o.y - rect.y) < .5 && Math.abs(o.w - rect.w) < .5 && Math.abs(o.h - rect.h) < .5 && Math.abs(o.W - rect.W) < .5) return;
+    this.setState({ tourRect: rect });
+  }
+  componentDidMount() {
+    var self = this; this.simSync(); this.measure();
+    if (typeof document !== 'undefined' && document.fonts && document.fonts.ready) document.fonts.ready.then(function () { self.measure(); });
+    if (typeof window !== 'undefined') window.addEventListener('resize', function () { self.simSync(); self.measure(); });
+  }
+  componentDidUpdate() {
+    this.simSync(); this.measure(); this.qaFocusSync();
+    // modal drawer (below Expanded): bring the top of the frame into view when it opens
+    var open = !!this.state.navOpen && (this._simW || 1440) < 840;
+    if (open && !this._drawerShown && typeof document !== 'undefined') { var r = document.getElementById('cl-root'); if (r && r.getBoundingClientRect().top < 0) try { r.scrollIntoView({ block: 'start' }); } catch (e) {} }
+    this._drawerShown = open;
+  }
+  renderVals() {
+    var s = this.state, self = this;
+    var set = function (o) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState(typeof o === 'function' ? o(e) : o); }; };
+    var val = function (e) { return e && e.target ? e.target.value : ''; };
+    var ON = 'background: #E3DFFF; border-color: #E3DFFF; color: #191836';
+    var chips = function (defs, cur, key, extra) { return defs.map(function (d) { var o = {}; o[key] = d.k; return { label: d.label, k: d.k, on: cur === d.k, style: cur === d.k ? ON : '', n: d.n || 0, hasN: !!d.n, pick: set(Object.assign(o, extra || {})) }; }); };
+    var sub = function (path, patch) { var o = {}; o[path] = Object.assign({}, s[path], patch); return o; };
+    var sim = this.simVals(), SW = sim.simW;
+    // nav width at this window size: none (bottom bar) when Compact, the drawer is modal below Expanded
+    var L = SW < 600 ? 0 : (s.navOpen && SW >= 840 ? 300 : 80), M = L + 32;
+    var role = s.role, isUser = role === 'user';
+    var isC = s.screen === 'community' || (isUser && s.screen === 'admin'), isS = s.screen === 'sweep', isA = s.screen === 'admin' && !isUser;
+    // Community > Feedback (admin only); a Sweep admin holds the scoped right Feedback · Sweep and sees only that section
+    var isAC = isA && s.adminView === 'community', isListen = isAC && (role === 'feature' || s.mtab === 'listen');
+    var scoped = role === 'feature';
+    var adUsers = this.adminUsers();
+    var QA = this.qaSeed(), qaAs = role === 'user' ? null : { who: 'Aurélien Heux', role: 'Platform team' };
+    var closeAll = { panel: false, menu: false, help: false };
+    if (SW < 840) closeAll.navOpen = false; // the drawer is modal below Expanded: going somewhere closes it
+
+    /* ---------- tours ---------- */
+    var A = {
+      'header.ask':   { label: 'Ask field (header)', screen: 'any', ring: 'left: calc(50% + 218px); top: 12px; width: 80px; height: 40px; border-radius: 14px', pos: 'left: calc(50% + 40px); top: 64px' },
+      'header.assistant': { label: 'Assistant button (header)', screen: 'any', ring: 'right: 306px; top: 8px; width: 48px; height: 48px; border-radius: 999px', pos: 'right: 200px; top: 64px' },
+      'header.bell':  { label: 'Notifications (header)', screen: 'any', ring: 'right: 258px; top: 8px; width: 48px; height: 48px; border-radius: 999px', pos: 'right: 150px; top: 64px' },
+      'rail.sweep':   { label: 'Sweep (navigation)', screen: 'any', ring: s.navOpen ? 'left: 12px; top: 168px; width: 276px; height: 56px; border-radius: 16px' : 'left: 4px; top: 134px; width: 72px; height: 58px; border-radius: 16px', pos: s.navOpen ? 'left: 312px; top: 160px' : 'left: 92px; top: 128px' },
+      'rail.community': { label: 'Community (navigation)', screen: 'any', ring: s.navOpen ? 'left: 12px; top: 336px; width: 276px; height: 56px; border-radius: 16px' : 'left: 4px; top: 320px; width: 72px; height: 58px; border-radius: 16px', pos: s.navOpen ? 'left: 312px; top: 328px' : 'left: 92px; top: 314px' },
+      'community.tabs.ideas': { label: 'Ideas tab (Community)', screen: 'community', tab: 'new', ring: 'left: ' + (M + 280) + 'px; top: 184px; width: 110px; height: 48px; border-radius: 8px', pos: 'left: ' + (M + 280) + 'px; top: 240px' },
+      'community.newIdea': { label: 'New idea button (Ideas)', screen: 'community', tab: 'ideas', ring: 'right: 28px; top: 120px; width: 148px; height: 48px; border-radius: 16px', pos: 'right: 24px; top: 176px' },
+      'sweep.run':    { label: 'Run selected (Sweep › Runs)', screen: 'sweep', ring: 'left: ' + (M - 4) + 'px; top: 168px; width: 168px; height: 48px; border-radius: 18px', pos: 'left: ' + M + 'px; top: 224px' },
+      'sweep.summary': { label: 'PR review summary (Sweep › Runs)', screen: 'sweep', ring: 'left: ' + (M + 520) + 'px; top: 352px; width: 206px; height: 40px; border-radius: 12px', pos: 'left: ' + (M + 744) + 'px; top: 344px' }
+    };
+    var anchorOpts = Object.keys(A).map(function (k) { return { key: k, label: A[k].label, screen: A[k].screen === 'any' ? 'Any page' : (A[k].screen === 'sweep' ? 'Sweep' : 'Community') }; });
+    var T = {
+      t46: { name: 'New in 4.6', trigger: 'first', steps: [
+        { a: 'header.ask', title: 'Ask from the search field', body: 'Type a question and press Ask: the assistant opens beside the page, with this page as context.' },
+        { a: 'header.assistant', title: 'Approve before anything changes', body: 'When a tool would deploy, delete or edit, the assistant shows an approval card and waits for Run or Don’t run.' },
+        { a: 'sweep.summary', title: 'PR summaries in Sweep', body: 'Every pull request now gets a review summary written from the diff and the pipeline logs. Open one and rate it.' } ] },
+      tsweep: { name: 'Sweep basics', trigger: 'page', steps: [
+        { a: 'rail.sweep', title: 'Sweep lives here', body: 'Runs, schedules and findings for every repository you can see.' },
+        { a: 'sweep.run', title: 'Run the selected pull requests', body: 'Select one or more rows, then Run selected. A run takes about two minutes on staging.' },
+        { a: 'sweep.summary', title: 'Read the review summary', body: 'The summary is written by the assistant from the diff. Rate it so the platform team can tune it.' } ] },
+      tidea: { name: 'Share an idea', trigger: 'guides', steps: [
+        { a: 'rail.community', title: 'Community', body: 'What’s new, guides and ideas live together. The counter shows unread releases.' },
+        { a: 'community.tabs.ideas', title: 'Ideas', body: 'Everyone sees every idea and votes once per idea. The platform team answers within two weeks.' },
+        { a: 'community.newIdea', title: 'Add yours', body: 'One line as a wish, then why it matters. Similar ideas are suggested before you submit.' } ] },
+      tpage: { name: 'Around this page', trigger: 'help', steps: [
+        { a: 'header.ask', title: 'Search or ask', body: 'One field for both: results first, then the assistant if you press Ask.' },
+        { a: 'header.bell', title: 'Notifications', body: 'Runs, releases, ideas you follow and answers from champions. Filter by kind.' },
+        { a: 'rail.community', title: 'Community', body: 'Releases, guides and ideas. Open the rail menu for the full navigation.' } ] },
+      tapprove: { name: 'Approve assistant tools', trigger: 'usage', steps: [
+        { a: 'header.assistant', title: 'Open the assistant', body: 'Ask it to deploy, delete or edit something.' },
+        { a: 'header.ask', title: 'Read the approval card', body: 'It lists the tool, its arguments and the environment. Nothing runs until you press Run.' } ] }
+    };
+    var liveTour = s.tourId === '__draft' ? s.te : T[s.tourId];
+    var apply = function (tour, n, preview) {
+      var st = tour.steps[n - 1], a = A[st.a] || A['header.ask'];
+      var o = Object.assign({ tourId: s.tourId, tourStep: n, tourAnchor: st.a, tourPreview: !!preview, snack: null, video: null }, closeAll);
+      if (a.screen === 'sweep') o.screen = 'sweep';
+      if (a.screen === 'community') { o.screen = 'community'; o.tab = a.tab; }
+      return o;
+    };
+    var startTour = function (id, preview) { return set(function () { var t = id === '__draft' ? s.te : T[id]; var o = apply(t, 1, preview); o.tourId = id; if (id === '__draft') o.mtab = 'tours'; return o; }); };
+    var endTour = function (complete) { return set(function () { var o = { tourId: null, tourStep: 0, tourAnchor: null, tourRect: null, tourPreview: false }; if (complete && s.tourId && s.tourId !== '__draft') { o.gDone = Object.assign({}, s.gDone); o.gDone[s.tourId] = true; if (s.tourId === 't46') { o.ck = Object.assign({}, s.ck, { ck1: true }); } o.snack = { text: 'Tour finished. Find it again under Guides.', action: 'Guides', act: 'guides' }; } if (s.tourId === '__draft') { o.screen = 'admin'; o.adminView = 'community'; o.mtab = 'tours'; o.mview = 'edit'; } return o; }); };
+    var tourStep = liveTour ? liveTour.steps[s.tourStep - 1] : null, tourA = tourStep ? A[tourStep.a] : null, blk = null, spotSoft = false;
+    // measured target (set by measure() after each render) wins over the static fallback positions
+    var R = s.tourRect && tourStep && s.tourRect.k === tourStep.a ? s.tourRect : null;
+    if (R) {
+      var rad = /^rail\./.test(R.k) ? 16 : 12, pad = 6;
+      spotSoft = R.w > R.W * 0.6;
+      var bx = R.x - pad, by = R.y - pad, bw = R.w + 2 * pad, bh = R.h + 2 * pad, RH = R.H || 1180;
+      blk = { top: 'left: 0; top: 0; width: ' + R.W + 'px; height: ' + Math.max(0, by) + 'px', bottom: 'left: 0; top: ' + (by + bh) + 'px; width: ' + R.W + 'px; height: ' + Math.max(0, RH - by - bh) + 'px', left: 'left: 0; top: ' + by + 'px; width: ' + Math.max(0, bx) + 'px; height: ' + bh + 'px', right: 'left: ' + (bx + bw) + 'px; top: ' + by + 'px; width: ' + Math.max(0, R.W - bx - bw) + 'px; height: ' + bh + 'px' };
+      var ring = 'left: ' + (R.x - pad) + 'px; top: ' + (R.y - pad) + 'px; width: ' + (R.w + 2 * pad) + 'px; height: ' + (R.h + 2 * pad) + 'px; border-radius: ' + rad + 'px';
+      var CW = Math.min(340, R.W - 32), pos;
+      if (R.x + R.w + 16 + CW <= R.W - 16) pos = 'left: ' + (R.x + R.w + 16) + 'px; top: ' + Math.max(8, R.y - 8) + 'px';
+      else if (R.x - 16 - CW >= 16) pos = 'left: ' + (R.x - 16 - CW) + 'px; top: ' + Math.max(8, R.y - 8) + 'px';
+      else pos = 'left: ' + Math.max(16, Math.min(R.x, R.W - CW - 16)) + 'px; top: ' + (R.y + R.h + 12) + 'px';
+      tourA = { ring: ring, pos: pos + '; width: ' + CW + 'px' };
+    }
+
+    /* ---------- releases ---------- */
+    var NEW = { bg: '#E3DFFF', fg: '#14085E' }, AI = { bg: '#9CF1F0', fg: '#002020' }, NEU = { bg: '#ECE5F4', fg: '#1C1B1E' };
+    var baseRel = [
+      { id: 'r1', type: 'feature', hasVersion: true, version: '4.6.0', typeLabel: 'Feature release', typeBg: NEW.bg, typeFg: NEW.fg, meta: '24 Oct · Sweep, Assistant, Environments', title: 'Approval cards for assistant tools, PR summaries in Sweep',
+        summary: 'The assistant now asks before any tool that changes something, Sweep writes a review summary on every pull request, and Environments warns you before a promotion window closes.',
+        bullets: [ { tag: 'New', bg: NEW.bg, fg: NEW.fg, lead: 'Approval card', text: 'a tool that deploys, deletes or edits shows its arguments and waits for Run or Don’t run.' }, { tag: 'AI', bg: AI.bg, fg: AI.fg, lead: 'Sweep PR summaries', text: 'written from the diff and the pipeline logs; reviewers can rate them.' }, { tag: 'Improved', bg: NEU.bg, fg: NEU.fg, lead: 'Promotion window alerts', text: '30 minutes before a window closes, a notification names what is still in staging.' } ],
+        readLabel: 'Read the notes · 4 min', tour: 't46', videoLen: '2:10', helpfulStat: 'Useful for 87% · 212 votes', comments: [ { ini: 'MK', bg: '#9CF1F0', who: 'Marta Kowalski', champ: true, when: '2 days ago', text: 'If your reviewers use the summary, ask them to rate it — the thumbs feed the model prompt directly.' }, { ini: 'SB', bg: '#FFDEA0', who: 'Sami Ben Ali', team: true, when: 'yesterday', text: 'Question from Client: summaries are off for repos with no pipeline logs yet. Fix lands in 4.6.1 next week.' } ] },
+      { id: 'r2', type: 'ai', isAi: true, typeLabel: 'AI topic', typeBg: AI.bg, typeFg: AI.fg, action: true, actionLabel: 'Action required · by 3 Nov', meta: '20 Oct · Assistant', title: 'The assistant moves to a new model on 3 November',
+        summary: 'Answers get longer context and tool calls get more reliable. Skills keep working; two behaviours change and your team should check them before the switch.',
+        bullets: [ { tag: 'Changes', bg: NEU.bg, fg: NEU.fg, lead: 'Answers', text: 'code blocks carry a language tag; Explain on logs cites line numbers.' }, { tag: 'Check', bg: '#FFDEA0', fg: '#261900', lead: 'Your integrations', text: 'skills that parse the answer text, MCP servers pinned to the old tool schema.' } ],
+        readLabel: 'Migration guide · 6 min', videoLen: '4:35', helpfulStat: 'Useful for 72% · 96 votes', comments: [ { ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', when: '3 days ago', text: 'Will the old model stay available for a fallback period?' }, { ini: 'SB', bg: '#FFDEA0', who: 'Sami Ben Ali', team: true, when: '3 days ago', text: 'Two weeks, per workspace, from Settings › Assistant. After 17 Nov the switch is final.' } ] },
+      { id: 'r3', type: 'policy', typeLabel: 'Policy', typeBg: NEU.bg, typeFg: NEU.fg, action: true, actionLabel: 'Acknowledge by 1 Nov', meta: '18 Oct · All users', title: 'AI usage policy v3 applies from 1 November',
+        summary: 'Customer data stays out of prompts unless the workspace is tagged data:approved. Prompts and answers are kept 90 days.', bullets: [], readLabel: 'Read the policy · 3 min', hasAck: true, ackLabel: 'I have read and understood', helpfulStat: 'Useful for 64% · 58 votes', comments: [] },
+      { id: 'r4', type: 'fix', hasVersion: true, version: '4.5.2', typeLabel: 'Fix', typeBg: NEU.bg, typeFg: NEU.fg, meta: '10 Oct · Docs, Notifications', title: 'Fixes for Docs search and notification badges', summary: 'Two fixes, no change to how you work.',
+        bullets: [ { tag: 'Fixed', bg: NEU.bg, fg: NEU.fg, lead: 'Docs search', text: 'no longer returns archived pages first.' }, { tag: 'Fixed', bg: NEU.bg, fg: NEU.fg, lead: 'Bell badge', text: 'resets when notifications are read from the email.' } ], readLabel: 'Full changelog', helpfulStat: 'Useful for 91% · 33 votes', comments: [], old: true }
+    ];
+    var allRel = s.relExtra.concat(baseRel);
+    var unread = allRel.filter(function (r) { return !r.old && !s.read[r.id]; }).length;
+    var filters = chips([{ k: 'all', label: 'All' }, { k: 'feature', label: 'Features' }, { k: 'ai', label: 'AI topics', ai: true }, { k: 'fix', label: 'Fixes' }, { k: 'policy', label: 'Policies' }], s.filter, 'filter');
+    filters[2].ai = s.filter !== 'ai';
+    var REASONS = ['Too short', 'Not for my role', 'Needs an example', 'Unclear impact'];
+    var items = allRel.filter(function (r) { return s.filter === 'all' || r.type === s.filter; }).map(function (r) {
+      var h = s.helpful[r.id], rs = s.reasons[r.id] || {}, extra = s.cmts[r.id] || [], acked = !!s.acked[r.id];
+      var qv = self.qaVals(r.id, QA[r.id], 'Ask a question or share how you use this release…', qaAs, false);
+      return Object.assign({ isAi: false, action: false, hasVersion: false, hasAck: false, version: '', videoLen: '', actionLabel: '', ackLabel: '' }, r, qv, {
+        unread: !r.old && !s.read[r.id], hasBullets: r.bullets.length > 0, hasTour: !!r.tour, tourSteps: r.tour ? T[r.tour].steps.length : 0, hasVideo: !!r.videoLen,
+        acked: acked, action: r.action && !acked, ackStyle: acked ? ON : '', ack: set(function () { var o = { acked: Object.assign({}, s.acked), read: Object.assign({}, s.read) }; o.acked[r.id] = !acked; o.read[r.id] = true; if (!acked) { o.ck = Object.assign({}, s.ck, { ck3: true }); o.snack = { text: 'Policy acknowledged. Recorded on your account.', action: '', act: '' }; } return o; }),
+        read: set(function () { var o = { read: Object.assign({}, s.read) }; o.read[r.id] = true; return o; }),
+        tour: startTour(r.tour), video: set(Object.assign({ video: r, read: Object.assign({}, s.read, (function () { var o = {}; o[r.id] = true; return o; })()) }, closeAll)),
+        ask: set({ snack: { text: 'Assistant opened with this release as context.', action: '', act: '' } }),
+        yes: h === 'yes', no: h === 'no', yesStyle: h === 'yes' ? ON : '', noStyle: h === 'no' ? ON : '',
+        sayYes: set(function () { var o = { helpful: Object.assign({}, s.helpful) }; o.helpful[r.id] = h === 'yes' ? null : 'yes'; return o; }),
+        sayNo: set(function () { var o = { helpful: Object.assign({}, s.helpful) }; o.helpful[r.id] = h === 'no' ? null : 'no'; return o; }),
+        reasons: REASONS.map(function (x) { return { label: x, on: !!rs[x], style: rs[x] ? ON : '', pick: set(function () { var o = { reasons: Object.assign({}, s.reasons) }; o.reasons[r.id] = Object.assign({}, rs); o.reasons[r.id][x] = !rs[x]; return o; }) }; }),
+        open: !!s.open[r.id], toggle: set(function () { var o = { open: Object.assign({}, s.open) }; o.open[r.id] = !s.open[r.id]; return o; }),
+         qaSummary: 'Moderated by the platform team and champions',
+        comments: r.comments.concat(extra), draft: s.drafts[r.id] || '', draftId: 'draft-' + r.id,
+        onDraft: set(function (e) { var o = { drafts: Object.assign({}, s.drafts) }; o.drafts[r.id] = val(e); return o; }),
+        post: set(function () { var txt = (s.drafts[r.id] || '').trim(); if (!txt) return {}; var o = { cmts: Object.assign({}, s.cmts), drafts: Object.assign({}, s.drafts) }; o.cmts[r.id] = extra.concat([{ ini: 'AH', bg: '#D4D0F9', who: 'Aurélien Heux', team: true, when: 'just now', text: txt }]); o.drafts[r.id] = ''; return o; })
+      });
+    });
+
+    /* ---------- checklist, NPS, champions ---------- */
+    var ckDefs = [ { id: 'ck1', title: 'Take the 4.6 tour', sub: '3 steps · 1 min', act: startTour('t46') }, { id: 'ck2', title: 'Rate a PR review summary', sub: 'Sweep › Runs · any pull request', act: set({ screen: 'sweep', ck: Object.assign({}, s.ck, { ck2: true }), snack: { text: 'Open a summary and use the thumbs to rate it.', action: '', act: '' } }) }, { id: 'ck3', title: 'Acknowledge the AI usage policy', sub: 'Required by 1 Nov', act: set({ filter: 'policy', tab: 'new' }) } ];
+    var ckDone = ckDefs.filter(function (k) { return s.ck[k.id]; }).length;
+    var checklist = ckDefs.map(function (k, i) { var d = !!s.ck[k.id]; return { n: i + 1, title: k.title, sub: k.sub, done: d, todo: !d, numStyle: d ? 'background: #C3F4DC; color: #00391E' : '', start: k.act }; });
+    var champs = [ { ini: 'MK', bg: '#9CF1F0', who: 'Marta Kowalski', team: 'Client', topics: 'Sweep, pipelines' }, { ini: 'PS', bg: '#C3F4DC', who: 'Priya Sharma', team: 'Request', topics: 'Assistant, skills' }, { ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', team: 'Facility', topics: 'Environments, promotions' } ].map(function (c, i) { return Object.assign({}, c, { ask: set(Object.assign({ champ: i, champSent: false, champQ: '' }, closeAll)) }); });
+    var champ = champs[s.champ || 0];
+
+    /* ---------- guides ---------- */
+    var gDefs = [
+      { id: 'tapprove', area: 'Assistant', bg: AI.bg, fg: AI.fg, title: 'Approve assistant tools before they run', sub: 'What the approval card shows, and what happens when you decline.', kind: 'Guided tour', len: '2 steps' },
+      { id: 'tsweep', area: 'Sweep', bg: NEW.bg, fg: NEW.fg, title: 'Run your first Sweep scan', sub: 'Select pull requests, run, read the findings.', kind: 'Guided tour', len: '3 steps' },
+      { id: 'tidea', area: 'Community', bg: NEW.bg, fg: NEW.fg, title: 'Share an idea and follow it', sub: 'Where ideas go after you submit them, and how voting works.', kind: 'Guided tour', len: '3 steps' },
+      { id: 'vpromo', area: 'Environments', bg: NEU.bg, fg: NEU.fg, title: 'Promote to production safely', sub: 'Promotion windows, checks and the 30-minute warning.', kind: 'Video', len: '3:20', video: true },
+      { id: 't46', area: 'Sweep', bg: NEW.bg, fg: NEW.fg, title: 'Read and rate a PR review summary', sub: 'Part of the 4.6 tour: where the summary comes from and how to rate it.', kind: 'Guided tour', len: '3 steps' },
+      { id: 'tpage', area: 'Platform', bg: NEU.bg, fg: NEU.fg, title: 'Find your way around any page', sub: 'Search, ask, notifications and the navigation rail.', kind: 'Guided tour', len: '3 steps' }
+    ];
+    var gFilters = chips([{ k: 'all', label: 'All' }, { k: 'Sweep', label: 'Sweep' }, { k: 'Assistant', label: 'Assistant' }, { k: 'Environments', label: 'Environments' }, { k: 'Community', label: 'Community' }], s.guideFilter, 'guideFilter');
+    var gDone = gDefs.filter(function (g) { return s.gDone[g.id]; }).length;
+    var guides = gDefs.filter(function (g) { return s.guideFilter === 'all' || g.area === s.guideFilter; }).map(function (g) {
+      var d = !!s.gDone[g.id];
+      return Object.assign({}, g, { isDone: d, notDone: !d, status: d ? 'Completed' : (g.id === 'tapprove' ? 'Suggested' : 'Not started'), tile: d ? 'ok' : (g.id === 'tapprove' ? 'ai' : 'ne'), cta: g.video ? 'Watch' : 'Start',
+        start: g.video ? set(Object.assign({ video: { title: g.title, videoLen: g.len }, gDone: Object.assign({}, s.gDone, { vpromo: true }) }, closeAll)) : startTour(g.id) });
+    });
+
+    /* ---------- ideas ---------- */
+    var baseIdeas = [
+      { id: 'i1', title: 'Re-run only the failed checks', body: 'When one check fails on a big PR, I have to re-run the whole sweep. A partial re-run from the PR page would save 10 minutes each time.', votes: 48, status: 'Planned', area: 'Sweep', who: 'Marta Kowalski', when: '12 Sep', note: 'Planned for 4.8: partial re-run from the PR page. Design review on 5 Nov.', comments: [ { ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', when: '20 Sep', text: 'Same here on monorepos — a re-run is 25 minutes for us.' }, { ini: 'SB', bg: '#FFDEA0', who: 'Sami Ben Ali', team: true, when: '2 Oct', text: 'Taking it. First version: re-run failed steps only, from the PR page.' } ], track: ['12 Sep', '19 Sep', '2 Oct', '', ''] },
+      { id: 'i2', title: 'Export an assistant conversation to the pull request', body: 'When the assistant helps me understand a failure, I want to attach that conversation to the PR as a comment.', votes: 31, status: 'Under review', area: 'Assistant', who: 'Yann Dupont', when: '3 Oct', comments: [ { ini: 'PS', bg: '#C3F4DC', who: 'Priya Sharma', champ: true, when: '5 Oct', text: 'Would need redaction of secrets in the transcript first.' } ], track: ['3 Oct', '10 Oct', '', '', ''] },
+      { id: 'i3', title: 'Dark mode for the runs table', body: 'The rest of the app has a dark theme; the runs table stays light.', votes: 27, status: 'Proposed', area: 'Platform', who: 'Priya Sharma', when: '15 Oct', comments: [], track: ['15 Oct', '', '', '', ''] },
+      { id: 'i4', title: 'Promotion window calendar in Environments', body: 'Show the next promotion windows as a calendar so teams can plan releases around them.', votes: 19, status: 'In progress', area: 'Environments', who: 'Aurélien Heux', when: '28 Aug', mine: true, comments: [ { ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', champ: true, when: '1 Sep', text: 'The Facility team plans around these windows every sprint. Big yes.' } ], track: ['28 Aug', '4 Sep', '20 Sep', '14 Oct', ''] },
+      { id: 'i5', title: 'Skills marketplace with ratings', body: 'Let teams publish skills to a shared catalogue with ratings and usage counts.', votes: 14, status: 'Proposed', area: 'Assistant', who: 'Lucas Bernard', when: '21 Oct', comments: [], track: ['21 Oct', '', '', '', ''] },
+      { id: 'i6', title: 'Slack digest of what’s new', body: 'A weekly digest in our team channel so nobody misses a release.', votes: 36, status: 'Delivered', area: 'Community', who: 'Nadia Rahal', when: '2 Jul', version: '4.5', comments: [], track: ['2 Jul', '9 Jul', '20 Jul', '1 Sep', '10 Oct'] }
+    ];
+    var STATUSES = ['Proposed', 'Under review', 'Planned', 'In progress', 'Delivered'];
+    var TILE = { 'Proposed': 'ne', 'Under review': 'in', 'Planned': 'in', 'In progress': 'wn', 'Delivered': 'ok', 'Declined': 'er' };
+    var allIdeas = s.ideaExtra.concat(baseIdeas).map(function (i) {
+      var v = s.votes[i.id] || { voted: !!i.voted, delta: 0 }, status = s.ideaStatus[i.id] || i.status, extra = s.ideaCmts[i.id] || [];
+      return Object.assign({}, i, { status: status, votes: i.votes + v.delta, voted: v.voted, frozen: status === 'Delivered' || status === 'Declined', nComments: i.comments.length + extra.length, nQa: [].concat(QA[i.id] || [], (s.qaExtra || {})[i.id] || []).reduce(function (n, t) { return n + 1 + (t.r || []).length + ((s.qaReplies || {})[t.id] || []).length; }, 0), allComments: i.comments.concat(extra), note: s.ideaNotes[i.id] !== undefined ? s.ideaNotes[i.id] : (i.note || ''), following: !!s.follows[i.id] });
+    });
+    var counts = {}; allIdeas.forEach(function (i) { counts[i.status] = (counts[i.status] || 0) + 1; });
+    var iFilters = chips([{ k: 'all', label: 'All', n: allIdeas.length }].concat(STATUSES.map(function (x) { return { k: x, label: x, n: counts[x] || 0 }; })), s.ideaFilter, 'ideaFilter');
+    var voteFn = function (i) { return set(function () { if (i.frozen) return {}; var o = { votes: Object.assign({}, s.votes) }; o.votes[i.id] = { voted: !i.voted, delta: (s.votes[i.id] ? s.votes[i.id].delta : 0) + (i.voted ? -1 : 1) }; return o; }); };
+    var followFn = function (i) { return set(function () { var o = { follows: Object.assign({}, s.follows) }; o.follows[i.id] = !i.following; return o; }); };
+    var deco = function (i) { return Object.assign({}, i, { tile: TILE[i.status] || 'ne', hasNote: !!i.note, voteCls: i.voted ? 'vote-on' : '', voteStyle: i.frozen ? 'color: #79757F; border-color: #CAC4CF; cursor: default' : '', voteLabel: (i.voted ? 'Remove your vote, ' : 'Vote, ') + i.votes + ' votes', vote: voteFn(i), follow: followFn(i), followLabel: i.following ? 'Following' : 'Follow', followStyle: i.following ? ON : '', open: set({ ideaSel: i.id, ideaDraft: '', ideaPicked: true }), selStyle: s.ideaSel === i.id ? 'box-shadow: 0 0 0 2px #35307E' : '', mine: !!i.mine }); };
+    var ideas = allIdeas.filter(function (i) { return s.ideaFilter === 'all' || i.status === s.ideaFilter; }).sort(function (a, b) { return s.iSort === 'votes' ? b.votes - a.votes : (s.iSort === 'discussed' ? b.nQa - a.nQa : 0); }).map(deco);
+    // below 1200 px the idea replaces the list, so nothing is open until the viewer picks one
+    var selRaw = (SW >= 1200 || s.ideaPicked) ? allIdeas.filter(function (i) { return i.id === s.ideaSel; })[0] : null;
+    var sel = selRaw ? deco(selRaw) : null;
+    if (sel) Object.assign(sel, this.qaVals(sel.id, QA[sel.id], 'Ask the author, add a use case or a workaround…', sel.who === 'Aurélien Heux' ? { who: 'Aurélien Heux', role: 'Author' } : qaAs, false));
+    if (sel) {
+      sel.voteBtn = sel.frozen ? 'Votes closed' : (sel.voted ? 'Voted' : 'Vote');
+      sel.comments = sel.allComments;
+      var idx = STATUSES.indexOf(sel.status);
+      sel.track = STATUSES.map(function (x, k) { var reached = k <= idx; return { label: x, when: selRaw.track[k] || '', dot: reached ? (k === idx ? '#35307E' : '#00A56B') : '#CAC4CF', color: reached ? '#1C1B1E' : '#79757F' }; });
+    }
+
+    /* ---------- manage: releases compose ---------- */
+    var c = s.c;
+    var cTypes = [{ k: 'feature', label: 'Feature release' }, { k: 'ai', label: 'AI topic' }, { k: 'fix', label: 'Fix' }, { k: 'policy', label: 'Policy' }].map(function (d) { return { label: d.label, on: c.type === d.k, style: c.type === d.k ? ON : '', pick: set(sub('c', { type: d.k })) }; });
+    var cAud = [{ k: 'all', label: 'All users' }, { k: 'dev', label: 'Developers' }, { k: 'admins', label: 'Workspace admins' }, { k: 'ai', label: 'Assistant users' }].map(function (d) { return { label: d.label, on: c.aud === d.k, style: c.aud === d.k ? ON : '', pick: set(sub('c', { aud: d.k })) }; });
+    var cChan = [{ k: 'card', label: 'In-app card' }, { k: 'notif', label: 'Notification' }, { k: 'digest', label: 'Email digest' }, { k: 'banner', label: 'Banner (critical)' }].map(function (d) { return { label: d.label, on: !!c.chan[d.k], pick: set(function () { var ch = Object.assign({}, c.chan); ch[d.k] = !ch[d.k]; return sub('c', { chan: ch }); }) }; });
+    var cAsk = [{ k: 'helpful', label: 'Useful? vote' }, { k: 'ack', label: 'Acknowledgment' }, { k: 'check', label: 'Understanding check' }].map(function (d) { return { label: d.label, on: !!c.ask[d.k], pick: set(function () { var a = Object.assign({}, c.ask); a[d.k] = !a[d.k]; return sub('c', { ask: a }); }) }; });
+    var TYPEMETA = { feature: ['Feature release', NEW], ai: ['AI topic', AI], fix: ['Fix', NEU], policy: ['Policy', NEU] };
+    var AUDL = { all: 'All users', dev: 'Developers', admins: 'Workspace admins', ai: 'Assistant users' };
+    var finish = function (status) { return set(function () { var t = c.title.trim() || 'Untitled release'; var chans = Object.keys(c.chan).filter(function (k) { return c.chan[k]; }); var rel = { id: 'rx' + (s.relExtra.length + 1), type: c.type, typeLabel: TYPEMETA[c.type][0], typeBg: TYPEMETA[c.type][1].bg, typeFg: TYPEMETA[c.type][1].fg, meta: (status === 'Scheduled' ? 'Scheduled 4 Nov' : 'Today') + ' · ' + AUDL[c.aud], title: t, summary: c.body.trim() || 'Summary to come.', bullets: [], readLabel: 'Read the notes', tour: c.tour || '', videoLen: c.video ? '1:30' : '', hasAck: !!c.ask.ack, ackLabel: 'I have read and understood', action: !!c.ask.ack, actionLabel: 'Acknowledge', helpfulStat: 'No votes yet', comments: [], mstatus: status, channels: chans.join(', ') }; return { relExtra: [rel].concat(s.relExtra), mview: 'list', c: Object.assign({}, c, { title: '', body: '' }), snack: { text: status === 'Scheduled' ? 'Release scheduled for 4 Nov, 09:00.' : 'Release published to ' + chans.length + ' channels.', action: 'View', act: 'new' } }; }); };
+    var relRows = s.relExtra.map(function (r) { return { title: r.title, meta: r.meta, type: r.typeLabel, typeBg: r.typeBg, typeFg: r.typeFg, status: r.mstatus, tile: r.mstatus === 'Scheduled' ? 'in' : 'ok', channels: r.channels, read: '0%', useful: '—', acked: r.hasAck ? '0 / 1,284' : '—', cta: 'Edit', edit: set({ mview: 'compose' }) }; }).concat([
+      { title: baseRel[0].title, meta: '4.6.0 · 24 Oct', type: 'Feature release', typeBg: NEW.bg, typeFg: NEW.fg, status: 'Published', tile: 'ok', channels: 'card, notification, digest', read: '68%', useful: '87%', acked: '—', cta: 'Edit', edit: set({ mview: 'compose' }) },
+      { title: baseRel[1].title, meta: '20 Oct', type: 'AI topic', typeBg: AI.bg, typeFg: AI.fg, status: 'Published', tile: 'ok', channels: 'card, notification, banner', read: '81%', useful: '72%', acked: '—', cta: 'Edit', edit: set({ mview: 'compose' }) },
+      { title: baseRel[2].title, meta: '18 Oct', type: 'Policy', typeBg: NEU.bg, typeFg: NEU.fg, status: 'Published', tile: 'ok', channels: 'card, notification, digest', read: '74%', useful: '64%', acked: '1,141 / 1,284', cta: 'Edit', edit: set({ mview: 'compose' }) },
+      { title: 'Assistant model switch: day-of notice', meta: 'Scheduled 3 Nov, 08:00', type: 'AI topic', typeBg: AI.bg, typeFg: AI.fg, status: 'Scheduled', tile: 'in', channels: 'banner, notification', read: '—', useful: '—', acked: '—', cta: 'Edit', edit: set({ mview: 'compose' }) },
+      { title: baseRel[3].title, meta: '4.5.2 · 10 Oct', type: 'Fix', typeBg: NEU.bg, typeFg: NEU.fg, status: 'Published', tile: 'ok', channels: 'card', read: '52%', useful: '91%', acked: '—', cta: 'Edit', edit: set({ mview: 'compose' }) }
+    ]);
+
+    /* ---------- manage: tours ---------- */
+    var tourRowsBase = [ { id: 't46', area: 'Sweep, Assistant', trigger: 'First visit after 4.6', status: 'Live', started: '412', done: '41%' }, { id: 'tsweep', area: 'Sweep', trigger: 'First visit to Runs', status: 'Live', started: '1,204', done: '78%' }, { id: 'tidea', area: 'Community', trigger: 'From Guides', status: 'Live', started: '96', done: '63%' }, { id: 'tapprove', area: 'Assistant', trigger: 'After 10 assistant uses', status: s.tePub.tapprove ? 'Live' : 'Draft', started: '0', done: '0%' } ];
+    var tourRows = tourRowsBase.map(function (t) { return Object.assign({}, t, { name: T[t.id].name, steps: T[t.id].steps.length, tile: t.status === 'Live' ? 'ok' : 'ne', play: startTour(t.id), edit: set({ screen: 'admin', adminView: 'community', mtab: 'tours', mview: 'edit', te: { id: t.id, name: T[t.id].name, trigger: T[t.id].trigger, steps: T[t.id].steps.map(function (x) { return Object.assign({}, x); }) } }) }); });
+    var tourOpts = tourRowsBase.map(function (t) { return { id: t.id, name: T[t.id].name }; });
+    var te = s.te || { id: null, name: '', trigger: 'guides', steps: [] };
+    var teSet = function (patch) { return { te: Object.assign({}, te, patch) }; };
+    var teSteps = te.steps.map(function (st, i) {
+      var a = A[st.a];
+      return { n: i + 1, anchor: st.a, title: st.title, body: st.body, tid: 'te-t' + i, bid: 'te-b' + i, cls: '', aTile: a ? 'ok' : 'er', aStatus: a ? 'Anchor found' : 'Missing anchor',
+        del: set(function () { return teSet({ steps: te.steps.filter(function (x, k) { return k !== i; }) }); }) };
+    });
+    teSteps.forEach(function (row, i) {
+      var st = te.steps[i];
+      var patchStep = function (patch) { var arr = te.steps.map(function (x) { return Object.assign({}, x); }); Object.assign(arr[i], patch); return teSet({ steps: arr }); };
+      row.onAnchor = set(function (e) { return patchStep({ a: val(e) }); });
+      row.onTitle = set(function (e) { return patchStep({ title: val(e) }); });
+      row.onBody = set(function (e) { return patchStep({ body: val(e) }); });
+      row.up = set(function () { var arr = te.steps.slice(); if (i === 0) return {}; var tmp = arr[i]; arr[i] = arr[i - 1]; arr[i - 1] = tmp; return teSet({ steps: arr }); });
+      row.down = set(function () { var arr = te.steps.slice(); if (i >= arr.length - 1) return {}; var tmp = arr[i]; arr[i] = arr[i + 1]; arr[i + 1] = tmp; return teSet({ steps: arr }); });
+    });
+    var teTriggers = [{ k: 'first', label: 'First visit after release' }, { k: 'page', label: 'First visit to a page' }, { k: 'usage', label: 'After N uses' }, { k: 'guides', label: 'From Guides only' }].map(function (d) { return { label: d.label, on: te.trigger === d.k, style: te.trigger === d.k ? ON : '', pick: set(teSet({ trigger: d.k })) }; });
+
+    /* ---------- manage: surveys ---------- */
+    var sb = s.sb;
+    var sbSet = function (patch) { return set(sub('sb', patch)); };
+    var SCALES = { micro: '5', nps: '11', check: 'yn' };
+    var sbTypes = [{ k: 'micro', label: 'Micro-survey' }, { k: 'nps', label: 'NPS' }, { k: 'check', label: 'Understanding check' }].map(function (d) { return { label: d.label, on: sb.type === d.k, style: sb.type === d.k ? ON : '', pick: set(sub('sb', { type: d.k, scale: SCALES[d.k] })) }; });
+    var sbScales = [{ k: '5', label: '1 to 5' }, { k: '11', label: '0 to 10' }, { k: 'yn', label: 'Yes / No' }].map(function (d) { return { label: d.label, on: sb.scale === d.k, style: sb.scale === d.k ? ON : '', pick: sbSet({ scale: d.k }) }; });
+    var sbTriggers = [{ k: 'after', label: 'After an action' }, { k: 'page', label: 'On a page' }, { k: 'login', label: 'On sign-in' }, { k: 'manual', label: 'From a release' }].map(function (d) { return { label: d.label, on: sb.trigger === d.k, style: sb.trigger === d.k ? ON : '', pick: sbSet({ trigger: d.k }) }; });
+    var sbAud = [{ k: 'all', label: 'All users' }, { k: 'dev', label: 'Developers' }, { k: 'ai', label: 'Assistant users' }, { k: 'new', label: 'New this month' }].map(function (d) { return { label: d.label, on: sb.aud === d.k, style: sb.aud === d.k ? ON : '', pick: sbSet({ aud: d.k }) }; });
+    var sbCaps = [{ k: 'week', label: 'Once a week' }, { k: 'month', label: 'Once a month' }, { k: 'once', label: 'Once ever' }].map(function (d) { return { label: d.label, on: sb.cap === d.k, style: sb.cap === d.k ? ON : '', pick: sbSet({ cap: d.k }) }; });
+    var TRIGL = { after: 'After an action', page: 'On a page', login: 'On sign-in', manual: 'From a release' };
+    var AUD2 = { all: 'All users', dev: 'Developers', ai: 'Assistant users', new: 'New this month' };
+    var survBase = [ { id: 's1', feature: 'Sweep', name: 'Run experience', q: 'How easy was it to run these scans?', type: 'Micro', trigger: 'After 3rd run of the day', aud: 'All users', status: 'Live', tile: 'ok', resp: '318' }, { id: 's2', name: 'Quarterly NPS', q: 'How likely are you to recommend AIToolbox?', type: 'NPS', trigger: 'Once per quarter, What’s new', aud: 'All users', status: 'Live', tile: 'ok', resp: '1,042' }, { id: 's3', name: 'AI policy v3 check', q: '2 questions after acknowledgment', type: 'Check', trigger: 'On policy acknowledgment', aud: 'All users', status: 'Live', tile: 'ok', resp: '611' }, { id: 's4', name: 'Assistant model change', q: 'Did the new model answer as well as before?', type: 'Micro', trigger: 'After first answer on new model', aud: 'Assistant users', status: 'Scheduled 3 Nov', tile: 'in', resp: '0' } ];
+    var survRows = s.survExtra.concat(survBase).filter(function (x) { return s.role !== 'feature' || x.feature === 'Sweep'; }).map(function (x) { return Object.assign({}, x, { results: set({ mview: 'results', srId: x.id, srTheme: 'all' }) }); });
+    var srDistBase = [ { v: 5, p: 38 }, { v: 4, p: 31 }, { v: 3, p: 17 }, { v: 2, p: 9 }, { v: 1, p: 5 } ];
+    var srDist = srDistBase.map(function (d) { return { v: d.v, pct: d.p + '%', color: d.v >= 4 ? '#35307E' : (d.v === 3 ? '#8C88C8' : '#79757F') }; });
+    var verbs = [ { ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', score: 2, theme: 'Partial re-run', when: '2 days ago', text: 'One failed check and I have to re-run everything. Twenty-five minutes on our monorepo.' }, { ini: 'NR', bg: '#E3DFFF', who: 'Nadia Rahal', score: 5, theme: 'Speed', when: '3 days ago', text: 'Runs are twice as fast as last quarter, and the summary tells me where to look first.' }, { ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', score: 3, theme: 'Logs', when: '5 days ago', text: 'When a run fails I still have to open the pipeline logs by hand. Link the failing line from the finding.' }, { ini: 'PS', bg: '#9CF1F0', who: 'Priya Sharma', score: 4, theme: 'Permissions', when: '1 week ago', text: 'Had to ask an admin to run on a repo I review every day. Reviewers should be able to run.' } ];
+    var themeCounts = { 'Speed': 14, 'Partial re-run': 9, 'Logs': 6, 'Permissions': 4 };
+    var srThemes = [{ k: 'all', label: 'All', n: 33 }].concat(Object.keys(themeCounts).map(function (k) { return { k: k, label: k, n: themeCounts[k] }; })).map(function (d) { return { label: d.label, n: d.n, on: s.srTheme === d.k, style: s.srTheme === d.k ? ON : '', pick: set({ srTheme: d.k }) }; });
+    var srVerbs = verbs.filter(function (v) { return s.srTheme === 'all' || v.theme === s.srTheme; }).map(function (v, i) { var k = v.who; return Object.assign({}, v, { open: !s.verbDone[k], done: !!s.verbDone[k], toIdea: set(function () { var o = { verbDone: Object.assign({}, s.verbDone) }; o.verbDone[k] = true; o.ideaExtra = [{ id: 'ix' + (s.ideaExtra.length + 1), title: v.theme === 'Logs' ? 'Link the failing log line from a finding' : (v.theme === 'Permissions' ? 'Let reviewers run sweeps on repos they review' : 'From survey: ' + v.theme), body: '“' + v.text + '” — from the Run experience survey, submitted by the platform team on behalf of ' + v.who + '.', votes: 1, voted: true, status: 'Proposed', area: 'Sweep', who: 'Platform team', when: 'today', comments: [], track: ['today', '', '', '', ''] }].concat(s.ideaExtra); o.snack = { text: 'Idea created from the verbatim. ' + v.who + ' was notified.', action: 'Open Ideas', act: 'ideas' }; return o; }) }); });
+    var srMeta = { s1: 'Micro-survey · after the 3rd run of the day · since 1 Sep', s2: 'NPS · quarterly · Q3', s3: 'Understanding check · 2 questions', s4: 'Scheduled 3 Nov' }[s.srId] || 'Micro-survey';
+    var srRow = survRows.filter(function (x) { return x.id === s.srId; })[0] || survRows[0];
+
+    /* ---------- manage: triage, insights ---------- */
+    var triage = allIdeas.filter(function (i) { return i.status !== 'Delivered'; }).map(function (i) { return { title: i.title, who: i.who, area: i.area, nQa: i.nQa, votes: i.votes, status: i.status, note: i.note, saveLabel: s.saved[i.id] ? 'Saved' : 'Save',
+      onStatus: set(function (e) { var o = { ideaStatus: Object.assign({}, s.ideaStatus), saved: Object.assign({}, s.saved) }; o.ideaStatus[i.id] = val(e); o.saved[i.id] = false; return o; }),
+      onNote: set(function (e) { var o = { ideaNotes: Object.assign({}, s.ideaNotes), saved: Object.assign({}, s.saved) }; o.ideaNotes[i.id] = val(e); o.saved[i.id] = false; return o; }),
+      save: set(function () { var o = { saved: Object.assign({}, s.saved) }; o.saved[i.id] = true; o.snack = { text: 'Saved. ' + (i.votes + (i.following ? 0 : 1)) + ' voters and followers were notified of the change.', action: '', act: '' }; return o; }) }; });
+    var kpis = [ { v: '4.1 / 5', label: 'after-action score', delta: '+0.2', tile: 'ok', src: 'Feedback forms · 312 answers' }, { v: '+32', label: 'NPS', delta: '+4', tile: 'ok', src: 'Surveys · 388 responses' }, { v: '41%', label: 'tour completion', delta: '−3 pts', tile: 'wn', src: 'Tours · 4 live' }, { v: '68%', label: 'read rate · last release', delta: '+12 pts', tile: 'ok', src: 'Releases' } ];
+    var insSources = [ { label: 'Feedback forms', tile: 'ok' }, { label: 'Surveys', tile: 'ok' }, { label: 'Tours', tile: 'ok' }, { label: 'OpenSearch metrics · later', tile: 'ne', style: 'border: 1px dashed #79757F; background: transparent' } ];
+    var insFeat = [ { label: 'Sweep', n: 128, score: '3.8 / 5', tile: 'wn' }, { label: 'Assistant', n: 94, score: '4.2 / 5', tile: 'ok' }, { label: 'Environments', n: 51, score: '3.6 / 5', tile: 'wn' }, { label: 'Docs', n: 39, score: '4.4 / 5', tile: 'ok' } ].map(function (a) { return Object.assign(a, { pct: Math.round(a.n / 128 * 100) + '%' }); });
+    var DROP = ['leaves at step 3 of 5', 'leaves at step 2 of 4', 'no clear drop', 'leaves at step 4 of 6'];
+    var insTours = tourRows.map(function (t, i) { return { name: t.name, started: t.started, done: t.done, drop: DROP[i % DROP.length] }; });
+    var insSurveys = [ { name: 'Quarterly NPS', sub: '388 responses · promoters 48%, detractors 16%', v: '+32' }, { name: 'Run experience', sub: 'After a failed run · 214 responses', v: '3.4 / 5' }, { name: 'Secrets policy check', sub: 'Required · 61% done', v: '61%' } ];
+    var attDefs = [ { id: 'a1', kind: 'Low adoption', tile: 'wn', title: 'Risk team · assistant used by 12%', sub: '22 users, no assistant use in 30 days', cta: 'Remind', doneLabel: 'Reminder sent' }, { id: 'a2', kind: 'Policy', tile: 'er', title: 'AI usage policy v3', sub: '143 users have not acknowledged · due 1 Nov', cta: 'Nudge', doneLabel: 'Nudge sent' }, { id: 'a3', kind: 'Tour', tile: 'in', title: 'New in 4.6 · drop-off at step 2', sub: '31% leave at the approval step', cta: 'Edit tour', edit: true } ];
+    var attention = attDefs.map(function (a) { return Object.assign({}, a, { open: !s.remind[a.id], done: !!s.remind[a.id], act: a.edit ? tourRows[0].edit : set(function () { var o = { remind: Object.assign({}, s.remind) }; o.remind[a.id] = true; o.snack = { text: a.cta === 'Nudge' ? 'Nudge sent to 143 users via notification and email.' : 'Reminder sent to the Risk team lead with the assistant guide.', action: '', act: '' }; return o; }) }); });
+
+    /* ---------- sweep, micro-survey ---------- */
+    var runs = [ { title: '#4821 · Rate limits on the credit request API', meta: 'opened 2 h ago · Marta K.', status: 'Passed', tile: 'ok', summary: 'Review summary · rate it', findings: '0 blocking · 2 suggestions' }, { title: '#4818 · Migrate facility exports to the new schema', meta: 'opened yesterday · Yann D.', status: 'Failed', tile: 'er', summary: 'Review summary · rate it', findings: '1 blocking · secret in test fixture' }, { title: '#4809 · Bump SDK to 3.2', meta: 'opened 3 days ago · bot', status: 'Not run', tile: 'ne', summary: 'Summary pending', findings: '—' } ];
+    var micro = [1, 2, 3, 4, 5].map(function (v) { return { v: v, on: s.microV === v, pick: set({ microV: v }) }; });
+
+    /* ---------- snack, notifications ---------- */
+    var ACT = { t46: startTour('t46'), guides: set({ screen: 'community', tab: 'guides', snack: null }), ideas: set({ screen: 'community', tab: 'ideas', snack: null }), new: set({ screen: 'community', tab: 'new', filter: 'all', snack: null }), '': set({ snack: null }) };
+    var snack = s.snack && !s.tourId;
+    var notifs = [ { title: 'Sami Ben Ali answered in “Approval cards for assistant tools”', sub: 'Fix for repos without pipeline logs lands in 4.6.1.', bg: '#E3DFFF', fg: '#14085E', unread: true, go: set(Object.assign({ screen: 'community', tab: 'new', filter: 'all', open: Object.assign({}, s.open, { r1: true }) }, closeAll)) }, { title: 'Your idea moved to In progress', sub: 'Promotion window calendar in Environments · 19 votes', bg: '#FFDEA0', fg: '#261900', unread: true, go: set(Object.assign({ screen: 'community', tab: 'ideas', ideaSel: 'i4' }, closeAll)) }, { title: 'Run #4818 failed', sub: 'facility exports · 1 blocking finding', bg: '#FFDAD6', fg: '#410002', unread: true, go: set(Object.assign({ screen: 'sweep' }, closeAll)) }, { title: 'Office hours tomorrow at 14:00', sub: 'Assistant model change · 30 min, recorded', bg: '#ECE5F4', fg: '#1C1B1E', unread: false, go: set(Object.assign({ screen: 'community', tab: 'new' }, closeAll)) } ];
+
+    var mDefs = [{ k: 'releases', label: 'Releases', n: relRows.length }, { k: 'tours', label: 'Tours', n: tourRows.length }, { k: 'listen', label: 'Listening' }, { k: 'ideas', label: 'Ideas triage', n: triage.length }, { k: 'insights', label: 'Insights' }];
+    var mtab = role === 'feature' ? 'listen' : s.mtab;
+    var mTabs = mDefs.map(function (d) { return { label: d.label, n: d.n || 0, hasN: !!d.n, on: mtab === d.k, style: mtab === d.k ? ON : '', pick: set({ mtab: d.k, mview: 'list' }) }; });
+    /* ---------- administration ---------- */
+
+    /* ---------- feedback profiles: FeedbackProfile, shared component owned by Community ---------- */
+    var FB = this.feedbackProfiles(s, set, { onSave: function (name) { return { snack: { text: name + ' feedback profile saved. Changes apply within 5 minutes.', action: '', act: '' } }; } });
+    var fpKeys = FB.keys.filter(function (k) { return !scoped || k === 'sweep'; });
+    var fpOpen = scoped ? (s.fpEdit || 'sweep') : s.fpEdit;
+    var fpRows = fpKeys.map(function (k) { var p = FB.summary(k), open = fpOpen === k;
+      return Object.assign(p, { rowStyle: open ? 'box-shadow: inset 3px 0 0 #35307E' : '', cta: open && !scoped ? 'Close' : 'Edit', aria: (open && !scoped ? 'Close the ' : 'Edit the ') + p.name + ' feedback profile', go: set({ fpEdit: open && !scoped ? null : k }) }); });
+    var fpEditing = isListen && s.ltab === 'feedback' && fpKeys.indexOf(fpOpen) >= 0;
+    var fp = fpEditing ? FB.editor(fpOpen, { canClose: !scoped, close: set({ fpEdit: null }) }) : {};
+    var fpNote = scoped ? 'Your Feedback · Sweep right covers this profile and the Sweep inbox. The other profiles, surveys and the cap stay with the platform team.' : 'One place for every feature’s feedback form. Feature admins with a Feedback · <feature> right see only their own profile and inbox.';
+    var capChips = [ { k: '7', label: '1 prompt / 7 days' }, { k: '14', label: '1 prompt / 14 days' }, { k: '30', label: '1 prompt / 30 days' } ].map(function (c) { return { label: c.label, on: s.cap === c.k, style: s.cap === c.k ? ON : '', pick: role === 'feature' ? set({ snack: { text: 'The solicitation cap is set by the platform team.', action: '', act: '' } }) : set({ cap: c.k }) }; });
+
+    /* ---------- listening: inbox ---------- */
+    var IN0 = [
+      { id: 'f1', ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', feature: 'Sweep', source: 'After a run', score: '2/5', when: '1 h ago', text: 'The Test phase took 9 minutes on a docs-only change. Could Sweep skip tests when only Markdown changed?', ctx: ['run #4818', 'staging', 'v4.6.0'] },
+      { id: 'f2', ini: 'NR', bg: '#E3DFFF', who: 'Nadia Rahal', feature: 'Assistant', source: 'AI answer', score: 'thumbs down', when: '3 h ago', text: 'Answer cited a log line that does not exist in the run. Reason picked: wrong facts.', ctx: ['run #4809', 'assistant model v3'] },
+      { id: 'f3', ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', feature: 'Environments', source: 'Page button', score: '', when: 'yesterday', text: 'The promotion button is disabled with no reason shown. I lost 20 minutes before asking in Teams.', ctx: ['credit-request', 'production'] },
+      { id: 'f4', ini: 'PS', bg: '#9CF1F0', who: 'Priya Sharma', feature: 'Sweep', source: 'Page button', score: '4/5', when: 'yesterday', text: 'Love the PR summaries. Would be great to choose which reviewers get them by email.', ctx: ['PR #4821', 'v4.6.0'] },
+      { id: 'f5', ini: 'MK', bg: '#9CF1F0', who: 'Marta Kowalski', feature: 'Docs', source: 'Page button', score: 'thumbs down', when: '2 days ago', text: 'The runner setup page still shows the old CLI flags.', ctx: ['docs/sweep/runners'] },
+      { id: 'f6', ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', feature: 'Assistant', source: 'Discussion', score: '', when: '3 days ago', text: 'No reply for 2 working days: “Do MCP servers pinned to the old tool schema need a redeploy before 3 November?”', ctx: ['What’s new · assistant model change', 'started 3 days ago'] }
+    ];
+    var inAll = IN0.filter(function (f) { return !scoped || f.feature === 'Sweep'; });
+    var stOf = function (f) { return s.inState[f.id] || 'New'; };
+    var inFeats = ['all', 'Sweep', 'Environments', 'Docs', 'Assistant'];
+    var inFeatChips = inFeats.filter(function (k) { return !scoped || k === 'Sweep'; }).map(function (k) { var n = inAll.filter(function (f) { return (k === 'all' || f.feature === k) && stOf(f) === 'New'; }).length; var cur = scoped ? 'Sweep' : s.inFilter; return { label: k === 'all' ? 'All features' : k, n: n, on: cur === k, style: cur === k ? ON : '', locked: scoped, pick: set({ inFilter: k }) }; });
+    var inStatusChips = [ { k: 'open', label: 'Open' }, { k: 'done', label: 'Handled' }, { k: 'any', label: 'All' } ].map(function (c) { return { label: c.label, on: s.inStatus === c.k, style: s.inStatus === c.k ? ON : '', pick: set({ inStatus: c.k }) }; });
+    var INTILE = { 'New': 'in', 'Replied': 'ok', 'Routed': 'ne', 'Idea asked': 'wn', 'Idea published': 'ok' };
+    var inCur = scoped ? 'Sweep' : s.inFilter;
+    var inbox = inAll.filter(function (f) { var st = stOf(f); return (inCur === 'all' || f.feature === inCur) && (s.inStatus === 'any' || (s.inStatus === 'open' ? (st === 'New' || st === 'Idea asked') : (st !== 'New' && st !== 'Idea asked'))); }).map(function (f) {
+      var st = stOf(f), patchSt = function (v, extra) { var o = Object.assign({ inState: Object.assign({}, s.inState) }, extra || {}); o.inState[f.id] = v; return o; };
+      return Object.assign({}, f, { hasScore: !!f.score, status: st, tile: INTILE[st], canAct: st === 'New' || st === 'Replied', isIdeaAsk: st === 'Idea asked', isRouted: st === 'Routed', routeNote: 'Routed to ' + (s.inRoutes[f.id] || '') + ' · the author is told where it went',
+        hasReply: !!s.inReplies[f.id], reply: s.inReplies[f.id] || '', replying: !!s.inReplying[f.id], rid: 'in-r-' + f.id, draft: s.inDrafts[f.id] || '',
+        startReply: set(function () { var o = { inReplying: Object.assign({}, s.inReplying) }; o.inReplying[f.id] = !s.inReplying[f.id]; return o; }),
+        onDraft: set(function (e) { var o = { inDrafts: Object.assign({}, s.inDrafts) }; o.inDrafts[f.id] = val(e); return o; }),
+        send: set(function () { var t = (s.inDrafts[f.id] || '').trim(); if (!t) return {}; var o = patchSt('Replied', { inReplies: Object.assign({}, s.inReplies), inReplying: Object.assign({}, s.inReplying), snack: { text: 'Reply sent to ' + f.who + '.', action: '', act: '' } }); o.inReplies[f.id] = t; o.inReplying[f.id] = false; return o; }),
+        onRoute: set(function (e) { var v = val(e); if (!v) return {}; var o = patchSt('Routed', { inRoutes: Object.assign({}, s.inRoutes), snack: { text: 'Routed to ' + v + '. A ticket link was added to the item.', action: '', act: '' } }); o.inRoutes[f.id] = v; return o; }),
+        toIdea: set(patchSt('Idea asked', { snack: { text: f.who + ' was asked whether this can be published as an idea.', action: '', act: '' } })),
+        simulateYes: set(function () { var o = patchSt('Idea published', { snack: { text: 'Published in Ideas with ' + f.who + ' as author.', action: 'Open Ideas', act: 'ideas' } }); o.ideaExtra = [{ id: 'ix' + (s.ideaExtra.length + 1), title: f.text.split(/[.?]/)[0], body: f.text, votes: 1, voted: false, status: 'Proposed', area: f.feature, who: f.who, when: 'today', comments: [], track: ['today', '', '', '', ''] }].concat(s.ideaExtra); return o; })
+      });
+    });
+    var newOf = function (feat) { return IN0.filter(function (f) { return (!feat || f.feature === feat) && stOf(f) === 'New'; }).length; };
+    var lTabs = [ { k: 'feedback', label: scoped ? 'Profile' : 'Profiles', n: scoped ? 0 : fpKeys.length }, { k: 'inbox', label: 'Inbox', n: newOf(scoped ? 'Sweep' : null) }, { k: 'surveys', label: 'Surveys', n: survRows.length, platform: true }, { k: 'policy', label: 'Solicitation policy' } ].filter(function (t) { return !scoped || !t.platform; }).map(function (t) { return { label: t.label, n: t.n, hasN: !!t.n, on: s.ltab === t.k, style: s.ltab === t.k ? 'color: #35307E; border-bottom: 3px solid #35307E' : '', pick: set({ ltab: t.k, mview: 'list' }) }; });
+    var tabOn = 'color: #35307E; border-bottom: 3px solid #35307E', tabOff = '';
+    var tabIs = function (t) { return isC && s.tab === t; };
+    var crumb = { new: 'What’s new', guides: 'Guides', ideas: 'Ideas', manage: 'Manage' }[s.tab];
+    var subtitle = { new: 'Releases, AI topics and policies for your workspace', guides: 'Short tours and videos, by feature', ideas: 'Vote once per idea; the platform team answers within two weeks', manage: 'Platform team only' }[s.tab];
+    // B · admin sidebar: Core (platform admins), Sweep, Community; a section key in adminView ('community' uses mtab)
+    var CORE_KEYS = ['general', 'users', 'groups', 'audit'], SWEEP_KEYS = ['connectors'], COMM_KEYS = ['releases', 'tours', 'listen', 'ideas', 'insights'];
+    var adGroups = this.adminGroups(role === 'platform', { users: 1, connectors: 1, releases: relRows.length, tours: tourRows.length, listen: newOf() || undefined, listenScoped: newOf('Sweep') || undefined, ideas: triage.length });
+    var goSec = function (key) { return set(function () { var o = { screen: 'admin', mview: 'list', tourId: null, usel: null }; if (COMM_KEYS.indexOf(key) >= 0) { o.adminView = 'community'; o.mtab = key; if (key === 'listen') { o.ltab = s.ltab || 'feedback'; } } else { o.adminView = key; } return Object.assign(o, closeAll); }); };
+    var curKey = s.adminView === 'community' ? mtab : s.adminView;
+    var adNav = this.adminNav(adGroups, curKey, goSec), adCur = adNav.cur;
+    var isFeaturePage = !adCur.g.core, isAdminSweep = adCur.g.key === 'sweep';
+    var modKey = s.adminView, mod = null;
+    var AD_SUMM = { users: '1,284 users from the directory · 46 admins · 1 request', groups: '18 groups', audit: 'Last 90 days', general: 'Workspace, language, time zone, retention', connectors: '5 connectors · 1 needs attention', releases: relRows.length + ' releases', tours: tourRows.length + ' tours', listen: scoped ? 'Sweep profile, Sweep inbox, shared cap (read-only)' : 'Profiles, inbox, surveys, solicitation policy', ideas: triage.length + ' ideas to triage', insights: 'Feedback forms, surveys and tours, last 30 days' };
+    var roleChips = [ { k: 'platform', label: 'Platform admin' }, { k: 'feature', label: 'Sweep admin' }, { k: 'user', label: 'User' } ].map(function (r) { return { label: r.label, on: role === r.k, style: role === r.k ? ON : '', pick: set(function () { var o = { role: r.k, adminView: r.k === 'platform' ? (CORE_KEYS.indexOf(s.adminView) >= 0 || s.adminView === 'community' ? s.adminView : s.adminView) : (s.adminView === 'community' ? 'community' : 'connectors'), mview: 'list' }; if (r.k === 'feature') { o.mtab = 'listen'; o.fpEdit = null; if (s.ltab === 'surveys') o.ltab = 'feedback'; } o.inFilter = 'all'; if (r.k === 'user' && s.screen === 'admin') { o.screen = 'community'; o.snack = { text: 'Users without an admin right see no Administration entry.', action: '', act: '' }; } return o; }) }; });
+    var hdr = isS ? ['Sweep · Runs', 'staging · credit-request · 3 open pull requests'] : isA ? ['Administration · ' + adCur.g.label, adCur.s.label + ' · ' + (AD_SUMM[adCur.s.key] || '')] : ['Community · ' + crumb, subtitle];
+    var goTab = function (t) { return set(Object.assign({ screen: 'community', tab: t, mview: 'list', tourId: null }, closeAll)); };
+
+    return Object.assign(sim, {
+      isCommunity: isC, isSweep: isS, crumb: crumb, subtitle: subtitle, hdrFeature: hdr[0], hdrSummary: hdr[1],
+      tabNew: tabIs('new'), tabGuides: tabIs('guides'), tabIdeas: tabIs('ideas'), tabManage: tabIs('manage'),
+      tNew: s.tab === 'new' ? tabOn : tabOff, tGuides: s.tab === 'guides' ? tabOn : tabOff, tIdeas: s.tab === 'ideas' ? tabOn : tabOff,
+      goNew: goTab('new'), goGuides: goTab('guides'), goIdeas: goTab('ideas'), goCommunity: goTab(s.tab === 'manage' ? 'new' : s.tab), goSweep: set(Object.assign({ screen: 'sweep', tourId: null }, closeAll)),
+      unreadCount: unread, guidesLeft: gDefs.length - gDone, ideaCount: allIdeas.length,
+      navOpen: !!s.navOpen, navRail: !s.navOpen, toggleNav: set({ navOpen: !s.navOpen }), snackLeft: (SW < 600 ? 16 : L + 24) + 'px',
+      navScrim: !!s.navOpen && SW < 840, navBarNew: isC, navBarSweep: isS, navBarAdmin: isA,
+      navNewD: isC && s.navOpen, navSweepD: isS && s.navOpen, navNewR: isC && !s.navOpen, navSweepR: isS && !s.navOpen, navAdminD: isA && s.navOpen, navAdminR: isA && !s.navOpen,
+      maint: !!s.maint, maintLabel: s.maint ? 'On' : 'Off', maintStyle: s.maint ? ON : '', toggleMaint: set({ maint: !s.maint }), hideMaint: set({ maint: false }),
+      filters: filters, items: items, noItems: items.length === 0, resetFilter: set({ filter: 'all' }), markAllRead: set(function () { var o = { read: {} }; allRel.forEach(function (r) { o.read[r.id] = true; }); return o; }),
+      checklist: checklist, ckDone: ckDone, ckPct: Math.round(ckDone / 3 * 100) + '%', ckTile: ckDone === 3 ? 'ok' : 'in',
+      npsOpen: !s.npsSent, npsDone: s.npsSent, npsPicked: s.nps !== null, npsScore: s.nps, npsWhy: s.npsWhy, onNpsWhy: set(function (e) { return { npsWhy: val(e) }; }), sendNps: set({ npsSent: true }),
+      nps: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (v) { return { v: v, on: s.nps === v, pick: set({ nps: v }) }; }),
+      calOpen: !s.cal, calDone: s.cal, addCal: set({ cal: true, snack: { text: 'Office hours added to your calendar (Thu 31 Oct, 14:00).', action: '', act: '' } }),
+      champs: champs, champOn: s.champ !== null, champAsk: !s.champSent, champSent: s.champSent, champIni: champ.ini, champBg: champ.bg, champWho: champ.who, champTeam: champ.team, champQ: s.champQ, onChampQ: set(function (e) { return { champQ: val(e) }; }), sendChamp: set({ champSent: true }), closeChamp: set({ champ: null, champSent: false }),
+      gFilters: gFilters, guides: guides, gDone: gDone, gTotal: gDefs.length, replayAll: set({ gDone: {}, ck: {} }), startSuggested: startTour('tapprove'), askAssistant: set(Object.assign({ snack: { text: 'Assistant opened beside the page.', action: '', act: '' } }, closeAll)),
+      iFilters: iFilters, iSort: s.iSort, onSort: set(function (e) { return { iSort: val(e) }; }), ideas: ideas, noIdeas: ideas.length === 0, resetIdeas: set({ ideaFilter: 'all' }),
+      ideaOpen: !!sel, ideaClosed: !sel, ideaSelCls: sel ? 'ie-sel' : '', sel: sel || {}, closeIdea: set({ ideaSel: null, ideaPicked: false }), ideaDraft: s.ideaDraft, onIdeaDraft: set(function (e) { return { ideaDraft: val(e) }; }),
+      postIdea: set(function () { var t = s.ideaDraft.trim(); if (!t || !sel) return {}; var o = { ideaCmts: Object.assign({}, s.ideaCmts), ideaDraft: '' }; o.ideaCmts[sel.id] = (s.ideaCmts[sel.id] || []).concat([{ ini: 'AH', bg: '#D4D0F9', who: 'Aurélien Heux', team: true, when: 'just now', text: t }]); return o; }),
+      delivered: allIdeas.filter(function (i) { return i.status === 'Delivered'; }).map(function (i) { return { title: i.title, version: i.version || '4.6' }; }).concat([{ title: 'Rate a PR review summary', version: '4.6' }]),
+      openNewIdea: set(Object.assign({ newIdea: true, niVoted: false }, closeAll)), closeNewIdea: set({ newIdea: false }), newIdeaOn: s.newIdea, niTitle: s.ni.title, niBody: s.ni.body, onNiTitle: set(function (e) { return sub('ni', { title: val(e) }); }), onNiBody: set(function (e) { return sub('ni', { body: val(e) }); }),
+      niAreas: ['Sweep', 'Assistant', 'Environments', 'Docs', 'Platform'].map(function (a) { return { label: a, on: s.ni.area === a, style: s.ni.area === a ? ON : '', pick: set(sub('ni', { area: a })) }; }),
+      niSimilar: s.ni.area === 'Sweep' && !s.niVoted, niVoteSimilar: set({ niVoted: true, votes: Object.assign({}, s.votes, { i1: { voted: true, delta: (s.votes.i1 && s.votes.i1.voted) ? s.votes.i1.delta : ((s.votes.i1 ? s.votes.i1.delta : 0) + 1) } }), newIdea: false, ideaSel: 'i1', snack: { text: 'Voted for “Re-run only the failed checks”.', action: '', act: '' } }),
+      submitIdea: set(function () { var t = s.ni.title.trim() || 'Untitled idea'; var idea = { id: 'ix' + (s.ideaExtra.length + 1), title: t, body: s.ni.body.trim() || 'No description yet.', votes: 1, voted: true, status: 'Proposed', area: s.ni.area, who: 'Aurélien Heux', when: 'today', mine: true, comments: [], track: ['today', '', '', '', ''] }; return { ideaExtra: [idea].concat(s.ideaExtra), newIdea: false, ideaSel: idea.id, ni: { title: '', body: '', area: 'Sweep' }, follows: Object.assign({}, s.follows, (function () { var o = {}; o[idea.id] = true; return o; })()), snack: { text: 'Idea submitted. You follow it; the platform team answers within two weeks.', action: '', act: '' } }; }),
+      mTabs: mTabs, mRel: isAC && mtab === 'releases' && s.mview === 'list', mTours: isAC && mtab === 'tours' && s.mview === 'list', mSurv: isAC && isListen && s.ltab === 'surveys' && s.mview === 'list',
+      mRelList: mtab === 'releases' && s.mview === 'list', mCompose: mtab === 'releases' && s.mview === 'compose', mTourList: mtab === 'tours' && s.mview === 'list', mTourEdit: mtab === 'tours' && s.mview === 'edit', mSurvList: isListen && s.ltab === 'surveys' && s.mview === 'list', mSurvEdit: isListen && s.ltab === 'surveys' && s.mview === 'edit', mSurvRes: isListen && s.ltab === 'surveys' && s.mview === 'results', mIdeas: mtab === 'ideas', mInsights: mtab === 'insights',
+      isAdmin: isA, isAdminCommunity: isAC, isAdminSweep: isAdminSweep, isFeaturePage: isFeaturePage, isFeatureRole: role === 'feature', showPlatform: role === 'platform',
+      groups: adNav.groups, page: adCur.s.key, pageTitle: adCur.s.label, onSelect: function (e) { var k = e && e.target ? e.target.value : null; if (k) goSec(k)(e); },
+      pUsers: isA && adCur.s.key === 'users', pGeneral: isA && adCur.s.key === 'general', pConnectors: isA && adCur.s.key === 'connectors', pOther: isA && !isAC && ['users', 'general', 'connectors'].indexOf(adCur.s.key) < 0,
+      mTopRow: isAC && s.mview === 'list' && role === 'platform',
+      uCount: adUsers.uCount, uFilters: adUsers.uFilters, users: adUsers.users, hasUsr: adUsers.hasUsr, usr: adUsers.usr, closeUsr: adUsers.closeUsr,
+      roleChips: roleChips,
+      goAdmin: set(Object.assign({ screen: 'admin', adminView: role === 'platform' ? 'general' : 'connectors', mview: 'list', tourId: null }, closeAll)), showAdminNav: !isUser,
+      modName: adCur.g.label, modOwner: adCur.g.owner || '', modRemote: adCur.g.remote || '', modScope: role === 'platform' || isAdminSweep ? 'Full module' : 'Feedback · Sweep only',
+      hasModSub: isAC, modSub: { releases: 'Releases', tours: 'Tours', listen: 'Listening', ideas: 'Ideas triage', insights: 'Insights' }[mtab] || '',
+      openFeature: set({ screen: 'sweep' }),
+      isListen: isListen, lTabs: lTabs, lFeedback: isListen && s.ltab === 'feedback', lInbox: isListen && s.ltab === 'inbox', lPolicy: isListen && s.ltab === 'policy', fpNote: fpNote, capLabel: 'Shared cap · 1 prompt per user every ' + s.cap + ' days',
+      fpRows: fpRows, fpEditing: fpEditing, fp: fp,
+      capChips: capChips, capNote: role === 'feature' ? 'Set by the platform team' : 'Applies to every feature',
+      inFeatChips: inFeatChips, inStatusChips: inStatusChips, inbox: inbox, noInbox: inbox.length === 0,
+      relRows: relRows, goCompose: set({ mview: 'compose' }), cancelCompose: set({ mview: 'list' }), cTitle: c.title, cBody: c.body, onCTitle: set(function (e) { return sub('c', { title: val(e) }); }), onCBody: set(function (e) { return sub('c', { body: val(e) }); }), cTypes: cTypes, cAud: cAud, cChan: cChan, cAsk: cAsk, cTour: c.tour, onCTour: set(function (e) { return sub('c', { tour: val(e) }); }), cVideo: c.video, onCVideo: set(function (e) { return sub('c', { video: val(e) }); }), tourOpts: tourOpts,
+      cTypeLabel: TYPEMETA[c.type][0], cTypeBg: TYPEMETA[c.type][1].bg, cTypeFg: TYPEMETA[c.type][1].fg, cAudLabel: AUDL[c.aud], cTitleOr: c.title.trim() || 'Release title', cBodyOr: c.body.trim() || 'Two sentences: what changed and what the reader should do.', cBodyShort: (c.body.trim() || 'Summary to come.').slice(0, 90), cHasTour: !!c.tour, cHasVideo: !!c.video.trim(),
+      cReach: 'Reaches ' + ({ all: '1,284', dev: '812', admins: '46', ai: '690' }[c.aud]) + ' users through ' + Object.keys(c.chan).filter(function (k) { return c.chan[k]; }).length + ' channels. Email digest goes out Monday 08:00.',
+      aiDraft: set(sub('c', { title: c.title || 'Partial re-runs and faster findings in Sweep 4.6.1', body: c.body || 'Re-run only the failed checks from the PR page, and findings open on the failing log line. Repos without pipeline logs get review summaries again.' })),
+      schedule: finish('Scheduled'), publish: finish('Published'),
+      tourRows: tourRows, newTour: set({ mview: 'edit', te: { id: null, name: '', trigger: 'guides', steps: [{ a: 'header.ask', title: 'First step', body: 'Say what the user will see here.' }] } }),
+      teName: te.name, onTeName: set(function (e) { return teSet({ name: val(e) }); }), teTriggers: teTriggers, teSteps: teSteps, teCount: te.steps.length, anchorOpts: anchorOpts, teStatus: te.id && s.tePub[te.id] ? 'Live' : (te.id && tourRowsBase.filter(function (t) { return t.id === te.id && t.status === 'Live'; }).length ? 'Live · editing' : 'Draft'), teTile: te.id && (s.tePub[te.id] || tourRowsBase.filter(function (t) { return t.id === te.id && t.status === 'Live'; }).length) ? 'ok' : 'ne',
+      teAdd: set(teSet({ steps: te.steps.concat([{ a: 'rail.community', title: 'New step', body: 'Describe what to look at.' }]) })), teBack: set({ mview: 'list' }), tePreview: set(function () { if (!te.steps.length) return {}; var o = apply(te, 1, true); o.tourId = '__draft'; return o; }),
+      tePublish: set(function () { var o = { mview: 'list', tePub: Object.assign({}, s.tePub), snack: { text: (te.name || 'Tour') + ' published. Available in Guides and attachable to a release.', action: 'Guides', act: 'guides' } }; if (te.id) o.tePub[te.id] = true; return o; }),
+      survRows: survRows, newSurvey: set({ mview: 'edit' }), sbBack: set({ mview: 'list' }), sbName: sb.name, onSbName: set(function (e) { return sub('sb', { name: val(e) }); }), sbTypes: sbTypes, sbTypeHint: { micro: 'One question after an action, 10 seconds', nps: '0–10 scale, once per quarter', check: 'Required, tracked per user' }[sb.type], sbQ: sb.q, onSbQ: set(function (e) { return sub('sb', { q: val(e) }); }), sbScales: sbScales, sbComment: !!sb.comment, sbCommentStyle: sb.comment ? ON : '', toggleSbComment: sbSet({ comment: !sb.comment }), sbTriggers: sbTriggers, sbAud: sbAud, sbCaps: sbCaps,
+      sbQOr: sb.q.trim() || 'Your question appears here', sbIs5: sb.scale === '5', sbIs11: sb.scale === '11', sbIsYN: sb.scale === 'yn', sbReach: AUD2[sb.aud] + ' · ' + TRIGL[sb.trigger].toLowerCase() + ' · at most ' + { week: 'once a week', month: 'once a month', once: 'once' }[sb.cap] + ' per user, never during a run.',
+      sbTest: set({ micro: true, microV: null, microSent: false, screen: 'sweep', snack: null }), sbPublish: set(function () { return { survExtra: [{ id: 'sx' + (s.survExtra.length + 1), name: sb.name.trim() || 'Untitled survey', q: sb.q.trim() || '—', type: { micro: 'Micro', nps: 'NPS', check: 'Check' }[sb.type], trigger: TRIGL[sb.trigger], aud: AUD2[sb.aud], status: 'Live', tile: 'ok', resp: '0' }].concat(s.survExtra), mview: 'list', sb: Object.assign({}, sb, { name: '', q: '' }), snack: { text: 'Survey published. First answers show here within the hour.', action: '', act: '' } }; }),
+      srName: srRow.name, srMeta: srMeta, srResp: srRow.resp, srRate: '64%', srAvg: '3.9 / 5', srTrend: '+0.3', srDist: srDist, srThemes: srThemes, srVerbs: srVerbs, srVerbN: srVerbs.length,
+      triage: triage, mergeIdeas: set({ merged: true, snack: { text: 'Merged 2 ideas into “Re-run only the failed checks”. Voters were notified.', action: '', act: '' } }), mergeLabel: s.merged ? 'Merged' : 'Merge them',
+      kpis: kpis, insSources: insSources, insFeat: insFeat, insTours: insTours, insSurveys: insSurveys, goSurveys: set({ screen: 'admin', adminView: 'community', mtab: 'listen', ltab: 'surveys', mview: 'list' }), attention: attention, goNewFromInsights: set({ tab: 'new', filter: 'all', open: Object.assign({}, s.open, { r1: true, r2: true }) }),
+      runs: runs, runsMsg: s.runClicks ? (s.runClicks + ' run' + (s.runClicks > 1 ? 's' : '') + ' started today') : '', runSelected: set(function () { var n = s.runClicks + 1; var o = { runClicks: n, snack: { text: 'Run started on 2 pull requests · about 2 minutes.', action: '', act: '' } }; if (n === 3 && !s.microSent) { o.micro = true; o.snack = null; } return o; }),
+      tipOn: s.tip && !s.tourId, tipOff: set({ tip: false }), tipTour: set(function () { var o = apply(T.tsweep, 3, false); o.tourId = 'tsweep'; return o; }),
+      microOn: s.micro, microAsk: !s.microSent, microDone: s.microSent, micro: micro, microPicked: s.microV !== null, microWhy: s.microWhy, onMicroWhy: set(function (e) { return { microWhy: val(e) }; }), microLater: set({ micro: false }), microSend: set({ microSent: true }), microClose: set({ micro: false }),
+      snack: snack, snackText: snack ? s.snack.text : '', snackHasAction: snack && !!s.snack.action, snackAction: snack ? s.snack.action : '', snackAct: snack ? (ACT[s.snack.act] || ACT['']) : ACT[''], closeSnack: set({ snack: null }),
+      panel: s.panel, bellBg: s.panel ? '#D4D0F9' : 'transparent', togglePanel: set({ panel: !s.panel, menu: false, help: false }), openPanel: set(Object.assign({ snack: { text: 'Notification preferences open in Settings › Notifications.', action: '', act: '' } }, closeAll)), notifs: notifs,
+      help: s.help, helpBg: s.help ? '#D4D0F9' : 'transparent', toggleHelp: set({ help: !s.help, panel: false, menu: false }), helpTour: startTour('tpage'), helpGuides: goTab('guides'), helpNew: goTab('new'), helpChamp: champs[0].ask, helpIdea: set(Object.assign({ screen: 'community', tab: 'ideas', newIdea: true, niVoted: false }, closeAll)),
+      menu: s.menu, menuBg: s.menu ? '#D4D0F9' : 'transparent', toggleMenu: set({ menu: !s.menu, panel: false, help: false }),
+      tourOn: !!tourStep, tourEven: s.tourStep % 2 === 0, tourOdd: s.tourStep % 2 === 1, spotCls: spotSoft ? 'spot-soft' : '', noop: set({}), blkTop: blk ? blk.top : 'display: none', blkBottom: blk ? blk.bottom : 'display: none', blkLeft: blk ? blk.left : 'display: none', blkRight: blk ? blk.right : 'display: none', tourStep: s.tourStep, tourTotal: liveTour ? liveTour.steps.length : 0, tourName: liveTour ? (liveTour.name || 'Untitled tour') : '', tourTitle: tourStep ? tourStep.title : '', tourBody: tourStep ? tourStep.body : '', tourRing: tourA ? tourA.ring : '', tourPos: tourA ? tourA.pos : '', tourPreview: s.tourPreview, tourHasPrev: s.tourStep > 1,
+      tourNext: liveTour && s.tourStep >= liveTour.steps.length ? 'Done' : 'Next',
+      nextTour: !liveTour ? set({}) : (s.tourStep >= liveTour.steps.length ? endTour(true) : set(function () { return apply(liveTour, s.tourStep + 1, s.tourPreview); })), prevTour: set(function () { return liveTour ? apply(liveTour, Math.max(1, s.tourStep - 1), s.tourPreview) : {}; }), endTour: endTour(false),
+      video: !!s.video, videoTitle: s.video ? s.video.title : '', videoLen: s.video ? s.video.videoLen : '', closeVideo: set({ video: null }), videoToTour: s.video && s.video.tour ? startTour(s.video.tour) : set({ video: null })
+    });
+  }
+}
+</script>
+</body>
+</html>

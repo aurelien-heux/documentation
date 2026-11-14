@@ -1,0 +1,11 @@
+// AIToolbox for Angular Material 21 — Material 2 theming API (`mat.m2-*`), the theme in use today.
+// angular.json → "styles": ["node_modules/@aitoolbox/ui/styles/aitoolbox-m2.scss"]
+// Dark mode: add class="dark" on <html> (the M2 theme does not follow the system setting).
+// When you move to Angular Material 22, swap this file for aitoolbox-m3.scss: tokens, classes and components are the same.
+@use './tokens';
+@use './layout';
+@use './theme-m2-core';
+@use './components';
+
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }

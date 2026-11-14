@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tour focus lab, seven ways to point at a target</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;display=swap">
+<style>
+<!--CSS-->
+.tile{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:4px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+.tile i{width:8px;height:8px;border-radius:2px;background:currentColor}
+.ok{background:#C3F4DC;color:#00391E}.wn{background:#FFDEA0;color:#261900}.er{background:#FFDAD6;color:#410002}.in{background:#E3DFFF;color:#14085E}.ne{background:#ECE5F4;color:#1C1B1E}.ai{background:#9CF1F0;color:#002020}
+.cap{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#48454E}
+.ov{position:absolute;pointer-events:none;box-sizing:border-box}
+.ring{border:2px solid #35307E;border-radius:12px;box-shadow:0 0 0 4px rgba(53,48,126,.18)}
+.scrim{border-radius:12px;box-shadow:0 0 0 9999px rgba(13,11,20,.42)}
+.scrim-soft{border-radius:12px;box-shadow:0 0 0 9999px rgba(13,11,20,.16)}
+.blur{background:rgba(13,11,20,.34);backdrop-filter:blur(2.5px);-webkit-backdrop-filter:blur(2.5px)}
+.glow{border-radius:12px;box-shadow:0 0 0 2px #35307E,0 0 0 8px #D4D0F9,0 10px 28px 2px rgba(53,48,126,.38)}
+.halo{border-radius:14px;border:2px solid #35307E;opacity:0;animation:dc-halo 1.4s cubic-bezier(.2,0,0,1) 2}
+.halo.b{animation-delay:.45s}
+.halo.inf{animation-iteration-count:infinite}
+@keyframes dc-halo{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.22,1.9);opacity:0}}
+.dot{width:14px;height:14px;border-radius:999px;background:#35307E;box-shadow:0 0 0 3px #FDF8FD}
+.dothalo{width:14px;height:14px;border-radius:999px;border:2px solid #35307E;animation:dc-dot 1.6s cubic-bezier(.2,0,0,1) infinite}
+@keyframes dc-dot{0%{transform:scale(1);opacity:.8}100%{transform:scale(3);opacity:0}}
+.draw rect{stroke-dasharray:1200;stroke-dashoffset:1200;animation:dc-draw .7s cubic-bezier(.2,0,0,1) forwards}
+@keyframes dc-draw{to{stroke-dashoffset:0}}
+.fade{animation:dc-fade .35s cubic-bezier(.2,0,0,1) both}
+@keyframes dc-fade{from{opacity:0}to{opacity:1}}
+.rise{animation:dc-rise .4s cubic-bezier(.2,0,0,1) both}
+@keyframes dc-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.rm .halo,.rm .dothalo,.rm .draw rect,.rm .fade,.rm .rise{animation:none!important;opacity:1;stroke-dashoffset:0;transform:none}
+.rm .halo,.rm .dothalo{display:none}
+@media (prefers-reduced-motion: reduce){.halo,.dothalo,.draw rect,.fade,.rise{animation:none!important;opacity:1;stroke-dashoffset:0;transform:none}.halo,.dothalo{display:none}}
+.tcard{position:absolute;width:340px;box-sizing:border-box;padding:12px 16px 8px;border-radius:12px;background:#F2EBFA;box-shadow:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15);z-index:9}
+.ttab{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px;border-radius:12px;border:1px solid #CAC4CF;background:#FDF8FD;text-align:left;cursor:pointer;min-width:0}
+.ttab:hover{background:rgba(53,48,126,.06)}
+.ttab-on{border-color:#35307E;box-shadow:inset 0 0 0 1px #35307E;background:#F2EBFA}
+.cmp td,.cmp th{padding:10px 12px;font-size:13px;line-height:18px;vertical-align:top;border-top:1px solid #CAC4CF}
+.cmp th{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#48454E;text-align:left;border-top:0}
+.cmp tr.on td{background:#F2EBFA}
+<!--SIMCSS-->
+@container win (max-width: 839px){
+.r-tool{flex-wrap:wrap;height:auto!important}
+}
+@container win (max-width: 1199px){
+.r-sweep colgroup,.r-sweep thead{display:none}
+.r-sweep,.r-sweep tbody{display:block}
+.r-sweep tr{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:6px 8px;padding:12px 16px;border-top:1px solid #CAC4CF}
+.r-sweep tr:first-child{border-top:0}
+.r-sweep td{display:block;border:0!important;height:auto!important;padding:0!important}
+.r-sweep td:nth-child(1){grid-row:1 / span 3}
+.r-sweep td:nth-child(3){grid-column:3;grid-row:1}
+.r-sweep td:nth-child(4),.r-sweep td:nth-child(5){grid-column:2 / 4}
+}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1520px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column">
+
+  <div style="padding: 20px 32px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; align-items: center; gap: 16px">
+      <h1 class="ui" style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 700">Tour focus lab</h1>
+      <span style="font-size: 14px; color: #48454E">Seven ways to pull the eye to the target of a guided-tour step; D is adopted. Pick one, press Replay to see the entrance again.</span>
+      <span style="flex: 1"></span>
+      <button type="button" class="chip" aria-pressed="{{rm}}" style="{{rmStyle}}" onClick="{{toggleRm}}"><sc-if value="{{rm}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>Reduced motion</button>
+      <button type="button" class="btn t btn-i" onClick="{{replay}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>Replay</button>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="7">
+        <button type="button" class="ttab {{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}"><span class="row" style="gap: 8px"><span class="num" style="width: 24px; height: 24px; border-radius: 999px; background: {{t.numBg}}; color: {{t.numFg}}; font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">{{t.k}}</span><span class="ui" style="font-size: 14px; font-weight: 600">{{t.name}}</span></span><span style="font-size: 12px; line-height: 16px; color: #48454E">{{t.sub}}</span><sc-if value="{{t.rec}}" hint-placeholder-val="{{false}}"><span class="tile ok"><i></i>Adopted</span></sc-if></button>
+      </sc-for>
+    </div>
+    <!--SIMBAR-->
+  </div>
+
+  <div style="margin: 0 32px; border-radius: 12px; overflow: hidden; border: 1px solid #CAC4CF">
+  <!--SIMOPEN-->
+  <div id="tf-frame" class="{{frameCls}}" style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; background: #FDF8FD; overflow: hidden">
+    <!--HEADER-->
+    <div style="flex: 1; display: flex; min-height: 0">
+      <!--RAIL-->
+      <main style="position: relative; flex: 1; min-width: 0; padding: 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+        <div class="r-tool" style="height: 40px; display: flex; align-items: center; gap: 8px">
+          <span class="btn f btn-i" style="width: 160px; justify-content: center; background: #1D1A27"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Run selected</span>
+          <span class="btn o" style="width: 120px; justify-content: center">Schedule</span>
+          <span style="flex: 1"></span>
+          <span class="chip">All statuses</span>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden">
+          <table class="r-sweep" style="width: 100%; border-collapse: collapse; table-layout: fixed">
+            <colgroup><col style="width: 48px"><col style="width: 320px"><col style="width: 140px"><col style="width: 240px"><col></colgroup>
+            <thead><tr><th class="th"><span class="cb" style="display: inline-block; width: 18px; height: 18px; border: 2px solid #48454E; border-radius: 2px; box-sizing: border-box"></span></th><th class="th">Pull request</th><th class="th">Last run</th><th class="th">Review summary</th><th class="th">Findings</th></tr></thead>
+            <tbody>
+              <sc-for list="{{runs}}" as="r" hint-placeholder-count="3">
+                <tr><td class="td"><span class="cb" style="display: inline-block; width: 18px; height: 18px; border: 2px solid #48454E; border-radius: 2px; box-sizing: border-box"></span></td><td class="td"><div class="ui" style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.title}}</div><div style="font-size: 12px; color: #48454E">{{r.meta}}</div></td><td class="td"><span class="tile {{r.tile}}"><i></i>{{r.status}}</span></td><td class="td"><span class="chip" data-anchor="sweep.summary" style="height: 32px; background: #9CF1F0; border-color: #9CF1F0; color: #002020"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#006A6A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>{{r.summary}}</span></td><td class="td" style="font-size: 13px; color: #48454E">{{r.findings}}</td></tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+    <!--NAVBAR-->
+
+    <sc-if value="{{vRing}}" hint-placeholder-val="{{true}}"><div class="ov ring" style="{{T}}"></div></sc-if>
+
+    <sc-if value="{{vPulse}}" hint-placeholder-val="{{false}}">
+      <sc-if value="{{even}}" hint-placeholder-val="{{true}}"><div class="ov halo" style="{{T}}"></div><div class="ov halo b" style="{{T}}"></div></sc-if>
+      <sc-if value="{{odd}}" hint-placeholder-val="{{false}}"><div class="ov halo" style="{{T}}"></div><div class="ov halo b" style="{{T}}"></div></sc-if>
+      <div class="ov ring" style="{{T}}"></div>
+    </sc-if>
+
+    <sc-if value="{{vBeacon}}" hint-placeholder-val="{{false}}">
+      <div class="ov dothalo" style="{{dotT}}"></div><div class="ov dot" style="{{dotT}}"></div>
+      <svg class="ov" style="left: 0; top: 0; width: {{W}}px; height: {{H}}px" viewBox="0 0 {{W}} {{H}}" aria-hidden="true"><path d="{{leader}}" fill="none" stroke="#35307E" stroke-width="1.5" stroke-dasharray="4 4"/></svg>
+    </sc-if>
+
+    <sc-if value="{{vSpot}}" hint-placeholder-val="{{false}}">
+      <sc-if value="{{even}}" hint-placeholder-val="{{true}}"><div class="ov scrim fade" style="{{Tpad}}"></div></sc-if>
+      <sc-if value="{{odd}}" hint-placeholder-val="{{false}}"><div class="ov scrim fade" style="{{Tpad}}"></div></sc-if>
+      <div class="ov ring" style="{{T}}"></div>
+    </sc-if>
+
+    <sc-if value="{{vBlur}}" hint-placeholder-val="{{false}}">
+      <div class="ov blur" style="{{bTop}}"></div><div class="ov blur" style="{{bBottom}}"></div><div class="ov blur" style="{{bLeft}}"></div><div class="ov blur" style="{{bRight}}"></div>
+      <div class="ov ring" style="{{T}}"></div>
+    </sc-if>
+
+    <sc-if value="{{vGlow}}" hint-placeholder-val="{{false}}">
+      <div class="ov scrim-soft" style="{{Tpad}}"></div>
+      <sc-if value="{{even}}" hint-placeholder-val="{{true}}"><div class="ov glow fade" style="{{T}}"></div></sc-if>
+      <sc-if value="{{odd}}" hint-placeholder-val="{{false}}"><div class="ov glow fade" style="{{T}}"></div></sc-if>
+    </sc-if>
+
+    <sc-if value="{{vReco}}" hint-placeholder-val="{{false}}">
+      <sc-if value="{{even}}" hint-placeholder-val="{{true}}"><div class="ov scrim fade" style="{{Tpad}}"></div><div class="ov halo" style="{{T}}; animation-iteration-count: 1"></div><svg class="ov draw" style="{{Tsvg}}" viewBox="0 0 {{tw}} {{th}}" aria-hidden="true"><rect x="1" y="1" width="{{twi}}" height="{{thi}}" rx="11" fill="none" stroke="#35307E" stroke-width="2"/></svg></sc-if>
+      <sc-if value="{{odd}}" hint-placeholder-val="{{false}}"><div class="ov scrim fade" style="{{Tpad}}"></div><div class="ov halo" style="{{T}}; animation-iteration-count: 1"></div><svg class="ov draw" style="{{Tsvg}}" viewBox="0 0 {{tw}} {{th}}" aria-hidden="true"><rect x="1" y="1" width="{{twi}}" height="{{thi}}" rx="11" fill="none" stroke="#35307E" stroke-width="2"/></svg></sc-if>
+    </sc-if>
+
+    <sc-if value="{{even}}" hint-placeholder-val="{{true}}"><div class="tcard rise" role="dialog" aria-label="Guided tour" style="{{cardPos}}"><div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px"><span class="tag" style="background: #E3DFFF; color: #14085E">New in 4.6</span><span style="font-size: 12px; color: #48454E">Step 3 of 3</span></div><div class="ui" style="font-size: 14px; line-height: 20px; font-weight: 600; margin-bottom: 4px">PR summaries in Sweep</div><div style="font-size: 14px; line-height: 20px; color: #48454E">Every pull request now gets a review summary written from the diff and the pipeline logs. Open one and rate it.</div><div style="display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px"><span class="btn x">Skip</span><span class="btn x">Back</span><span class="btn x">Done</span></div></div></sc-if>
+    <sc-if value="{{odd}}" hint-placeholder-val="{{false}}"><div class="tcard rise" role="dialog" aria-label="Guided tour" style="{{cardPos}}"><div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px"><span class="tag" style="background: #E3DFFF; color: #14085E">New in 4.6</span><span style="font-size: 12px; color: #48454E">Step 3 of 3</span></div><div class="ui" style="font-size: 14px; line-height: 20px; font-weight: 600; margin-bottom: 4px">PR summaries in Sweep</div><div style="font-size: 14px; line-height: 20px; color: #48454E">Every pull request now gets a review summary written from the diff and the pipeline logs. Open one and rate it.</div><div style="display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px"><span class="btn x">Skip</span><span class="btn x">Back</span><span class="btn x">Done</span></div></div></sc-if>
+  </div>
+  <!--SIMCLOSE-->
+  </div>
+
+  <div style="padding: 20px 32px 32px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start">
+    <div class="card" style="padding: 0; overflow: hidden">
+      <table class="cmp" style="width: 100%; border-collapse: collapse">
+        <thead><tr><th style="width: 36px"></th><th style="width: 150px">Treatment</th><th>What it does</th><th style="width: 120px">Focus</th><th style="width: 120px">Motion</th><th>Use it when</th></tr></thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+            <tr class="{{r.cls}}"><td><span class="ui" style="font-weight: 700">{{r.k}}</span></td><td><span class="ui" style="font-weight: 600">{{r.name}}</span></td><td>{{r.what}}</td><td><span class="tile {{r.ftile}}"><i></i>{{r.focus}}</span></td><td><span class="tile {{r.mtile}}"><i></i>{{r.motion}}</span></td><td style="color: #48454E">{{r.when}}</td></tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px">
+        <div class="row" style="justify-content: space-between"><span class="h2">Decision · D adopted</span><span class="tile ok"><i></i>Spotlight</span></div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E">The scrim does the work: everything else drops to 42 % and the target stays at full brightness, so the eye lands on it before reading a word. The ring marks the exact edge of the target. The scrim fades in over 350 ms and the card rises 8 px; nothing loops. The page under the scrim is not clickable, only the target is, which also prevents mis-clicks during a tour. Applied to the Community prototype (all tours) and documented in the design system as the GuidedTour component.</div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E"><b style="color: #1C1B1E">Fallbacks.</b> Reduced motion: the spotlight appears without the fade. Targets wider than 60 % of the window (a whole table): soft scrim at 16 % instead of 42 %, so the content stays readable. A target in the rail or header: the cutout follows the 16 px item radius.</div>
+      </div>
+      <div class="ocard" style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 18px; color: #48454E">
+        <span class="ui" style="font-size: 14px; font-weight: 700; color: #1C1B1E">Design-system notes</span>
+        <span>Scrim: the `scrim` role at 42 % (dialogs use 32 %); cutout radius 12 px, or 16 px on navigation items. Ring: 2 px `primary`, 4 px gap at 18 %. Card: `surface-container-high`, level 2, 12 px radius, 340 px, placed beside the target (right, else left, else below). Targets are `data-anchor` elements measured at runtime, scrolled into view first.</span>
+        <span>Never teal: the tour is chrome, not an AI feature. Never the beacon dot alone as the only cue (colour alone): the card always names the target.</span>
+        <span>Motion: MD emphasized easing, 350–700 ms, at most one looping element per screen (the beacon loop stops when the card closes).</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1610}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.simHostId = 'sim-host-tf'; this.simDefault = 1374;
+    this.state = { v: 'D', k: 0, rm: false, rect: null, simW: null, simAvail: 0 };
+  }
+/*SIMJS*/
+  measure() {
+    var f = document.getElementById('tf-frame'); if (!f) return;
+    var el = f.querySelector('[data-anchor="sweep.summary"]'); if (!el) return;
+    var r = el.getBoundingClientRect(), b = f.getBoundingClientRect();
+    var z = this.simScale();
+    var rect = { x: (r.left - b.left) / z, y: (r.top - b.top) / z, w: r.width / z, h: r.height / z, W: b.width / z, H: b.height / z };
+    var o = this.state.rect;
+    if (o && Math.abs(o.x - rect.x) < .5 && Math.abs(o.y - rect.y) < .5 && Math.abs(o.w - rect.w) < .5 && Math.abs(o.h - rect.h) < .5 && Math.abs(o.W - rect.W) < .5) return;
+    this.setState({ rect: rect });
+  }
+  componentDidMount() { var self = this; this.simSync(); this.measure(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { self.measure(); }); window.addEventListener('resize', function () { self.simSync(); self.measure(); }); }
+  componentDidUpdate() { this.simSync(); this.measure(); }
+  renderVals() {
+    var s = this.state, self = this, sim = this.simVals();
+    var set = function (o) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState(o); }; };
+    var ON = 'background: #E3DFFF; border-color: #E3DFFF; color: #191836';
+    var defs = [
+      { k: 'A', name: 'Ring', sub: 'Today: 2 px ring, 4 px glow.', what: 'A 2 px primary ring with a faint 4 px glow around the target. Nothing else changes.', focus: 'Low', ftile: 'ne', motion: 'None', mtile: 'ne', when: 'Secondary steps on a page the user already knows; tips.' },
+      { k: 'B', name: 'Pulse ring', sub: 'Ring + two expanding halos.', what: 'The ring, plus two halos that expand and fade at entry (1.4 s, twice). The page stays fully visible.', focus: 'Medium', ftile: 'in', motion: 'At entry', mtile: 'in', when: 'Steps where the page must stay readable, such as a tour over a form being filled.' },
+      { k: 'C', name: 'Beacon', sub: 'Pulsing dot + leader line.', what: 'A 14 px dot on the corner of the target with a looping halo, and a dashed leader to the card. Light and discoverable.', focus: 'Low', ftile: 'ne', motion: 'Loop', mtile: 'wn', when: 'Hotspots the user opens when they want, not a linear tour.' },
+      { k: 'D', name: 'Spotlight', sub: 'Scrim with a cutout.', what: 'A 42 % scrim over the whole page with a rounded cutout on the target; the target keeps full brightness.', focus: 'High', ftile: 'ok', motion: 'Fade', mtile: 'in', when: 'First-run tours and release tours: the user should look at one thing only.', rec: true },
+      { k: 'E', name: 'Spotlight + blur', sub: 'Scrim with a 2.5 px blur.', what: 'Same cutout, but the dimmed page is also blurred. Strongest separation; heavier to render on large pages.', focus: 'Highest', ftile: 'ok', motion: 'Fade', mtile: 'in', when: 'Short tours on dense screens (tables, logs) where the dimmed content still competes.' },
+      { k: 'F', name: 'Glow halo', sub: 'Soft scrim + lifted target.', what: 'A 16 % scrim and a lifted target: ring, nav-active halo and a level-3 shadow, as if the target sat above the page.', focus: 'Medium', ftile: 'in', motion: 'Fade', mtile: 'in', when: 'Steps that point at a card or a panel rather than a control.' },
+      { k: 'G', name: 'Spotlight + pulse', sub: 'Scrim, ring draws, one pulse.', what: 'The spotlight, with the ring drawing itself in 0.7 s and one halo pulse at entry. Static spotlight under reduced motion.', focus: 'High', ftile: 'ok', motion: 'At entry', mtile: 'in', when: 'Considered; not adopted, the pulse added motion for little gain over D.' }
+    ];
+    var tabs = defs.map(function (d) { var on = s.v === d.k; return { k: d.k, name: d.name, sub: d.sub, on: on, cls: on ? 'ttab-on' : '', numBg: on ? '#35307E' : '#E3DFFF', numFg: on ? '#FFFFFF' : '#14085E', rec: !!d.rec, pick: set({ v: d.k, k: s.k + 1 }) }; });
+    var rows = defs.map(function (d) { return Object.assign({}, d, { cls: s.v === d.k ? 'on' : '' }); });
+    // target: the first review-summary chip (frame coordinates)
+    var pad = 6, m = s.rect, x = m ? m.x - 4 : 634, y = m ? m.y - 4 : 286, w = m ? m.w + 8 : 206, h = m ? m.h + 8 : 40;
+    var T = 'left: ' + x + 'px; top: ' + y + 'px; width: ' + w + 'px; height: ' + h + 'px';
+    var Tpad = 'left: ' + (x - pad) + 'px; top: ' + (y - pad) + 'px; width: ' + (w + 2 * pad) + 'px; height: ' + (h + 2 * pad) + 'px';
+    var W = m ? m.W : 1374, H = m ? m.H : 560;
+    var bx = x - pad, by = y - pad, bw = w + 2 * pad, bh = h + 2 * pad;
+    // card beside the target (right, else left, else below), never wider than the window allows
+    var CW = Math.min(340, W - 32), cardLeft, cardTop = y - 8;
+    if (x + w + 28 + CW <= W - 16) cardLeft = x + w + 28;
+    else if (x - 28 - CW >= 16) cardLeft = x - 28 - CW;
+    else { cardLeft = Math.max(16, Math.min(x, W - CW - 16)); cardTop = y + h + 16; }
+    return Object.assign(sim, {
+      tabs: tabs, rows: rows, rm: s.rm, rmStyle: s.rm ? ON : '', toggleRm: set({ rm: !s.rm }), replay: set({ k: s.k + 1 }), frameCls: s.rm ? 'rm' : '',
+      even: s.k % 2 === 0, odd: s.k % 2 === 1,
+      vRing: s.v === 'A', vPulse: s.v === 'B', vBeacon: s.v === 'C', vSpot: s.v === 'D', vBlur: s.v === 'E', vGlow: s.v === 'F', vReco: s.v === 'G',
+      W: W, H: H, T: T, Tpad: Tpad, Tsvg: T + '; overflow: visible', tw: w, th: h, twi: w - 2, thi: h - 2,
+      dotT: 'left: ' + (x + w - 7) + 'px; top: ' + (y - 7) + 'px',
+      leader: 'M' + (x + w + 2) + ' ' + (y + 1) + ' C ' + (x + w + 18) + ' ' + (y + 1) + ', ' + (cardLeft - 16) + ' ' + (cardTop + 24) + ', ' + cardLeft + ' ' + (cardTop + 24),
+      bTop: 'left: 0; top: 0; width: ' + W + 'px; height: ' + by + 'px', bBottom: 'left: 0; top: ' + (by + bh) + 'px; width: ' + W + 'px; height: ' + (H - by - bh) + 'px',
+      bLeft: 'left: 0; top: ' + by + 'px; width: ' + bx + 'px; height: ' + bh + 'px', bRight: 'left: ' + (bx + bw) + 'px; top: ' + by + 'px; width: ' + (W - bx - bw) + 'px; height: ' + bh + 'px',
+      cardPos: 'left: ' + cardLeft + 'px; top: ' + cardTop + 'px; width: ' + CW + 'px',
+      runs: [ { title: '#4821 · Rate limits on the credit request API', meta: 'opened 2 h ago · Marta K.', status: 'Passed', tile: 'ok', summary: 'Review summary · rate it', findings: '0 blocking · 2 suggestions' }, { title: '#4818 · Migrate facility exports to the new schema', meta: 'opened yesterday · Yann D.', status: 'Failed', tile: 'er', summary: 'Review summary · rate it', findings: '1 blocking · secret in test fixture' }, { title: '#4809 · Bump SDK to 3.2', meta: 'opened 3 days ago · bot', status: 'Not run', tile: 'ne', summary: 'Summary pending', findings: '—' } ]
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# NavigationRail
+The default navigation from 600 px, at every window class from Medium to Extra-large: 80 px wide, menu button, then the destinations, then Cookies at the bottom.
+- **Destinations:** Sweep · Envs · Docs · Community, each with its feature mark at 24 px and a label in label-medium under it. Active: 56×32 px `secondary-container` pill with a 3 px `primary` leading bar.
+- The rail sits on `nav-container` (violet band in light) with no border, the same colour as the top app bar.
+- **Bottom:** a **Cookies** destination (cookie icon) that opens the cookie policy in a new tab — nothing under it (no version, no Terms). No Settings (it is in the account menu of the header) and no Privacy destination.
+- **Responsive:** Shown by default from 600 px. Its menu button opens the NavigationDrawer on demand: over the page with a scrim from 600 to 1199 px, standard and pushing the page from 1200 px. While the docked assistant needs the room, an open drawer folds back to the rail. A phone in landscape (height under 480 px) also takes the rail.
+- **Keyboard and screen reader:** the menu button has `aria-expanded` and `aria-controls` pointing at the drawer; same active cue as the drawer (pill + 3 px leading bar, `aria-current="page"`); every icon has a visible label that is also its name.
+- **Angular Material:** No Angular Material equivalent — an 80 px aside on `.dt-nav` with `mat-icon-button`s and labels, always rendered from 600 px (`layout.navigation() !== 'bar'`); the menu button calls `layout.toggleDrawer()` (`AitWindowClass`, `angular/breakpoints.ts`). Full map and theme files: `angular-material.md`.

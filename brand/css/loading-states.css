@@ -1,0 +1,77 @@
+/* AIToolbox loading states — use when the SVG markup is inlined in the page.
+   Colours come from tokens.css (--md-sys-color-*), so the same markup works in light and dark. */
+
+/* Brand loader (Constructor): inline the <svg> from loading-states/<theme>/brand-loader.svg without its <style>,
+   add this file, and the hard-coded colours are overridden by the tokens so one markup serves both themes. */
+.ait-loader .ait-body-fill { fill: var(--md-sys-color-logo-box); }
+.ait-loader .ait-body-stroke { stroke: var(--md-sys-color-logo-box); }
+.ait-loader .ait-chev { stroke: var(--md-sys-color-on-logo-box); }
+.ait-loader .ait-cur { stroke: var(--md-sys-color-logo-cursor); }
+.ait-loader .ait-ai-stroke { stroke: var(--md-sys-color-ai); }
+.ait-loader .ait-ai-fill { fill: var(--md-sys-color-ai); }
+.ait-loader .ait-on-ai { fill: var(--md-sys-color-on-ai); }
+@keyframes ait-badge-in{0%{transform:scale(0);opacity:0}4%{transform:scale(1.12);opacity:1}6.5%{transform:scale(.96);opacity:1}8%,100%{transform:scale(1);opacity:1}}
+@keyframes ait-la{0%,6%{transform:translateY(8px);opacity:0}10%{transform:translateY(-1px);opacity:1}11.5%,100%{transform:translateY(0);opacity:1}}
+@keyframes ait-li{0%,8.5%{transform:translateY(8px);opacity:0}12.5%{transform:translateY(-1px);opacity:1}14%,100%{transform:translateY(0);opacity:1}}
+@keyframes ait-sheen{0%,14%{transform:translateX(0);opacity:0}14.5%{opacity:.6}18.5%{transform:translateX(40px);opacity:.6}19%,100%{transform:translateX(40px);opacity:0}}
+@keyframes ait-badge-pulse{0%,68%{transform:scale(1)}71%{transform:scale(1.08)}75%,100%{transform:scale(1)}}
+@keyframes ait-pen{0%,18%{offset-distance:0%;opacity:0}18.5%{opacity:1}65.5%{opacity:1}66%,100%{offset-distance:100%;opacity:0}}
+@keyframes ait-ln-box{0%,19.77%{stroke-dashoffset:100;opacity:0}19.87%{opacity:1}46.00%,68%{stroke-dashoffset:0;opacity:1}74%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes ait-ln-handle{0%,46.23%{stroke-dashoffset:100;opacity:0}46.33%{opacity:1}52.65%,68%{stroke-dashoffset:0;opacity:1}74%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes ait-ln-chev{0%,54.32%{stroke-dashoffset:100;opacity:0}54.42%{opacity:1}57.66%,68%{stroke-dashoffset:0;opacity:1}74%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes ait-ln-cur{0%,60.17%{stroke-dashoffset:100;opacity:0}60.27%{opacity:1}62.22%,68%{stroke-dashoffset:0;opacity:1}74%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes ait-fill{0%,68%{opacity:0}73%,100%{opacity:1}}
+@keyframes ait-blink{0%,73%{opacity:0}75%{opacity:1}81%{opacity:0}85%{opacity:1}91%{opacity:0}93%,100%{opacity:1}}
+@keyframes ait-guide{0%,14%{opacity:0}18%,64%{opacity:.55}69%,100%{opacity:0}}
+.ait-badge-in{transform-origin:55px 15px;animation:ait-badge-in 4.8s cubic-bezier(.34,1.4,.64,1) infinite}
+.ait-badge-pulse{transform-origin:55px 15px;animation:ait-badge-pulse 4.8s cubic-bezier(.2,0,0,1) infinite}
+.ait-la{animation:ait-la 4.8s cubic-bezier(.2,0,0,1) infinite}
+.ait-li{animation:ait-li 4.8s cubic-bezier(.2,0,0,1) infinite}
+.ait-sheen{animation:ait-sheen 4.8s cubic-bezier(.2,0,0,1) infinite}
+.ait-pen{offset-path:path("M55 24.5L44 22H14a10 10 0 0 0-10 10v16a10 10 0 0 0 10 10h36a10 10 0 0 0 10-10V32a10 10 0 0 0-10-10H44L43 23v-6a6 6 0 0 0-6-6H27a6 6 0 0 0-6 6v6L17.5 33l8 7-8 7L33.5 47h13L55 24.5");offset-rotate:0deg;animation:ait-pen 4.8s linear infinite}
+.ait-ln-box{animation:ait-ln-box 4.8s linear infinite}
+.ait-ln-handle{animation:ait-ln-handle 4.8s linear infinite}
+.ait-ln-chev{animation:ait-ln-chev 4.8s linear infinite}
+.ait-ln-cur{animation:ait-ln-cur 4.8s linear infinite}
+.ait-fill{animation:ait-fill 4.8s linear infinite}
+.ait-blink{animation:ait-blink 4.8s linear infinite}
+.ait-guide{animation:ait-guide 4.8s linear infinite}
+.ait-once *{animation-iteration-count:1!important;animation-fill-mode:forwards!important}
+@media (prefers-reduced-motion: reduce){.ait-loader *{animation:none!important}.ait-loader .ait-o{opacity:0}.ait-loader .ait-fill,.ait-loader .ait-blink{opacity:1}.ait-loader .ait-badge-in{transform:none;opacity:1}.ait-loader .ait-sheen{opacity:0}}
+
+/* Progress indicators (Constructor family): colours from the tokens when the markup is inlined. */
+.ait-po-track { stroke: var(--md-sys-color-primary-container); }
+.ait-po-arc { stroke: var(--md-sys-color-primary); }
+.ait-po-pen, .ait-gl-pen, .ait-cd-pen, .ait-dot-ai { fill: var(--md-sys-color-ai); }   /* ai: deep teal on light grounds (tokens 5.0), light teal in dark */
+.ait-gl-guide, .ait-cd-guide, .ait-cd-line { stroke: var(--md-sys-color-ai); }
+.ait-gl-value { fill: var(--md-sys-color-primary); }
+.ait-cd-body { fill: var(--md-sys-color-logo-box); } .ait-cd-handle { stroke: var(--md-sys-color-logo-box); }
+.ait-cd-chev { stroke: var(--md-sys-color-on-logo-box); } .ait-cd-cur { stroke: var(--md-sys-color-logo-cursor); }
+.ait-dot-run { fill: var(--md-sys-color-tertiary); }
+@keyframes ait-po-spin{to{transform:rotate(360deg)}}
+.ait-po{animation:ait-po-spin 1.4s linear infinite;transform-origin:center}
+@keyframes ait-gl-run{0%{transform:translateX(-30%)}100%{transform:translateX(105%)}}
+.ait-gl-bar{animation:ait-gl-run 1.8s cubic-bezier(.2,0,0,1) infinite}
+@keyframes ait-cd-draw{0%,6%{stroke-dashoffset:100}70%,100%{stroke-dashoffset:0}}
+@keyframes ait-cd-pen{0%,6%{offset-distance:0%;opacity:1}70%{offset-distance:100%;opacity:1}73%,100%{offset-distance:100%;opacity:0}}
+@keyframes ait-cd-fill{0%,72%{opacity:0}78%,100%{opacity:1}}
+.ait-cd-loop .ait-cd-line{animation:ait-cd-draw 4s linear infinite}
+.ait-cd-loop .ait-cd-pen{animation:ait-cd-pen 4s linear infinite}
+.ait-cd-loop .ait-cd-solid{animation:ait-cd-fill 4s linear infinite}
+.ait-cd-pen{offset-path:path("M44 22H14a10 10 0 0 0-10 10v16a10 10 0 0 0 10 10h36a10 10 0 0 0 10-10V32a10 10 0 0 0-10-10H44");offset-rotate:0deg}
+.ait-cd[style*="--p"] .ait-cd-line{stroke-dashoffset:calc(100 - var(--p))}
+.ait-cd[style*="--p"] .ait-cd-pen{offset-distance:calc(var(--p) * 1%)}
+.ait-cd[style*="--p"] .ait-cd-solid{opacity:0}
+.ait-cd.ait-cd-done .ait-cd-solid{opacity:1}.ait-cd.ait-cd-done .ait-cd-pen{opacity:0}
+@keyframes ait-dot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+.ait-dot{animation:ait-dot 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion: reduce){.ait-po{animation:none!important}.ait-gl-bar,.ait-dot,.ait-cd-loop *{animation:none!important}.ait-cd-loop .ait-cd-solid{opacity:1}.ait-cd-loop .ait-cd-pen{opacity:0}}
+
+/* Usage:
+   <svg class="ait-loader ait-once" viewBox="-4 2 76 64" width="114" height="96">…</svg>   one-shot splash intro
+   <svg class="ait-loader" viewBox="-4 2 76 64" width="57" height="48">…</svg>             looping loader
+   circular: inline circular-indeterminate.svg without its <style> (classes ait-po-*)
+   linear:   inline linear-indeterminate.svg (ait-gl-*); for a value, set the rect width and the pen cx to the percentage
+   brand progress: inline brand-progress.svg and set style="--p: 35" on the root (0–100); add class ait-cd-done at 100
+   dots:     working-dots.svg (green = a command runs) · working-dots-ai.svg (teal = a model is working)
+*/

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AIToolbox core components</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0;font-family:Manrope,"Segoe UI",system-ui,sans-serif}
+a{color:#39235F}a:hover{color:#14085E}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1180px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column; gap: 24px; padding: 56px 64px">
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #48454E">Material Design 3 · Components</div>
+    <h1 style="margin: 0; font-size: 45px; line-height: 52px; font-weight: 700; letter-spacing: -0.01em">Core components</h1>
+    <p style="margin: 0; max-width: 820px; font-size: 16px; line-height: 24px; color: #48454E">MD3 specs (40 px buttons, 56 px fields, 12 px cards, 16 px corners on every rectangle — buttons, segments, search, nav items, dialogs; full only for circles) in the AIToolbox roles. Deep-violet primary carries navigation and confirmation, mauve secondary the tonal controls (chips, filters, selection); neon-green tertiary is reserved for the one action that starts work (run, deploy). Teal is never used for chrome — it belongs to AI features only.</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+
+    <div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 16px; background: #FAF4FF">
+      <span style="font-size: 14px; font-weight: 700">Buttons</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+        <button type="button" style="height: 40px; padding: 0 24px; border: 0; border-radius: 16px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600; letter-spacing: 0.1px">Filled</button>
+        <button type="button" style="height: 40px; padding: 0 24px; border: 0; border-radius: 16px; background: #DED7EB; color: #1D1A28; font-size: 14px; font-weight: 600; letter-spacing: 0.1px">Tonal</button>
+        <button type="button" style="height: 40px; padding: 0 24px; border: 0; border-radius: 16px; background: #FDF8FD; color: #39235F; font-size: 14px; font-weight: 600; letter-spacing: 0.1px; box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15)">Elevated</button>
+        <button type="button" style="height: 40px; padding: 0 24px; border: 1px solid #79757F; border-radius: 16px; background: transparent; color: #39235F; font-size: 14px; font-weight: 600; letter-spacing: 0.1px">Outlined</button>
+        <button type="button" style="height: 40px; padding: 0 12px; border: 0; border-radius: 16px; background: transparent; color: #39235F; font-size: 14px; font-weight: 600; letter-spacing: 0.1px">Text</button>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+        <button type="button" style="height: 40px; padding: 0 24px 0 16px; border: 0; border-radius: 16px; background: #DCEAB4; color: #39235F; font-size: 14px; font-weight: 600; letter-spacing: 0.1px; display: inline-flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="#39235F" stroke="#39235F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l12 8-12 8z"></path></svg>Run pipeline</button>
+        <button type="button" disabled style="height: 40px; padding: 0 24px; border: 0; border-radius: 16px; background: rgba(22,29,29,0.12); color: rgba(22,29,29,0.38); font-size: 14px; font-weight: 600; letter-spacing: 0.1px">Disabled</button>
+        <button type="button" aria-label="Settings" style="width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
+        <button type="button" aria-label="Favorite" style="width: 40px; height: 40px; border: 0; border-radius: 999px; background: #39235F; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></button>
+      </div>
+      <span style="font-size: 14px; font-weight: 700; margin-top: 4px">FABs</span>
+      <div style="display: flex; gap: 14px; align-items: center">
+        <button type="button" aria-label="New tool" style="width: 56px; height: 56px; border: 0; border-radius: 16px; background: #E3DFFF; color: #14085E; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 8px 3px rgba(0,0,0,0.15)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+        <button type="button" aria-label="New tool, small" style="width: 40px; height: 40px; border: 0; border-radius: 12px; background: #DCEAB4; color: #39235F; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 8px 3px rgba(0,0,0,0.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+        <button type="button" style="height: 56px; padding: 0 20px 0 16px; border: 0; border-radius: 16px; background: #E3DFFF; color: #14085E; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 8px 3px rgba(0,0,0,0.15)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>New workspace</button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 16px; background: #FAF4FF">
+      <span style="font-size: 14px; font-weight: 700">Chips</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <button type="button" style="height: 32px; padding: 0 16px; border: 1px solid #79757F; border-radius: 8px; background: transparent; color: #1C1B1E; font-size: 14px; font-weight: 500">Docker</button>
+        <button type="button" style="height: 32px; padding: 0 16px 0 8px; border: 0; border-radius: 8px; background: #DED7EB; color: #1D1A28; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>Kubernetes</button>
+        <button type="button" style="height: 32px; padding: 0 16px; border: 1px solid #79757F; border-radius: 8px; background: transparent; color: #1C1B1E; font-size: 14px; font-weight: 500">Terraform</button>
+        <button type="button" style="height: 32px; padding: 0 8px 0 12px; border: 1px solid #79757F; border-radius: 8px; background: transparent; color: #1C1B1E; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px">env:prod<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+        <button type="button" style="height: 32px; padding: 0 16px 0 8px; border: 0; border-radius: 8px; background: #FFFFFF; color: #39235F; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add tool</button>
+      </div>
+      <span style="font-size: 14px; font-weight: 700; margin-top: 4px">Text fields</span>
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <div style="position: relative; display: flex; flex-direction: column">
+          <label for="f-outlined" style="position: absolute; top: -8px; left: 12px; padding: 0 4px; background: #FAF4FF; font-size: 12px; font-weight: 500; color: #39235F">Repository URL</label>
+          <input id="f-outlined" type="text" value="github.com/acme/aitoolbox" style="height: 56px; box-sizing: border-box; padding: 0 16px; border: 2px solid #39235F; border-radius: 4px; background: transparent; color: #1C1B1E; font-size: 16px; font-family: 'JetBrains Mono', monospace">
+          <span style="font-size: 12px; color: #48454E; padding: 4px 16px 0">Public or private, HTTPS or SSH</span>
+        </div>
+        <div style="display: flex; flex-direction: column">
+          <div style="position: relative; display: flex; flex-direction: column; height: 56px; border-radius: 4px 4px 0 0; background: #F2EBFA; border-bottom: 1px solid #48454E">
+            <label for="f-filled" style="position: absolute; top: 8px; left: 16px; font-size: 12px; color: #48454E">Workspace name</label>
+            <input id="f-filled" type="text" value="staging-eu" style="height: 56px; box-sizing: border-box; padding: 20px 16px 0; border: 0; background: transparent; color: #1C1B1E; font-size: 16px; outline: none">
+          </div>
+          <span style="font-size: 12px; color: #48454E; padding: 4px 16px 0">Lower-case, hyphens allowed</span>
+        </div>
+        <div style="position: relative; display: flex; flex-direction: column">
+          <label for="f-error" style="position: absolute; top: -8px; left: 12px; padding: 0 4px; background: #FAF4FF; font-size: 12px; font-weight: 500; color: #93000A">API token</label>
+          <input id="f-error" type="text" value="dtb_" style="height: 56px; box-sizing: border-box; padding: 0 16px; border: 2px solid #93000A; border-radius: 4px; background: transparent; color: #1C1B1E; font-size: 16px; font-family: 'JetBrains Mono', monospace">
+          <span style="font-size: 12px; color: #93000A; padding: 4px 16px 0">Token must be 40 characters</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 16px; background: #FAF4FF">
+      <span style="font-size: 14px; font-weight: 700">Selection controls</span>
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; min-height: 44px"><span>Auto-deploy on merge</span><span style="position: relative; width: 52px; height: 32px; border-radius: 999px; background: #39235F; display: inline-flex; align-items: center; padding: 0 4px; box-sizing: border-box; justify-content: flex-end"><input type="checkbox" checked style="position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0"><span style="width: 24px; height: 24px; border-radius: 999px; background: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; color: #39235F"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span></span></label>
+        <label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; min-height: 44px"><span>Notify on failure only</span><span style="position: relative; width: 52px; height: 32px; border-radius: 999px; background: #E6E0EC; border: 2px solid #79757F; box-sizing: border-box; display: inline-flex; align-items: center; padding: 0 6px"><input type="checkbox" style="position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0"><span style="width: 16px; height: 16px; border-radius: 999px; background: #79757F"></span></span></label>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap">
+          <label style="display: inline-flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px"><span style="width: 18px; height: 18px; border-radius: 2px; background: #39235F; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF"><input type="checkbox" checked style="position: absolute; opacity: 0; width: 18px; height: 18px; margin: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span>Lint</label>
+          <label style="display: inline-flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px"><span style="width: 18px; height: 18px; border-radius: 2px; border: 2px solid #48454E; box-sizing: border-box; display: inline-flex"><input type="checkbox" style="position: absolute; opacity: 0; width: 18px; height: 18px; margin: 0"></span>Tests</label>
+          <label style="display: inline-flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px"><span style="width: 20px; height: 20px; border-radius: 999px; border: 2px solid #39235F; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center"><input type="radio" name="r" checked style="position: absolute; opacity: 0; width: 20px; height: 20px; margin: 0"><span style="width: 10px; height: 10px; border-radius: 999px; background: #39235F"></span></span>Blue/green</label>
+          <label style="display: inline-flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px"><span style="width: 20px; height: 20px; border-radius: 999px; border: 2px solid #48454E; box-sizing: border-box; display: inline-flex"><input type="radio" name="r" style="position: absolute; opacity: 0; width: 20px; height: 20px; margin: 0"></span>Rolling</label>
+        </div>
+      </div>
+      <span style="font-size: 14px; font-weight: 700; margin-top: 4px">Segmented button &amp; tabs</span>
+      <div style="display: flex; border: 1px solid #79757F; border-radius: 16px; overflow: hidden; height: 40px">
+        <button type="button" style="flex: 1; border: 0; border-right: 1px solid #79757F; background: #DED7EB; color: #1D1A28; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>Day</button>
+        <button type="button" style="flex: 1; border: 0; border-right: 1px solid #79757F; background: transparent; color: #1C1B1E; font-size: 14px; font-weight: 600">Week</button>
+        <button type="button" style="flex: 1; border: 0; background: transparent; color: #1C1B1E; font-size: 14px; font-weight: 600">Month</button>
+      </div>
+      <div style="display: flex; border-bottom: 1px solid #CAC4CF">
+        <button type="button" style="flex: 1; height: 48px; border: 0; background: transparent; color: #39235F; font-size: 14px; font-weight: 600; position: relative">Overview<span style="position: absolute; left: 24px; right: 24px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; background: #39235F"></span></button>
+        <button type="button" style="flex: 1; height: 48px; border: 0; background: transparent; color: #48454E; font-size: 14px; font-weight: 600">Runs</button>
+        <button type="button" style="flex: 1; height: 48px; border: 0; background: transparent; color: #48454E; font-size: 14px; font-weight: 600">Secrets</button>
+      </div>
+      <span style="font-size: 14px; font-weight: 700; margin-top: 4px">Progress</span>
+      <div style="display: flex; align-items: center; gap: 16px">
+        <div style="flex: 1; height: 4px; border-radius: 2px; background: #E3DFFF; overflow: hidden"><div style="width: 62%; height: 100%; border-radius: 2px; background: #39235F"></div></div>
+        <svg width="40" height="40" viewBox="0 0 48 48" aria-label="62% complete" role="img"><circle cx="24" cy="24" r="20" fill="none" stroke="#E3DFFF" stroke-width="4"></circle><circle cx="24" cy="24" r="20" fill="none" stroke="#39235F" stroke-width="4" stroke-linecap="round" stroke-dasharray="78 126" transform="rotate(-90 24 24)"></circle></svg>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 16px; background: #FAF4FF">
+      <span style="font-size: 14px; font-weight: 700">Cards</span>
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <div style="padding: 16px; border-radius: 12px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 6px">
+          <div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 16px; font-weight: 600">api-gateway</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 3px 8px; border-radius: 4px; background: #DED7EB; color: #1D1A28">passing</span></div>
+          <span style="font-size: 14px; color: #48454E">Elevated · last run 4 min ago on main</span>
+          <div style="display: flex; gap: 8px; margin-top: 6px"><button type="button" style="height: 40px; padding: 0 12px; border: 0; border-radius: 16px; background: transparent; color: #39235F; font-size: 14px; font-weight: 600">Logs</button><button type="button" style="height: 40px; padding: 0 24px; border: 0; border-radius: 16px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600">Open</button></div>
+        </div>
+        <div style="padding: 16px; border-radius: 12px; background: #F2EBFA; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 16px; font-weight: 600">Filled card</span>
+          <span style="font-size: 14px; color: #48454E">surface-container-high, no shadow. Use in dense lists.</span>
+        </div>
+        <div style="padding: 16px; border-radius: 12px; background: #FDF8FD; border: 1px solid #CAC4CF; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 16px; font-weight: 600">Outlined card</span>
+          <span style="font-size: 14px; color: #48454E">outline-variant border. Use for secondary content.</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 16px; background: #FAF4FF">
+      <span style="font-size: 14px; font-weight: 700">App bar, navigation rail, list</span>
+      <div style="display: flex; border-radius: 12px; overflow: hidden; background: #FDF8FD; border: 1px solid #CAC4CF; height: 300px">
+        <nav aria-label="Primary" style="width: 80px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 12px 0; box-sizing: border-box; background: #EDE4FF"><div style="height: 48px; display: flex; align-items: center"><button type="button" aria-label="Open navigation" style="position: relative; width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center; margin: 4px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div><a href="#sweep" aria-current="page" title="Sweep" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: #DED7EB; box-shadow: inset 3px 0 0 #39235F; color: #1D1A28; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg65" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm65" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg65)" mask="url(#nvm65)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 700; color: #1C1B1E; white-space: nowrap">Sweep</span></a><a href="#env" title="Envs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-0.2 0.2)"><path d="M12 50L32 32L52 14" stroke="#39235F" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="12" cy="50" r="7" fill="#FDF8FD" stroke="#39235F" stroke-width="5"/><circle cx="32" cy="32" r="7.5" fill="#FDF8FD" stroke="#278383" stroke-width="5"/><circle cx="52" cy="14" r="10" fill="#00A56B"/><path d="M47.5 14.2l3 3 6-6" fill="none" stroke="#FDF8FD" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Envs</span></a><a href="#docs" title="Docs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-2.7 -2.5)"><rect x="6" y="10" width="13" height="48" rx="3.5" fill="#39235F"/><path d="M9.5 20H15.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="22" y="16" width="13" height="42" rx="3.5" fill="#278383"/><path d="M25.5 25H31.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="38" y="13" width="13" height="46" rx="3.5" fill="#00A56B" transform="rotate(16 51 58)"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Docs</span></a><a href="#new" title="Community" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Community</span></a><div style="flex: 1"></div><a href="#admin" title="Admin" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M8.5 16.5c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Admin</span></a><a href="#cookies" target="_blank" rel="noopener" title="Cookies" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M21 12.3A9 9 0 1 1 11.7 3a3 3 0 0 0 3.3 3.6 3 3 0 0 0 3.4 3.4 3 3 0 0 0 2.6 2.3z"/><path d="M8.5 9.5h.01M15.5 15.5h.01M9.5 15h.01M12.5 12h.01"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Cookies</span></a></nav>
+        <div style="flex: 1; display: flex; flex-direction: column; min-width: 0">
+          <div style="height: 64px; display: flex; align-items: center; gap: 12px; padding: 0 16px; background: #EDE4FF">
+            <span style="font-size: 22px; font-weight: 500; flex: 1">Tools</span>
+            <button type="button" aria-label="Search" style="width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button>
+            <span style="width: 32px; height: 32px; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center" aria-label="Account: AH">AH</span>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <div style="display: flex; align-items: center; gap: 16px; height: 72px; padding: 0 16px"><span style="width: 40px; height: 40px; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">sh</span><span style="flex: 1; display: flex; flex-direction: column; min-width: 0"><span style="font-size: 16px; font-weight: 500">Shell runner</span><span style="font-size: 14px; color: #48454E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Run scripts in an isolated sandbox</span></span><span style="font-size: 11px; font-weight: 600; color: #48454E">v2.4</span></div>
+            <div style="display: flex; align-items: center; gap: 16px; height: 72px; padding: 0 16px"><span style="width: 40px; height: 40px; border-radius: 999px; background: #DCEAB4; color: #39235F; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">k8</span><span style="flex: 1; display: flex; flex-direction: column; min-width: 0"><span style="font-size: 16px; font-weight: 500">Cluster inspector</span><span style="font-size: 14px; color: #48454E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Pods, nodes and events</span></span><span style="width: 8px; height: 8px; border-radius: 999px; background: #93000A" aria-label="1 alert"></span></div>
+            <div style="display: flex; align-items: center; gap: 16px; height: 72px; padding: 0 16px"><span style="width: 40px; height: 40px; border-radius: 999px; background: #E6E0EC; color: #48454E; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">db</span><span style="flex: 1; display: flex; flex-direction: column; min-width: 0"><span style="font-size: 16px; font-weight: 500">Query console</span><span style="font-size: 14px; color: #48454E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Postgres, MySQL, Redis</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 16px; background: #FAF4FF">
+      <span style="font-size: 14px; font-weight: 700">Dialog, snackbar, badge</span>
+      <div style="padding: 24px; border-radius: 16px; background: #F8F1FF; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 8px 3px rgba(0,0,0,0.15)">
+        <span style="font-size: 24px; line-height: 32px; font-weight: 600">Delete workspace?</span>
+        <span style="font-size: 14px; line-height: 20px; color: #48454E">staging-eu and its 14 run logs will be removed. This cannot be undone.</span>
+        <div style="display: flex; justify-content: flex-end; gap: 8px"><button type="button" style="height: 40px; padding: 0 12px; border: 0; border-radius: 16px; background: transparent; color: #39235F; font-size: 14px; font-weight: 600">Cancel</button><button type="button" style="height: 40px; padding: 0 12px; border: 0; border-radius: 16px; background: transparent; color: #93000A; font-size: 14px; font-weight: 600">Delete</button></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 6px 8px 6px 16px; border-radius: 4px; background: #313033; color: #F4EFF4; font-size: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 8px 3px rgba(0,0,0,0.15)"><span style="flex: 1">Pipeline queued · position 2</span><button type="button" style="height: 36px; padding: 0 12px; border: 0; border-radius: 16px; background: transparent; color: #C4C0FF; font-size: 14px; font-weight: 600">View</button></div>
+      <div style="display: flex; align-items: center; gap: 24px">
+        <span style="position: relative; display: inline-flex; color: #48454E"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"></path></svg><span style="position: absolute; top: -6px; left: 14px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #93000A; color: #FFFFFF; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">3</span></span>
+        <span style="font-size: 13px; color: #48454E">Badge: error role, label-small, 16 px.</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

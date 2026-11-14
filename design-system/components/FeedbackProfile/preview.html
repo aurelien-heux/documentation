@@ -1,0 +1,52 @@
+<!-- @dsCard group="Communication" height=640 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"><style>
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+body{margin:0;padding:16px;background:var(--surface-container-lowest);color:var(--on-surface);font-family:var(--font-body);font-size:14px;display:flex;flex-direction:column;gap:12px}
+button,.ui,select{font-family:var(--font-ui)}button{cursor:pointer}
+.tabs{display:flex;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--outline-variant)}
+.tab{height:44px;padding:0 16px;border:0;background:transparent;color:var(--on-surface-variant);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.tab[aria-selected=true]{color:var(--primary);box-shadow:inset 0 -3px 0 var(--primary)}
+.n{min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--surface-container-high);font-size:11px;display:inline-flex;align-items:center;justify-content:center}
+.tile{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:var(--radius-xs);background:var(--primary-container);color:var(--on-primary-container);font-family:var(--font-ui);font-size:12px;font-weight:600}
+.tile i{width:8px;height:8px;border-radius:2px;background:currentColor}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+@media (max-width:700px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{border:1px solid var(--outline-variant);border-radius:var(--radius-md);background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:12px}
+h2{margin:0;font-family:var(--font-ui);font-size:18px}
+.meta{font-size:12px;color:var(--on-surface-variant)}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lbl{width:92px;font-size:13px;color:var(--on-surface-variant)}
+.chip{height:32px;padding:0 12px;border:1px solid var(--outline);border-radius:var(--radius-sm);background:transparent;color:var(--on-surface);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed=true]{background:var(--secondary-container);border-color:var(--secondary-container);color:var(--on-secondary-container)}
+.q{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--outline-variant);border-radius:12px}
+.num{width:24px;height:24px;flex:none;border-radius:50%;background:var(--primary-container);color:var(--on-primary-container);font-family:var(--font-ui);font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+select{height:32px;padding:0 8px;border:1px solid var(--outline);border-radius:8px;background:var(--surface);color:var(--on-surface);font-size:13px}
+.fld{flex:1;min-width:0;height:36px;box-sizing:border-box;border:1px solid var(--outline);border-radius:4px;padding:0 10px;font:inherit;color:var(--on-surface);background:var(--surface)}
+.ib{width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--on-surface-variant);display:inline-flex;align-items:center;justify-content:center}
+.foot{display:flex;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--outline-variant)}
+.btn{height:40px;padding:0 20px;border:0;border-radius:var(--radius-lg);background:var(--primary);color:var(--on-primary);font-size:14px;font-weight:600}
+.cap{font-family:var(--font-ui);font-size:12px;font-weight:700;color:var(--on-surface-variant)}
+.sheet{border-radius:12px;background:var(--surface-container);box-shadow:var(--elevation-2,0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15));padding:16px;display:flex;flex-direction:column;gap:12px}
+.tag{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:var(--radius-xs);background:var(--surface-container-high);font-size:12px}
+</style></head><body>
+<div class="tabs" role="tablist" aria-label="Feedback"><button class="tab" role="tab" aria-selected="true">Profiles<span class="n">5</span></button><button class="tab" role="tab" aria-selected="false">Inbox<span class="n">6</span></button><button class="tab" role="tab" aria-selected="false">Surveys</button><button class="tab" role="tab" aria-selected="false">Solicitation policy</button><span style="flex:1"></span><span class="tile"><i></i>Shared cap · 1 prompt per user every 7 days</span></div>
+<div class="grid">
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><div><h2>Sweep · feedback profile</h2><div class="meta">FeedbackProfile component · one editor for every feature’s profile</div></div><button class="chip" aria-pressed="true">✓ Profile on</button></div>
+    <div class="row"><span class="lbl">Entry points</span><button class="chip" aria-pressed="true">✓ Page button</button><button class="chip" aria-pressed="true">✓ After an action</button><button class="chip" aria-pressed="false">On AI answers</button></div>
+    <div class="cap">Questions · 2 of 3</div>
+    <div class="q"><span class="num">1</span><select aria-label="Question 1 type"><option>Scale 1–5</option></select><input class="fld" aria-label="Question 1" value="How did this Sweep run go?"><button class="ib" aria-label="Remove question 1">✕</button></div>
+    <div class="q"><span class="num">2</span><select aria-label="Question 2 type"><option>Single choice</option></select><input class="fld" aria-label="Question 2" value="Which phase needs work?"><button class="ib" aria-label="Remove question 2">✕</button></div>
+    <div class="row"><span class="lbl">Sampling</span><button class="chip" aria-pressed="false">10%</button><button class="chip" aria-pressed="true">20%</button><button class="chip" aria-pressed="false">50%</button><span class="meta">after-action prompts only</span></div>
+    <div class="row"><label class="lbl" for="rt">Routing</label><select id="rt"><option>Inbox + Jira project</option></select><span class="meta">Bugs always go to Jira; never to Ideas</span></div>
+    <div class="foot"><button class="btn">Save profile</button></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span class="cap">Preview · side sheet in Sweep</span>
+    <div class="sheet"><div class="row" style="justify-content:space-between"><b class="ui" style="font-size:16px">Feedback · Sweep</b><span class="meta">Goes to Sweep team</span></div>
+      <div><b class="ui">How did this Sweep run go?</b><br><span class="tag">Scale 1–5</span></div>
+      <div><b class="ui">Which phase needs work?</b><br><span class="tag">Single choice</span></div>
+      <div class="row" style="justify-content:flex-end"><button class="btn" style="height:32px;padding:0 16px">Send</button></div></div>
+  </div>
+</div>
+</body></html>

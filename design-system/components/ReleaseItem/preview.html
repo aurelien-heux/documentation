@@ -1,0 +1,36 @@
+<!-- @dsCard group="Communication" height=440 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"><style>
+body{margin:0;padding:16px;background:var(--surface);color:var(--on-surface);font-family:var(--font-body);font-size:14px}
+button,.ui{font-family:var(--font-ui)}button{cursor:pointer}
+.card{max-width:760px;box-sizing:border-box;padding:20px 24px;border-radius:var(--radius-md);background:var(--surface-container-lowest);box-shadow:var(--elevation-1,0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15));display:flex;flex-direction:column;gap:12px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:var(--radius-xs);font-family:var(--font-ui);font-size:12px;font-weight:600;white-space:nowrap}
+.new{background:var(--primary-container);color:var(--on-primary-container)}.ai{background:var(--ai-container);color:var(--on-ai-container)}.ne{background:var(--surface-container-high);color:var(--on-surface)}
+.ver{font-weight:600;font-size:13px;padding:2px 8px;border-radius:4px;background:var(--primary-container);color:var(--on-primary-container)}
+.meta{font-size:12px;color:var(--on-surface-variant)}
+h2{margin:0;font-family:var(--font-ui);font-size:20px;line-height:28px;font-weight:700}
+p{margin:0;font-size:14px;line-height:20px;color:var(--on-surface-variant);max-width:72ch}
+.chgt{border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden}
+.chgr{display:grid;grid-template-columns:96px 200px minmax(0,1fr);gap:12px;align-items:start;padding:8px 12px;font-size:13px;line-height:18px;border-top:1px solid var(--surface-container-high)}
+.chgr:first-child{border-top:0}
+.foot{border-top:1px solid var(--outline-variant);padding-top:12px}
+.btn{height:40px;padding:0 24px;border:0;border-radius:var(--radius-lg);background:var(--secondary-container);color:var(--on-secondary-container);font-size:14px;font-weight:600}
+.chip{height:32px;padding:0 12px;border-radius:var(--radius-sm);border:1px solid var(--outline);background:transparent;color:var(--on-surface);font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.chip.on{background:var(--secondary-container);border-color:var(--secondary-container)}
+.thumb{width:40px;justify-content:center;padding:0}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--warning,#E8A400)}
+</style></head><body>
+<article class="card">
+  <div class="row"><span class="ver">4.6.0</span><span class="tag new">Feature release</span><span class="meta">24 Oct · Sweep, Assistant, Environments</span><span class="meta" style="margin-left:auto;display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--primary)"></span>New</span></div>
+  <h2>Approval cards for assistant tools, PR summaries in Sweep</h2>
+  <p>The assistant now asks before any tool that changes something, and Sweep writes a review summary on every pull request.</p>
+  <div class="chgt" role="table" aria-label="Changes in this release">
+    <div class="chgr" role="row"><span role="cell"><span class="tag new">New</span></span><b role="cell">Approval card</b><span role="cell">A tool that deploys, deletes or edits waits for Run or Don’t run.</span></div>
+    <div class="chgr" role="row"><span role="cell"><span class="tag ai">AI</span></span><b role="cell">Sweep PR summaries</b><span role="cell">Written from the diff and the pipeline logs; reviewers can rate them.</span></div>
+    <div class="chgr" role="row"><span role="cell"><span class="tag ne">Improved</span></span><b role="cell">Promotion window alerts</b><span role="cell">30 minutes before a window closes.</span></div>
+  </div>
+  <div class="row foot"><button class="btn">Read the notes · 4 min</button><button class="chip">Try it in the app · 3 steps</button><button class="chip">Watch · 2:10</button>
+    <span class="row" style="margin-left:auto;flex-wrap:nowrap"><span class="meta" style="font-size:13px">Useful?</span><button class="chip thumb" aria-label="Useful: yes" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v11M15 5.9l-1 4.1H21a2 2 0 0 1 2 2.3l-1.4 7a2 2 0 0 1-2 1.7H7V10l5-7a2.3 2.3 0 0 1 3 2.9z"/></svg></button><button class="chip thumb" aria-label="Useful: no" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V3M9 18.1l1-4.1H3a2 2 0 0 1-2-2.3l1.4-7A2 2 0 0 1 4.4 3H17v11l-5 7a2.3 2.3 0 0 1-3-2.9z"/></svg></button></span></div>
+  <button style="width:100%;min-height:48px;display:flex;align-items:center;gap:10px;padding:8px 14px 8px 10px;border:1px solid var(--outline-variant);border-radius:var(--radius-md);background:var(--surface-container-low);color:var(--on-surface);font:inherit;text-align:left" aria-expanded="false" aria-label="Discussion · 7 threads, 18 messages, platform team replied, last message 1 h ago"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><b class="ui" style="font-size:14px">Discussion</b><span class="meta">7 threads · 18 messages</span><span class="tag" style="background:var(--surface-container-high);color:var(--on-surface)">Platform team replied</span><span class="meta">Last message 1 h ago</span><span class="ui" style="margin-left:auto;font-size:13px;font-weight:600;color:var(--primary)">Show</span></button>
+</article>
+</body></html>

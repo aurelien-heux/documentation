@@ -1,0 +1,86 @@
+
+      <!-- ---------- Guides ---------- -->
+      <sc-if value="{{tabGuides}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+        <sc-for list="{{gFilters}}" as="fl" hint-placeholder-count="5">
+          <button type="button" class="chip" aria-pressed="{{fl.on}}" style="{{fl.style}}" onClick="{{fl.pick}}"><sc-if value="{{fl.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{fl.label}}</button>
+        </sc-for>
+        <span style="flex: 1"></span>
+        <span style="font-size: 13px; color: #48454E">{{gDone}} of {{gTotal}} completed</span>
+      </div>
+      <div class="ocard" style="display: flex; align-items: center; gap: 16px">
+        <span class="tile ai"><i></i>Suggested for you</span>
+        <span style="font-size: 14px; line-height: 20px"><b>Approve assistant tools before they run.</b> You used the assistant 14 times this week and have not seen the approval card yet — 3 steps, under a minute.</span>
+        <span style="flex: 1"></span>
+        <button type="button" class="btn f sm" onClick="{{startSuggested}}">Start</button>
+      </div>
+      <div class="r-g3" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+        <sc-for list="{{guides}}" as="g" hint-placeholder-count="6">
+          <article class="card" style="display: flex; flex-direction: column; gap: 10px; min-height: 196px">
+            <div class="row" style="justify-content: space-between"><span class="tag" style="background: {{g.bg}}; color: {{g.fg}}">{{g.area}}</span><span class="tile {{g.tile}}"><i></i>{{g.status}}</span></div>
+            <h2 class="h2" style="font-size: 16px; line-height: 22px">{{g.title}}</h2>
+            <p style="margin: 0; font-size: 13px; line-height: 18px; color: #48454E; flex: 1">{{g.sub}}</p>
+            <div class="row" style="font-size: 12px; color: #48454E"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3l6 16 2.2-6.8L20 10z"/><path d="M14 14l5 5"/></svg>{{g.kind}} · {{g.len}}<span style="flex: 1"></span><sc-if value="{{g.isDone}}" hint-placeholder-val="{{false}}"><button type="button" class="chip" onClick="{{g.start}}">Replay</button></sc-if><sc-if value="{{g.notDone}}" hint-placeholder-val="{{true}}"><button type="button" class="btn t sm" onClick="{{g.start}}">{{g.cta}}</button></sc-if></div>
+          </article>
+        </sc-for>
+      </div>
+      </sc-if>
+
+      <!-- ---------- Ideas ---------- -->
+      <sc-if value="{{tabIdeas}}" hint-placeholder-val="{{false}}">
+      <!-- E · stack + detail: filters above both, 380 px list, the idea beside it; below 1200 px the idea takes the page with a back chip -->
+      <div class="ie-bar {{ideaSelCls}}" style="display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+            <sc-for list="{{iFilters}}" as="fl" hint-placeholder-count="5">
+              <button type="button" class="chip" aria-pressed="{{fl.on}}" style="{{fl.style}}" onClick="{{fl.pick}}"><sc-if value="{{fl.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{fl.label}}<span class="n">{{fl.n}}</span></button>
+            </sc-for>
+            <span style="flex: 1"></span>
+            <label for="isort" style="font-size: 13px; color: #48454E">Sort</label>
+            <select id="isort" class="sel sel-s" value="{{iSort}}" onChange="{{onSort}}"><option value="votes">Most votes</option><option value="new">Newest</option><option value="discussed">Most discussed</option></select>
+          </div>
+          <div style="font-size: 12px; color: #48454E">Everyone sees every idea and votes once per idea. Votes are frozen once an idea is delivered.</div>
+      </div>
+      <div class="ie {{ideaSelCls}}" style="display: flex; gap: 24px; align-items: flex-start">
+        <div class="ie-list" style="width: 380px; flex: none; display: flex; flex-direction: column; gap: 12px">
+          <sc-for list="{{ideas}}" as="i" hint-placeholder-count="4">
+            <div class="card" style="display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; {{i.selStyle}}">
+              <button type="button" class="vote {{i.voteCls}}" aria-pressed="{{i.voted}}" aria-label="{{i.voteLabel}}" aria-disabled="{{i.frozen}}" style="{{i.voteStyle}}" onClick="{{i.vote}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg>{{i.votes}}</button>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+                <div class="row" style="gap: 8px; flex-wrap: wrap"><span class="tile {{i.tile}}"><i></i>{{i.status}}</span><span class="tag" style="background: #ECE5F4; color: #1C1B1E">{{i.area}}</span><sc-if value="{{i.mine}}" hint-placeholder-val="{{false}}"><span class="tile in"><i></i>Yours</span></sc-if><span style="font-size: 12px; color: #48454E">{{i.who}} · {{i.when}}</span></div>
+                <button type="button" class="lnk ui" style="text-align: left; font-size: 16px; line-height: 22px; font-weight: 600; color: #1C1B1E" onClick="{{i.open}}">{{i.title}}</button>
+                <p style="margin: 0; font-size: 13px; line-height: 18px; color: #48454E">{{i.body}}</p>
+                <div class="row" style="font-size: 12px; color: #48454E; gap: 16px"><span>{{i.nQa}} messages</span><button type="button" class="lnk" style="font-size: 12px" aria-pressed="{{i.following}}" onClick="{{i.follow}}">{{i.followLabel}}</button><span style="flex: 1"></span><button type="button" class="lnk" style="font-size: 12px" onClick="{{i.open}}">Open</button></div>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{noIdeas}}" hint-placeholder-val="{{false}}"><div class="ocard" style="display: flex; align-items: center; gap: 16px; padding: 24px"><span class="tile ne"><i></i>Nothing here</span><span style="font-size: 14px; color: #48454E">No idea with this status.</span><button type="button" class="chip" onClick="{{resetIdeas}}">Show all</button></div></sc-if>
+        </div>
+
+        <div class="ie-detail" style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+          <sc-if value="{{ideaOpen}}" hint-placeholder-val="{{true}}">
+          <section class="card" style="display: flex; flex-direction: column; gap: 12px; padding: 20px 24px" aria-label="Idea">
+            <div class="row" style="gap: 8px"><button type="button" class="ib sh-back ie-back" aria-label="Back to all ideas" title="Back to all ideas" style="margin: -8px 0 -8px -12px!important; color: #1C1B1E" onClick="{{closeIdea}}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><span class="sh-c ie-back" style="align-self: center">All ideas</span><span class="tile {{sel.tile}}"><i></i>{{sel.status}}</span><span style="flex: 1"></span><button type="button" class="ib ie-x" aria-label="Close idea" style="margin: -8px -8px -8px 0" onClick="{{closeIdea}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+            <h2 class="ui" style="margin: 0; font-size: 20px; line-height: 26px; font-weight: 700">{{sel.title}}</h2>
+            <div style="font-size: 12px; color: #48454E">{{sel.who}} · {{sel.when}} · {{sel.area}}</div>
+            <p style="margin: 0; font-size: 14px; line-height: 20px">{{sel.body}}</p>
+            <div class="row"><button type="button" class="vote {{sel.voteCls}}" style="width: auto; height: 40px; flex-direction: row; gap: 6px; padding: 0 14px; border-radius: 16px" aria-pressed="{{sel.voted}}" aria-disabled="{{sel.frozen}}" onClick="{{sel.vote}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg>{{sel.voteBtn}}</button><button type="button" class="chip" aria-pressed="{{sel.following}}" style="{{sel.followStyle}}" onClick="{{sel.follow}}">{{sel.followLabel}}</button><span style="margin-left: auto; font-size: 12px; color: #48454E">{{sel.votes}} votes</span></div>
+            <div style="display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 8px; background: #F2EBFA">
+              <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Progress</div>
+              <sc-for list="{{sel.track}}" as="t" hint-placeholder-count="5"><div class="row" style="gap: 8px; font-size: 13px"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{t.dot}}; flex: none"></span><span style="color: {{t.color}}">{{t.label}}</span><span style="margin-left: auto; font-size: 12px; color: #48454E">{{t.when}}</span></div></sc-for>
+            </div>
+            <sc-if value="{{sel.hasNote}}" hint-placeholder-val="{{false}}"><div style="display: flex; gap: 8px; align-items: flex-start; padding: 8px 12px; border-radius: 8px; background: #F2EBFA; font-size: 13px; line-height: 18px"><span class="tile ne" style="flex: none"><i></i>Platform team</span><span>{{sel.note}}</span></div></sc-if>
+            <!--QA:sel-->
+          </section>
+          </sc-if>
+          <sc-if value="{{ideaClosed}}" hint-placeholder-val="{{false}}">
+          <section class="ocard" style="display: flex; flex-direction: column; gap: 8px"><div class="h2">How ideas move</div><div style="font-size: 13px; line-height: 18px; color: #48454E">Proposed → Under review (platform team, within 2 weeks) → Planned → In progress → Delivered. Status changes notify everyone who voted or follows. Open an idea to see its history and its discussion.</div></section>
+          </sc-if>
+          <sc-if value="{{ideaClosed}}" hint-placeholder-val="{{false}}">
+          <section class="card" style="display: flex; flex-direction: column; gap: 8px">
+            <div class="h2">Recently delivered</div>
+            <sc-for list="{{delivered}}" as="d" hint-placeholder-count="2"><div class="row" style="gap: 8px; font-size: 13px"><span class="tile ok"><i></i>Delivered</span><span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{d.title}}</span><span class="mono" style="font-size: 12px; color: #14085E">{{d.version}}</span></div></sc-for>
+          </section>
+          </sc-if>
+        </div>
+      </div>
+      </sc-if>

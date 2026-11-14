@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fm-docs run" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Docs" style="overflow:visible"><style>@keyframes docs0run{0%{transform:translateY(18px);opacity:0}0%{transform:translateY(18px);opacity:0}26%{transform:translateY(-2px);opacity:1}36%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:1}}
+.fm-docs.run .dc-b1{animation:docs0run 1.5s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes docs1run{0%{transform:translateY(18px);opacity:0}12%{transform:translateY(18px);opacity:0}38%{transform:translateY(-2px);opacity:1}48%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:1}}
+.fm-docs.run .dc-b2{animation:docs1run 1.5s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes docs2run{0%{transform:translateY(18px);opacity:0}24%{transform:translateY(18px);opacity:0}50%{transform:translateY(-2px);opacity:1}60%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:1}}
+.fm-docs.run .dc-b3{animation:docs2run 1.5s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes docs3run{0%{transform:rotate(-16deg)}60%{transform:rotate(-16deg)}82%{transform:rotate(3deg)}100%{transform:rotate(0deg)}}
+.fm-docs.run .dc-lean{transform-origin:51px 58px;animation:docs3run 1.5s cubic-bezier(.2,0,0,1) 1 both}
+@media (prefers-reduced-motion: reduce){.fm-docs.run *{animation:none!important}}</style><defs></defs><g transform="translate(-2.7 -2.5)"><g class="dc-b1"><rect x="6" y="10" width="13" height="48" rx="3.5" fill="#39235F"/><path d="M9.5 20H15.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/></g><g class="dc-b2"><rect x="22" y="16" width="13" height="42" rx="3.5" fill="#278383"/><path d="M25.5 25H31.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/></g><g class="dc-b3"><g class="dc-lean"><rect x="38" y="13" width="13" height="46" rx="3.5" fill="#00A56B" transform="rotate(16 51 58)"/></g></g></g></svg>

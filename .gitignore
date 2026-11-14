@@ -1,0 +1,13 @@
+# dependencies and build output
+node_modules/
+dist/
+.angular/
+*.tgz
+.mermaid-cache/
+# canvas exports rendered locally (python3 tooling/canvas/convert.py ...)
+out/
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+*.zip

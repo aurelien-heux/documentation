@@ -1,0 +1,970 @@
+<title>AIToolbox Architecture</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=account_tree,apps,arrow_forward,assignment,bookmark,check,checklist,chevron_right,cleaning_services,close,compare_arrows,content_copy,deployed_code,description,dns,edit_note,error,expand_more,fact_check,flag,forum,gavel,group,help,home,how_to_vote,info,inventory_2,layers,menu_book,notifications,pan_tool,person,rule,schedule,search,settings,task_alt,timeline,warning&display=block">
+<style>
+/* Layout: AIToolbox shell — TopAppBar on nav-container · NavigationDrawer (≥1200) / Rail (600–1199) / NavigationBar (<600)
+   · .atb-page with the Architecture feature: page header, primary tabs (Chain · Elements), element page (Overview · Design · Source).
+   Tokens: AIToolbox md-sys roles (component-rules.md), light / dark. Display/title/label: BNPP Type (Manrope fallback); body + code: Open Sans. */
+:root {
+  --primary:#35307E; --on-primary:#FFFFFF; --primary-container:#E3DFFF; --on-primary-container:#14085E;
+  --secondary-container:#E3DFFF; --on-secondary-container:#191836;
+  --tertiary:#005232;
+  --error:#93000A; --on-error:#FFFFFF; --error-container:#FFDAD6; --on-error-container:#410002;
+  --success:#1B5F1F; --on-success:#FFFFFF; --success-container:#ACF4A2; --on-success-container:#1B5F1F;
+  --warning:#6A4E00; --on-warning:#FFFFFF; --warning-container:#FFDEA0; --on-warning-container:#6A4E00;
+  --ai-container:#9CF1F0; --on-ai-container:#002020;
+  --surface:#FDF8FD; --sc-lowest:#FFFFFF; --sc-low:#FAF4FF; --sc:#F8F1FF; --sc-high:#F2EBFA; --sc-highest:#ECE5F4;
+  --on-surface:#1C1B1E; --on-surface-variant:#48454E; --outline:#79757F; --outline-variant:#CAC4CF;
+  --nav-container:#EDE4FF; --nav-active:#D4D0F9;
+  --inverse-surface:#313033; --inverse-on-surface:#F4EFF4; --inverse-primary:#C4C0FF;
+  --logo-box:#0D0B14; --on-logo-box:#FFFFFF; --logo-cursor:#00F29E;
+  --mk-violet:#35307E; --mk-teal:#278383; --mk-green:#00A56B;
+  --shadow-1: 0 1px 2px rgba(0,0,0,.30), 0 1px 3px 1px rgba(0,0,0,.15);
+  --shadow-3: 0 4px 8px 3px rgba(0,0,0,.15), 0 1px 3px rgba(0,0,0,.30);
+  --brand: 'BNPP Type', 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  --plain: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+  --r-xs:4px; --r-sm:8px; --r-md:12px; --r-lg:16px;
+  --page-margin:16px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]):not(.light) {
+  --primary:#C4C0FF; --on-primary:#2A2473; --primary-container:#413C8A; --on-primary-container:#E3DFFF;
+  --secondary-container:#454364; --on-secondary-container:#E3DFFF;
+  --tertiary:#00F29E;
+  --error:#FFB4AB; --on-error:#690005; --error-container:#93000A; --on-error-container:#FFDAD6;
+  --success:#91D888; --on-success:#0B3910; --success-container:#0B5314; --on-success-container:#ACF4A2;
+  --warning:#FCBC00; --on-warning:#3F2E00; --warning-container:#5C4300; --on-warning-container:#FFDEA0;
+  --ai-container:#004F50; --on-ai-container:#9CF1F0;
+  --surface:#14121E; --sc-lowest:#0F0C19; --sc-low:#1D1A27; --sc:#23202D; --sc-high:#2B2836; --sc-highest:#363341;
+  --on-surface:#ECE5F8; --on-surface-variant:#CAC3DC; --outline:#948DA5; --outline-variant:#494458;
+  --nav-container:#1D1A27; --nav-active:#454364;
+  --inverse-surface:#E6DFF2; --inverse-on-surface:#322E3C; --inverse-primary:#413C8A;
+  --logo-box:#C4C0FF; --on-logo-box:#0D0B14; --logo-cursor:#006C44;
+  --mk-violet:#A6A2F8; --mk-teal:#80D5D4; --mk-green:#00F29E;
+  color-scheme: dark;
+} }
+:root[data-theme="dark"], html.dark {
+  --primary:#C4C0FF; --on-primary:#2A2473; --primary-container:#413C8A; --on-primary-container:#E3DFFF;
+  --secondary-container:#454364; --on-secondary-container:#E3DFFF;
+  --tertiary:#00F29E;
+  --error:#FFB4AB; --on-error:#690005; --error-container:#93000A; --on-error-container:#FFDAD6;
+  --success:#91D888; --on-success:#0B3910; --success-container:#0B5314; --on-success-container:#ACF4A2;
+  --warning:#FCBC00; --on-warning:#3F2E00; --warning-container:#5C4300; --on-warning-container:#FFDEA0;
+  --ai-container:#004F50; --on-ai-container:#9CF1F0;
+  --surface:#14121E; --sc-lowest:#0F0C19; --sc-low:#1D1A27; --sc:#23202D; --sc-high:#2B2836; --sc-highest:#363341;
+  --on-surface:#ECE5F8; --on-surface-variant:#CAC3DC; --outline:#948DA5; --outline-variant:#494458;
+  --nav-container:#1D1A27; --nav-active:#454364;
+  --inverse-surface:#E6DFF2; --inverse-on-surface:#322E3C; --inverse-primary:#413C8A;
+  --logo-box:#C4C0FF; --on-logo-box:#0D0B14; --logo-cursor:#006C44;
+  --mk-violet:#A6A2F8; --mk-teal:#80D5D4; --mk-green:#00F29E;
+  color-scheme: dark;
+}
+@media (min-width:600px) { :root { --page-margin:24px; } }
+@media (min-width:1200px) { :root { --page-margin:32px; } }
+
+* { box-sizing:border-box; }
+html, body { min-height:100%; }
+body { background:var(--surface); color:var(--on-surface); font-family:var(--plain); font-size:14px; line-height:20px; }
+body::before { content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:30; background:var(--nav-container); }
+h1,h2,h3 { margin:0; font-family:var(--brand); text-wrap:balance; }
+button { font:inherit; color:inherit; }
+a { color:var(--primary); }
+code, .mono { font-family:var(--plain); font-weight:600; font-size:13px; }
+.sym { font-family:'Material Symbols Outlined'; font-weight:400; font-style:normal; font-size:24px; line-height:1; letter-spacing:normal; text-transform:none; white-space:nowrap; direction:ltr; -webkit-font-smoothing:antialiased; display:inline-block; width:1em; overflow:hidden; flex:none; }
+:root:not(.icons-ready) .sym { color:transparent !important; }
+.sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+:focus-visible { outline:2px solid var(--primary); outline-offset:2px; }
+
+/* type scale */
+.headline-small { font-family:var(--brand); font-size:24px; line-height:32px; font-weight:700; }
+.title-large { font-family:var(--brand); font-size:22px; line-height:28px; font-weight:700; }
+.title-medium { font-family:var(--brand); font-size:16px; line-height:24px; font-weight:600; }
+.title-small { font-family:var(--brand); font-size:14px; line-height:20px; font-weight:600; }
+.label-large { font-family:var(--brand); font-size:14px; line-height:20px; font-weight:600; }
+.label-medium { font-family:var(--brand); font-size:12px; line-height:16px; font-weight:600; }
+.body-small { font-size:12px; line-height:16px; }
+.muted { color:var(--on-surface-variant); }
+
+/* ---------- TopAppBar ---------- */
+.top { position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:var(--nav-container); height:64px; display:flex; align-items:center; gap:8px;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); margin-bottom:2px; }
+.logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--on-surface); flex:none; }
+.logo-word { font-family:var(--brand); font-weight:800; font-size:20px; letter-spacing:-.01em; }
+.search { flex:1 1 auto; display:flex; justify-content:center; min-width:0; }
+.search-field { width:100%; max-width:600px; height:44px; display:flex; align-items:center; gap:8px; padding:0 6px 0 14px; border-radius:var(--r-lg);
+  background:var(--sc-lowest); border:1px solid transparent; }
+.search-field:focus-within { border:2px solid var(--primary); padding-left:13px; }
+.search-field .sym { color:var(--on-surface-variant); }
+.search-field input { flex:1; min-width:0; border:0; outline:0; background:transparent; color:var(--on-surface); font:inherit; font-size:16px; }
+.search-field input::placeholder { color:var(--on-surface-variant); }
+.kbd { font-family:var(--plain); font-weight:600; font-size:11px; color:var(--on-surface-variant); border:1px solid var(--outline-variant); border-radius:var(--r-xs); padding:1px 5px; }
+.ask { display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 12px 0 8px; border-radius:var(--r-sm); border:0; background:var(--ai-container); color:var(--on-ai-container); cursor:not-allowed; }
+.ask .sym { font-size:18px; color:var(--on-ai-container); }
+.actions { display:flex; align-items:center; gap:4px; flex:none; }
+.icon-btn { width:40px; height:40px; border-radius:9999px; border:0; background:transparent; color:var(--on-surface-variant); display:inline-grid; place-items:center; cursor:pointer; position:relative; }
+.icon-btn:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.icon-btn:active { background:color-mix(in srgb, var(--primary) 10%, transparent); }
+.badge { position:absolute; top:4px; right:4px; min-width:16px; height:16px; padding:0 4px; border-radius:9999px; background:var(--error); color:var(--on-error); font-size:11px; line-height:16px; font-weight:600; text-align:center; }
+.vdiv { width:1px; height:32px; background:var(--outline-variant); margin:0 4px; }
+.user { display:flex; align-items:center; gap:10px; height:48px; padding:0 8px 0 4px; border-radius:var(--r-lg); border:0; background:transparent; cursor:pointer; text-align:left; }
+.user:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.avatar { width:36px; height:36px; border-radius:9999px; background:var(--nav-active); color:var(--on-secondary-container); display:grid; place-items:center; font-family:var(--brand); font-weight:700; font-size:14px; }
+.user .who { display:grid; line-height:16px; }
+.user .who b { font-family:var(--brand); font-size:14px; font-weight:600; }
+
+/* ---------- Shell ---------- */
+.shell { display:flex; align-items:flex-start; min-height:calc(100vh - 66px); }
+.drawer { position:sticky; top:calc(66px + env(safe-area-inset-top,0px)); flex:none; width:300px; height:calc(100vh - 66px - env(safe-area-inset-top,0px)); background:var(--nav-container);
+  border-radius:0 var(--r-lg) var(--r-lg) 0; padding:8px 12px 12px; display:flex; flex-direction:column; gap:2px; overflow-y:auto;
+  padding-left:max(12px, env(safe-area-inset-left,0px)); }
+.nav-item { position:relative; display:flex; align-items:center; gap:12px; height:56px; padding:0 16px; border-radius:var(--r-lg); color:var(--on-surface-variant); text-decoration:none; border:0; background:transparent; width:100%; cursor:pointer; text-align:left; }
+.nav-item:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.nav-item .lbl { flex:1; font-family:var(--brand); font-size:14px; font-weight:600; }
+.nav-item .count { font-family:var(--brand); font-size:12px; font-weight:600; }
+.nav-item[aria-current="page"] { background:var(--nav-active); color:var(--on-secondary-container); }
+.nav-item[aria-current="page"]::before { content:""; position:absolute; left:0; top:14px; bottom:14px; width:3px; border-radius:0 3px 3px 0; background:var(--primary); }
+.nav-section { padding:16px 16px 6px; border-top:1px solid var(--outline-variant); margin-top:8px; }
+.nav-foot { margin-top:auto; padding:12px 16px 4px; }
+.nav-foot a { color:var(--on-surface-variant); }
+.navbar { display:none; }
+
+.page { flex:1 1 auto; min-width:0; container-type:inline-size; container-name:page;
+  padding-block:20px 48px; padding-left:max(var(--page-margin), env(safe-area-inset-left,0px)); padding-right:max(var(--page-margin), env(safe-area-inset-right,0px)); }
+.page > * + * { margin-top:20px; }
+
+/* rail 600–1199 */
+@media (max-width:1199px) {
+  .drawer { width:80px; padding:8px 0 12px; border-radius:0; align-items:center; padding-left:env(safe-area-inset-left,0px); }
+  .nav-item { flex-direction:column; justify-content:center; gap:4px; height:auto; width:72px; padding:6px 0 8px; background:transparent !important; }
+  .nav-item .sym { width:56px; height:32px; line-height:32px; text-align:center; border-radius:var(--r-lg); }
+  .nav-item[aria-current="page"] .sym { background:var(--nav-active); width:56px; }
+  .nav-item:hover .sym { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+  .nav-item[aria-current="page"]::before { left:0; top:6px; bottom:auto; height:32px; }
+  .nav-item .lbl { font-size:12px; line-height:16px; text-align:center; }
+  .nav-item .count, .nav-section, .nav-foot .full { display:none; }
+  .user .who, .user .chev { display:none; }
+}
+@media (max-width:839px) { .help { display:none; } }
+/* navigation bar < 600 */
+@media (max-width:599px) {
+  .top { height:56px; }
+  .drawer, .search, .vdiv, .ask-wrap { display:none; }
+  .actions { margin-left:auto; }
+  .navbar { display:flex; position:fixed; left:0; right:0; bottom:0; z-index:20; height:calc(80px + env(safe-area-inset-bottom,0px)); background:var(--nav-container);
+    padding:12px max(8px, env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(8px, env(safe-area-inset-left,0px)); justify-content:space-around; }
+  .navbar .nav-item { flex-direction:column; gap:4px; height:auto; width:auto; flex:1; padding:0; background:transparent !important; }
+  .navbar .nav-item .sym { width:64px; height:32px; line-height:32px; text-align:center; border-radius:var(--r-lg); }
+  .navbar .nav-item[aria-current="page"] .sym { background:var(--nav-active); }
+  .navbar .nav-item[aria-current="page"]::before { left:50%; top:-12px; bottom:auto; width:32px; height:3px; transform:translateX(-50%); border-radius:0 0 3px 3px; }
+  .navbar .nav-item .lbl { font-size:12px; line-height:16px; flex:none; }
+  .page { padding-bottom:calc(112px + env(safe-area-inset-bottom,0px)); }
+}
+
+/* ---------- page header ---------- */
+.crumbs { display:flex; flex-wrap:wrap; align-items:center; gap:4px; color:var(--on-surface-variant); }
+.crumbs button { border:0; background:none; padding:2px 4px; border-radius:var(--r-xs); color:var(--primary); cursor:pointer; }
+.crumbs button:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.crumbs .sym { font-size:18px; }
+.phead { display:flex; flex-wrap:wrap; align-items:flex-start; gap:16px; }
+.phead .ttl { display:flex; gap:14px; align-items:center; min-width:0; flex:1 1 360px; }
+.phead .ttl > div { min-width:0; }
+.phead .meta { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+@container page (max-width:599px) { .phead .meta { align-items:flex-start; } }
+.mk { width:40px; height:40px; flex:none; }
+.mk-dark { display:none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]):not(.light) .mk-dark { display:block; } :root:not([data-theme="light"]):not(.light) .mk-light { display:none; } }
+:root[data-theme="dark"] .mk-dark, html.dark .mk-dark { display:block; } :root[data-theme="dark"] .mk-light, html.dark .mk-light { display:none; }
+
+/* ---------- tabs ---------- */
+.tabs { display:flex; border-bottom:1px solid var(--outline-variant); overflow-x:auto; scrollbar-width:none; }
+.tab { position:relative; flex:0 0 auto; min-width:120px; height:48px; padding:0 20px; border:0; background:transparent; cursor:pointer; color:var(--on-surface-variant); display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+.tab:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.tab:focus-visible { outline-offset:-3px; }
+.tab[aria-selected="true"] { color:var(--primary); }
+.tab[aria-selected="true"]::after { content:""; position:absolute; left:12px; right:12px; bottom:0; height:3px; border-radius:3px 3px 0 0; background:var(--primary); }
+.tab .n { font-family:var(--brand); font-size:12px; font-weight:600; min-width:20px; height:20px; padding:0 6px; border-radius:9999px; background:var(--sc-highest); color:var(--on-surface-variant); line-height:20px; }
+.tab[aria-selected="true"] .n { background:var(--primary-container); color:var(--on-primary-container); }
+
+/* ---------- cards ---------- */
+.card { border-radius:var(--r-md); padding:16px; min-width:0; }
+.card-elev { background:var(--sc-lowest); box-shadow:var(--shadow-1); }
+.card-out { background:var(--surface); border:1px solid var(--outline-variant); }
+.card-fill { background:var(--sc-high); }
+.card > h2 { font-family:var(--brand); font-size:16px; line-height:24px; font-weight:600; margin-bottom:12px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.grid2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap:16px; }
+
+/* ---------- chips ---------- */
+.chips { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.chip { display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 12px; border-radius:var(--r-sm); border:1px solid var(--outline); background:transparent; color:var(--on-surface); font-family:var(--brand); font-size:14px; font-weight:500; white-space:nowrap; }
+.chip .sym { font-size:18px; color:var(--on-surface-variant); }
+.chip code { font-size:13px; }
+button.chip { cursor:pointer; }
+button.chip:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+button.chip[aria-pressed="true"] { background:var(--secondary-container); color:var(--on-secondary-container); border-color:transparent; }
+button.chip[aria-pressed="true"]:hover { background:color-mix(in srgb, var(--on-secondary-container) 6%, var(--secondary-container)); }
+/* StatusChip: radius-xs, state container, 18 px tile glyph (aria-hidden) + word */
+.status { display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 10px 0 5px; border-radius:var(--r-xs); font-family:var(--brand); font-size:12px; line-height:16px; font-weight:600; white-space:nowrap; }
+.tile { width:18px; height:18px; border-radius:var(--r-xs); display:inline-grid; place-items:center; font-family:var(--plain); font-size:12px; font-weight:700; line-height:1; flex:none; }
+.st-success { background:var(--success-container); color:var(--on-success-container); } .st-success .tile { background:var(--success); color:var(--on-success); }
+.st-info { background:var(--primary-container); color:var(--on-primary-container); } .st-info .tile { background:var(--primary); color:var(--on-primary); }
+.st-warning { background:var(--warning-container); color:var(--on-warning-container); } .st-warning .tile { background:var(--warning); color:var(--on-warning); }
+.st-error { background:var(--error-container); color:var(--on-error-container); } .st-error .tile { background:var(--error); color:var(--on-error); }
+.tile.solo { width:20px; height:20px; }
+
+/* ---------- buttons ---------- */
+.btn { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 24px; border-radius:var(--r-lg); border:0; cursor:pointer; font-family:var(--brand); font-size:14px; font-weight:600; text-decoration:none; }
+.btn .sym { font-size:18px; }
+.btn.lead { padding-left:16px; }
+.btn-text { background:transparent; color:var(--primary); padding:0 12px; }
+.btn-text:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.btn-out { background:transparent; color:var(--primary); border:1px solid var(--outline); }
+.btn-out:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.btn-tonal { background:var(--secondary-container); color:var(--on-secondary-container); }
+.btn-tonal:hover { background:color-mix(in srgb, var(--on-secondary-container) 6%, var(--secondary-container)); }
+
+/* ---------- chain diagram ---------- */
+.legend { display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-bottom:12px; }
+.legend span { display:inline-flex; align-items:center; gap:8px; }
+.legend svg { width:28px; height:8px; }
+.diagram-frame { overflow-x:auto; border-radius:var(--r-sm); }
+/* LikeC4 view (web component) */
+.lc4-head { display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; margin-bottom:12px; }
+.lc4-head .legend { margin:0; }
+.seg { display:inline-flex; border:1px solid var(--outline); border-radius:var(--r-lg); overflow:hidden; }
+.seg button { height:40px; padding:0 16px; border:0; background:transparent; color:var(--on-surface); cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-family:var(--brand); font-size:14px; font-weight:600; }
+.seg button + button { border-left:1px solid var(--outline); }
+.seg button:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.seg button[aria-pressed="true"] { background:var(--secondary-container); color:var(--on-secondary-container); }
+.seg button:focus-visible { outline-offset:-3px; }
+.seg .sym { font-size:18px; }
+.lc4-frame { position:relative; height:clamp(420px, 62vh, 640px); border:1px solid var(--outline-variant); border-radius:var(--r-md); overflow:hidden; background:var(--surface); }
+.lc4-frame.small { height:clamp(300px, 42vh, 420px); }
+.lc4-frame likec4-view { display:block; width:100%; height:100%; }
+.lc4-hint { display:flex; align-items:center; gap:6px; margin-top:8px; }
+.lc4-hint .sym { font-size:16px; }
+.lc4-badge { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 8px; border-radius:var(--r-xs); background:var(--sc-highest); color:var(--on-surface-variant); font-family:var(--brand); font-size:12px; font-weight:600; }
+.chain-svg { display:block; min-width:900px; width:100%; height:auto; }
+.chain-svg .col { font-family:var(--brand); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; fill:var(--on-surface-variant); }
+.chain-svg .node { cursor:pointer; }
+.chain-svg .node rect.box { fill:var(--sc-lowest); stroke:var(--outline-variant); }
+.chain-svg .node:hover rect.box { fill:color-mix(in srgb, var(--primary) 6%, var(--sc-lowest)); }
+.chain-svg .node:focus-visible { outline:none; }
+.chain-svg .node:focus-visible rect.box { stroke:var(--primary); stroke-width:2; }
+.chain-svg .node text { font-family:var(--plain); font-size:13px; fill:var(--on-surface); }
+.chain-svg .node text.k { font-size:11px; fill:var(--on-surface-variant); }
+.chain-svg .edge { fill:none; stroke:var(--primary); stroke-width:1.4; opacity:.55; }
+.chain-svg .edge.tr { stroke:var(--outline); stroke-dasharray:5 4; opacity:.9; }
+
+/* ---------- list rows inside cards ---------- */
+.rows { display:grid; }
+.row { display:flex; align-items:center; gap:12px; min-height:56px; padding:8px 12px; margin:0 -12px; border-radius:var(--r-sm); border:0; background:transparent; text-align:left; cursor:pointer; width:calc(100% + 24px); }
+.row:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.row:focus-visible { outline-offset:-2px; }
+.row .txt { flex:1; min-width:0; display:grid; }
+.row .txt b { font-family:var(--brand); font-weight:600; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.row .txt span { color:var(--on-surface-variant); font-size:12px; line-height:16px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.row .sym.go { color:var(--on-surface-variant); font-size:20px; }
+.row + .row { border-top:1px solid var(--outline-variant); border-radius:0; }
+
+/* ---------- table ---------- */
+.tbl-wrap { background:var(--sc-lowest); border:1px solid var(--outline-variant); border-radius:var(--r-md); overflow:hidden; }
+.tbl-scroll { overflow-x:auto; }
+table { border-collapse:collapse; width:100%; }
+th { height:48px; padding:0 12px; text-align:left; font-family:var(--brand); font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--on-surface-variant); border-bottom:1px solid var(--outline-variant); white-space:nowrap; }
+td { height:52px; padding:8px 12px; border-bottom:1px solid var(--outline-variant); vertical-align:middle; }
+tbody tr:last-child td { border-bottom:0; }
+tbody tr.click { cursor:pointer; }
+tbody tr.click:hover td { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+tbody tr.click:focus-visible { outline:2px solid var(--primary); outline-offset:-2px; }
+td .nm { font-family:var(--brand); font-weight:600; }
+td .id { display:block; color:var(--on-surface-variant); font-size:12px; line-height:16px; }
+.p2, .p3 { }
+@container page (max-width:799px) { .p3 { display:none; } }
+@container page (max-width:599px) { .p2 { display:none; } .elements-table th:first-child, .elements-table td:first-child { width:36px; padding-right:0; } }
+.facts td, .facts th { height:auto; padding:10px 16px; vertical-align:top; }
+
+/* ---------- element page ---------- */
+.chain-steps { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.step { display:grid; gap:2px; padding:8px 12px; border-radius:var(--r-sm); border:1px solid var(--outline-variant); background:var(--sc-lowest); cursor:pointer; text-align:left; max-width:100%; }
+.step:hover { background:color-mix(in srgb, var(--primary) 6%, var(--sc-lowest)); }
+.step small { font-family:var(--brand); font-size:11px; line-height:16px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--on-surface-variant); }
+.step.here { border:2px solid var(--primary); padding:7px 11px; background:var(--primary-container); color:var(--on-primary-container); cursor:default; }
+.step.here small { color:var(--on-primary-container); }
+.arrow { color:var(--on-surface-variant); font-size:20px; }
+.rel h3 { font-family:var(--brand); font-size:12px; line-height:16px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--on-surface-variant); margin-bottom:4px; }
+.rel + .rel { margin-top:16px; }
+.idline { display:flex; align-items:center; gap:4px; color:var(--on-surface-variant); }
+.idline .icon-btn { width:32px; height:32px; }
+.idline .icon-btn .sym { font-size:18px; }
+
+.reading { max-width:840px; }
+.prose { line-height:22px; }
+.prose > :first-child { margin-top:0; }
+.prose h2 { font-size:16px; line-height:24px; font-weight:600; margin:24px 0 8px; }
+.prose h3 { font-size:14px; margin:20px 0 6px; }
+.prose p, .prose li { max-width:72ch; }
+.prose code { background:var(--sc-highest); padding:1px 5px; border-radius:var(--r-xs); }
+.prose pre { background:var(--sc-highest); border-radius:var(--r-sm); padding:12px 14px; overflow-x:auto; }
+.prose pre code { background:none; padding:0; }
+.prose table { border:1px solid var(--outline-variant); border-radius:var(--r-md); border-collapse:separate; border-spacing:0; overflow:hidden; margin:12px 0; display:block; overflow-x:auto; }
+.prose th { height:40px; } .prose td { height:auto; padding:10px 16px; }
+.diagram { background:var(--sc-lowest); border:1px solid var(--outline-variant); border-radius:var(--r-md); padding:16px; overflow-x:auto; margin:16px 0; }
+.diagram svg { max-width:100%; height:auto; display:block; margin:0 auto; }
+.dg-dark { display:none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]):not(.light) .dg-dark { display:block; } :root:not([data-theme="light"]):not(.light) .dg-light { display:none; } }
+:root[data-theme="dark"] .dg-dark, html.dark .dg-dark { display:block; } :root[data-theme="dark"] .dg-light, html.dark .dg-light { display:none; }
+.source { background:var(--sc-highest); border-radius:var(--r-sm); padding:14px 16px; overflow-x:auto; margin:0; font-family:var(--plain); font-weight:600; font-size:13px; line-height:20px; white-space:pre; }
+
+/* ---------- tooltip + snackbar ---------- */
+[data-tip] { position:relative; }
+[data-tip]:hover::after, [data-tip]:focus-visible::after { content:attr(data-tip); position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); z-index:40;
+  background:var(--inverse-surface); color:var(--inverse-on-surface); font-family:var(--brand); font-size:12px; line-height:16px; font-weight:500; padding:4px 8px; border-radius:var(--r-xs); white-space:nowrap; max-width:240px; pointer-events:none; }
+.snack { position:fixed; z-index:50; left:50%; transform:translateX(-50%); bottom:calc(24px + env(safe-area-inset-bottom,0px)); min-width:344px; max-width:min(600px, calc(100vw - 32px));
+  background:var(--inverse-surface); color:var(--inverse-on-surface); border-radius:var(--r-xs); box-shadow:var(--shadow-3); min-height:48px; padding:6px 8px 6px 16px; display:flex; align-items:center; gap:12px; }
+.snack[hidden] { display:none; }
+.snack .msg { flex:1; }
+.snack button { border:0; background:transparent; color:var(--inverse-primary); font-family:var(--brand); font-weight:600; height:36px; padding:0 12px; border-radius:var(--r-lg); cursor:pointer; }
+@media (max-width:599px) { .snack { min-width:0; left:16px; right:16px; transform:none; bottom:calc(96px + env(safe-area-inset-bottom,0px)); } }
+.empty { padding:32px 16px; text-align:center; color:var(--on-surface-variant); }
+@media (prefers-reduced-motion: no-preference) { .nav-item, .tab, .row, .chip, .btn, .icon-btn { transition:background-color .15s cubic-bezier(.2,0,0,1); } }
+
+/* ---------- ArchiMate notation (design-system/archimate/archimate.css, inlined at build) ---------- */
+/*__TOKENS_BRIDGE__*/
+/*__ARCHIMATE_CSS__*/
+.ax-text-tile { --ax-fill: var(--sc-highest); --ax-ink: var(--on-surface-variant); }
+.cell-name { display:flex; align-items:center; gap:10px; min-width:0; }
+.cell-name > span:last-child { display:grid; min-width:0; }
+.wp { display:inline-flex; align-items:center; gap:6px; margin:2px 10px 2px 0; font-size:13px; }
+.lnk { border:0; background:none; padding:0; color:var(--primary); font:inherit; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
+.chip.static { cursor:default; }
+.lc4-off { padding:4px 0; }
+.st-neutral { background:var(--sc-highest); color:var(--on-surface-variant); } .st-neutral .tile { background:var(--outline); color:var(--sc-lowest); }
+/* checks */
+.check-group h3 { font-family:var(--brand); font-size:12px; line-height:16px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--on-surface-variant); margin:16px 0 4px; }
+.check-group:first-child h3 { margin-top:0; }
+.check { display:flex; gap:10px; padding:10px 0; border-top:1px solid var(--outline-variant); }
+.check-group h3 + .check { border-top:0; }
+.ck-body { min-width:0; }
+.ck-title { display:flex; flex-wrap:wrap; gap:2px 10px; align-items:baseline; }
+.ck-title b { font-family:var(--brand); font-weight:600; }
+.ck-id { font:600 12px/16px var(--brand); color:var(--on-surface-variant); }
+.check ul { margin:6px 0 0; padding-left:18px; color:var(--on-surface-variant); font-size:13px; }
+/* reviews */
+.arb-list { display:grid; gap:16px; margin-top:16px; }
+.arb-card { display:grid; gap:10px; }
+.arb-top { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; }
+.arb-card h2 { font-family:var(--brand); font-size:22px; line-height:28px; font-weight:700; }
+.arb-mark { width:40px; height:40px; border-radius:12px; background:var(--secondary-container); color:var(--on-secondary-container); display:grid; place-items:center; flex:none; }
+.kpis { display:grid; grid-template-columns:1fr; gap:16px; }
+@container page (min-width:300px) { .kpis { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+@container page (min-width:720px) { .kpis { grid-template-columns:repeat(4, minmax(0,1fr)); } }
+.kpi { position:relative; display:grid; gap:2px; padding:16px; border-radius:var(--r-md); background:var(--sc-lowest); box-shadow:var(--shadow-1); min-width:0; }
+.kpi > .sym { position:absolute; top:14px; right:14px; color:var(--on-surface-variant); }
+.kpi-label { font:600 12px/16px var(--brand); letter-spacing:.06em; text-transform:uppercase; color:var(--on-surface-variant); padding-right:28px; }
+.kpi-value { font:700 28px/36px var(--brand); font-variant-numeric:tabular-nums; }
+.kpi.warn .kpi-value { color:var(--warning); } .kpi.err .kpi-value { color:var(--error); }
+/* ASD document */
+.asd { display:grid; gap:24px; margin-top:20px; }
+@container page (min-width:1040px) { .asd { grid-template-columns:240px minmax(0,1fr); } .toc { position:sticky; top:calc(84px + env(safe-area-inset-top,0px)); align-self:start; } }
+.toc { display:grid; gap:2px; align-content:start; }
+.toc a { display:flex; gap:8px; align-items:center; padding:6px 8px; border-radius:var(--r-sm); color:var(--on-surface); text-decoration:none; font-size:13px; line-height:18px; }
+.toc a:hover { background:color-mix(in srgb, var(--primary) 6%, transparent); }
+.toc a .num { width:18px; flex:none; color:var(--on-surface-variant); font:600 12px/16px var(--brand); }
+.toc a .sym { font-size:16px; margin-left:auto; color:var(--on-surface-variant); }
+.toc a.miss { color:var(--error); }
+.asd-doc { display:grid; gap:32px; min-width:0; max-width:980px; }
+.asd-sec { min-width:0; scroll-margin-top:84px; }
+.asd-head { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--outline-variant); }
+.asd-head h2 { font-size:18px; line-height:24px; font-weight:700; display:flex; align-items:center; gap:10px; }
+.asd-head h2:focus { outline:none; }
+.asd-head .num { width:28px; height:28px; border-radius:var(--r-sm); background:var(--sc-highest); display:grid; place-items:center; font-size:13px; flex:none; }
+.src-badge { display:inline-flex; gap:4px; align-items:center; height:24px; padding:0 8px; border-radius:var(--r-xs); font:600 12px/16px var(--brand); }
+.src-badge .sym { font-size:16px; }
+.src-badge.model { background:var(--secondary-container); color:var(--on-secondary-container); }
+.src-badge.ok { background:var(--success-container); color:var(--on-success-container); }
+.src-badge.warn { background:var(--warning-container); color:var(--on-warning-container); }
+.src-badge.err { background:var(--error-container); color:var(--on-error-container); }
+/* plateau timeline on the element page */
+.timeline { display:flex; flex-wrap:wrap; }
+.tl { flex:1 1 140px; display:grid; gap:2px; padding:4px 12px 4px 0; position:relative; }
+.tl .dot { width:14px; height:14px; border-radius:50%; border:2px solid var(--outline); background:var(--surface); position:relative; z-index:1; }
+.tl.on .dot { background:var(--primary); border-color:var(--primary); }
+.tl::before { content:""; position:absolute; left:14px; right:0; top:10px; height:2px; background:var(--outline-variant); }
+.tl:last-child::before { display:none; }
+/* decision form */
+.field { display:grid; gap:6px; margin-bottom:16px; }
+.field textarea { width:100%; border:1px solid var(--outline); border-radius:var(--r-xs); background:transparent; color:var(--on-surface); padding:12px 14px; font:inherit; font-size:16px; line-height:24px; resize:vertical; }
+.field textarea:focus { outline:none; border:2px solid var(--primary); padding:11px 13px; }
+.actions-row { display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; }
+@container page (max-width:599px) { .actions-row .btn { flex:1 1 100%; justify-content:center; } }
+.btn-filled { background:var(--primary); color:var(--on-primary); }
+.btn-filled:hover { background:color-mix(in srgb, var(--on-primary) 8%, var(--primary)); }
+.btn.is-disabled { opacity:.38; cursor:not-allowed; }
+.avatar.sm { width:28px; height:28px; font-size:11px; flex:none; }
+</style>
+
+<header class="top" role="banner">
+  <a class="logo" href="#chain" aria-label="AIToolbox home">
+    <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--logo-box)"/><path d="M8 11 l5 5 l-5 5" fill="none" stroke="var(--on-logo-box)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="15" y="20" width="9" height="2.6" rx="1.3" fill="var(--logo-cursor)"/></svg>
+    <span class="logo-word">AIToolbox</span>
+  </a>
+  <div class="search" role="search">
+    <label class="search-field" for="q">
+      <span class="sym" aria-hidden="true">search</span>
+      <input id="q" type="search" autocomplete="off" placeholder="Search the architecture model" aria-describedby="q-hint">
+      <span class="kbd" id="q-hint" aria-label="Shortcut Command K">⌘K</span>
+      <span class="ask-wrap" data-tip="Assistant not connected in this preview"><button class="ask" type="button" aria-disabled="true" aria-describedby="ask-why"><span class="sym" aria-hidden="true">forum</span><span class="label-large">Ask</span></button></span>
+      <span id="ask-why" class="sr">The assistant is not connected in this preview.</span>
+    </label>
+  </div>
+  <div class="actions">
+    <button class="icon-btn" type="button" aria-label="Assistant" data-tip="Assistant ⌘J" data-inert><span class="sym" aria-hidden="true">forum</span></button>
+    <button class="icon-btn" type="button" aria-label="Notifications, 2 unread" data-tip="Notifications" data-inert><span class="sym" aria-hidden="true">notifications</span><span class="badge" aria-hidden="true">2</span></button>
+    <button class="icon-btn help" type="button" aria-label="Help" data-tip="Help" data-inert><span class="sym" aria-hidden="true">help</span></button>
+    <span class="vdiv" aria-hidden="true"></span>
+    <button class="user" type="button" aria-label="Aurélien Heux, platform admin, account menu" aria-haspopup="menu" data-inert>
+      <span class="avatar" aria-hidden="true">AH</span>
+      <span class="who"><b>Aurélien Heux</b><span class="body-small muted">platform admin</span></span>
+      <span class="sym chev muted" aria-hidden="true">expand_more</span>
+    </button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="drawer" aria-label="Main">
+    <button class="nav-item" type="button" data-inert><span class="sym" aria-hidden="true">home</span><span class="lbl">Home</span></button>
+    <button class="nav-item" type="button" data-inert><span class="sym" aria-hidden="true">inventory_2</span><span class="lbl">Catalog</span></button>
+    <button class="nav-item" type="button" data-inert><span class="sym" aria-hidden="true">dns</span><span class="lbl">Environments</span></button>
+    <button class="nav-item" type="button" data-inert><span class="sym" aria-hidden="true">cleaning_services</span><span class="lbl">Sweep</span></button>
+    <div class="nav-section label-medium muted">Knowledge</div>
+    <button class="nav-item" type="button" data-inert><span class="sym" aria-hidden="true">menu_book</span><span class="lbl">Docs</span></button>
+    <a class="nav-item" href="#chain" aria-current="page"><span class="sym" aria-hidden="true">account_tree</span><span class="lbl">Architecture</span><span class="count" id="nav-count"></span></a>
+    <div class="nav-foot">
+      <button class="nav-item" type="button" data-inert><span class="sym" aria-hidden="true">settings</span><span class="lbl">Settings</span></button>
+      <p class="body-small muted full" style="margin:8px 16px 0"><a href="#chain">Privacy</a> · <a href="#chain">Cookies</a> · <a href="#chain">Terms</a> · v0.9 preview</p>
+    </div>
+  </nav>
+
+  <main class="page" id="page" tabindex="-1"></main>
+</div>
+
+<nav class="navbar" aria-label="Main">
+  <button class="nav-item" type="button" data-inert><span class="sym" aria-hidden="true">home</span><span class="lbl">Home</span></button>
+  <button class="nav-item" type="button" data-inert><span class="sym" aria-hidden="true">dns</span><span class="lbl">Environments</span></button>
+  <a class="nav-item" href="#chain" aria-current="page"><span class="sym" aria-hidden="true">account_tree</span><span class="lbl">Architecture</span></a>
+  <button class="nav-item" type="button" data-inert><span class="sym" aria-hidden="true">forum</span><span class="lbl">Assistant</span></button>
+</nav>
+
+<div class="snack" id="snack" role="status" aria-live="polite" hidden><span class="msg" id="snack-msg"></span><button type="button" id="snack-close">Dismiss</button></div>
+
+<!--LIKEC4-WEBCOMPONENT-->
+<script>
+const MODEL = __MODEL_JSON__;
+const MARK = `
+<svg class="mk mk-light" viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="6" y="6" width="30" height="12" rx="4" stroke="#35307E" stroke-width="4"/>
+  <rect x="17" y="26" width="30" height="12" rx="4" stroke="#35307E" stroke-width="4"/>
+  <rect x="28" y="46" width="30" height="12" rx="4" stroke="#35307E" stroke-width="4"/>
+  <path d="M12 18v14h5M23 38v14h5" stroke="#278383" stroke-width="3" stroke-dasharray="3 4"/></g>
+  <circle cx="51" cy="52" r="3.5" fill="#00A56B"/></svg>
+<svg class="mk mk-dark" viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="6" y="6" width="30" height="12" rx="4" stroke="#A6A2F8" stroke-width="4"/>
+  <rect x="17" y="26" width="30" height="12" rx="4" stroke="#A6A2F8" stroke-width="4"/>
+  <rect x="28" y="46" width="30" height="12" rx="4" stroke="#A6A2F8" stroke-width="4"/>
+  <path d="M12 18v14h5M23 38v14h5" stroke="#80D5D4" stroke-width="3" stroke-dasharray="3 4"/></g>
+  <circle cx="51" cy="52" r="3.5" fill="#00F29E"/></svg>`;
+const EL = Object.fromEntries(MODEL.elements.map(e => [e.id, e]));
+const ARB = Object.fromEntries(MODEL.arbs.map(a => [a.id, a]));
+const LEVEL_ORDER = ["motivation", "requirement", "abb", "sbb", "dd", "migration", "adr"];
+const LEVEL_NAME = { motivation: "Motivation", requirement: "Requirement", abb: "ABB", sbb: "SBB", dd: "DD", migration: "Migration", adr: "ADR" };
+const LEVEL_HINT = { motivation: "why", requirement: "need", abb: "what", sbb: "with what", dd: "how (text)", migration: "when", adr: "decision" };
+const STATUS = { done: ["success", "✓", "Done"], ready: ["info", "i", "Ready"], draft: ["warning", "!", "Draft"], deprecated: ["error", "✕", "Deprecated"] };
+const ARB_STATUS = { draft: ["warning", "!", "Draft"], submitted: ["info", "i", "Submitted"], "in-review": ["info", "i", "In review"], approved: ["success", "✓", "Approved"], "approved-with-conditions": ["success", "✓", "Approved with conditions"], rejected: ["error", "✕", "Rejected"] };
+const DECISION = { approved: ["success", "✓", "Approved"], "approved-with-conditions": ["success", "✓", "Approved with conditions"], "changes-requested": ["warning", "!", "Changes requested"], rejected: ["error", "✕", "Rejected"], pending: ["info", "i", "Pending"], "not-required": ["neutral", "–", "Not required"] };
+const READINESS = { ready: ["success", "✓", "Ready for the board"], attention: ["warning", "!", "Needs attention"], blocked: ["error", "✕", "Blocked"] };
+const CHECK = { pass: ["success", "✓", "Passed"], warn: ["warning", "!", "Warning"], fail: ["error", "✕", "Failed"] };
+const CHANGE = { new: ["+", "New"], changed: ["Δ", "Changed"], retired: ["−", "Retired"], unchanged: ["=", "Unchanged"] };
+const PLATEAU_SHORT = { baseline: "B", "transition-1": "T1", "transition-2": "T2", target: "T" };
+const DD_GLYPH = '<path d="M8 7 3.5 12 8 17M16 7l4.5 5-4.5 5M13.5 5l-3 14"/>';
+const ADR_GLYPH = '<path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M9 11h6M9 14.5h6M9 18h4"/>';
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const SVG = inner => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+const L = MODEL.landscapes[0] || { plateaus: [], gaps: [] };
+const app = L.application || "";
+
+/* ---------- small renderers ---------- */
+function chip3(map, key, extra) { const [cls, g, w] = map[key] || ["info", "i", key]; return `<span class="status st-${cls}"${extra || ""}><span class="tile" aria-hidden="true">${g}</span>${esc(w)}</span>`; }
+const statusChip = s => s ? chip3(STATUS, s) : "";
+function statusTile(s) { if (!s) return '<span class="sr">no status</span>'; const [cls, g, w] = STATUS[s] || ["info", "i", s]; return `<span class="st-${cls}" style="background:none"><span class="tile solo" aria-hidden="true">${g}</span></span><span class="sr">${esc(w)}</span>`; }
+const outcomeChip = o => o === "OK" ? `<span class="status st-success"><span class="tile" aria-hidden="true">✓</span>OK</span>` : `<span class="status st-error"><span class="tile" aria-hidden="true">✕</span>KO</span>`;
+const changeChip = ch => ch ? `<span class="ax-change ${ch}"><b aria-hidden="true">${CHANGE[ch][0]}</b>${CHANGE[ch][1]}</span>` : "";
+function typeName(e) { return MODEL.notation[e.kind] ? MODEL.notation[e.kind].name : (e.level === "dd" ? "DD · " + e.kind : e.level === "adr" ? "Decision record" : e.kind); }
+function typeTile(e, lg) {
+  const n = MODEL.notation[e.kind];
+  if (n) return `<span class="ax-tile ax-l-${n.layer}${lg ? " lg" : ""}" title="${esc(n.name)}" aria-hidden="true">${SVG(n.svg)}</span>`;
+  return `<span class="ax-tile ax-text-tile${lg ? " lg" : ""}" title="${esc(typeName(e))}" aria-hidden="true">${SVG(e.level === "adr" ? ADR_GLYPH : DD_GLYPH)}</span>`;
+}
+function plateauTrack(e) {
+  if (!["abb", "sbb"].includes(e.level)) return '<span class="muted">—</span>';
+  return `<span class="ax-track" aria-label="In ${esc(e.plateaus.map(p => p).join(", ") || "no plateau")}">${L.plateaus.map(p =>
+    `<span class="${e.plateaus.includes(p.tag) ? "on" : ""}" title="${esc(p.title)}">${PLATEAU_SHORT[p.tag] || p.tag}</span>`).join("")}</span>`;
+}
+const link = (id, label) => EL[id] || ARB[id] ? `<button type="button" class="lnk" data-go="${esc(id)}">${esc(label || (EL[id] || ARB[id]).title)}</button>` : `<code>${esc(id)}</code>`;
+function rowsHtml(items, meta) {
+  if (!items.length) return `<p class="empty">None yet.</p>`;
+  return `<div class="rows">${items.map(e => `<button class="row" type="button" data-go="${esc(e.id)}">
+    ${typeTile(e)}<span class="txt"><b>${esc(e.title)}</b><span>${meta ? meta(e) : esc(typeName(e))}</span></span>
+    ${statusTile(e.status)}<span class="sym go" aria-hidden="true">chevron_right</span></button>`).join("")}</div>`;
+}
+const byLevel = lv => MODEL.elements.filter(e => e.level === lv);
+
+/* ---------- LikeC4 views (web component from tools/build_likec4.py; lists without it) ---------- */
+const HAS_LC4 = !!(window.customElements && customElements.get("likec4-view"));
+function pageIsDark() { const h = document.documentElement, t = h.dataset.theme; if (h.classList.contains("dark") || t === "dark") return true; if (h.classList.contains("light") || t === "light") return false; return matchMedia("(prefers-color-scheme: dark)").matches; }
+function skinLikeC4(host, tries = 0) {
+  const inner = host.shadowRoot && host.shadowRoot.querySelector(".likec4-view");
+  const sr = inner && inner.shadowRoot;
+  if (!sr || !sr.querySelector(".likec4-shadow-root")) { if (tries < 120) requestAnimationFrame(() => skinLikeC4(host, tries + 1)); return; }
+  let st = sr.getElementById("atb-skin");
+  if (!st) { st = document.createElement("style"); st.id = "atb-skin"; st.textContent = window.ATB_LC4_SKIN || ""; }
+  if (sr.lastElementChild !== st) sr.appendChild(st);
+  const want = pageIsDark() ? "dark" : "light";
+  sr.querySelectorAll("[data-mantine-color-scheme]").forEach(n => { if (n.getAttribute("data-mantine-color-scheme") !== want) n.setAttribute("data-mantine-color-scheme", want); });
+  if (!host._aitObs) { host._aitObs = new MutationObserver(() => skinLikeC4(host)); host._aitObs.observe(sr, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-mantine-color-scheme"] }); }
+}
+function lc4(viewId, size, fallback) {
+  if (!HAS_LC4) return `<div class="lc4-off">${fallback || ""}<p class="body-small muted">Interactive LikeC4 view <code>${esc(viewId)}</code>: run <code>tools/build_likec4.py</code> to embed it.</p></div>`;
+  return `<div class="lc4-frame ${size || ""}"><likec4-view view-id="${esc(viewId)}" browser="true"></likec4-view></div>`;
+}
+const lc4Badge = v => `<span class="lc4-badge"><span class="sym" style="font-size:14px" aria-hidden="true">account_tree</span>LikeC4 · ${esc(v)}</span>`;
+function mountLc4(root) { root.querySelectorAll("likec4-view").forEach(v => skinLikeC4(v)); }
+try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => document.querySelectorAll("likec4-view").forEach(v => skinLikeC4(v))); } catch (_) {}
+new MutationObserver(() => document.querySelectorAll("likec4-view").forEach(v => skinLikeC4(v))).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+
+/* ---------- routing ---------- */
+const TABS = [["landscape", "Landscape"], ["blocks", "Building blocks"], ["elements", "Elements"], ["reviews", "Reviews"]];
+const state = { tab: "landscape", mode: "plateau", plateau: (L.plateaus.find(p => p.tag === "target") || L.plateaus[0] || {}).tag, gap: Math.max(0, L.gaps.length - 1),
+  blocksView: "index", filter: "all", q: "", detailTab: "overview", arbTab: "asd", decisions: {} };
+const page = document.getElementById("page");
+function route() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (EL[h]) return renderDetail(h);
+  if (ARB[h]) return renderArb(h);
+  state.tab = TABS.some(t => t[0] === h) ? h : "landscape";
+  renderMain();
+}
+function nav(hash) { if (decodeURIComponent(location.hash.slice(1)) === hash) route(); else location.hash = hash; }
+function wire(root) {
+  root.querySelectorAll("[data-go]").forEach(b => b.onclick = ev => { ev.preventDefault(); nav(b.dataset.go); });
+  root.querySelectorAll("tr[data-go]").forEach(r => r.onkeydown = ev => { if (ev.key === "Enter") nav(r.dataset.go); });
+  mountLc4(root);
+}
+function wireTabs(list, onSelect) {
+  const tabs = [...list.querySelectorAll('[role="tab"]')];
+  tabs.forEach((t, i) => {
+    t.onclick = () => onSelect(t.dataset.tab);
+    t.onkeydown = ev => {
+      let j = null;
+      if (ev.key === "ArrowRight") j = (i + 1) % tabs.length; else if (ev.key === "ArrowLeft") j = (i - 1 + tabs.length) % tabs.length;
+      else if (ev.key === "Home") j = 0; else if (ev.key === "End") j = tabs.length - 1;
+      if (j != null) { ev.preventDefault(); onSelect(tabs[j].dataset.tab); requestAnimationFrame(() => document.querySelector(`[role="tab"][data-tab="${tabs[j].dataset.tab}"]`)?.focus()); }
+    };
+  });
+}
+function tabsHtml(list, current, label, idp) {
+  return `<div class="tabs" role="tablist" aria-label="${esc(label)}">${list.map(([id, name, n]) =>
+    `<button class="tab label-large" role="tab" id="${idp}-${id}" aria-controls="${idp}-panel" aria-selected="${current === id}" tabindex="${current === id ? 0 : -1}" data-tab="${id}">${esc(name)}${n != null ? `<span class="n">${n}</span>` : ""}</button>`).join("")}</div>`;
+}
+const seg = (items, cur, attr, label) => `<div class="seg" role="group" aria-label="${esc(label)}">${items.map(([id, name]) =>
+  `<button type="button" aria-pressed="${cur === id}" data-${attr}="${esc(id)}">${cur === id ? '<span class="sym" aria-hidden="true">check</span>' : ""}${esc(name)}</button>`).join("")}</div>`;
+
+/* ---------- main tabs ---------- */
+function pageHeader() {
+  const v = MODEL.validation.summary;
+  const valid = v.errors ? chip3({ x: ["error", "✕", `${v.errors} blocking ${v.errors > 1 ? "errors" : "error"}`] }, "x")
+    : chip3({ x: [v.warnings ? "warning" : "success", v.warnings ? "!" : "✓", v.warnings ? `Model valid · ${v.warnings} warning${v.warnings > 1 ? "s" : ""}` : "Model valid"] }, "x");
+  return `<div class="phead">
+    <div class="ttl">${MARK}<div><h1 class="headline-small">Architecture</h1>
+      <p class="muted" style="margin:2px 0 0">Building blocks in LikeC4 (<code>model/bb</code>), detailed design in text (<code>model/dd</code>), reviewed at the ARB. Application <code>${esc(app)}</code>.</p></div></div>
+    <div class="meta">${valid}<span class="body-small muted">${v.passed} checks passed · ${MODEL.elements.length} elements · ${MODEL.arbs.length} review${MODEL.arbs.length > 1 ? "s" : ""}</span></div>
+  </div>`;
+}
+function renderMain() {
+  document.title = "AIToolbox Architecture";
+  const counts = { elements: MODEL.elements.length, reviews: MODEL.arbs.length };
+  page.innerHTML = `${pageHeader()}${tabsHtml(TABS.map(([id, n]) => [id, n, counts[id]]), state.tab, "Architecture views", "tab")}<section id="tab-panel" role="tabpanel" aria-labelledby="tab-${state.tab}"></section>`;
+  wireTabs(page.querySelector(".tabs"), id => nav(id));
+  const p = page.querySelector("#tab-panel");
+  ({ landscape: renderLandscape, blocks: renderBlocks, elements: renderElements, reviews: renderReviews })[state.tab](p);
+  wire(p);
+}
+
+function gapTable(g, opts) {
+  const items = g.items.filter(i => opts && opts.all ? true : i.change !== "unchanged")
+    .sort((a, b) => ["new", "changed", "retired", "unchanged"].indexOf(a.change) - ["new", "changed", "retired", "unchanged"].indexOf(b.change) || EL[a.id].level.localeCompare(EL[b.id].level));
+  if (!items.length) return `<p class="empty">No difference between these plateaus.</p>`;
+  return `<div class="tbl-wrap"><div class="tbl-scroll"><table class="gap-table">
+    <thead><tr><th scope="col">Building block</th><th scope="col">Change</th><th scope="col" class="p2">Level</th><th scope="col" class="p3">Plateaus</th><th scope="col" class="p2">Addressed by</th><th scope="col"><span class="sr">Status</span></th></tr></thead>
+    <tbody>${items.map(i => { const e = EL[i.id]; return `<tr class="click" tabindex="0" data-go="${esc(e.id)}">
+      <td><span class="cell-name">${typeTile(e)}<span><span class="nm">${esc(e.title)}</span><span class="id">${esc(typeName(e))}</span></span></span></td>
+      <td>${changeChip(i.change)}</td><td class="p2">${esc(LEVEL_NAME[e.level])}</td><td class="p3">${plateauTrack(e)}</td>
+      <td class="p2">${i.addressedBy.length ? i.addressedBy.map(w => `<span class="wp">${esc(EL[w].title)}${EL[w].workItemId ? ` <code>${esc(EL[w].workItemId)}</code>` : ""}</span>`).join("") : (i.change === "unchanged" ? '<span class="muted">—</span>' : '<span class="muted">not addressed</span>')}</td>
+      <td>${statusTile(e.status)}</td></tr>`; }).join("")}</tbody></table></div></div>`;
+}
+function changeLegend() {
+  return `<div class="legend body-small muted"><span>${changeChip("new")} solid</span><span>${changeChip("changed")} dotted border</span><span>${changeChip("retired")} dashed, faded</span><span>${changeChip("unchanged")} faded</span></div>`;
+}
+function renderLandscape(panel) {
+  const modes = [["plateau", "Plateaus"], ["gap", "Gap"], ["roadmap", "Roadmap"]];
+  let view, head = "", desc = "", fallback = "";
+  if (state.mode === "plateau") {
+    const p = L.plateaus.find(x => x.tag === state.plateau) || L.plateaus[0];
+    view = p.view; desc = p.description;
+    head = seg(L.plateaus.map(x => [x.tag, x.title.split(" · ")[0]]), p.tag, "plateau", "Plateau");
+    const items = MODEL.elements.filter(e => ["abb", "sbb"].includes(e.level) && e.plateaus.includes(p.tag));
+    fallback = rowsHtml(items);
+  } else if (state.mode === "gap") {
+    const g = L.gaps[state.gap] || L.gaps[0];
+    view = g.view; desc = "What changes between the two plateaus, and which work package delivers each change.";
+    head = seg(L.gaps.map((x, i) => [String(i), `${PLATEAU_LABEL(x.from)} → ${PLATEAU_LABEL(x.to)}`]), String(state.gap), "gap", "Plateaus compared");
+  } else {
+    view = "roadmap"; desc = "Plateaus, the work packages that realise them, and the gaps between them.";
+    fallback = rowsHtml(byLevel("migration"), e => esc(typeName(e)) + (e.workItemId ? " · " + esc(e.workItemId) : ""));
+  }
+  const g = L.gaps[state.gap] || L.gaps[0];
+  panel.innerHTML = `
+    <div class="card card-out" style="margin-top:20px">
+      <div class="lc4-head">${seg(modes, state.mode, "mode", "Landscape view")}${head}<span style="margin-left:auto">${lc4Badge(view)}</span></div>
+      ${desc ? `<p class="muted body-small" style="margin:0 0 10px">${esc(desc)}</p>` : ""}
+      ${state.mode === "gap" ? changeLegend() : ""}
+      ${lc4(view, "", fallback)}
+    </div>
+    ${state.mode === "gap" ? `<div class="card card-elev" style="margin-top:16px"><h2><span class="sym" aria-hidden="true">compare_arrows</span>Gap · ${esc(PLATEAU_LABEL(g.from))} → ${esc(PLATEAU_LABEL(g.to))}
+        <span class="body-small muted">${g.items.filter(i => i.change !== "unchanged").length} building blocks change</span></h2>${gapTable(g)}</div>` :
+      `<div class="grid2" style="margin-top:16px">
+        <div class="card card-elev"><h2><span class="sym" aria-hidden="true">timeline</span>Plateaus</h2>${rowsHtml(L.plateaus.map(p => EL[p.id]), e => esc(e.description))}</div>
+        <div class="card card-elev"><h2><span class="sym" aria-hidden="true">assignment</span>Work packages</h2>${rowsHtml(byLevel("migration").filter(e => e.kind === "work-package"), e => `${esc(e.workItemId || "")} · ${esc(e.metadata.start || "")} → ${esc(e.metadata.end || "")}`)}</div>
+      </div>`}`;
+  panel.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => { state.mode = b.dataset.mode; renderMain(); });
+  panel.querySelectorAll("[data-plateau]").forEach(b => b.onclick = () => { state.plateau = b.dataset.plateau; renderMain(); });
+  panel.querySelectorAll("[data-gap]").forEach(b => b.onclick = () => { state.gap = +b.dataset.gap; renderMain(); });
+}
+function PLATEAU_LABEL(tag) { return ({ baseline: "Baseline", "transition-1": "Transition 1", "transition-2": "Transition 2", target: "Target" })[tag] || tag; }
+
+function renderBlocks(panel) {
+  const views = [["index", "Chain · target"], ["motivation", "Motivation"]];
+  const sbbs = MODEL.elements.filter(e => e.level === "sbb" && e.plateaus.includes("target") && /^application-|^data-object/.test(e.kind));
+  panel.innerHTML = `
+    <div class="card card-out" style="margin-top:20px">
+      <div class="lc4-head">${seg(views, state.blocksView, "bview", "Building-block view")}
+        <div class="legend body-small muted"><span><svg viewBox="0 0 28 8" aria-hidden="true"><line x1="0" y1="4" x2="28" y2="4" stroke="var(--on-surface)" stroke-width="2" stroke-dasharray="2 3"/></svg>realization</span></div>
+        <span style="margin-left:auto">${lc4Badge(state.blocksView)}</span></div>
+      ${lc4(state.blocksView, "", rowsHtml(MODEL.elements.filter(e => ["requirement", "abb", "sbb"].includes(e.level))))}
+    </div>
+    <div class="card card-elev" style="margin-top:16px">
+      <h2><span class="sym" aria-hidden="true">description</span>Detailed design · text <span class="body-small muted">SBB of the target and the DD files that realize them</span></h2>
+      <div class="tbl-wrap"><div class="tbl-scroll"><table><thead><tr><th scope="col">Solution Building Block</th><th scope="col">Change</th><th scope="col">Detailed design (model/dd)</th></tr></thead><tbody>
+      ${sbbs.map(e => `<tr class="click" tabindex="0" data-go="${esc(e.id)}"><td><span class="cell-name">${typeTile(e)}<span><span class="nm">${esc(e.title)}</span><span class="id">${esc(e.id)}</span></span></span></td>
+        <td>${changeChip(e.change || "unchanged")}</td>
+        <td>${e.dd.length ? e.dd.map(d => `<span class="wp">${typeTile(EL[d])} ${esc(EL[d].kind)}</span>`).join("") : chip3({ x: ["warning", "!", "No DD yet"] }, "x")}</td></tr>`).join("")}
+      </tbody></table></div></div></div>`;
+  panel.querySelectorAll("[data-bview]").forEach(b => b.onclick = () => { state.blocksView = b.dataset.bview; renderMain(); });
+}
+
+function renderElements(panel) {
+  const q = state.q.toLowerCase();
+  const match = e => (state.filter === "all" || e.level === state.filter) && (!q || (e.title + " " + e.id + " " + e.kind + " " + typeName(e) + " " + (e.module || "")).toLowerCase().includes(q));
+  const items = LEVEL_ORDER.flatMap(byLevel).filter(match);
+  const chip = (id, label, n) => `<button class="chip" type="button" aria-pressed="${state.filter === id}" data-f="${id}">${state.filter === id ? '<span class="sym" aria-hidden="true">check</span>' : ""}${label}<span class="muted">${n}</span></button>`;
+  panel.innerHTML = `
+    <div class="chips" role="group" aria-label="Filter by level" style="margin-top:20px">${chip("all", "All", MODEL.elements.length)}${LEVEL_ORDER.map(l => chip(l, LEVEL_NAME[l], byLevel(l).length)).join("")}
+      ${state.q ? `<span class="chip">“${esc(state.q)}”<button class="icon-btn" style="width:24px;height:24px;margin-right:-6px" type="button" id="clear-q" aria-label="Remove search ${esc(state.q)}"><span class="sym" style="font-size:18px" aria-hidden="true">close</span></button></span>` : ""}</div>
+    <p class="sr" aria-live="polite">${items.length} elements shown</p>
+    <div class="tbl-wrap" style="margin-top:16px"><div class="tbl-scroll"><table>
+      <thead><tr><th scope="col">Name</th><th scope="col">Level</th><th scope="col" class="p2">Type</th><th scope="col" class="p3">Plateaus</th><th scope="col" class="p2">Change</th><th scope="col"><span class="sr">Status</span></th></tr></thead>
+      <tbody>${items.map(e => `<tr class="click" tabindex="0" data-go="${esc(e.id)}">
+        <td><span class="cell-name">${typeTile(e)}<span><span class="nm">${esc(e.title)}</span><span class="id">${esc(e.id)}</span></span></span></td>
+        <td>${esc(LEVEL_NAME[e.level])}</td><td class="p2">${esc(typeName(e))}</td><td class="p3">${plateauTrack(e)}</td>
+        <td class="p2">${changeChip(e.change) || '<span class="muted">—</span>'}</td><td>${statusTile(e.status)}</td></tr>`).join("")}</tbody></table>
+      ${items.length ? "" : `<p class="empty">No element matches. Clear the search or pick another level.</p>`}</div></div>`;
+  panel.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { state.filter = b.dataset.f; renderMain(); page.querySelector(`[data-f="${state.filter}"]`)?.focus(); });
+  const c = panel.querySelector("#clear-q"); if (c) c.onclick = () => { state.q = ""; document.getElementById("q").value = ""; renderMain(); };
+}
+
+function checksList(checks, opts) {
+  const groups = [...new Set(checks.map(c => c.group))];
+  return groups.map(g => `<div class="check-group"><h3>${esc(g)}</h3>${checks.filter(c => c.group === g).map(c => `
+    <div class="check ${c.status}"><span class="st-${CHECK[c.status][0]}" style="background:none"><span class="tile solo" aria-hidden="true">${CHECK[c.status][1]}</span></span>
+      <div class="ck-body"><div class="ck-title"><b>${esc(c.title)}</b><span class="ck-id">${esc(c.id)} · ${c.severity === "error" ? "blocking" : "warning"}</span><span class="sr">${CHECK[c.status][2]}</span></div>
+        ${c.items.length ? `<ul>${c.items.map(i => `<li>${i.id ? link(i.id, (EL[i.id] || {}).title || i.id) + " · " : ""}${esc(i.message)}</li>`).join("")}</ul>` : ""}</div></div>`).join("")}</div>`).join("");
+}
+function renderReviews(panel) {
+  panel.innerHTML = `
+    <p class="muted" style="margin:20px 0 0;max-width:80ch">Prepare a submission for the Architecture Review Board: the ASD is assembled from the model and the submission text, the checks run on the scope of the change, and each reviewer records a decision as a Checkpoint.</p>
+    <div class="arb-list">${MODEL.arbs.map(a => { const r = a.readiness; const dec = (a.reviewers || []).filter(x => !["pending"].includes(x.decision)).length;
+      return `<article class="card card-elev arb-card">
+        <div class="arb-top"><span class="label-medium muted">${esc(a.board)} · board ${esc(a.boardDate)}</span>${chip3(ARB_STATUS, a.status)}</div>
+        <h2 style="margin:0">${esc(a.title)}</h2>
+        <p class="body-small muted" style="margin:0">${esc(PLATEAU_LABEL(a.from.split(".").pop()))} → ${esc(PLATEAU_LABEL(a.to.split(".").pop()))} · ${r.counts.inScope} building blocks in scope · submitted by ${esc(a.submittedBy)} on ${esc(a.submittedAt)}</p>
+        <div class="chips">${chip3(READINESS, r.readiness)}
+          <span class="chip static"><span class="sym" aria-hidden="true">fact_check</span>${r.checks.filter(c => c.status === "pass").length}/${r.checks.length} checks</span>
+          <span class="chip static"><span class="sym" aria-hidden="true">how_to_vote</span>${dec}/${(a.reviewers || []).length} decisions</span>
+          <span class="chip static"><span class="sym" aria-hidden="true">flag</span>${r.counts.openConditions} open condition${r.counts.openConditions === 1 ? "" : "s"}</span></div>
+        <div><button class="btn btn-tonal lead" type="button" data-go="${esc(a.id)}"><span class="sym" aria-hidden="true">arrow_forward</span>Open the review</button></div>
+      </article>`; }).join("")}</div>
+    <div class="card card-out" style="margin-top:16px"><h2><span class="sym" aria-hidden="true">rule</span>Checks on the whole model <span class="body-small muted">tools/validate.py · errors block the pull request, warnings go to the board</span></h2>
+      ${checksList(MODEL.validation.checks)}</div>`;
+}
+
+/* ---------- element page ---------- */
+function chainUp(id) {
+  const out = []; let cur = EL[id]; const seen = new Set();
+  while (cur && !seen.has(cur.id)) {
+    seen.add(cur.id);
+    let p = null;
+    if (cur.level === "dd") p = (cur.realizes || [])[0];
+    else p = (MODEL.relations.find(r => r.source === cur.id && r.kind === "realization" && EL[r.target] && ["abb", "sbb", "requirement", "motivation"].includes(EL[r.target].level)) || {}).target;
+    if (!p || !EL[p]) break;
+    out.unshift(EL[p]); cur = EL[p];
+  }
+  return out;
+}
+function relationsOf(id) {
+  const rels = MODEL.relations.filter(r => (r.source === id || r.target === id) && EL[r.source] && EL[r.target]);
+  const groups = {};
+  for (const r of rels) {
+    const out = r.source === id, other = out ? r.target : r.source;
+    const key = `${MODEL.relationshipNames[r.kind] || r.kind}${out ? "" : " (from)"}`;
+    (groups[key] = groups[key] || []).push({ e: EL[other], title: r.title });
+  }
+  const e = EL[id];
+  if (e.level === "dd") { groups["Realizes"] = (e.realizes || []).filter(x => EL[x]).map(x => ({ e: EL[x] })); if ((e.dependsOn || []).length) groups["Depends on"] = e.dependsOn.filter(x => EL[x]).map(x => ({ e: EL[x] })); }
+  if ((e.dd || []).length) groups["Detailed design"] = e.dd.map(x => ({ e: EL[x] }));
+  if (e.level === "adr") groups["Affects"] = (e.affects || []).filter(x => EL[x]).map(x => ({ e: EL[x] }));
+  const adrs = (e.adr || []).filter(x => EL[x]); if (adrs.length) groups["Decisions"] = adrs.map(x => ({ e: EL[x] }));
+  return groups;
+}
+function renderDetail(id) {
+  const e = EL[id];
+  document.title = `${e.title} · AIToolbox Architecture`;
+  const up = chainUp(id);
+  const n = MODEL.notation[e.kind];
+  const groups = relationsOf(id);
+  const isBB = e._lang === "likec4";
+  const meta = [
+    `<span class="chip static">${typeTile(e)}${esc(typeName(e))}${n ? ` <span class="muted">· ${esc(MODEL.layers[n.layer])}</span>` : ""}</span>`,
+    e.module ? `<span class="chip static"><span class="sym" aria-hidden="true">deployed_code</span><code>${esc(e.module)}</code></span>` : "",
+    e.workItemId ? `<span class="chip static"><span class="sym" aria-hidden="true">assignment</span><code>${esc(e.workItemId)}</code></span>` : "",
+    e.contract ? `<span class="chip static"><span class="sym" aria-hidden="true">description</span><code>${esc(e.contract)}</code></span>` : "",
+    e.domainRef ? `<span class="chip static"><span class="sym" aria-hidden="true">bookmark</span>${esc(e.domainRef)}</span>` : "",
+    e.owner ? `<span class="chip static"><span class="sym" aria-hidden="true">group</span>${esc(e.owner)}</span>` : "",
+  ].join("");
+  const hasDesign = !!e._html;
+  const dtabs = [["overview", "Overview"], ["design", isBB ? "Notes" : "Design"], ["source", "Source"]].filter(t => t[0] !== "design" || hasDesign);
+  if (!dtabs.some(t => t[0] === state.detailTab)) state.detailTab = "overview";
+  page.innerHTML = `
+    <nav class="crumbs body-small" aria-label="Breadcrumb"><button type="button" data-go="landscape">Architecture</button><span class="sym" aria-hidden="true">chevron_right</span>
+      <button type="button" data-go="elements" data-level="${esc(e.level)}">${esc(LEVEL_NAME[e.level])}</button><span class="sym" aria-hidden="true">chevron_right</span><span aria-current="page">${esc(e.title)}</span></nav>
+    <div class="phead">
+      <div class="ttl">${typeTile(e, true)}<div>
+        <p class="label-medium muted" style="margin:0 0 4px;letter-spacing:.06em;text-transform:uppercase">${esc(LEVEL_NAME[e.level])} · ${esc(typeName(e))}</p>
+        <h1 class="headline-small">${esc(e.title)}</h1>
+        <div class="idline"><code>${esc(e.id)}</code><button class="icon-btn" type="button" id="copy-id" aria-label="Copy id" data-tip="Copy id"><span class="sym" aria-hidden="true">content_copy</span></button></div>
+      </div></div>
+      <div class="meta">${statusChip(e.status)}${changeChip(e.change)}<span class="body-small muted">${e.updatedAt ? "updated " + esc(e.updatedAt) : ""}</span></div>
+    </div>
+    <div class="chips">${meta}</div>
+    ${tabsHtml(dtabs, state.detailTab, "Element views", "dtab")}
+    <section id="dtab-panel" role="tabpanel" aria-labelledby="dtab-${state.detailTab}"></section>`;
+  page.querySelectorAll("[data-level]").forEach(b => b.addEventListener("click", () => { state.filter = b.dataset.level; }));
+  page.querySelector("#copy-id").onclick = () => copy(e.id, "Id copied");
+  wireTabs(page.querySelector(".tabs"), k => { state.detailTab = k; renderDetail(id); });
+  const p = page.querySelector("#dtab-panel");
+  if (state.detailTab === "overview") {
+    let facts = "";
+    if (["abb", "sbb"].includes(e.level)) facts += `<div class="card card-out"><h2>Plateaus ${changeChip(e.change || "unchanged")}</h2>
+      <div class="timeline">${L.plateaus.map(pl => `<div class="tl ${e.plateaus.includes(pl.tag) ? "on" : ""}"><span class="dot" aria-hidden="true"></span><b>${esc(pl.title.split(" · ")[0])}</b><span class="body-small muted">${e.plateaus.includes(pl.tag) ? "present" : "absent"}</span></div>`).join("")}</div>
+      ${e.addressedBy.length ? `<p class="body-small" style="margin:12px 0 0">Delivered by ${e.addressedBy.map(w => link(w)).join(", ")}</p>` : ""}</div>`;
+    if (e.acceptance) facts += `<div class="card card-elev"><h2>Acceptance criteria <span class="body-small muted">one acceptance test per row · ${esc(e._detailPath || "")}</span></h2><div class="tbl-wrap"><div class="tbl-scroll"><table class="facts"><thead><tr><th>#</th><th>Given</th><th>When</th><th>Then</th></tr></thead><tbody>${e.acceptance.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.given)}</td><td>${esc(r.when)}</td><td>${esc(r.then)}</td></tr>`).join("")}</tbody></table></div></div></div>`;
+    if (e.decisionTable) facts += `<div class="card card-elev"><h2>Decision table <span class="body-small muted">each KO row becomes a test</span></h2><div class="tbl-wrap"><div class="tbl-scroll"><table class="facts"><thead><tr><th>#</th><th>Case</th><th>Outcome</th><th>Reason</th></tr></thead><tbody>${e.decisionTable.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.case)}</td><td>${outcomeChip(r.outcome)}</td><td>${r.reason ? `<code>${esc(r.reason)}</code>` : '<span class="muted">—</span>'}</td></tr>`).join("")}</tbody></table></div></div></div>`;
+    if (e.operational) facts += `<div class="card card-elev"><h2>Operational requirements</h2><div class="tbl-wrap"><table class="facts"><tbody>${Object.entries(e.operational).map(([k, v]) => `<tr><td><code>${esc(k)}</code></td><td style="font-variant-numeric:tabular-nums">${esc(v)}</td></tr>`).join("")}</tbody></table></div></div>`;
+    if (e.decision) facts += `<div class="card card-elev"><h2>Decision</h2><p style="margin:0">${esc(e.decision)}</p></div>`;
+    const map = MODEL.kindMapping[e.kind];
+    if (map && ["abb", "sbb", "dd"].includes(e.level)) facts += `<div class="card card-elev"><h2>Design to Code <code>${esc(e.kind)}</code></h2><div class="tbl-wrap"><table class="facts"><thead><tr><th>In the DD</th><th>In the code</th><th>Tested by</th></tr></thead><tbody><tr><td>${esc(map.dd)}</td><td><code>${esc(map.code)}</code></td><td>${esc(map.test)}</td></tr></tbody></table></div></div>`;
+    const rels = Object.entries(groups).map(([k, xs]) => `<div class="rel"><h3>${esc(k)}</h3>${rowsHtml(xs.map(x => x.e), x => esc(typeName(x)) + (xs.find(y => y.e === x).title ? " · " + esc(xs.find(y => y.e === x).title) : ""))}</div>`).join("");
+    p.innerHTML = `<div style="display:grid;gap:16px;margin-top:20px">
+      ${e.description ? `<p style="margin:0;max-width:80ch">${esc(e.description)}</p>` : ""}
+      ${up.length ? `<div class="card card-out"><h2>Chain to the requirement</h2><div class="chain-steps">${up.map(x => `<button class="step" type="button" data-go="${esc(x.id)}"><small>${esc(LEVEL_NAME[x.level])}</small><span>${esc(x.title)}</span></button><span class="sym arrow" aria-hidden="true">arrow_forward</span>`).join("")}<span class="step here" aria-current="true"><small>${esc(LEVEL_NAME[e.level])} · this element</small><span>${esc(e.title)}</span></span></div></div>` : ""}
+      ${isBB ? `<div class="card card-out"><h2>Architecture view ${lc4Badge(e.view)}</h2>${lc4(e.view, "small")}</div>` : ""}
+      ${facts}
+      ${rels ? `<div class="card card-elev"><h2>Relationships</h2>${rels}</div>` : ""}</div>`;
+  } else if (state.detailTab === "design") {
+    p.innerHTML = `<div class="reading prose" style="margin-top:20px">${e._html}<p class="body-small muted">Source: <code>${esc(e._detailPath || e._path)}</code></p></div>`;
+  } else {
+    p.innerHTML = `<div class="card card-out" style="margin-top:20px"><h2 style="justify-content:space-between"><span>${isBB ? "LikeC4" : "Frontmatter"} <code>${esc(e._path)}</code></span>
+        <button class="btn btn-tonal lead" type="button" id="copy-src"><span class="sym" aria-hidden="true">content_copy</span>Copy</button></h2>
+      <pre class="source">${esc(e._source)}</pre>
+      <p class="body-small muted" style="margin:12px 0 0">Edits go through a pull request and a Checkpoint. An agent never changes the status (INV-12).${e._detailPath ? ` Details: <code>${esc(e._detailPath)}</code>.` : ""}</p></div>`;
+    p.querySelector("#copy-src").onclick = () => copy(e._source, "Source copied");
+  }
+  wire(p); wire(page.querySelector(".crumbs"));
+}
+
+/* ---------- ARB review page ---------- */
+const ASD_ORDER = [
+  ["Context and scope", "md"], ["Business need", "md"], ["Requirements", "model"], ["Baseline", "model"], ["Target", "model"],
+  ["Gap and transition", "model"], ["Architecture overview", "md"], ["Detailed design", "model"], ["Decisions", "model"],
+  ["Non-functional requirements", "md"], ["Security", "md"], ["Risks", "md"], ["Open questions", "md"],
+];
+function asdSection(a, title, src, i) {
+  const r = a.readiness, from = a.from.split(".").pop(), to = a.to.split(".").pop();
+  const md = (a.sections.find(s => s.title === title) || {}).html;
+  const st = (r.sections.find(s => s.title === title) || {}).status;
+  const badge = src === "model" ? `<span class="src-badge model"><span class="sym" aria-hidden="true">account_tree</span>From the model</span>`
+    : st === "complete" || (!st && md) ? `<span class="src-badge ok"><span class="sym" aria-hidden="true">task_alt</span>Written</span>`
+    : st === "thin" ? `<span class="src-badge warn"><span class="sym" aria-hidden="true">warning</span>Too short</span>`
+    : st === "missing" ? `<span class="src-badge err"><span class="sym" aria-hidden="true">error</span>Missing</span>` : `<span class="src-badge ok"><span class="sym" aria-hidden="true">task_alt</span>Written</span>`;
+  let body = "";
+  const g = L.gaps.find(x => x.from === from && x.to === to);
+  if (title === "Requirements") {
+    body = `<div class="tbl-wrap"><div class="tbl-scroll"><table><thead><tr><th>Requirement</th><th>Acceptance</th><th>KO rules</th><th>Operational</th></tr></thead><tbody>${(a.requirements || []).filter(x => EL[x]).map(x => { const e = EL[x];
+      return `<tr class="click" tabindex="0" data-go="${esc(x)}"><td><span class="cell-name">${typeTile(e)}<span class="nm">${esc(e.title)}</span></span></td><td>${(e.acceptance || []).length} rows</td><td>${(e.decisionTable || []).filter(d => d.outcome === "KO").length}</td><td class="body-small">${Object.entries(e.operational || {}).map(([k, v]) => `<code>${esc(k)}</code> ${esc(v)}`).join("<br>")}</td></tr>`; }).join("")}</tbody></table></div></div>`;
+  } else if (title === "Baseline" || title === "Target") {
+    const pl = L.plateaus.find(p => p.tag === (title === "Baseline" ? from : to));
+    body = `<p class="body-small muted" style="margin:0 0 8px">${esc(pl.title)} — ${esc(pl.description)}</p>${lc4(pl.view, "small")}`;
+  } else if (title === "Gap and transition") {
+    body = g ? `${changeLegend()}${lc4(g.view, "small")}<div style="margin-top:12px">${gapTable(g)}</div>` : "";
+  } else if (title === "Detailed design") {
+    const dds = MODEL.elements.filter(e => e.level === "dd" && (e.realizes || []).some(s => r.scope.some(x => x.id === s)));
+    const missing = r.scope.map(x => EL[x.id]).filter(e => e.level === "sbb" && /^application-|^data-object/.test(e.kind) && x_ne(e) && !e.dd.length);
+    body = `${rowsHtml(dds, e => `${esc(e.kind)} · realizes ${(e.realizes || []).map(s => esc((EL[s] || {}).title || s)).join(", ")}`)}
+      ${missing.length ? `<p class="body-small" style="margin:10px 0 0">${chip3({ x: ["warning", "!", "No DD yet"] }, "x")} ${missing.map(m => link(m.id)).join(", ")}</p>` : ""}`;
+  } else if (title === "Decisions") {
+    body = rowsHtml((a.adr || []).filter(x => EL[x]).map(x => EL[x]), e => esc(e.decision || ""));
+  } else {
+    body = md ? `<div class="prose">${md}</div>` : `<p class="empty">Not written yet. Add a <code>## ${esc(title)}</code> section to <code>${esc(a._path)}</code>.</p>`;
+  }
+  return `<section class="asd-sec" id="asd-${i}" aria-labelledby="asd-h-${i}"><div class="asd-head"><h2 id="asd-h-${i}"><span class="num">${i + 1}</span>${esc(title)}</h2>${badge}</div>${body}</section>`;
+}
+function x_ne(e) { return e.change !== "retired"; }
+function asdMarkdown(a) {
+  const out = [`# ${a.title}`, "", `${a.board} · board ${a.boardDate} · ${PLATEAU_LABEL(a.from.split(".").pop())} → ${PLATEAU_LABEL(a.to.split(".").pop())} · ${a.workItemId || ""}`, ""];
+  const g = L.gaps.find(x => x.from === a.from.split(".").pop() && x.to === a.to.split(".").pop());
+  ASD_ORDER.forEach(([t, src], i) => {
+    out.push(`## ${i + 1}. ${t}`, "");
+    if (t === "Requirements") (a.requirements || []).forEach(x => EL[x] && out.push(`- ${EL[x].title} (${x}): ${(EL[x].acceptance || []).length} acceptance rows`));
+    else if (t === "Gap and transition" && g) { out.push("| Building block | Change | Addressed by |", "|---|---|---|"); g.items.filter(x => x.change !== "unchanged").forEach(x => out.push(`| ${EL[x.id].title} | ${x.change} | ${x.addressedBy.map(w => EL[w].title).join(", ")} |`)); }
+    else if (t === "Baseline" || t === "Target") out.push(`LikeC4 view: \`landscape_${(t === "Baseline" ? a.from : a.to).split(".").pop().replace("-", "_")}\``);
+    else if (t === "Decisions") (a.adr || []).forEach(x => EL[x] && out.push(`- ${EL[x].title}: ${EL[x].decision}`));
+    else if (t === "Detailed design") MODEL.elements.filter(e => e.level === "dd" && (e.realizes || []).some(s => a.readiness.scope.some(y => y.id === s))).forEach(e => out.push(`- ${e.title} (${e.id})`));
+    else { const s = a.sections.find(x => x.title === t); if (s) { const d = document.createElement("div"); d.innerHTML = s.html; out.push(d.innerText.trim()); } }
+    out.push("");
+  });
+  return out.join("\n");
+}
+function renderArb(id) {
+  const a = ARB[id], r = a.readiness;
+  document.title = `${a.board} · AIToolbox Architecture`;
+  const reviewers = (a.reviewers || []).map(x => ({ ...x }));
+  if (state.decisions[id]) reviewers.push(state.decisions[id]);
+  const decided = reviewers.filter(x => x.decision !== "pending").length;
+  const sectionsOk = r.sections.filter(s => s.status === "complete").length;
+  const passed = r.checks.filter(c => c.status === "pass").length;
+  const kpi = (icon, label, value, sub, tone) => `<div class="kpi ${tone || ""}"><span class="sym" aria-hidden="true">${icon}</span><span class="kpi-label">${esc(label)}</span><span class="kpi-value">${value}</span><span class="body-small muted">${sub}</span></div>`;
+  const atabs = [["asd", "ASD"], ["checks", "Checks", r.checks.filter(c => c.status !== "pass").length || null], ["decision", "Decision"]];
+  page.innerHTML = `
+    <nav class="crumbs body-small" aria-label="Breadcrumb"><button type="button" data-go="landscape">Architecture</button><span class="sym" aria-hidden="true">chevron_right</span>
+      <button type="button" data-go="reviews">Reviews</button><span class="sym" aria-hidden="true">chevron_right</span><span aria-current="page">${esc(a.board)}</span></nav>
+    <div class="phead">
+      <div class="ttl"><span class="arb-mark" aria-hidden="true"><span class="sym">gavel</span></span><div>
+        <p class="label-medium muted" style="margin:0 0 4px;letter-spacing:.06em;text-transform:uppercase">ARB submission · ${esc(a.board)} · board ${esc(a.boardDate)}</p>
+        <h1 class="headline-small">${esc(a.title)}</h1>
+        <p class="body-small muted" style="margin:4px 0 0">${esc(PLATEAU_LABEL(a.from.split(".").pop()))} → ${esc(PLATEAU_LABEL(a.to.split(".").pop()))} · submitted by ${esc(a.submittedBy)} on ${esc(a.submittedAt)} · <code>${esc(a.workItemId || "")}</code></p>
+      </div></div>
+      <div class="meta">${chip3(ARB_STATUS, a.status)}${chip3(READINESS, r.readiness)}</div>
+    </div>
+    <div class="kpis">
+      ${kpi("fact_check", "Checks on the scope", `${passed}/${r.checks.length}`, `${r.counts.errors} blocking · ${r.counts.warnings} warning${r.counts.warnings === 1 ? "" : "s"}`, r.counts.errors ? "err" : r.counts.warnings ? "warn" : "ok")}
+      ${kpi("description", "ASD sections written", `${sectionsOk}/${r.sections.length}`, `+ ${ASD_ORDER.filter(s => s[1] === "model").length} sections from the model`, sectionsOk === r.sections.length ? "ok" : "warn")}
+      ${kpi("how_to_vote", "Reviewer decisions", `${decided}/${reviewers.length}`, `${reviewers.filter(x => x.decision === "changes-requested").length} change request · ${reviewers.filter(x => x.decision === "pending").length} pending`, reviewers.some(x => ["changes-requested", "rejected"].includes(x.decision)) ? "warn" : "ok")}
+      ${kpi("flag", "Open conditions", `${(a.conditions || []).filter(c => c.status === "open").length}`, `of ${(a.conditions || []).length} conditions`, (a.conditions || []).some(c => c.status === "open") ? "warn" : "ok")}
+    </div>
+    ${tabsHtml(atabs, state.arbTab, "Review views", "atab")}
+    <section id="atab-panel" role="tabpanel" aria-labelledby="atab-${state.arbTab}"></section>`;
+  wireTabs(page.querySelector(".tabs"), k => { state.arbTab = k; renderArb(id); });
+  const p = page.querySelector("#atab-panel");
+  if (state.arbTab === "asd") {
+    p.innerHTML = `<div class="asd">
+      <nav class="toc" aria-label="ASD sections"><p class="label-medium muted" style="margin:0 0 8px;letter-spacing:.06em;text-transform:uppercase">Architecture Solution Design</p>
+        ${ASD_ORDER.map(([t, src], i) => { const st = (r.sections.find(s => s.title === t) || {}).status; return `<a href="#${esc(id)}" data-sec="${i}" class="${st === "missing" ? "miss" : ""}"><span class="num">${i + 1}</span>${esc(t)}${src === "model" ? '<span class="sym" aria-hidden="true" title="From the model">account_tree</span>' : ""}</a>`; }).join("")}
+        <button class="btn btn-tonal lead" type="button" id="copy-asd" style="margin-top:12px"><span class="sym" aria-hidden="true">content_copy</span>Copy ASD as Markdown</button></nav>
+      <div class="asd-doc">${ASD_ORDER.map(([t, src], i) => asdSection(a, t, src, i)).join("")}</div></div>`;
+    p.querySelectorAll("[data-sec]").forEach(x => x.onclick = ev => { ev.preventDefault(); const s = document.getElementById("asd-" + x.dataset.sec); s.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); s.querySelector("h2").setAttribute("tabindex", "-1"); s.querySelector("h2").focus({ preventScroll: true }); });
+    p.querySelector("#copy-asd").onclick = () => copy(asdMarkdown(a), "ASD copied as Markdown");
+  } else if (state.arbTab === "checks") {
+    p.innerHTML = `<div class="card card-out" style="margin-top:20px"><h2><span class="sym" aria-hidden="true">fact_check</span>Checks on the scope of the change <span class="body-small muted">${r.counts.inScope} building blocks + their DD and requirements</span></h2>
+      ${checksList(r.checks)}</div>
+      <div class="card card-elev" style="margin-top:16px"><h2><span class="sym" aria-hidden="true">description</span>ASD sections</h2>
+      <div class="chips">${r.sections.map(s => chip3({ complete: ["success", "✓", s.title], thin: ["warning", "!", s.title + " · too short"], missing: ["error", "✕", s.title + " · missing"] }, s.status)).join("")}</div></div>`;
+  } else {
+    const mine = state.decisions[id];
+    p.innerHTML = `<div style="display:grid;gap:16px;margin-top:20px">
+      <div class="card card-elev"><h2><span class="sym" aria-hidden="true">how_to_vote</span>Reviewers</h2>
+        <div class="tbl-wrap"><div class="tbl-scroll"><table><thead><tr><th>Reviewer</th><th>Decision</th><th class="p2">Date</th><th>Note</th></tr></thead><tbody>
+        ${reviewers.map(x => `<tr><td><span class="cell-name"><span class="avatar sm" aria-hidden="true">${esc(x.name.split(" ").map(s => s[0]).join("").slice(0, 2))}</span><span><span class="nm">${esc(x.name)}</span><span class="id">${esc(x.role)}</span></span></span></td>
+          <td>${chip3(DECISION, x.decision)}</td><td class="p2" style="white-space:nowrap">${esc(x.at || "—")}</td><td class="body-small">${esc(x.note || "")}</td></tr>`).join("")}</tbody></table></div></div></div>
+      <div class="card card-elev"><h2><span class="sym" aria-hidden="true">flag</span>Conditions</h2>
+        <div class="tbl-wrap"><div class="tbl-scroll"><table><thead><tr><th>#</th><th>Condition</th><th class="p2">Owner</th><th class="p2">Due</th><th>Status</th></tr></thead><tbody>
+        ${(a.conditions || []).map(c => `<tr><td><b>${esc(c.id)}</b></td><td>${esc(c.text)}</td><td class="p2"><code>${esc(c.owner || "")}</code></td><td class="p2" style="white-space:nowrap">${esc(c.due || "")}</td>
+          <td>${chip3({ open: ["warning", "!", "Open"], met: ["success", "✓", "Met"], waived: ["neutral", "–", "Waived"] }, c.status)}</td></tr>`).join("")}</tbody></table></div></div></div>
+      <div class="card card-out"><h2><span class="sym" aria-hidden="true">gavel</span>Your decision <span class="body-small muted">recorded as a Checkpoint decision (CMD-DECIDE-CHECKPOINT)</span></h2>
+        ${mine ? `<p style="margin:0 0 12px">${chip3(DECISION, mine.decision)} <span class="body-small muted">recorded in this preview only · ${esc(mine.note || "no note")}</span></p>` : ""}
+        <label class="field" for="dec-note"><span class="label-medium">Note to the board</span><textarea id="dec-note" rows="3" placeholder="What you checked, and what must change if anything"></textarea></label>
+        <div class="actions-row">
+          <button class="btn btn-filled lead" type="button" data-dec="approved"><span class="sym" aria-hidden="true">check</span>Approve</button>
+          <button class="btn btn-tonal lead" type="button" data-dec="approved-with-conditions"><span class="sym" aria-hidden="true">flag</span>Approve with conditions</button>
+          <button class="btn btn-out lead" type="button" data-dec="changes-requested"><span class="sym" aria-hidden="true">edit_note</span>Request changes</button>
+        </div>
+        <p class="body-small muted" style="margin:12px 0 0">The submission status changes only after the board decision; an agent never changes it (INV-12). ${r.counts.errors ? "Approval is unavailable while blocking checks fail." : ""}</p></div></div>`;
+    p.querySelectorAll("[data-dec]").forEach(b => {
+      if (r.counts.errors && b.dataset.dec !== "changes-requested") { b.setAttribute("aria-disabled", "true"); b.classList.add("is-disabled"); }
+      b.onclick = () => {
+        if (b.getAttribute("aria-disabled") === "true") { toast("Fix the blocking checks before approving."); return; }
+        state.decisions[id] = { name: "Aurélien Heux", role: "Platform admin (you)", decision: b.dataset.dec, at: new Date().toISOString().slice(0, 10), note: p.querySelector("#dec-note").value.trim() };
+        toast(`Decision recorded in this preview: ${DECISION[b.dataset.dec][2]}`); renderArb(id);
+      };
+    });
+  }
+  wire(p); wire(page.querySelector(".crumbs"));
+}
+
+/* ---------- snackbar, copy, inert shell items ---------- */
+const snack = document.getElementById("snack"); let snackT;
+function toast(msg) { document.getElementById("snack-msg").textContent = msg; snack.hidden = false; clearTimeout(snackT); snackT = setTimeout(() => snack.hidden = true, 4000); }
+document.getElementById("snack-close").onclick = () => snack.hidden = true;
+function copy(text, msg) {
+  try { navigator.clipboard.writeText(text).then(() => toast(msg), () => toast("Copy is blocked here. Select the text instead.")); }
+  catch (_) { toast("Copy is blocked here. Select the text instead."); }
+}
+document.querySelectorAll("[data-inert]").forEach(b => b.addEventListener("click", () => toast("This preview contains only the Architecture feature.")));
+
+/* ---------- search ---------- */
+const qEl = document.getElementById("q");
+qEl.addEventListener("input", () => { state.q = qEl.value.trim(); state.filter = "all"; if (location.hash.slice(1) !== "elements") nav("elements"); else renderMain(); qEl.focus(); });
+document.addEventListener("keydown", ev => {
+  if ((ev.metaKey || ev.ctrlKey) && ev.key.toLowerCase() === "k") { ev.preventDefault(); qEl.focus(); }
+  if (ev.key === "Escape" && !snack.hidden) snack.hidden = true;
+});
+document.getElementById("nav-count").textContent = MODEL.elements.length;
+let lastHash = location.hash.slice(1);
+window.addEventListener("hashchange", () => {
+  const h = location.hash.slice(1);
+  if (h !== lastHash) { state.detailTab = "overview"; if (!ARB[decodeURIComponent(h)]) state.arbTab = "asd"; }
+  lastHash = h; route(); window.scrollTo(0, 0);
+});
+route();
+try {
+  const spec = '24px "Material Symbols Outlined"';
+  document.fonts.load(spec).then(faces => { if (faces && faces.length) document.documentElement.classList.add("icons-ready"); }).catch(() => {});
+} catch (_) {}
+</script>

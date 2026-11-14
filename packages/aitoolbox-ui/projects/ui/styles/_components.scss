@@ -1,0 +1,107 @@
+// AIToolbox — global rules for the Angular Material components the design system specifies beyond the theme files
+// (Table, Paginator, Sort, Expansion, Stepper, Tree), extra button roles, and the overlay pieces of @aitoolbox/ui.
+// Colours are --md-sys-color-* custom properties from tokens, so this file works under the M2 and the M3 theme.
+@use '@angular/material' as mat;
+
+html {
+  // Table: wrapper on surface-container-lowest, 48 px header in label-medium uppercase, 52 px rows, outline-variant rules.
+  @include mat.table-overrides((
+    background-color: var(--md-sys-color-surface-container-lowest),
+    header-headline-color: var(--md-sys-color-on-surface-variant),
+    header-headline-size: 12px,
+    header-headline-weight: 500,
+    header-headline-font: var(--ait-font-ui),
+    header-headline-tracking: 0.5px,
+    header-container-height: 48px,
+    row-item-container-height: 52px,
+    row-item-outline-color: var(--md-sys-color-outline-variant),
+    row-item-label-text-color: var(--md-sys-color-on-surface),
+  ));
+  @include mat.paginator-overrides((
+    container-background-color: var(--md-sys-color-surface-container-lowest),
+    container-text-color: var(--md-sys-color-on-surface-variant),
+    container-size: 56px,
+  ));
+  @include mat.sort-overrides((arrow-color: var(--md-sys-color-on-surface-variant)));
+  @include mat.expansion-overrides((
+    container-background-color: var(--md-sys-color-surface-container-low),
+    header-text-color: var(--md-sys-color-on-surface),
+    header-collapsed-state-height: 48px,
+    container-shape: 12px,
+  ));
+  @include mat.stepper-overrides((
+    header-selected-state-icon-background-color: var(--md-sys-color-primary),
+    header-done-state-icon-background-color: var(--md-sys-color-primary),
+    header-error-state-icon-foreground-color: var(--md-sys-color-error),
+    line-color: var(--md-sys-color-outline-variant),
+  ));
+  @include mat.tree-overrides((
+    container-background-color: var(--md-sys-color-surface),
+    node-text-color: var(--md-sys-color-on-surface),
+    node-min-height: 40px,
+  ));
+  // Dialog: surface-container-high, headline-small title, body-medium supporting text (both themes).
+  @include mat.dialog-overrides((
+    container-color: var(--md-sys-color-surface-container-high),
+    subhead-color: var(--md-sys-color-on-surface),
+    subhead-font: var(--ait-font-ui),
+    subhead-size: 24px,
+    subhead-line-height: 32px,
+    subhead-weight: 500,
+    subhead-tracking: 0,
+    supporting-text-color: var(--md-sys-color-on-surface-variant),
+    container-shape: 16px,
+  ));
+  @include mat.tooltip-overrides((
+    container-color: var(--md-sys-color-inverse-surface),
+    supporting-text-color: var(--md-sys-color-inverse-on-surface),
+  ));
+}
+.mat-mdc-header-cell { text-transform: uppercase; }
+// <div class="ait-table"><table mat-table>…</table></div>: the frame scrolls, never the page.
+.ait-table {
+  background: var(--md-sys-color-surface-container-lowest);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 12px;
+  overflow-x: auto;
+  > table { width: 100%; }
+  .mat-mdc-row:last-child .mat-mdc-cell { border-bottom: 0; }
+}
+.ait-table-dense { @include mat.table-overrides((row-item-container-height: 40px)); }
+
+// Button roles that both themes need. Tonal (M2 has no tonal appearance): <button mat-flat-button class="dt-tonal">
+.dt-tonal {
+  @include mat.button-overrides((
+    filled-container-color: var(--md-sys-color-secondary-container),
+    filled-label-text-color: var(--md-sys-color-on-secondary-container),
+    filled-state-layer-color: var(--md-sys-color-on-secondary-container),
+  ));
+}
+// Destructive: always a text button in error, never a filled red. <button mat-button class="dt-danger">
+.dt-danger {
+  @include mat.button-overrides((
+    text-label-text-color: var(--md-sys-color-error),
+    text-state-layer-color: var(--md-sys-color-error),
+  ));
+}
+// Disabled controls that keep their reason (Tooltip E): [disabledInteractive] buttons stay focusable.
+.mat-mdc-button-disabled-interactive { cursor: not-allowed; }
+
+// Snackbar panel opened by AitSnackBar: inverse surface, 4 px radius, 24 px state mark.
+.ait-snackbar-panel {
+  @include mat.snack-bar-overrides((
+    container-color: var(--md-sys-color-inverse-surface),
+    supporting-text-color: var(--md-sys-color-inverse-on-surface),
+    button-color: var(--md-sys-color-inverse-primary),
+    container-shape: 4px,
+  ));
+}
+// State marks drawn on an inverse surface use the other theme's colours (the "-dark" file in light).
+.ait-on-inverse { color-scheme: dark; }
+html.dark .ait-on-inverse { color-scheme: light; }
+
+// Dialog: 280–560 px; under 600 px forms open full screen (AitWindowClass.fullScreenDialogs).
+.ait-dialog-full-screen .mat-mdc-dialog-surface { border-radius: 0; }
+
+// Spinner inside a button (Deploying…): 18 px pen orbit before the label.
+.mat-mdc-button-base ait-pen-orbit { margin-inline: -4px 8px; }

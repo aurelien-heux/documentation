@@ -1,0 +1,28 @@
+<!-- @dsCard group="Navigation" height=420 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"><style>
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+body{margin:0;padding:16px 16px 16px 24px;background:var(--surface);color:var(--on-surface);font-family:var(--font-body);font-size:14px;display:flex;flex-direction:column;gap:18px}
+.cap{font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.5px;color:var(--on-surface-variant);text-transform:uppercase}
+.sh{display:flex;align-items:flex-start;gap:4px 8px;min-height:48px;flex-wrap:wrap;padding-bottom:8px;border-bottom:1px solid var(--outline-variant)}
+.back{margin-left:-8px;width:40px;height:40px;border:0;border-radius:999px;background:transparent;color:var(--on-surface);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.back:hover{background:color-mix(in srgb,var(--on-surface) 8%,transparent)}
+.txt{flex:1 1 240px;min-width:0;display:flex;align-items:center;gap:2px 12px;flex-wrap:wrap;padding-top:6px}
+h2{margin:0;font-family:var(--font-ui);font-size:20px;line-height:28px;font-weight:700}
+.ctx{font-size:13px;line-height:18px;color:var(--on-surface-variant);padding-left:12px;border-left:1px solid var(--outline-variant)}
+.act{display:flex;align-items:center;gap:8px;margin-left:auto;min-height:48px}
+.btn{height:40px;padding:0 20px;border-radius:20px;border:0;font-family:var(--font-ui);font-size:14px;font-weight:600;cursor:pointer}
+.f{background:var(--primary);color:var(--on-primary)}.t{background:var(--secondary-container);color:var(--on-secondary-container)}
+.kind{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:var(--ai-container,#9CF1F0);color:var(--on-ai-container,#002020);font-family:var(--font-ui);font-size:11px;font-weight:800}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:6px;background:#C3F4DC;color:#00391E;font-family:var(--font-ui);font-size:12px;font-weight:600}
+.chip i{width:8px;height:8px;border-radius:2px;background:currentColor}
+.bad{display:flex;align-items:center;gap:12px;opacity:.85}
+.bad span.b{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px 0 8px;border:1px solid var(--outline);border-radius:8px;font-family:var(--font-ui);font-size:14px}
+.x{font-family:var(--font-ui);font-size:12px;font-weight:700;color:var(--error)}
+</style></head><body>
+<span class="cap">Item, with a lead and one action</span>
+<div class="sh"><button class="back" aria-label="Back to the Catalog" title="Back to the Catalog"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="txt"><span class="kind">MCP</span><h2>DevOps</h2><span class="ctx">MCP server by Platform team · v2.3</span></div><div class="act"><button class="btn f">Add to my assistant</button></div></div>
+<span class="cap">Sub-page with a status</span>
+<div class="sh"><button class="back" aria-label="Back to all surveys" title="Back to all surveys"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="txt"><h2>Sweep run satisfaction</h2><span class="chip"><i></i>Live</span><span class="ctx">After the 3rd run of the day · since 1 Sep</span></div></div>
+<span class="cap">Don't · a back button on its own row</span>
+<div class="bad"><span class="b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Catalog</span><span class="x">✕ costs a line, says nothing about the page</span></div>
+</body></html>

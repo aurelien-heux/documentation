@@ -1,0 +1,52 @@
+openapi: 3.1.0
+info:
+  title: Devtoolbox Environments — Deployments
+  version: 1.0.0
+  x-model-id: sbb.environments.deployment-api
+paths:
+  /environments/{env}/deployments:
+    post:
+      operationId: requestDeployment
+      summary: Request a Deployment of a Module branch on an Environment (CMD-REQUEST-DEPLOYMENT)
+      parameters:
+        - { name: env, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RequestDeployment' }
+      responses:
+        '201': { description: Deployment created (status requested), content: { application/json: { schema: { $ref: '#/components/schemas/Deployment' } } } }
+        '409': { description: Blocked by another Holder's Reservation (INV-ENV-06), content: { application/json: { schema: { $ref: '#/components/schemas/ReservationConflict' } } } }
+        '422': { description: Environment not eligible (INV-ENV-12, INV-ENV-14), content: { application/json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+components:
+  schemas:
+    RequestDeployment:
+      type: object
+      required: [module, branch]
+      properties:
+        module: { type: string, pattern: '^[a-z0-9-]+/[a-z0-9-]+$', description: applicationSlug/moduleName }
+        branch: { type: string }
+        workItemId: { type: string, pattern: '^WI-[0-9]+$' }
+    Deployment:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        environment: { type: string }
+        module: { type: string }
+        branch: { type: string }
+        status: { type: string, enum: [requested, pr_opened, merged, first_rollout, succeeded, failed] }
+        prUrl: { type: string, format: uri }
+        requestedBy: { type: string }
+        requestedAt: { type: string, format: date-time }
+    ReservationConflict:
+      type: object
+      properties:
+        holder: { type: string }
+        scope: { type: string, enum: [environment, application, module] }
+        expiresAt: { type: string, format: date-time }
+    Problem:
+      type: object
+      properties:
+        reason: { type: string, description: 'invariant id, e.g. INV-ENV-12' }
+        detail: { type: string }

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AIToolbox dialog with a form</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0;font-family:Manrope,"Segoe UI",system-ui,sans-serif}
+a{color:#39235F}a:hover{color:#14085E}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1000px; height: 1180px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column; gap: 20px; padding: 56px 64px">
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #48454E">Material Design 3 · Components · Dialog</div>
+    <h1 style="margin: 0; font-size: 45px; line-height: 52px; font-weight: 700; letter-spacing: -0.01em">Dialog with a form</h1>
+    <p style="margin: 0; max-width: 840px; font-size: 16px; line-height: 24px; color: #48454E">MD3 basic dialog carrying a short form: 560 px max, 16 px corners, surface-container-high, 24 px padding, headline-small title, actions right-aligned. The confirm action is a filled <em>primary</em> button (creating is a decision, not a run); the lime Run button stays out of dialogs.</p>
+  </div>
+
+  <!-- Light: dialog over a dimmed app -->
+  <div style="position: relative; height: 560px; border-radius: 16px; overflow: hidden; background: #FAF4FF; border: 1px solid #CAC4CF">
+    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0.6">
+      <div style="height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 20px; background: #F8F1FF"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true"><path d="M21 23v-6a6 6 0 0 1 6-6h10a6 6 0 0 1 6 6v6" fill="none" stroke="#0D0B14" stroke-width="6" stroke-linecap="round"></path><rect x="4" y="22" width="56" height="36" rx="10" fill="#0D0B14"></rect><path d="M17.5 33l8 7-8 7" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M33.5 47h13" fill="none" stroke="#00F29E" stroke-width="5.5" stroke-linecap="round"></path></svg><span style="font-size: 18px; font-weight: 600">Workspaces</span></div>
+      <div style="padding: 20px; display: flex; flex-direction: column; gap: 10px"><div style="height: 48px; border-radius: 10px; background: #FFFFFF"></div><div style="height: 48px; border-radius: 10px; background: #FFFFFF"></div><div style="height: 48px; border-radius: 10px; background: #FFFFFF"></div></div>
+    </div>
+    <div style="position: absolute; inset: 0; background: rgba(26, 27, 33, 0.32)"></div>
+    <div role="dialog" aria-labelledby="dlg-title" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 560px; box-sizing: border-box; padding: 24px; border-radius: 16px; background: #F2EBFA; color: #1C1B1E; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 8px 3px rgba(0,0,0,0.15)">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span id="dlg-title" style="font-size: 24px; line-height: 32px; font-weight: 600">New workspace</span>
+        <span style="font-size: 14px; line-height: 20px; color: #48454E">A workspace groups the tools, secrets and environments for one team.</span>
+      </div>
+      <form style="display: flex; flex-direction: column; gap: 18px; margin: 0">
+        <div style="position: relative; display: flex; flex-direction: column">
+          <label for="ws-name" style="position: absolute; top: -8px; left: 12px; padding: 0 4px; background: #F2EBFA; font-size: 12px; font-weight: 500; color: #39235F">Workspace name</label>
+          <input id="ws-name" type="text" value="platform-eu" style="height: 56px; box-sizing: border-box; padding: 0 16px; border: 2px solid #39235F; border-radius: 4px; background: transparent; color: #1C1B1E; font-size: 16px">
+          <span style="font-size: 12px; color: #48454E; padding: 4px 16px 0">Lower-case, hyphens allowed · 3–32 characters</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+          <div style="position: relative; display: flex; flex-direction: column">
+            <label for="ws-region" style="position: absolute; top: -8px; left: 12px; padding: 0 4px; background: #F2EBFA; font-size: 12px; font-weight: 500; color: #48454E">Region</label>
+            <div style="position: relative">
+              <select id="ws-region" style="width: 100%; height: 56px; box-sizing: border-box; padding: 0 44px 0 16px; border: 1px solid #79757F; border-radius: 4px; background: transparent; color: #1C1B1E; font-size: 16px; appearance: none; -webkit-appearance: none"><option>eu-west-1 (Ireland)</option><option>eu-central-1 (Frankfurt)</option><option>us-east-1 (Virginia)</option></select>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 16px; pointer-events: none"><path d="M6 9l6 6 6-6"></path></svg>
+            </div>
+          </div>
+          <div style="position: relative; display: flex; flex-direction: column">
+            <label for="ws-repo" style="position: absolute; top: -8px; left: 12px; padding: 0 4px; background: #F2EBFA; font-size: 12px; font-weight: 500; color: #48454E">Repository</label>
+            <input id="ws-repo" type="text" placeholder="org/repo" style="height: 56px; box-sizing: border-box; padding: 0 16px; border: 1px solid #79757F; border-radius: 4px; background: transparent; color: #1C1B1E; font-size: 15px; font-family: 'JetBrains Mono', monospace">
+          </div>
+        </div>
+        <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 8px">
+          <legend style="font-size: 12px; font-weight: 600; color: #48454E; padding: 0 0 2px">Environment</legend>
+          <div style="display: flex; gap: 8px">
+            <label style="display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 16px 0 8px; border-radius: 8px; background: #DED7EB; color: #1D1A28; font-size: 14px; font-weight: 500"><input type="radio" name="env" checked style="position: absolute; opacity: 0; width: 1px; height: 1px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>Staging</label>
+            <label style="display: inline-flex; align-items: center; height: 32px; padding: 0 16px; border: 1px solid #79757F; border-radius: 8px; color: #1C1B1E; font-size: 14px; font-weight: 500"><input type="radio" name="env" style="position: absolute; opacity: 0; width: 1px; height: 1px">Production</label>
+            <label style="display: inline-flex; align-items: center; height: 32px; padding: 0 16px; border: 1px solid #79757F; border-radius: 8px; color: #1C1B1E; font-size: 14px; font-weight: 500"><input type="radio" name="env" style="position: absolute; opacity: 0; width: 1px; height: 1px">Sandbox</label>
+          </div>
+        </fieldset>
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; min-height: 44px"><span>Auto-deploy on merge to main</span><span style="position: relative; width: 52px; height: 32px; border-radius: 999px; background: #39235F; display: inline-flex; align-items: center; padding: 0 4px; box-sizing: border-box; justify-content: flex-end"><input type="checkbox" checked style="position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0"><span style="width: 24px; height: 24px; border-radius: 999px; background: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; color: #39235F"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span></span></label>
+          <label style="display: inline-flex; align-items: center; gap: 12px; font-size: 14px; min-height: 44px"><span style="width: 18px; height: 18px; border-radius: 2px; border: 2px solid #48454E; box-sizing: border-box; display: inline-flex; position: relative"><input type="checkbox" style="position: absolute; opacity: 0; width: 18px; height: 18px; margin: 0"></span>Seed with the starter tool set (shell, inspector, query console)</label>
+        </div>
+      </form>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 4px">
+        <button type="button" style="height: 40px; padding: 0 12px; border: 0; border-radius: 16px; background: transparent; color: #39235F; font-size: 14px; font-weight: 600">Cancel</button>
+        <button type="submit" style="height: 40px; padding: 0 24px; border: 0; border-radius: 16px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600">Create workspace</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 440px minmax(0, 1fr); gap: 24px; align-items: start">
+    <!-- Dark: compact, with a validation error -->
+    <div style="position: relative; height: 380px; border-radius: 16px; overflow: hidden; background: #14121E">
+      <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.4)"></div>
+      <div role="dialog" aria-labelledby="dlg2-title" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 392px; box-sizing: border-box; padding: 24px; border-radius: 16px; background: #2B2836; color: #D8D1E4; display: flex; flex-direction: column; gap: 16px">
+        <span id="dlg2-title" style="font-size: 24px; line-height: 32px; font-weight: 600">Add a secret</span>
+        <form style="display: flex; flex-direction: column; gap: 18px; margin: 0">
+          <div style="position: relative; display: flex; flex-direction: column">
+            <label for="sc-key" style="position: absolute; top: -8px; left: 12px; padding: 0 4px; background: #2B2836; font-size: 12px; font-weight: 500; color: #BCB5CE">Key</label>
+            <input id="sc-key" type="text" value="DATABASE_URL" style="height: 56px; box-sizing: border-box; padding: 0 16px; border: 1px solid #948DA5; border-radius: 4px; background: transparent; color: #D8D1E4; font-size: 15px; font-family: 'JetBrains Mono', monospace">
+          </div>
+          <div style="position: relative; display: flex; flex-direction: column">
+            <label for="sc-val" style="position: absolute; top: -8px; left: 12px; padding: 0 4px; background: #2B2836; font-size: 12px; font-weight: 500; color: #FFB4AB">Value</label>
+            <input id="sc-val" type="password" value="postgres" aria-invalid="true" aria-describedby="sc-err" style="height: 56px; box-sizing: border-box; padding: 0 44px 0 16px; border: 2px solid #FFB4AB; border-radius: 4px; background: transparent; color: #D8D1E4; font-size: 15px; font-family: 'JetBrains Mono', monospace">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFB4AB" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position: absolute; right: 14px; top: 17px"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4M12 16h.01"></path></svg>
+            <span id="sc-err" style="font-size: 12px; color: #FFB4AB; padding: 4px 16px 0">Must be a connection string (postgres://…)</span>
+          </div>
+        </form>
+        <div style="display: flex; justify-content: flex-end; gap: 8px">
+          <button type="button" style="height: 40px; padding: 0 12px; border: 0; border-radius: 16px; background: transparent; color: #C4C0FF; font-size: 14px; font-weight: 600">Cancel</button>
+          <button type="submit" style="height: 40px; padding: 0 24px; border: 0; border-radius: 16px; background: #C4C0FF; color: #2A2473; font-size: 14px; font-weight: 600">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anatomy notes -->
+    <div style="display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 16px; background: #F8F1FF; font-size: 13px; line-height: 18px; color: #48454E">
+      <span style="font-size: 14px; font-weight: 700; color: #1C1B1E">Anatomy &amp; rules</span>
+      <span><strong style="color: #1C1B1E">Container</strong> 280–560 px wide, 16 px radius, <span style="font-family: 'JetBrains Mono', monospace">surface-container-high</span>, elevation 3, 24 px padding, scrim <span style="font-family: 'JetBrains Mono', monospace">scrim</span> at 32 %.</span>
+      <span><strong style="color: #1C1B1E">Title</strong> headline-small (24/32); one line of supporting text in body-medium on <span style="font-family: 'JetBrains Mono', monospace">on-surface-variant</span>.</span>
+      <span><strong style="color: #1C1B1E">Fields</strong> outlined, 56 px, 16 px gap between rows; the label floats on the dialog colour. Focused = 2 px primary; error = 2 px error + icon + helper text. Mono face for keys, URLs and paths.</span>
+      <span><strong style="color: #1C1B1E">Choices</strong> short enumerations are filter chips (secondary-container when selected); toggles for defaults, checkboxes for options.</span>
+      <span><strong style="color: #1C1B1E">Actions</strong> right-aligned: text button to dismiss, one filled primary to confirm. Never the Run button here, and never a destructive filled button; a delete confirm uses a text button in <span style="font-family: 'JetBrains Mono', monospace">error</span>.</span>
+      <span><strong style="color: #1C1B1E">Behaviour</strong> focus goes to the first field; Esc = Cancel; a form that needs more than ~6 fields becomes a full-screen dialog or a page.</span>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1000,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

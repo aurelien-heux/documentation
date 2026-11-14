@@ -1,0 +1,78 @@
+
+      </sc-if><!-- /isCommunity -->
+
+      <!-- ============ ADMINISTRATION · HUB ============ -->
+      <sc-if value="{{isAdminHub}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 16px; color: #48454E"><span>Administration</span></div>
+      <div style="height: 40px; display: flex; align-items: center; gap: 16px">
+        <h1 class="ui" style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 700">Administration</h1>
+        <span style="font-size: 14px; color: #48454E">{{adminScope}}</span>
+      </div>
+
+      <sc-if value="{{showPlatform}}" hint-placeholder-val="{{true}}">
+      <h2 class="h2">Platform</h2>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+        <sc-for list="{{platformCards}}" as="p" hint-placeholder-count="6">
+          <div class="card" style="display: flex; flex-direction: column; gap: 8px; min-height: 132px">
+            <div class="row" style="justify-content: space-between"><div class="ui" style="font-size: 16px; font-weight: 600">{{p.title}}</div><sc-if value="{{p.hasTile}}" hint-placeholder-val="{{false}}"><span class="tile {{p.tile}}"><i></i>{{p.status}}</span></sc-if></div>
+            <div style="flex: 1; font-size: 13px; line-height: 18px; color: #48454E">{{p.sub}}</div>
+            <div class="row"><span class="mono" style="font-size: 11px; color: #48454E">{{p.remote}}</span><span style="flex: 1"></span><button type="button" class="btn t sm" onClick="{{p.open}}">Open</button></div>
+          </div>
+        </sc-for>
+      </div>
+      </sc-if>
+
+      <h2 class="h2" style="margin-top: 8px">Features</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+        <sc-for list="{{featureCards}}" as="f" hint-placeholder-count="4">
+          <div class="card" style="display: flex; flex-direction: column; gap: 12px; padding: 20px">
+            <div class="row">
+              <span style="width: 40px; height: 40px; border-radius: 12px; background: #EDE4FF; display: inline-flex; align-items: center; justify-content: center; flex: none"><sc-if value="{{f.isSweep}}" hint-placeholder-val="{{true}}"><!--MARK:sweep--></sc-if><sc-if value="{{f.isEnv}}" hint-placeholder-val="{{false}}"><!--MARK:env--></sc-if><sc-if value="{{f.isDocs}}" hint-placeholder-val="{{false}}"><!--MARK:docs--></sc-if><sc-if value="{{f.isNew}}" hint-placeholder-val="{{false}}"><!--MARK:new--></sc-if></span>
+              <div style="flex: 1; min-width: 0"><div class="ui" style="font-size: 16px; font-weight: 700">{{f.name}}</div><div style="font-size: 12px; color: #48454E">Owned by {{f.owner}} · your role: {{f.role}}</div></div>
+              <button type="button" class="btn f sm" onClick="{{f.open}}">Manage</button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <sc-for list="{{f.stats}}" as="x" hint-placeholder-count="3"><div class="row" style="gap: 8px; font-size: 13px"><span class="tile {{x.tile}}" style="min-width: 28px; justify-content: center"><i></i>{{x.v}}</span><span style="color: #1C1B1E">{{x.label}}</span></div></sc-for>
+            </div>
+            <div class="row" style="border-top: 1px solid #ECE5F4; padding-top: 10px; font-size: 11px; color: #48454E"><span class="mono">{{f.remote}}</span><span style="flex: 1"></span><span>{{f.scope}}</span></div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div class="ocard" style="display: flex; gap: 16px; align-items: flex-start"><span class="tile in" style="flex: none"><i></i>How it works</span><span style="font-size: 13px; line-height: 18px; color: #48454E">Features have no admin entry of their own. Each feature team ships its administration as a <b>remote module</b> with a manifest (id, label, route, required right, summary for this card). Administration loads only the modules you have rights on; personal preferences stay in the account menu under Settings.</span></div>
+      </sc-if>
+
+      <!-- ============ ADMINISTRATION · MODULE CHROME ============ -->
+      <sc-if value="{{isAdminModule}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 16px; color: #48454E"><button type="button" class="lnk" style="font-size: 12px; font-weight: 400" onClick="{{goHub}}">Administration</button><span>›</span><span>{{modName}}</span><sc-if value="{{hasModSub}}" hint-placeholder-val="{{false}}"><span>›</span><span>{{modSub}}</span></sc-if></div>
+      <div style="height: 40px; display: flex; align-items: center; gap: 12px">
+        <h1 class="ui" style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 700">{{modName}}</h1>
+        <span class="tag" style="background: #ECE5F4; color: #1C1B1E">Remote module</span><span class="mono" style="font-size: 12px; color: #48454E">{{modRemote}} · {{modOwner}}</span>
+        <span style="flex: 1"></span>
+        <sc-if value="{{mRel}}" hint-placeholder-val="{{false}}"><button type="button" class="btn f btn-i" onClick="{{goCompose}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New release</button></sc-if>
+        <sc-if value="{{mTours}}" hint-placeholder-val="{{false}}"><button type="button" class="btn f btn-i" onClick="{{newTour}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New tour</button></sc-if>
+        <sc-if value="{{mSurv}}" hint-placeholder-val="{{false}}"><button type="button" class="btn f btn-i" onClick="{{newSurvey}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New survey</button></sc-if>
+        <sc-if value="{{isOtherModule}}" hint-placeholder-val="{{false}}"><button type="button" class="btn t" onClick="{{openFeature}}">Open {{modName}}</button></sc-if>
+      </div>
+      </sc-if>
+
+      <!-- other feature modules (placeholder content from their remote) -->
+      <sc-if value="{{isOtherModule}}" hint-placeholder-val="{{false}}">
+      <div class="card" style="padding: 0; overflow: hidden">
+        <sc-for list="{{modRows}}" as="r" hint-placeholder-count="5">
+          <div class="lr" style="display: flex; align-items: center; gap: 16px; min-height: 64px; padding: 8px 20px; border-top: 1px solid #ECE5F4"><div style="flex: 1; min-width: 0"><div class="ui" style="font-size: 14px; font-weight: 600">{{r.title}}</div><div style="font-size: 12px; color: #48454E">{{r.sub}}</div></div><sc-if value="{{r.hasTile}}" hint-placeholder-val="{{false}}"><span class="tile {{r.tile}}"><i></i>{{r.status}}</span></sc-if><button type="button" class="chip" onClick="{{r.go}}">{{r.cta}}</button></div>
+        </sc-for>
+      </div>
+      <div class="ocard" style="font-size: 13px; line-height: 18px; color: #48454E">This screen is rendered by <span class="mono">{{modRemote}}</span>, loaded by the Administration shell. The feedback profile of this feature is edited in <button type="button" class="lnk" onClick="{{goListenFeature}}">Community › Listening</button>, which owns the shared feedback and survey engine.</div>
+      </sc-if>
+
+      <!-- ============ ADMINISTRATION · COMMUNITY MODULE ============ -->
+      <sc-if value="{{isAdminCommunity}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+        <sc-for list="{{mTabs}}" as="m" hint-placeholder-count="5">
+          <button type="button" class="chip" aria-pressed="{{m.on}}" style="{{m.style}}" onClick="{{m.pick}}">{{m.label}}<sc-if value="{{m.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{m.n}}</span></sc-if></button>
+        </sc-for>
+        <span style="flex: 1"></span>
+        <sc-if value="{{showPlatform}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" aria-pressed="{{maint}}" style="{{maintStyle}}" onClick="{{toggleMaint}}"><sc-if value="{{maint}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>Maintenance banner · {{maintLabel}}</button></sc-if>
+        <sc-if value="{{isFeatureRole}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: #48454E">You see Listening for Sweep only</span></sc-if>
+      </div>

@@ -1,0 +1,302 @@
+/* AIToolbox 5.0.1 — generated from tokens.json; edit tokens.json, not this file */
+@font-face {
+  font-family: 'BNPP Type';
+  src: url('fonts/BNPPType-Regular.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --primary: #39235f; /* The Sweep purple #39235F in light, the lavender #C4C0FF in dark (kept from 4.x). Filled buttons, links, active tab and navigation bar, focused field border, switches on, the keyboard focus ring (2 px with a 2 px gap: 12.7 : 1 light, 10.9 : 1 dark), the “Toolbox” of the wordmark. Text on it: on-primary. */
+  --on-primary: #ffffff; /* Text and icons on primary. */
+  --primary-container: #e3dfff; /* Soft violet tint: FAB, selected chips, highlighted rows. Text on it: on-primary-container. */
+  --on-primary-container: #14085e; /* Text and icons on primary-container. */
+  --secondary: #484454; /* From the Sweep pale purple #DED7EB (hue 296, the hue of the neutrals), tone 30 in light. Secondary icons and text accents; rarely a fill. */
+  --on-secondary: #ffffff; /* Text on secondary. */
+  --secondary-container: #ded7eb; /* The Sweep pale purple #DED7EB in light: tonal buttons, filter and selected chips, segmented selection, environment badges, avatars and the active navigation pill (with a 3 px primary bar, because the pill is 1.1 : 1 on the band). Text on it: on-secondary-container. */
+  --on-secondary-container: #1d1a28; /* Text and icons on secondary-container (12.2 : 1 light, 7.3 : 1 dark). */
+  --tertiary: #404b23; /* From the Sweep lime #DCEAB4: olive in light (tone 30, 8.9 : 1 on the page), pale lime in dark. Running dots and deploy states, never a fill. The neon green stays in the logo only. */
+  --on-tertiary: #ffffff; /* Text on tertiary. */
+  --tertiary-container: #dceab4; /* The Sweep lime #DCEAB4 in both themes (pinned in dark): the Run action (Run, Deploy, Apply, New run; one per screen, a tonal button, never in a dialog), the disc behind the play icon of row Re-run actions, “Deploying…” chips. Text on it: on-tertiary-container. */
+  --on-tertiary-container: #39235f; /* Label and play icon on tertiary-container (the Run button, “Deploying…” chips): the Sweep purple #39235F in both themes (pinned), 10.4 : 1 on lime. */
+  --error: #93000a; /* Error role. Error outlines, ERR log level, destructive text buttons, error text. Light is tone 30 (#93000A, 8.9:1 on surface) so error text clears 7:1; dark stays tone 80. */
+  --on-error: #ffffff; /* Text on error. */
+  --error-container: #ffdad6; /* 'down' health chips, error banners. */
+  --on-error-container: #410002; /* Text on error-container. */
+  --surface: #fdf8fd; /* Page background. Light: the page surface is near-neutral (chroma 4); the containers (dialogs, menus, pickers, panels) are a light purple one step lighter than MD3 (chroma 10, tones 97/96/94/92); the navigation is the deepest violet band (nav-container). */
+  --on-surface: #1c1b1e; /* Body text and icons on any surface tone. */
+  --on-surface-variant: #48454e; /* Secondary text, helper text, captions, inactive icons. 8.9:1 on surface in light, 10.9:1 in dark. */
+  --surface-dim: #ddd9dd; /* Dimmed page ground behind modals. */
+  --surface-bright: #fdf8fd; /* Brightest surface tone. */
+  --nav-container: #ede4ff; /* Navigation frame only: top app bar, rail, drawer, bottom navigation bar, bottom app bar — header and rail (or drawer) share it so they read as one frame. The deepest light surface: a violet band (night hue, chroma 20, tone 92 = #EDE4FF), darker than the pale containers; night tone 10 in dark. Active item and chips on it: nav-active. */
+  --surface-container-lowest: #ffffff; /* Elevated cards (with elevation-1). */
+  --surface-container-low: #faf4ff; /* Section panels, nav rail ground. */
+  --surface-container: #f8f1ff; /* Default container: app bar, panels, list zebra. */
+  --surface-container-high: #f2ebfa; /* Dialogs, menus, filled cards. */
+  --surface-container-highest: #ece5f4; /* Filled text fields, highest tonal step. */
+  --outline: #79757f; /* Outlined buttons and chips, text-field resting border. */
+  --outline-variant: #cac4cf; /* Dividers, card borders, table rules. */
+  --inverse-surface: #313033; /* Snackbar ground. */
+  --inverse-on-surface: #f4eff4; /* Snackbar text. */
+  --inverse-primary: #c4c0ff; /* Snackbar action text. Dark is tone 30 (#413C8A, 7.2:1 on the pale inverse surface). */
+  --scrim: #000000; /* Modal scrim at 32% alpha. */
+  --shadow: #000000; /* Shadow colour for the elevation tokens. */
+  --ai: #004f50; /* AI-powered features, Material tones: deep teal in light (tone 30, 8.9 : 1), light teal in dark. AI marks drawn as lines or dots (working dots, pen orbit, guide track, sparkle icon). Fills use ai-container. Never chrome, navigation or non-AI buttons. */
+  --on-ai: #ffffff; /* Text on ai. */
+  --ai-container: #9cf1f0; /* AI suggestion cards and AI chips. */
+  --on-ai-container: #002020; /* Text on ai-container. */
+  --logo-box: #0d0b14; /* Brand token (logo family, not a UI role): the toolbox box and handle of the mark, the favicon and app-icon tiles, the brand loader and the state marks. Night #0D0B14 on light backgrounds, lavender on dark. */
+  --on-logo-box: #ffffff; /* Brand token: the > chevron of the prompt on logo-box. */
+  --logo-cursor: #00f29e; /* Brand token: the cursor of the prompt on logo-box, full neon on the night box, emerald on the lavender box. The neon is used nowhere else. */
+  --success: #0b5314; /* Healthy / passing (tone 30 in light). Status dots, INFO log level. Status is never told by colour alone: success chips carry the check glyph and a word. */
+  --on-success: #ffffff; /* Text on success. */
+  --success-container: #acf4a2; /* 'healthy' chips. */
+  --on-success-container: #002203; /* Text on success-container. */
+  --warning: #5c4300; /* Degraded / attention (tone 30 in light). WARN log level. Always with a glyph and a word. */
+  --on-warning: #ffffff; /* Text on warning. */
+  --warning-container: #ffdea0; /* 'degraded' chips, warning banners. */
+  --on-warning-container: #261900; /* Text on warning-container. */
+  --elevation-1: 0 1px 2px rgba(0,0,0,0.30), 0 1px 3px 1px rgba(0,0,0,0.15); /* Elevated buttons and cards. */
+  --elevation-2: 0 1px 2px rgba(0,0,0,0.30), 0 2px 6px 2px rgba(0,0,0,0.15); /* Menus, hovered elevated cards. */
+  --elevation-3: 0 1px 3px rgba(0,0,0,0.30), 0 4px 8px 3px rgba(0,0,0,0.15); /* FAB, dialogs, snackbars. */
+  --elevation-4: 0 2px 3px rgba(0,0,0,0.30), 0 6px 10px 4px rgba(0,0,0,0.15); /* Dragged items. */
+  --elevation-5: 0 4px 4px rgba(0,0,0,0.30), 0 8px 12px 6px rgba(0,0,0,0.15); /* Rare; modal sheets over dark. */
+  --logo-ai: #80d5d4; /* Brand token: the AI badge of the mark and the teal of the brand loader, the light teal #80D5D4 in both themes. */
+  --on-logo-ai: #003737; /* Brand token: the “AI” letters on logo-ai. */
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --primary: #c4c0ff;
+  --on-primary: #2a2473;
+  --primary-container: #413c8a;
+  --on-primary-container: #e3dfff;
+  --secondary: #cac3d7;
+  --on-secondary: #322e3d;
+  --secondary-container: #484454;
+  --on-secondary-container: #e6dff3;
+  --tertiary: #bfcc99;
+  --on-tertiary: #2a340f;
+  --tertiary-container: #dceab4;
+  --on-tertiary-container: #39235f;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  --surface: #14121e;
+  --on-surface: #ece5f8;
+  --on-surface-variant: #cac3dc;
+  --surface-dim: #14121e;
+  --surface-bright: #484553;
+  --nav-container: #1d1a27;
+  --surface-container-lowest: #0f0c19;
+  --surface-container-low: #1d1a27;
+  --surface-container: #23202d;
+  --surface-container-high: #2b2836;
+  --surface-container-highest: #363341;
+  --outline: #948da5;
+  --outline-variant: #494458;
+  --inverse-surface: #e6dff2;
+  --inverse-on-surface: #322e3c;
+  --inverse-primary: #413c8a;
+  --scrim: #000000;
+  --shadow: #000000;
+  --ai: #80d5d4;
+  --on-ai: #003737;
+  --ai-container: #004f50;
+  --on-ai-container: #9cf1f0;
+  --logo-box: #c4c0ff;
+  --on-logo-box: #0d0b14;
+  --logo-cursor: #006c44;
+  --success: #91d888;
+  --on-success: #003908;
+  --success-container: #0b5314;
+  --on-success-container: #acf4a2;
+  --warning: #fcbc00;
+  --on-warning: #402d00;
+  --warning-container: #5c4300;
+  --on-warning-container: #ffdea0;
+  --logo-ai: #80d5d4;
+  --on-logo-ai: #003737;
+}
+:root {
+  --space-1: 4px; /* Icon-to-label gaps, chip inner gaps. */
+  --space-2: 8px; /* Gap between chips and buttons in a row. */
+  --space-3: 12px; /* Dense list rows, text-button padding. */
+  --space-4: 16px; /* Field padding, card padding, grid gaps. */
+  --space-5: 20px; /* Panel padding. */
+  --space-6: 24px; /* Dialog padding, filled-button horizontal padding, section gaps. */
+  --space-8: 32px; /* Between page sections. */
+  --space-12: 48px; /* Page top/bottom, hero spacing. */
+  --space-16: 64px; /* Side gutters of long-form reading pages at Large and up (app pages use the layout-margin-* of their window class). */
+  --radius-none: 0px; /* Dividers, table cells. */
+  --radius-xs: 4px; /* Text fields, snackbars, badges. */
+  --radius-sm: 8px; /* Chips, small tiles. */
+  --radius-md: 12px; /* Cards, small FAB, panels. */
+  --radius-lg: 16px; /* The ceiling of the scale: buttons, segmented buttons, search bars, navigation items (hover and active), dialogs, sheets, pickers, large FAB, large panels. The logo box corner (10/64 of the mark). */
+  --radius-xl: 16px; /* Pinned to radius-lg — nothing in the system is rounder than 16 px except circles. Kept for Material naming (corner-extra-large). */
+  --radius-full: 9999px; /* Circles only: avatars, badges, radio, switch, icon-button state layers, dots. Never on buttons, pills, search bars or navigation items. */
+  --breakpoint-medium: 600px; /* Medium: 600–839 px, tablets in portrait, foldables, narrow windows. */
+  --breakpoint-expanded: 840px; /* Expanded: 840–1199 px, tablets in landscape, small laptops, half a desktop screen. */
+  --breakpoint-large: 1200px; /* Large: 1200–1599 px, laptops and desktops — the reference mockups are 1440 × 900. */
+  --breakpoint-extra-large: 1600px; /* Extra-large: ≥ 1600 px, large desktop monitors. */
+  --layout-margin-compact: 16px; /* Page side margin, Compact (0–599 px). */
+  --layout-margin-medium: 24px; /* Page side margin, Medium (600–839 px). */
+  --layout-margin-expanded: 24px; /* Page side margin, Expanded (840–1199 px). */
+  --layout-margin-large: 32px; /* Page side margin, Large (1200–1599 px). */
+  --layout-margin-extra-large: 32px; /* Page side margin, Extra-large (≥ 1600 px). */
+  --layout-columns-compact: 4; /* Grid columns, Compact. */
+  --layout-columns-medium: 8; /* Grid columns, Medium. */
+  --layout-columns-expanded: 12; /* Grid columns, Expanded. */
+  --layout-columns-large: 12; /* Grid columns, Large. */
+  --layout-columns-extra-large: 12; /* Grid columns, Extra-large. */
+  --layout-gutter-compact: 16px; /* Grid gutter, Compact. */
+  --layout-gutter-medium: 24px; /* Grid gutter, Medium. */
+  --layout-gutter-expanded: 24px; /* Grid gutter, Expanded. */
+  --layout-gutter-large: 24px; /* Grid gutter, Large. */
+  --layout-gutter-extra-large: 24px; /* Grid gutter, Extra-large. */
+  --layout-navigation-bar: 80px; /* Bottom NavigationBar height, Compact. */
+  --layout-navigation-rail: 80px; /* NavigationRail width: the default navigation from 600 px, Medium to Extra-large. */
+  --layout-navigation-drawer: 300px; /* NavigationDrawer width, opened on demand from the rail menu: pushes the page from 1200 px, over the page below. */
+  --layout-assistant-width: 400px; /* Docked assistant default width (320 – min(640 px, 50 %)), Large and up. */
+  --layout-page-min-with-assistant: 720px; /* The page keeps at least this width beside the docked assistant; an open drawer folds back to the rail to make room. */
+  --layout-side-column: 360px; /* Side column beside the table when the page area is ≥ 1040 px (400 px from 1380 px). */
+  --layout-reading-max: 840px; /* Max width of a text column (docs, settings, policies). */
+  --layout-form-max: 600px; /* Max width of a single-column form. */
+  --layout-short-height: 480px; /* Under this window height (phone in landscape): rail instead of bar, full-screen dialogs. */
+  --font-ui: 'BNPP Type', 'Open Sans', system-ui, sans-serif;
+  --font-brand: 'BNPP Type', 'Open Sans', system-ui, sans-serif;
+  --font-body: 'Open Sans', system-ui, sans-serif;
+  --font-plain: 'Open Sans', system-ui, sans-serif;
+  --text-display-large: 500 57px/64px var(--font-ui); /* Marketing heroes only. */
+  --text-display-medium: 500 45px/52px var(--font-ui); /* Page titles on foundation pages. */
+  --text-display-small: 500 36px/44px var(--font-ui); /* Large numbers, splash. */
+  --text-headline-large: 500 32px/40px var(--font-ui); /* Screen titles. */
+  --text-headline-medium: 500 28px/36px var(--font-ui); /* Section titles. */
+  --text-headline-small: 500 24px/32px var(--font-ui); /* Dialog titles. */
+  --text-title-large: 500 22px/28px var(--font-ui); /* Top app bar title. */
+  --text-title-medium: 500 16px/24px var(--font-ui); /* Card and list-item titles. */
+  --text-title-small: 500 14px/20px var(--font-ui); /* Dense list titles, tab labels. */
+  --text-body-large: 400 16px/24px var(--font-body); /* Text-field values, reading text. */
+  --text-body-medium: 400 14px/20px var(--font-body); /* Default UI text. */
+  --text-body-small: 400 12px/16px var(--font-body); /* Helper text, captions. */
+  --text-label-large: 500 14px/20px var(--font-ui); /* Button labels. */
+  --text-label-medium: 500 12px/16px var(--font-ui); /* Chips, badges, nav labels. */
+  --text-label-small: 500 11px/16px var(--font-plain); /* Metadata: IDs, paths, timestamps, log levels (Open Sans, 600 for emphasis). */
+  --text-code: 600 13px/20px var(--font-plain); /* Terminal output, keys, URLs, connection strings — Open Sans at 600 so data stands apart from prose. */
+}
+.display-large {
+  font-family: var(--font-ui);
+  font-size: 57px;
+  line-height: 64px;
+  font-weight: 500;
+  letter-spacing: -0.25px;
+}
+.display-medium {
+  font-family: var(--font-ui);
+  font-size: 45px;
+  line-height: 52px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+.display-small {
+  font-family: var(--font-ui);
+  font-size: 36px;
+  line-height: 44px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+.headline-large {
+  font-family: var(--font-ui);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+.headline-medium {
+  font-family: var(--font-ui);
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+.headline-small {
+  font-family: var(--font-ui);
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+.title-large {
+  font-family: var(--font-ui);
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+.title-medium {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: 0.15px;
+}
+.title-small {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+.body-large {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+.body-medium {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+}
+.body-small {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+.label-large {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+.label-medium {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.label-small {
+  font-family: var(--font-plain);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.code {
+  font-family: var(--font-plain);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: 0px;
+}
+
+/* Deprecated aliases from 4.x, kept for migration only: remove in 5.1. */
+:root { --run: var(--tertiary-container); --on-run: var(--on-tertiary-container); --run-icon: var(--on-tertiary-container); --run-outline: transparent; --run-text: var(--primary); --nav-active: var(--secondary-container); --focus-ring: var(--primary); --ai-strong: var(--ai); --surface-variant: var(--surface-container-highest); }

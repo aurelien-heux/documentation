@@ -1,0 +1,58 @@
+<!-- @dsCard group="Communication" height=360 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"><style>
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+body{margin:0;padding:16px;background:var(--surface);color:var(--on-surface);font-family:var(--font-body);font-size:14px}
+button,.ui{font-family:var(--font-ui)}button{cursor:pointer}
+.frame{position:relative;width:100%;max-width:720px;height:300px;overflow:hidden;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--outline-variant);box-sizing:border-box}
+.page{position:absolute;inset:0;padding:20px 24px;display:flex;flex-direction:column;gap:14px}
+.ttl{font-family:var(--font-ui);font-size:18px;font-weight:600}
+.row{display:flex;align-items:center;gap:12px}
+.btn{height:40px;padding:0 20px;border:0;border-radius:var(--radius-lg);font-family:var(--font-ui);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.tbl{border-radius:var(--radius-md);background:var(--surface-container-lowest);border:1px solid var(--outline-variant);overflow:hidden}
+.tr{display:grid;grid-template-columns:1.6fr 1fr 1.4fr;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid var(--outline-variant);font-size:13px}
+.th{font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--on-surface-variant);border-top:0}
+.chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:var(--radius-sm);background:var(--ai-container);color:var(--on-ai-container);font-family:var(--font-ui);font-size:13px;font-weight:500;white-space:nowrap}
+.tile{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:var(--radius-xs);font-family:var(--font-ui);font-size:12px;font-weight:600}
+.tile i{width:8px;height:8px;border-radius:2px;background:currentColor}
+.spot{position:absolute;box-sizing:border-box;pointer-events:none;border:2px solid var(--primary);border-radius:var(--radius-md);box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 18%,transparent),0 0 0 9999px color-mix(in srgb,var(--scrim) 42%,transparent);animation:spot-in .35s cubic-bezier(.2,0,0,1) both}
+@keyframes spot-in{from{box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 0%,transparent),0 0 0 9999px color-mix(in srgb,var(--scrim) 0%,transparent)}}
+.card{position:absolute;width:300px;box-sizing:border-box;padding:12px 16px 8px;border-radius:var(--radius-md);background:var(--surface-container-high);color:var(--on-surface);box-shadow:var(--elevation-2,0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15));animation:spot-rise .4s cubic-bezier(.2,0,0,1) both}
+@keyframes spot-rise{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.spot,.card{animation:none}}
+.tag{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:var(--radius-xs);background:var(--primary-container);color:var(--on-primary-container);font-family:var(--font-ui);font-size:12px;font-weight:600}
+.x{height:40px;padding:0 12px;border:0;border-radius:var(--radius-lg);background:transparent;color:var(--primary);font-family:var(--font-ui);font-size:14px;font-weight:600}
+.x:hover{background:color-mix(in srgb,var(--primary) 6%,transparent)}
+.cap{margin-top:10px;font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.5px;color:var(--on-surface-variant)}
+</style></head><body>
+<div class="frame" aria-label="Guided tour preview">
+  <div class="page" aria-hidden="true">
+    <div class="ttl">Runs</div>
+    <div class="row"><span class="btn" style="background:var(--tertiary-container);color:var(--on-tertiary-container);">Run selected</span><span class="btn" style="background:transparent;border:1px solid var(--outline);color:var(--primary)">Schedule</span></div>
+    <div class="tbl">
+      <div class="tr th"><span>Pull request</span><span>Last run</span><span>Review summary</span></div>
+      <div class="tr"><span>#4821 · Rate limits on the credit request API</span><span class="tile" style="background:var(--success-container);color:var(--on-success-container)"><i></i>Passed</span><span><span class="chip" id="target">✦ Review summary · rate it</span></span></div>
+      <div class="tr"><span>#4818 · Migrate facility exports</span><span class="tile" style="background:var(--error-container);color:var(--on-error-container)"><i></i>Failed</span><span><span class="chip">✦ Review summary · rate it</span></span></div>
+    </div>
+  </div>
+  <div class="spot" id="spot" aria-hidden="true"></div>
+  <div class="card" id="card" role="dialog" aria-label="Guided tour">
+    <div class="row" style="gap:8px;margin-bottom:6px"><span class="tag">New in 4.6</span><span style="font-size:12px;color:var(--on-surface-variant)">Step 3 of 3</span></div>
+    <div class="ui" style="font-size:14px;line-height:20px;font-weight:600;margin-bottom:4px">PR summaries in Sweep</div>
+    <div style="font-size:14px;line-height:20px;color:var(--on-surface-variant)">Every pull request now gets a review summary. Open one and rate it.</div>
+    <div class="row" style="justify-content:flex-end;gap:4px;margin-top:8px"><button type="button" class="x">Skip</button><button type="button" class="x">Back</button><button type="button" class="x" id="replay">Done</button></div>
+  </div>
+</div>
+<div class="cap">Spotlight: scrim 42 % with a 6 px cutout on the measured target, 2 px primary ring, card beside it. Press Done to replay the entrance.</div>
+<script>
+(function(){
+  var frame=document.querySelector('.frame'),t=document.getElementById('target'),s=document.getElementById('spot'),c=document.getElementById('card');
+  function place(){var r=t.getBoundingClientRect(),b=frame.getBoundingClientRect(),p=6,x=r.left-b.left-p,y=r.top-b.top-p,w=r.width+2*p,h=r.height+2*p;
+    s.style.cssText='left:'+x+'px;top:'+y+'px;width:'+w+'px;height:'+h+'px';
+    var cw=300,left=x+w+16<=b.width-16?x+w+16:(x-16-cw>=16?x-16-cw:Math.max(16,Math.min(x,b.width-cw-16)));
+    var top=left===x+w+16||left===x-16-cw?Math.max(8,y-8):y+h+12; c.style.left=left+'px';c.style.top=top+'px';}
+  function replay(){s.style.animation='none';c.style.animation='none';void s.offsetWidth;s.style.animation='';c.style.animation='';}
+  place();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(place);window.addEventListener('resize',place);
+  document.getElementById('replay').addEventListener('click',replay);
+})();
+</script>
+</body></html>
