@@ -2,9 +2,9 @@
 
 Marks for the AIToolbox features, separate from the product logo. One folder per feature, then `light/` and `dark/`, like the rest of the brand package. Open `index.html` for a live preview (with a button to play the once versions again).
 
-- `light/` — colours for **light backgrounds**: deep violet (primary #35307E), teal (ai 50 #278383), green (tertiary 60 #00A56B).
+- `light/` — colours for **light backgrounds**: the Sweep purple (primary #39235F), teal (ai 50 #278383), green (tertiary 60 #00A56B).
 - `dark/` — colours for **dark backgrounds**: lavender (primary 70 #A6A2F8), light teal (ai 80 #80D5D4), neon green (tertiary #00F29E).
-- Chatbot keeps its validated colours: deep violet #35307E with a #008857 cursor on light, lavender #C4C0FF with a neon #00F29E cursor on dark.
+- Chatbot keeps its validated colours: the Sweep purple #39235F with a #008857 cursor on light, lavender #C4C0FF with a neon #00F29E cursor on dark.
 
 Colours are fixed in each file (no automatic switching), so you choose the file that matches the surface. All backgrounds are transparent except the GIFs.
 
