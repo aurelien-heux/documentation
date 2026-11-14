@@ -1,0 +1,29 @@
+asyncapi: 3.0.0
+info:
+  title: Devtoolbox Environments — events
+  version: 1.0.0
+  x-model-id: sbb.environments.deployment-requested-event
+channels:
+  deployment:
+    address: devtoolbox.environments.deployment
+    messages:
+      DeploymentRequested: { $ref: '#/components/messages/DeploymentRequested' }
+operations:
+  publishDeploymentRequested:
+    action: send
+    channel: { $ref: '#/channels/deployment' }
+components:
+  messages:
+    DeploymentRequested:
+      name: EVT-DEPLOYMENT-REQUESTED
+      payload:
+        type: object
+        required: [deploymentId, environment, module, branch, requestedBy, requestedAt]
+        properties:
+          deploymentId: { type: string, format: uuid }
+          environment: { type: string }
+          module: { type: string, description: applicationSlug/moduleName }
+          branch: { type: string }
+          requestedBy: { type: string }
+          workItemId: { type: string }
+          requestedAt: { type: string, format: date-time }

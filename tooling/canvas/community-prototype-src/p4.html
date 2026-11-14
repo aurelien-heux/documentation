@@ -1,0 +1,146 @@
+
+      <!-- ============ SWEEP (host screen for tours, tips and micro-surveys) ============ -->
+      <sc-if value="{{isSweep}}" hint-placeholder-val="{{false}}">
+      <div class="r-tool" style="height: 40px; display: flex; align-items: center; gap: 8px">
+        <button type="button" class="btn f btn-i" data-anchor="sweep.run" style="width: 160px; justify-content: center; background: #1D1A27" onClick="{{runSelected}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Run selected</button>
+        <button type="button" class="btn o" style="width: 120px; justify-content: center">Schedule</button>
+        <span style="font-size: 13px; color: #48454E">{{runsMsg}}</span>
+        <span style="flex: 1"></span>
+        <select class="sel" aria-label="Status filter"><option>All statuses</option><option>Passed</option><option>Failed</option></select>
+      </div>
+      <div class="card" style="padding: 0; overflow: hidden">
+        <table class="r-sweep" style="width: 100%; border-collapse: collapse; table-layout: fixed">
+          <colgroup><col style="width: 48px"><col style="width: 320px"><col style="width: 140px"><col style="width: 240px"><col></colgroup>
+          <thead><tr><th class="th"><input type="checkbox" class="cb" style="width: 18px; height: 18px; margin: 0; accent-color: #35307E" aria-label="Select all"></th><th class="th">Pull request</th><th class="th">Last run</th><th class="th">Review summary</th><th class="th">Findings</th></tr></thead>
+          <tbody>
+            <sc-for list="{{runs}}" as="r" hint-placeholder-count="3">
+              <tr class="rw"><td class="td"><input type="checkbox" class="cb" style="width: 18px; height: 18px; margin: 0; accent-color: #35307E" aria-label="Select {{r.title}}"></td><td class="td"><div class="ui" style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.title}}</div><div style="font-size: 12px; color: #48454E">{{r.meta}}</div></td><td class="td"><span class="tile {{r.tile}}"><i></i>{{r.status}}</span></td><td class="td"><button type="button" class="chip" data-anchor="sweep.summary" style="height: 32px; background: #9CF1F0; border-color: #9CF1F0; color: #002020"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#006A6A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>{{r.summary}}</button></td><td class="td" style="font-size: 13px; color: #48454E">{{r.findings}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <sc-if value="{{tipOn}}" hint-placeholder-val="{{true}}">
+        <div class="ocard r-wrap" style="display: flex; gap: 16px; align-items: center; border-color: #35307E; background: #F2EBFA"><span class="tile in"><i></i>Tip · new in 4.6</span><span style="font-size: 14px; line-height: 20px">Every pull request now gets a <b>review summary</b> written from the diff and the pipeline logs. Open one and rate it — ratings go straight to the platform team.</span><span style="flex: 1"></span><button type="button" class="chip" onClick="{{tipTour}}">Show me</button><button type="button" class="lnk" onClick="{{tipOff}}">Got it</button></div>
+      </sc-if>
+      </sc-if>
+
+    </main>
+  </div>
+  <!--NAVBAR-->
+  <sc-if value="{{navScrim}}" hint-placeholder-val="{{false}}"><div class="scrim" style="z-index: 29" onClick="{{toggleNav}}"></div></sc-if>
+
+  <!-- ============ OVERLAYS ============ -->
+  <sc-if value="{{snack}}" hint-placeholder-val="{{true}}">
+    <div role="status" class="snk" style="position: absolute; left: {{snackLeft}}; bottom: 24px; display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 8px 0 16px; border-radius: 8px; background: #322F37; color: #F4EFF4; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15); z-index: 5">
+      <span>{{snackText}}</span>
+      <sc-if value="{{snackHasAction}}" hint-placeholder-val="{{true}}"><button type="button" class="btn x" style="color: #C4C0FF" onClick="{{snackAct}}">{{snackAction}}</button></sc-if>
+      <button type="button" class="ib" aria-label="Dismiss" style="width: 32px; height: 32px; color: #F4EFF4; margin: 0" onClick="{{closeSnack}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{microOn}}" hint-placeholder-val="{{false}}">
+    <div class="pop" role="dialog" aria-label="Quick question" style="right: 24px; bottom: 24px; width: 380px; padding: 16px">
+      <div class="row" style="justify-content: space-between; margin-bottom: 8px"><span class="tile in"><i></i>Quick question</span><span style="font-size: 12px; color: #48454E">10 seconds · once a week at most</span></div>
+      <sc-if value="{{microAsk}}" hint-placeholder-val="{{true}}">
+        <div class="ui" style="font-size: 14px; line-height: 20px; font-weight: 600; margin-bottom: 10px">How easy was it to run these scans?</div>
+        <div class="scale" role="radiogroup" aria-label="1 to 5"><sc-for list="{{micro}}" as="m" hint-placeholder-count="5"><button type="button" role="radio" aria-checked="{{m.on}}" aria-pressed="{{m.on}}" onClick="{{m.pick}}">{{m.v}}</button></sc-for></div>
+        <div class="row" style="justify-content: space-between; font-size: 12px; color: #48454E; margin-top: 4px"><span>Hard</span><span>Easy</span></div>
+        <sc-if value="{{microPicked}}" hint-placeholder-val="{{false}}"><div class="fld" style="min-height: 40px; padding: 8px 12px; margin-top: 10px"><label for="micro-why">Anything to add? (optional)</label><input id="micro-why" type="text" value="{{microWhy}}" onChange="{{onMicroWhy}}"></div></sc-if>
+        <div class="row" style="justify-content: flex-end; margin-top: 8px"><button type="button" class="btn x" onClick="{{microLater}}">Not now</button><button type="button" class="btn f sm" onClick="{{microSend}}">Send</button></div>
+      </sc-if>
+      <sc-if value="{{microDone}}" hint-placeholder-val="{{false}}"><div class="row"><span class="tile ok"><i></i>Sent</span><span style="font-size: 13px; color: #48454E">Thanks. The platform team reads every answer.</span><span style="flex: 1"></span><button type="button" class="btn x" onClick="{{microClose}}">Close</button></div></sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{panel}}" hint-placeholder-val="{{false}}">
+    <div role="dialog" aria-label="Notifications" style="position: absolute; right: 72px; top: 60px; width: 400px; box-sizing: border-box; border-radius: 12px; background: #F2EBFA; box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15); z-index: 7; overflow: hidden">
+      <div class="row" style="padding: 12px 16px 8px; justify-content: space-between"><span class="ui" style="font-size: 16px; font-weight: 700">Notifications</span><button type="button" class="lnk" onClick="{{markAllRead}}">Mark all as read</button></div>
+      <div class="row" style="padding: 0 16px 10px; gap: 6px"><span class="chip chip-on" style="height: 28px; font-size: 12px">All</span><span class="chip" style="height: 28px; font-size: 12px">Runs</span><span class="chip" style="height: 28px; font-size: 12px">Community</span><span class="chip" style="height: 28px; font-size: 12px">Ideas</span></div>
+      <sc-for list="{{notifs}}" as="n" hint-placeholder-count="4">
+        <button type="button" class="mi" style="height: auto; padding: 10px 16px; align-items: flex-start; border-top: 1px solid #E3DFFF" onClick="{{n.go}}"><span class="fi" style="width: 28px; height: 28px; border-radius: 8px; background: {{n.bg}}; color: {{n.fg}}; display: inline-flex; align-items: center; justify-content: center; flex: none; margin-top: 2px"><span style="width: 10px; height: 10px; border-radius: 2px; background: currentColor"></span></span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; font-weight: 600; line-height: 18px">{{n.title}}</span><span style="font-size: 12px; font-weight: 400; color: #48454E; line-height: 16px; white-space: normal">{{n.sub}}</span></span><sc-if value="{{n.unread}}" hint-placeholder-val="{{true}}"><span style="width: 8px; height: 8px; border-radius: 50%; background: #35307E; flex: none; margin-top: 6px"></span></sc-if></button>
+      </sc-for>
+      <div style="padding: 10px 16px; border-top: 1px solid #E3DFFF"><button type="button" class="lnk" onClick="{{openPanel}}">Notification preferences</button></div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{help}}" hint-placeholder-val="{{false}}">
+    <div role="menu" aria-label="Help" style="position: absolute; right: 180px; top: 60px; width: 280px; padding: 8px 0; border-radius: 12px; background: #F2EBFA; box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15); z-index: 7">
+      <button type="button" role="menuitem" class="mi" onClick="{{helpTour}}">Show me around this page</button>
+      <button type="button" role="menuitem" class="mi" onClick="{{helpGuides}}">Guides<span class="n" style="margin-left: auto">{{guidesLeft}} left</span></button>
+      <button type="button" role="menuitem" class="mi" onClick="{{helpNew}}">What's new<span class="n" style="margin-left: auto">{{unreadCount}}</span></button>
+      <button type="button" role="menuitem" class="mi" onClick="{{helpChamp}}">Ask a champion</button>
+      <button type="button" role="menuitem" class="mi" onClick="{{helpIdea}}">Suggest an idea</button>
+      <div style="height: 1px; background: #E3DFFF; margin: 8px 0"></div>
+      <button type="button" role="menuitem" class="mi" onClick="{{askAssistant}}">Ask the assistant</button>
+      <a role="menuitem" class="mi" href="#docs">Documentation</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{menu}}" hint-placeholder-val="{{false}}">
+    <div role="menu" aria-label="Account" style="position: absolute; right: 16px; top: 60px; width: 280px; padding: 8px 0; border-radius: 12px; background: #F2EBFA; box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15); z-index: 7">
+      <div style="padding: 8px 16px 12px; display: flex; gap: 12px; align-items: center"><span class="av" style="width: 40px; height: 40px">AH</span><div><div class="ui" style="font-size: 14px; font-weight: 700">Aurélien Heux</div><div style="font-size: 12px; color: #48454E">platform · admin</div></div></div>
+      <div style="height: 1px; background: #E3DFFF"></div>
+      <a role="menuitem" class="mi" href="#profile">Profile</a>
+      <a role="menuitem" class="mi" href="#settings">Settings</a>
+      <button type="button" role="menuitem" class="mi" onClick="{{openPanel}}">Notification preferences</button>
+      <div style="height: 1px; background: #E3DFFF; margin: 8px 0"></div>
+      <a role="menuitem" class="mi" href="#signout">Sign out</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{tourOn}}" hint-placeholder-val="{{false}}">
+    <sc-if value="{{tourEven}}" hint-placeholder-val="{{true}}"><div class="spot-block" style="{{blkTop}}" onClick="{{noop}}"></div><div class="spot-block" style="{{blkBottom}}" onClick="{{noop}}"></div><div class="spot-block" style="{{blkLeft}}" onClick="{{noop}}"></div><div class="spot-block" style="{{blkRight}}" onClick="{{noop}}"></div><div aria-hidden="true" class="spot {{spotCls}}" style="{{tourRing}}"></div>
+    <div role="dialog" aria-label="Guided tour" class="tcard-in" style="position: absolute; width: 340px; box-sizing: border-box; padding: 12px 16px 8px; border-radius: 12px; background: #F2EBFA; box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15); z-index: 7; {{tourPos}}">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px"><span class="tag" style="background: #E3DFFF; color: #14085E">{{tourName}}</span><span style="font-size: 12px; color: #48454E">Step {{tourStep}} of {{tourTotal}}</span><sc-if value="{{tourPreview}}" hint-placeholder-val="{{false}}"><span class="tile ne"><i></i>Preview</span></sc-if></div>
+      <div class="ui" style="font-size: 14px; line-height: 20px; font-weight: 600; margin-bottom: 4px">{{tourTitle}}</div>
+      <div style="font-size: 14px; line-height: 20px; color: #48454E">{{tourBody}}</div>
+      <div style="display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px"><button type="button" class="btn x" onClick="{{endTour}}">Skip</button><sc-if value="{{tourHasPrev}}" hint-placeholder-val="{{false}}"><button type="button" class="btn x" onClick="{{prevTour}}">Back</button></sc-if><button type="button" class="btn x" onClick="{{nextTour}}">{{tourNext}}</button></div>
+    </div></sc-if>
+    <sc-if value="{{tourOdd}}" hint-placeholder-val="{{false}}"><div class="spot-block" style="{{blkTop}}" onClick="{{noop}}"></div><div class="spot-block" style="{{blkBottom}}" onClick="{{noop}}"></div><div class="spot-block" style="{{blkLeft}}" onClick="{{noop}}"></div><div class="spot-block" style="{{blkRight}}" onClick="{{noop}}"></div><div aria-hidden="true" class="spot {{spotCls}}" style="{{tourRing}}"></div>
+    <div role="dialog" aria-label="Guided tour" class="tcard-in" style="position: absolute; width: 340px; box-sizing: border-box; padding: 12px 16px 8px; border-radius: 12px; background: #F2EBFA; box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15); z-index: 7; {{tourPos}}">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px"><span class="tag" style="background: #E3DFFF; color: #14085E">{{tourName}}</span><span style="font-size: 12px; color: #48454E">Step {{tourStep}} of {{tourTotal}}</span><sc-if value="{{tourPreview}}" hint-placeholder-val="{{false}}"><span class="tile ne"><i></i>Preview</span></sc-if></div>
+      <div class="ui" style="font-size: 14px; line-height: 20px; font-weight: 600; margin-bottom: 4px">{{tourTitle}}</div>
+      <div style="font-size: 14px; line-height: 20px; color: #48454E">{{tourBody}}</div>
+      <div style="display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px"><button type="button" class="btn x" onClick="{{endTour}}">Skip</button><sc-if value="{{tourHasPrev}}" hint-placeholder-val="{{false}}"><button type="button" class="btn x" onClick="{{prevTour}}">Back</button></sc-if><button type="button" class="btn x" onClick="{{nextTour}}">{{tourNext}}</button></div>
+    </div></sc-if>
+  </sc-if>
+
+  <sc-if value="{{video}}" hint-placeholder-val="{{false}}">
+    <div class="scrim" onClick="{{closeVideo}}"></div>
+    <div class="dlg" role="dialog" aria-label="Video" style="width: 760px; padding: 16px">
+      <div class="row" style="justify-content: space-between; margin-bottom: 12px"><div><div class="ui" style="font-size: 16px; font-weight: 700">{{videoTitle}}</div><div style="font-size: 12px; color: #48454E">{{videoLen}} · captions in EN and FR · transcript below</div></div><button type="button" class="ib" aria-label="Close" style="margin: 0" onClick="{{closeVideo}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div style="height: 380px; border-radius: 12px; background: #1D1A27; display: flex; align-items: center; justify-content: center; color: #CAC3DC; font-size: 14px">Video player · {{videoTitle}}</div>
+      <div class="row" style="margin-top: 12px"><button type="button" class="chip" onClick="{{videoToTour}}">Try it in the app</button><span class="lnk">Open transcript</span><span style="flex: 1"></span><span style="font-size: 12px; color: #48454E">Chapters: Approval card · PR summaries · Promotion alerts</span></div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{champOn}}" hint-placeholder-val="{{false}}">
+    <div class="scrim" onClick="{{closeChamp}}"></div>
+    <div class="dlg" role="dialog" aria-label="Ask a champion">
+      <div class="row" style="justify-content: space-between; margin-bottom: 12px"><div class="ui" style="font-size: 18px; font-weight: 700">Ask a champion</div><button type="button" class="ib" aria-label="Close" style="margin: 0" onClick="{{closeChamp}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <sc-if value="{{champAsk}}" hint-placeholder-val="{{true}}">
+        <div class="row" style="margin-bottom: 12px"><span class="av" style="background: {{champBg}}">{{champIni}}</span><div><div class="ui" style="font-size: 14px; font-weight: 600">{{champWho}}</div><div style="font-size: 12px; color: #48454E">{{champTeam}} · usually answers within a day</div></div></div>
+        <div class="fld" style="min-height: 100px; margin-bottom: 12px"><label for="champ-q">Your question</label><textarea id="champ-q" rows="3" value="{{champQ}}" onChange="{{onChampQ}}" placeholder="What are you trying to do, and where are you stuck?"></textarea></div>
+        <div class="row" style="margin-bottom: 16px"><label class="row" style="gap: 8px; font-size: 13px"><span class="chip chip-on">Include my current page</span></label><span style="font-size: 12px; color: #48454E">Sweep › Runs, credit-request</span></div>
+        <div class="row" style="justify-content: flex-end"><button type="button" class="btn x" onClick="{{closeChamp}}">Cancel</button><button type="button" class="btn f" onClick="{{sendChamp}}">Send</button></div>
+      </sc-if>
+      <sc-if value="{{champSent}}" hint-placeholder-val="{{false}}"><div class="row"><span class="tile ok"><i></i>Sent</span><span style="font-size: 14px">{{champWho}} will answer in your notifications. The thread is private.</span></div><div class="row" style="justify-content: flex-end; margin-top: 16px"><button type="button" class="btn f" onClick="{{closeChamp}}">Done</button></div></sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{newIdeaOn}}" hint-placeholder-val="{{false}}">
+    <div class="scrim" onClick="{{closeNewIdea}}"></div>
+    <div class="dlg" role="dialog" aria-label="New idea">
+      <div class="row" style="justify-content: space-between; margin-bottom: 12px"><div class="ui" style="font-size: 18px; font-weight: 700">New idea</div><button type="button" class="ib" aria-label="Close" style="margin: 0" onClick="{{closeNewIdea}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="fld" style="margin-bottom: 12px"><label for="ni-title">Title</label><input id="ni-title" type="text" value="{{niTitle}}" onChange="{{onNiTitle}}" placeholder="One line, as a wish"></div>
+      <div class="fld" style="min-height: 100px; margin-bottom: 12px"><label for="ni-body">Why it matters</label><textarea id="ni-body" rows="3" value="{{niBody}}" onChange="{{onNiBody}}" placeholder="What you do today, what gets in the way, how often"></textarea></div>
+      <div class="row" style="flex-wrap: wrap; margin-bottom: 12px"><span style="font-size: 13px; color: #48454E">Area</span><sc-for list="{{niAreas}}" as="a" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{a.on}}" style="{{a.style}}" onClick="{{a.pick}}">{{a.label}}</button></sc-for></div>
+      <sc-if value="{{niSimilar}}" hint-placeholder-val="{{true}}"><div class="ocard" style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px"><span class="tile ai" style="flex: none"><i></i>Similar idea</span><span style="font-size: 13px; line-height: 18px; flex: 1"><b>Re-run only the failed checks</b> · 48 votes · Planned. Vote for it instead?</span><button type="button" class="chip" onClick="{{niVoteSimilar}}">Vote for it</button></div></sc-if>
+      <div class="row" style="justify-content: flex-end"><button type="button" class="btn x" onClick="{{closeNewIdea}}">Cancel</button><button type="button" class="btn f" onClick="{{submitIdea}}">Submit idea</button></div>
+    </div>
+  </sc-if>
+
+</div>
+<!--SIMCLOSE-->
+</div>
+</x-dc>

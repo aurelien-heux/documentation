@@ -1,0 +1,236 @@
+// Building blocks of the Environment Management feature (CTX-ENV) — the approved model, source of truth for TOGAF BB.
+// Element kinds are the ArchiMate types of the AIToolbox notation (_archimate.spec.c4, generated).
+//
+// Ids follow <folder>.<applicationSlug>.<name>:
+//   mot  motivation (stakeholders, drivers, goals, outcomes, principles)
+//   req  requirements and constraints (details: model/requirement/<id>.md)
+//   abb  Architecture Building Blocks          sbb  Solution Building Blocks (DD: model/dd/*.md realizes them)
+//   imp  implementation & migration: plateaus, gaps; work packages live in changes/, one file per change
+//
+// Plateau membership is made of relationships, never tags, so parallel changes do not edit the same lines:
+//   - the baseline plateau aggregates what exists today (bottom of this file);
+//   - a later plateau contains the previous one, plus what its work packages realize, minus what they 'retire'.
+// New / changed / retired are derived from that membership (changed = in both, and realized by a work package).
+// Tags: status only (#draft #ready #done #deprecated), changed only through a Checkpoint decision (INV-12).
+
+model {
+
+  mot = grouping 'Motivation' {
+    environments = grouping 'environments' {
+      platform-team = stakeholder 'Platform team' {
+        #ready
+        description 'Runs the shared non-production Environments and reviews every descriptor change today.'
+        metadata {
+          owner 'team-platform'
+        }
+      }
+      feature-teams = stakeholder 'Feature teams' {
+        #ready
+        description 'Need their Module branch on a shared Environment to test with other Modules.'
+      }
+      shared-env-contention = driver 'Contention on shared environments' {
+        #ready
+        description 'Several teams deploy branches on the same Environments; overwrites go unnoticed.'
+      }
+      manual-lead-time = assessment 'Manual descriptor changes take 1 to 2 days' {
+        #ready
+        description 'Measured over 2026-Q2: median 26 h between request and placement; 14 % of changes overwrite another team.'
+      }
+      self-service = goal 'Self-service non-production environments' {
+        #ready
+      }
+      lead-time-outcome = outcome 'A branch runs on a shared Environment within 5 minutes' {
+        #ready
+        metadata {
+          measure 'p95 request-to-first-rollout < 5 min'
+        }
+      }
+      git-source-of-truth = principle 'The descriptor repository is the source of truth' {
+        #ready
+        metadata {
+          domainRef 'DEC-ENV-02'
+        }
+      }
+    }
+  }
+
+  req = grouping 'Requirements' {
+    environments = grouping 'environments' {
+      request-deployment = requirement 'Request a Deployment of a Module branch on an Environment' {
+        #ready
+        description 'Self-service placement of one Module branch on a shared non-production Environment, respecting Reservations.'
+        metadata {
+          owner 'team-platform'
+          jira 'DTB-412'
+          updatedAt '2026-10-22'
+        }
+      }
+      reserve-environment = requirement 'Reserve an Environment, Application or Module for a time-box' {
+        #ready
+        description 'Protect a placement while a team tests, with an expiry that releases it automatically.'
+        metadata {
+          owner 'team-platform'
+          jira 'DTB-398'
+          updatedAt '2026-10-14'
+        }
+      }
+      non-production-only = constraint 'Non-production Environments only' {
+        #ready
+        metadata {
+          domainRef 'DEC-ENV-01'
+        }
+      }
+    }
+  }
+
+  abb = grouping 'Architecture Building Blocks' {
+    environments = grouping 'environments' {
+      environment-management = capability 'Environment Management' {
+        #ready
+        description 'See which Module branch runs where, place a branch, protect it with a Reservation. Baseline: by hand, through the platform team.'
+        metadata {
+          owner 'team-platform'
+          bounded-context 'CTX-ENV'
+        }
+      }
+      platform-engineer = business-role 'Platform engineer' {
+        #ready
+        metadata {
+          owner 'team-platform'
+        }
+      }
+      manual-descriptor-change = business-process 'Manual descriptor change' {
+        #ready
+        description 'A feature team asks on a channel; a platform engineer edits the descriptor and opens a PR by hand.'
+        metadata {
+          owner 'team-platform'
+        }
+      }
+      booking-entry = business-object 'Booking entry' {
+        #ready
+        description 'A row in the shared booking sheet: who uses which Environment until when. Not enforced.'
+        metadata {
+          owner 'team-platform'
+        }
+      }
+      placement = business-object 'Placement' {
+        #ready
+        description 'Module M runs on Environment E from branch B, as declared in the descriptor.'
+        metadata {
+          owner 'team-platform'
+        }
+      }
+    }
+  }
+
+  sbb = grouping 'Solution Building Blocks' {
+    environments = grouping 'environments' {
+      booking-sheet = application-component 'Environment booking sheet (Confluence)' {
+        #ready
+        metadata {
+          owner 'team-platform'
+        }
+      }
+      jenkins-descriptor-job = application-component 'Jenkins descriptor job' {
+        #ready
+        description 'Applies a descriptor change. Baseline: started by hand after review. Target: started by the auto-merge PR.'
+        metadata {
+          owner 'team-platform'
+          workItemId 'WI-318'
+        }
+      }
+      environment-descriptor = artifact 'Environment descriptor (YAML)' {
+        #ready
+        metadata {
+          owner 'team-platform'
+          domainRef 'DEC-ENV-02'
+        }
+      }
+      descriptor-repository = system-software 'Bitbucket · descriptor repository' {
+        #ready
+      }
+      argocd = system-software 'ArgoCD' {
+        #ready
+      }
+      event-bus = technology-service 'Platform event bus' {
+        #ready
+        metadata {
+          owner 'team-integration'
+        }
+      }
+    }
+  }
+
+  imp = grouping 'Implementation & migration' {
+    environments = grouping 'environments' {
+      baseline = plateau 'Baseline · 2026-Q3' {
+        description 'Booking sheet and manual descriptor changes by the platform team.'
+      }
+      transition-1 = plateau 'Transition 1 · Reservations · 2026-Q4' {
+        description 'Reservations enforced by Devtoolbox; descriptor changes still manual.'
+      }
+      target = plateau 'Target · Self-service Deployment · 2027-Q1' {
+        description 'Self-service Deployments through auto-merge PRs, checked against Reservations.'
+      }
+      gap-booking = gap 'Booking sheet → enforced Reservations' {
+        description 'Retire the booking sheet; Reservations become the only way to protect a placement.'
+      }
+      gap-self-service = gap 'Manual descriptor change → self-service Deployment' {
+        description 'Replace the manual PR by a Deployment request that opens an auto-merge PR.'
+      }
+    }
+  }
+
+  // ---------- Motivation ----------
+  mot.environments.platform-team -[association]-> mot.environments.shared-env-contention
+  mot.environments.feature-teams -[association]-> mot.environments.self-service
+  mot.environments.manual-lead-time -[association]-> mot.environments.shared-env-contention
+  mot.environments.shared-env-contention -[influence]-> mot.environments.self-service '+'
+  mot.environments.lead-time-outcome -[realization]-> mot.environments.self-service
+  req.environments.request-deployment -[realization]-> mot.environments.lead-time-outcome
+  req.environments.reserve-environment -[realization]-> mot.environments.lead-time-outcome
+  req.environments.request-deployment -[association]-> mot.environments.git-source-of-truth
+  req.environments.non-production-only -[association]-> req.environments.request-deployment
+
+  // ---------- ABB → requirements ----------
+  abb.environments.environment-management -[realization]-> req.environments.request-deployment
+  abb.environments.environment-management -[realization]-> req.environments.reserve-environment
+
+  // ---------- ABB structure ----------
+  abb.environments.environment-management -[composition]-> abb.environments.manual-descriptor-change
+  abb.environments.platform-engineer -[assignment]-> abb.environments.manual-descriptor-change
+  abb.environments.manual-descriptor-change -[access]-> abb.environments.placement 'writes'
+  abb.environments.manual-descriptor-change -[access]-> abb.environments.booking-entry 'reads'
+
+  // ---------- SBB → ABB ----------
+  sbb.environments.booking-sheet -[realization]-> abb.environments.booking-entry
+  sbb.environments.jenkins-descriptor-job -[realization]-> abb.environments.manual-descriptor-change
+  sbb.environments.environment-descriptor -[realization]-> abb.environments.placement
+
+  // ---------- SBB structure and technology ----------
+  sbb.environments.descriptor-repository -[assignment]-> sbb.environments.environment-descriptor
+  sbb.environments.jenkins-descriptor-job -[access]-> sbb.environments.environment-descriptor 'applies'
+  sbb.environments.argocd -[access]-> sbb.environments.environment-descriptor 'syncs'
+  sbb.environments.descriptor-repository -[triggering]-> sbb.environments.jenkins-descriptor-job 'on merge'
+
+  // ---------- Migration ----------
+  imp.environments.baseline -[triggering]-> imp.environments.transition-1
+  imp.environments.transition-1 -[triggering]-> imp.environments.target
+  imp.environments.gap-booking -[association]-> imp.environments.baseline
+  imp.environments.gap-booking -[association]-> imp.environments.transition-1
+  imp.environments.gap-self-service -[association]-> imp.environments.transition-1
+  imp.environments.gap-self-service -[association]-> imp.environments.target
+
+  // ---------- Baseline membership (later plateaus are derived from the work packages in changes/) ----------
+  imp.environments.baseline -[aggregation]-> abb.environments.environment-management
+  imp.environments.baseline -[aggregation]-> abb.environments.platform-engineer
+  imp.environments.baseline -[aggregation]-> abb.environments.manual-descriptor-change
+  imp.environments.baseline -[aggregation]-> abb.environments.booking-entry
+  imp.environments.baseline -[aggregation]-> abb.environments.placement
+  imp.environments.baseline -[aggregation]-> sbb.environments.booking-sheet
+  imp.environments.baseline -[aggregation]-> sbb.environments.jenkins-descriptor-job
+  imp.environments.baseline -[aggregation]-> sbb.environments.environment-descriptor
+  imp.environments.baseline -[aggregation]-> sbb.environments.descriptor-repository
+  imp.environments.baseline -[aggregation]-> sbb.environments.argocd
+  imp.environments.baseline -[aggregation]-> sbb.environments.event-bus
+}

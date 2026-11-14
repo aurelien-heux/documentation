@@ -1,0 +1,22 @@
+# Design canvases
+
+Source of the three AIToolbox Design canvases (Claude artifacts of the Design type). Each folder is one canvas:
+`canvas.json` (board positions, titles, notes) and one `.dc.html` file per board. `ds/devtoolbox/tokens.json` is the
+canvas's copy of the design-system tokens (5.0.1).
+
+| Canvas | Boards | Live |
+|---|---|---|
+| `design-system/` | Colour roles (`Main`), typography, components and dialog, switch, tooltip, breakpoints, app shell (light, dark, rail, overlays, mobile), header, feedback, cookies, logo, favicon, chatbot mark, Sweep mark, loader, progress, state marks, assistant panel and chat | https://claude.ai/artifact/99DCh11LTWKebFQ9QJANMV |
+| `labs/` | Decision labs: hover states, Run button rounds 2–3, tour focus, What's new, Ideas, Q&A, Administration, Feedback administration, Catalog, Docs, catalogue, views, process, change start, Sweep purples trial, colour system review (`ColourLab`) | https://claude.ai/artifact/DTSkQfZZJTHTrpBSQxmZVg |
+| `prototypes/` | Production vision, Architecture board, Community, assistant, header, feedback, loader / logo / progress / state marks live, release channels, accessibility plan | https://claude.ai/artifact/7GdjuxqjRdryVMquDeX32J |
+
+Boards are Design Components: the markup sits in `<x-dc>`, `{{holes}}` come from `renderVals()` in the
+`<script type="text/x-dc">` block, and `<script src="./support.js">` is the canvas runtime (served by the artifact).
+To open boards outside the canvas, build standalone pages:
+
+```bash
+python3 tooling/canvas/convert.py canvases/labs out/labs
+```
+
+A board file must stay under 2 MiB (the canvas does not show larger files); `ProductionVision.dc.html` is built by
+`tooling/canvas/vision_build2.py`, which minifies it to fit.

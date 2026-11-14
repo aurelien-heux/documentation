@@ -1,0 +1,21 @@
+// Change Retire the booking sheet · work package imp.environments.retire-booking-sheet · plateau transition-1
+// One file per change: the work package, the building blocks it introduces and their relationships.
+// Folded into environments.c4 by the bot when its plateau is promoted to baseline.
+
+model {
+  extend imp.environments {
+    retire-booking-sheet = work-package 'Retire the booking sheet' {
+      #draft
+      metadata {
+        workItemId 'WI-322'
+        start '2026-11-02'
+        end '2026-11-13'
+        owner 'team-platform'
+      }
+    }
+  }
+
+  imp.environments.retire-booking-sheet -[realization]-> imp.environments.transition-1
+  imp.environments.retire-booking-sheet -[association]-> sbb.environments.booking-sheet 'retires'
+  imp.environments.retire-booking-sheet -[association]-> abb.environments.booking-entry 'retires'
+}

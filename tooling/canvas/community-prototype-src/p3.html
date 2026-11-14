@@ -1,0 +1,279 @@
+
+      </sc-if><!-- /isCommunity -->
+
+      <!-- ============ ADMINISTRATION · B · admin sidebar (Core, Sweep, Community) ============ -->
+      <sc-if value="{{isAdmin}}" hint-placeholder-val="{{false}}">
+      <div class="ad-split">
+      <!--ADMIN:TREE-->
+      <!--ADMIN:SELECT-->
+      <div class="stack" style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+      <!-- module line: remote id, owner, scope, and the module actions -->
+      <sc-if value="{{isFeaturePage}}" hint-placeholder-val="{{false}}"><div class="row r-wrap" style="gap: 8px; font-size: 12px; color: #48454E"><span class="tag" style="background: #ECE5F4">Remote module</span><span class="mono">{{modRemote}}</span><span>· owned by {{modOwner}}</span><span style="flex: 1"></span><span>{{modScope}}</span><sc-if value="{{isAdminSweep}}" hint-placeholder-val="{{false}}"><button type="button" class="chip" style="height: 28px" onClick="{{openFeature}}">Open Sweep</button></sc-if><sc-if value="{{mRel}}" hint-placeholder-val="{{false}}"><button type="button" class="btn f btn-i" onClick="{{goCompose}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New release</button></sc-if><sc-if value="{{mTours}}" hint-placeholder-val="{{false}}"><button type="button" class="btn f btn-i" onClick="{{newTour}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New tour</button></sc-if><sc-if value="{{mSurv}}" hint-placeholder-val="{{false}}"><button type="button" class="btn f btn-i" onClick="{{newSurvey}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New survey</button></sc-if></div></sc-if>
+      <!-- core pages -->
+      <sc-if value="{{pUsers}}" hint-placeholder-val="{{false}}"><!--ADMIN:USERS--></sc-if>
+      <sc-if value="{{pGeneral}}" hint-placeholder-val="{{false}}"><!--ADMIN:GENERAL--></sc-if>
+      <sc-if value="{{pConnectors}}" hint-placeholder-val="{{false}}"><!--ADMIN:CONNECTORS--></sc-if>
+      <sc-if value="{{pOther}}" hint-placeholder-val="{{false}}"><!--ADMIN:PLACEHOLDER--></sc-if>
+
+      <!-- ============ ADMINISTRATION · COMMUNITY MODULE ============ -->
+      <sc-if value="{{isAdminCommunity}}" hint-placeholder-val="{{false}}">
+      <sc-if value="{{mTopRow}}" hint-placeholder-val="{{false}}"><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+        <span style="flex: 1"></span>
+        <sc-if value="{{showPlatform}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" aria-pressed="{{maint}}" style="{{maintStyle}}" onClick="{{toggleMaint}}"><sc-if value="{{maint}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>Maintenance banner · {{maintLabel}}</button></sc-if>
+      </div></sc-if>
+
+      <!-- Releases list -->
+      <sc-if value="{{mRelList}}" hint-placeholder-val="{{false}}">
+      <div class="card" style="padding: 0; overflow: hidden">
+        <table class="r-tbl" style="width: 100%; border-collapse: collapse">
+          <thead><tr><th class="th">Release</th><th class="th">Type</th><th class="th">Status</th><th class="th">Channels</th><th class="th">Read</th><th class="th">Useful</th><th class="th">Acked</th><th class="th"></th></tr></thead>
+          <tbody>
+            <sc-for list="{{relRows}}" as="r" hint-placeholder-count="5">
+              <tr class="rw"><td class="td"><div class="ui" style="font-weight: 600">{{r.title}}</div><div style="font-size: 12px; color: #48454E">{{r.meta}}</div></td><td class="td"><span class="tag" style="background: {{r.typeBg}}; color: {{r.typeFg}}">{{r.type}}</span></td><td class="td"><span class="tile {{r.tile}}"><i></i>{{r.status}}</span></td><td class="td" style="font-size: 12px; color: #48454E">{{r.channels}}</td><td class="td"><div class="row" style="gap: 8px"><div class="bar" style="width: 64px"><i style="width: {{r.read}}"></i></div><span style="font-size: 12px">{{r.read}}</span></div></td><td class="td" style="font-size: 12px">{{r.useful}}</td><td class="td" style="font-size: 12px">{{r.acked}}</td><td class="td" style="text-align: right"><button type="button" class="chip" onClick="{{r.edit}}">{{r.cta}}</button></td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <div class="ocard" style="display: flex; gap: 16px; align-items: center"><span class="tile ai"><i></i>AI draft</span><span style="font-size: 13px; line-height: 18px; color: #48454E">Release notes can be drafted from the changelog and the PR summaries, then reviewed here before publishing. Each channel gets its own length: card, notification, email digest.</span></div>
+      </sc-if>
+
+      <!-- Compose -->
+      <sc-if value="{{mCompose}}" hint-placeholder-val="{{false}}">
+      <div class="r-split" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start">
+        <div class="card" style="display: flex; flex-direction: column; gap: 16px; padding: 24px">
+          <div class="row" style="justify-content: space-between"><h2 class="h2">New release</h2><span class="tile ne"><i></i>Draft</span></div>
+          <div class="fld"><label for="c-title">Title</label><input id="c-title" type="text" value="{{cTitle}}" onChange="{{onCTitle}}" placeholder="What changes, for whom"></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Type</span><sc-for list="{{cTypes}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Audience</span><sc-for list="{{cAud}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+          <div class="fld" style="min-height: 120px"><label for="c-body">Summary</label><textarea id="c-body" rows="3" value="{{cBody}}" onChange="{{onCBody}}" placeholder="Two sentences: what changed and what the reader should do."></textarea></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Channels</span><sc-for list="{{cChan}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Attach</span><label for="c-tour" style="font-size: 13px">Guided tour</label><select id="c-tour" class="sel sel-s" value="{{cTour}}" onChange="{{onCTour}}"><option value="">None</option><sc-for list="{{tourOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.id}}">{{o.name}}</option></sc-for></select><label for="c-vid" style="font-size: 13px">Video</label><div class="fld" style="min-height: 40px; padding: 8px 12px; flex: 1"><input id="c-vid" type="text" value="{{cVideo}}" onChange="{{onCVideo}}" placeholder="Link or upload"></div></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Ask for</span><sc-for list="{{cAsk}}" as="t" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+          <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><button type="button" class="btn x" onClick="{{cancelCompose}}">Cancel</button><button type="button" class="btn o" onClick="{{aiDraft}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#006A6A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Draft from changelog</button><button type="button" class="btn t" onClick="{{schedule}}">Schedule</button><button type="button" class="btn f" onClick="{{publish}}">Publish now</button></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Preview · in-app card</div>
+          <article class="card" style="display: flex; flex-direction: column; gap: 10px"><div class="row" style="gap: 8px"><span class="tag" style="background: {{cTypeBg}}; color: {{cTypeFg}}">{{cTypeLabel}}</span><span style="font-size: 12px; color: #48454E">Today · {{cAudLabel}}</span></div><h2 class="ui" style="margin: 0; font-size: 18px; line-height: 24px; font-weight: 700">{{cTitleOr}}</h2><p style="margin: 0; font-size: 14px; line-height: 20px; color: #48454E">{{cBodyOr}}</p><div class="row" style="flex-wrap: wrap"><button type="button" class="btn t sm">Read the notes</button><sc-if value="{{cHasTour}}" hint-placeholder-val="{{false}}"><span class="chip">Try it in the app</span></sc-if><sc-if value="{{cHasVideo}}" hint-placeholder-val="{{false}}"><span class="chip">Watch</span></sc-if></div></article>
+          <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Preview · notification</div>
+          <div class="ocard" style="display: flex; gap: 12px; align-items: flex-start"><span class="fi" style="width: 28px; height: 28px; border-radius: 8px; background: #E3DFFF; color: #14085E; display: inline-flex; align-items: center; justify-content: center; flex: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" transform="scale(.42) translate(-2 -2)"/></svg></span><div style="font-size: 13px; line-height: 18px"><b>{{cTitleOr}}</b><div style="color: #48454E">{{cBodyShort}}</div></div></div>
+          <div style="font-size: 12px; color: #48454E">{{cReach}}</div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- Tours list -->
+      <sc-if value="{{mTourList}}" hint-placeholder-val="{{false}}">
+      <div class="card" style="padding: 0; overflow: hidden">
+        <table class="r-tbl" style="width: 100%; border-collapse: collapse">
+          <thead><tr><th class="th">Tour</th><th class="th">Steps</th><th class="th">Trigger</th><th class="th">Status</th><th class="th">Started</th><th class="th">Completed</th><th class="th"></th></tr></thead>
+          <tbody>
+            <sc-for list="{{tourRows}}" as="t" hint-placeholder-count="4">
+              <tr class="rw"><td class="td"><div class="ui" style="font-weight: 600">{{t.name}}</div><div style="font-size: 12px; color: #48454E">{{t.area}}</div></td><td class="td">{{t.steps}}</td><td class="td" style="font-size: 12px; color: #48454E">{{t.trigger}}</td><td class="td"><span class="tile {{t.tile}}"><i></i>{{t.status}}</span></td><td class="td">{{t.started}}</td><td class="td"><div class="row" style="gap: 8px"><div class="bar" style="width: 64px"><i style="width: {{t.done}}"></i></div><span style="font-size: 12px">{{t.done}}</span></div></td><td class="td" style="text-align: right; white-space: nowrap"><button type="button" class="chip" onClick="{{t.play}}">Play</button> <button type="button" class="chip" onClick="{{t.edit}}">Edit</button></td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <div class="ocard" style="display: flex; gap: 16px; align-items: flex-start"><span class="tile in" style="flex: none"><i></i>How it works</span><span style="font-size: 13px; line-height: 18px; color: #48454E">Developers register <b>anchors</b> on screen elements (a stable id and a label) when they ship a feature. Admins compose tours from the anchor list here, with no release needed: steps, copy, order and trigger. A tour that points to a missing anchor is flagged before publishing.</span></div>
+      </sc-if>
+
+      <!-- Tour editor -->
+      <sc-if value="{{mTourEdit}}" hint-placeholder-val="{{false}}">
+      <div class="r-split" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start">
+        <div class="card" style="display: flex; flex-direction: column; gap: 16px; padding: 24px">
+          <div class="row" style="justify-content: space-between"><h2 class="h2">Tour editor</h2><span class="tile {{teTile}}"><i></i>{{teStatus}}</span></div>
+          <div class="fld"><label for="te-name">Name</label><input id="te-name" type="text" value="{{teName}}" onChange="{{onTeName}}" placeholder="Shown on the first step"></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Trigger</span><sc-for list="{{teTriggers}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+          <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Steps · {{teCount}}</div>
+          <sc-for list="{{teSteps}}" as="st" hint-placeholder-count="3">
+            <div class="step {{st.cls}}" style="flex-direction: column; gap: 10px; align-items: stretch">
+              <div class="row"><span class="num">{{st.n}}</span><select class="sel sel-s" aria-label="Anchor" value="{{st.anchor}}" onChange="{{st.onAnchor}}"><sc-for list="{{anchorOpts}}" as="a" hint-placeholder-count="8"><option value="{{a.key}}">{{a.label}}</option></sc-for></select><span class="tile {{st.aTile}}"><i></i>{{st.aStatus}}</span><span style="flex: 1"></span><button type="button" class="ib" aria-label="Move up" style="width: 32px; height: 32px; margin: 0" onClick="{{st.up}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button><button type="button" class="ib" aria-label="Move down" style="width: 32px; height: 32px; margin: 0" onClick="{{st.down}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10l6 6 6-6"/></svg></button><button type="button" class="ib" aria-label="Delete step" style="width: 32px; height: 32px; margin: 0" onClick="{{st.del}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
+              <div class="fld" style="min-height: 44px; padding: 10px 12px"><label for="{{st.tid}}">Title</label><input id="{{st.tid}}" type="text" value="{{st.title}}" onChange="{{st.onTitle}}"></div>
+              <div class="fld" style="min-height: 44px; padding: 10px 12px"><label for="{{st.bid}}">Text</label><input id="{{st.bid}}" type="text" value="{{st.body}}" onChange="{{st.onBody}}"></div>
+            </div>
+          </sc-for>
+          <button type="button" class="chip" style="align-self: flex-start" onClick="{{teAdd}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add step</button>
+          <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><button type="button" class="btn x" onClick="{{teBack}}">Back</button><button type="button" class="btn t btn-i" onClick="{{tePreview}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3l6 16 2.2-6.8L20 10z"/><path d="M14 14l5 5"/></svg>Preview</button><button type="button" class="btn f" onClick="{{tePublish}}">Publish</button></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <div class="card" style="display: flex; flex-direction: column; gap: 8px"><div class="h2">Available anchors</div><div style="font-size: 12px; color: #48454E">Registered by developers in the current build. Grey anchors belong to screens the user may not have access to.</div>
+            <sc-for list="{{anchorOpts}}" as="a" hint-placeholder-count="8"><div class="row" style="gap: 8px; font-size: 13px; padding: 4px 0; border-top: 1px solid #ECE5F4"><span class="mono" style="font-size: 12px; color: #14085E; background: #E3DFFF; padding: 1px 6px; border-radius: 4px">{{a.key}}</span><span style="flex: 1">{{a.label}}</span><span style="font-size: 12px; color: #48454E">{{a.screen}}</span></div></sc-for>
+          </div>
+          <div class="ocard" style="font-size: 13px; line-height: 18px; color: #48454E"><b style="color: #1C1B1E">Preview</b> runs the tour on this page with your draft copy. Publishing makes it available in Guides and attachable to a release.</div>
+        </div>
+      </div>
+      </sc-if>
+
+
+
+      <!-- Ideas triage -->
+      <sc-if value="{{mIdeas}}" hint-placeholder-val="{{false}}">
+      <div class="card" style="padding: 0; overflow: hidden">
+        <table class="r-tbl" style="width: 100%; border-collapse: collapse">
+          <thead><tr><th class="th">Idea</th><th class="th">Votes</th><th class="th">Status</th><th class="th">Platform note (public)</th><th class="th"></th></tr></thead>
+          <tbody>
+            <sc-for list="{{triage}}" as="t" hint-placeholder-count="6">
+              <tr class="rw"><td class="td" style="max-width: 360px"><div class="ui" style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{t.title}}</div><div style="font-size: 12px; color: #48454E">{{t.who}} · {{t.area}} · {{t.nQa}} messages</div></td><td class="td"><span class="ui" style="font-weight: 700">{{t.votes}}</span></td><td class="td"><select class="sel sel-s" aria-label="Status" value="{{t.status}}" onChange="{{t.onStatus}}"><option value="Proposed">Proposed</option><option value="Under review">Under review</option><option value="Planned">Planned</option><option value="In progress">In progress</option><option value="Delivered">Delivered</option><option value="Declined">Declined</option></select></td><td class="td"><div class="fld" style="min-height: 36px; padding: 6px 10px"><input type="text" aria-label="Platform note" value="{{t.note}}" onChange="{{t.onNote}}" placeholder="Why, when, or what you need"></div></td><td class="td" style="text-align: right; white-space: nowrap"><button type="button" class="chip" onClick="{{t.save}}">{{t.saveLabel}}</button></td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <div class="ocard" style="display: flex; gap: 16px; align-items: flex-start"><span class="tile ai" style="flex: none"><i></i>Duplicates</span><span style="font-size: 13px; line-height: 18px; color: #48454E">The assistant found 2 ideas that look like <b>“Re-run only the failed checks”</b>: “Partial re-run from the PR page” and “Retry failed sweep steps”. <button type="button" class="lnk" onClick="{{mergeIdeas}}">{{mergeLabel}}</button></span></div>
+      </sc-if>
+
+      <!-- Insights: feedback collected from feedback forms, surveys and tours; usage metrics from OpenSearch come later -->
+      <sc-if value="{{mInsights}}" hint-placeholder-val="{{false}}">
+      <div class="row r-wrap" style="gap: 8px"><span class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Sources</span><sc-for list="{{insSources}}" as="x" hint-placeholder-count="4"><span class="tile {{x.tile}}" style="{{x.style}}"><i></i>{{x.label}}</span></sc-for><span style="flex: 1"></span><span style="font-size: 12px; color: #48454E">Last 30 days</span></div>
+      <div class="r-kpis" style="display: flex; gap: 16px"><sc-for list="{{kpis}}" as="k" hint-placeholder-count="4"><div class="kpi"><b>{{k.v}}</b><span>{{k.label}}</span><div class="row" style="gap: 6px; margin-top: 4px"><span class="tile {{k.tile}}"><i></i>{{k.delta}}</span><span style="font-size: 11px; color: #48454E">{{k.src}}</span></div></div></sc-for></div>
+      <div class="r-split" style="display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 24px; align-items: start">
+        <div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+          <div class="card" style="display: flex; flex-direction: column; gap: 12px">
+            <div class="row" style="justify-content: space-between; flex-wrap: wrap"><div class="h2">Feedback forms by feature</div><span style="font-size: 12px; color: #48454E">answers and average after-action score</span></div>
+            <sc-for list="{{insFeat}}" as="a" hint-placeholder-count="4"><div class="row" style="gap: 12px"><span class="ui" style="width: 130px; font-size: 13px; font-weight: 600">{{a.label}}</span><div class="bar" style="flex: 1; height: 12px"><i style="width: {{a.pct}}"></i></div><span style="width: 36px; font-size: 13px; text-align: right" class="ui">{{a.n}}</span><span class="tile {{a.tile}}" style="width: 72px; justify-content: center"><i></i>{{a.score}}</span></div></sc-for>
+            <div class="row r-wrap" style="gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 12px"><span style="font-size: 12px; color: #48454E">Top themes, by the assistant:</span><span class="tag" style="background: #ECE5F4">Slow test phase · 9</span><span class="tag" style="background: #ECE5F4">Wrong facts in answers · 6</span><span class="tag" style="background: #ECE5F4">Disabled with no reason · 4</span></div>
+          </div>
+          <div class="card" style="display: flex; flex-direction: column; gap: 10px">
+            <div class="row" style="justify-content: space-between; flex-wrap: wrap"><div class="h2">Tours</div><span style="font-size: 12px; color: #48454E">started, completed, and the step where people leave</span></div>
+            <sc-for list="{{insTours}}" as="t" hint-placeholder-count="4"><div class="row" style="gap: 12px; padding: 6px 0; border-top: 1px solid #ECE5F4"><span class="ui" style="flex: 1; min-width: 0; font-size: 13px; font-weight: 600">{{t.name}}</span><span style="font-size: 12px; color: #48454E; width: 80px">{{t.started}} started</span><div class="bar" style="width: 96px"><i style="width: {{t.done}}"></i></div><span style="font-size: 12px; width: 36px">{{t.done}}</span><span style="font-size: 12px; color: #48454E; width: 120px">{{t.drop}}</span></div></sc-for>
+          </div>
+          <div class="ocard" style="display: flex; flex-direction: column; gap: 10px; border-style: dashed">
+            <div class="row r-wrap" style="gap: 8px"><span class="tile ne"><i></i>To be designed</span><span class="ui" style="font-size: 14px; font-weight: 700">Usage metrics · OpenSearch</span></div>
+            <div style="font-size: 13px; line-height: 18px; color: #48454E">Active users, feature adoption, run volumes and error rates will be injected from OpenSearch and shown next to the feedback above. Indicators and layout come in a later design round.</div>
+            <div class="row" style="gap: 12px; align-items: flex-end; height: 56px" aria-hidden="true"><span style="flex: 1; height: 40%; background: #ECE5F4; border-radius: 4px"></span><span style="flex: 1; height: 70%; background: #ECE5F4; border-radius: 4px"></span><span style="flex: 1; height: 55%; background: #ECE5F4; border-radius: 4px"></span><span style="flex: 1; height: 85%; background: #ECE5F4; border-radius: 4px"></span><span style="flex: 1; height: 65%; background: #ECE5F4; border-radius: 4px"></span><span style="flex: 1; height: 90%; background: #ECE5F4; border-radius: 4px"></span></div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <div class="card" style="display: flex; flex-direction: column; gap: 10px">
+            <div class="row" style="justify-content: space-between"><div class="h2">Surveys</div><button type="button" class="chip" style="height: 28px" onClick="{{goSurveys}}">Open in Feedback</button></div>
+            <sc-for list="{{insSurveys}}" as="v" hint-placeholder-count="3"><div class="row" style="gap: 10px; padding: 6px 0; border-top: 1px solid #ECE5F4"><div style="flex: 1; min-width: 0; font-size: 13px; line-height: 18px"><b>{{v.name}}</b><div style="color: #48454E">{{v.sub}}</div></div><span class="ui" style="font-size: 16px; font-weight: 700">{{v.v}}</span></div></sc-for>
+          </div>
+          <div class="card" style="display: flex; flex-direction: column; gap: 10px">
+            <div class="h2">Needs attention</div>
+            <sc-for list="{{attention}}" as="a" hint-placeholder-count="3"><div class="row" style="gap: 10px; padding: 8px 0; border-top: 1px solid #ECE5F4"><span class="tile {{a.tile}}" style="flex: none"><i></i>{{a.kind}}</span><div style="flex: 1; min-width: 0; font-size: 13px; line-height: 18px"><b>{{a.title}}</b><div style="color: #48454E">{{a.sub}}</div></div><sc-if value="{{a.open}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" onClick="{{a.act}}">{{a.cta}}</button></sc-if><sc-if value="{{a.done}}" hint-placeholder-val="{{false}}"><span class="tile ok"><i></i>{{a.doneLabel}}</span></sc-if></div></sc-for>
+          </div>
+          <div class="card" style="display: flex; flex-direction: column; gap: 8px"><div class="h2">Open questions in discussions</div><div style="font-size: 13px; line-height: 18px; color: #48454E">3 questions without an answer from the team for more than 2 days. Answering them in the thread also feeds the assistant's knowledge (later wave).</div><button type="button" class="chip" style="align-self: flex-start" onClick="{{goNewFromInsights}}">Open the threads</button></div>
+        </div>
+      </div>
+      </sc-if>
+
+      </sc-if><!-- /isAdminCommunity -->
+
+      <!-- Community > Feedback (admin only): Profiles, Inbox, Surveys, Solicitation policy; a feature admin sees their feature only -->
+      <sc-if value="{{isFeatureRole}}" hint-placeholder-val="{{false}}"><sc-if value="{{isListen}}" hint-placeholder-val="{{false}}"><div class="fbl-note ad-banner" style="display: flex; gap: 8px 12px; align-items: flex-start; padding: 12px 16px; border-radius: 12px; background: #FFF8E6; border: 1px solid #F0D58C; font-size: 13px; line-height: 18px"><span class="tile wn" style="flex: none"><i></i>Feedback · Sweep</span><span>You see the Sweep feedback only: its profile, the Sweep inbox and the shared cap (read-only). Releases, tours, ideas and surveys stay with the platform team.</span></div></sc-if></sc-if>
+      <sc-if value="{{isListen}}" hint-placeholder-val="{{false}}">
+      <div class="r-subtabs" role="tablist" aria-label="Feedback" style="display: flex; align-items: center; flex-wrap: wrap; gap: 0; border-bottom: 1px solid #CAC4CF">
+        <sc-for list="{{lTabs}}" as="t" hint-placeholder-count="4"><button type="button" role="tab" class="tab" aria-selected="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}<sc-if value="{{t.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{t.n}}</span></sc-if></button></sc-for>
+        <span style="flex: 1"></span>
+        <span class="tile in"><i></i>{{capLabel}}</span>
+      </div>
+      </sc-if>
+
+      <!-- Profiles: every feature's profile, edited here with the FeedbackProfile editor -->
+      <sc-if value="{{lFeedback}}" hint-placeholder-val="{{false}}">
+      <div class="card" style="padding: 0; overflow: hidden">
+        <table class="r-tbl" style="width: 100%; border-collapse: collapse">
+          <thead><tr><th class="th">Feedback profile</th><th class="th">Status</th><th class="th">Entry points</th><th class="th">Questions</th><th class="th">Sampling</th><th class="th">Routing</th><th class="th"></th></tr></thead>
+          <tbody>
+            <sc-for list="{{fpRows}}" as="p" hint-placeholder-count="5">
+              <tr class="rw" style="{{p.rowStyle}}"><td class="td"><div class="ui" style="font-weight: 600">{{p.name}}</div><div style="font-size: 12px; color: #48454E">Owner: {{p.owner}}</div></td><td class="td"><span class="tile {{p.tile}}"><i></i>{{p.status}}</span></td><td class="td" style="font-size: 12px; color: #48454E">{{p.entries}}</td><td class="td">{{p.nq}}</td><td class="td">{{p.sampling}}</td><td class="td" style="font-size: 12px; color: #48454E">{{p.routing}}</td><td class="td" style="text-align: right; white-space: nowrap"><button type="button" class="chip" aria-label="{{p.aria}}" onClick="{{p.go}}">{{p.cta}}</button></td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size: 12px; line-height: 16px; color: #48454E">{{fpNote}}</div>
+      </sc-if>
+
+      <!-- FeedbackProfile editor for the selected profile -->
+      <sc-if value="{{fpEditing}}" hint-placeholder-val="{{false}}"><!--ADMIN:FEEDBACK--></sc-if>
+
+      <sc-if value="{{lPolicy}}" hint-placeholder-val="{{false}}">
+      <div class="ocard" style="display: flex; flex-direction: column; gap: 10px">
+        <div class="row" style="flex-wrap: wrap"><span class="ui" style="font-size: 14px; font-weight: 700">Solicitation policy</span><span style="font-size: 12px; color: #48454E">one cap per user, shared by feedback prompts, micro-surveys and NPS</span></div>
+        <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">At most</span><sc-for list="{{capChips}}" as="t" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" aria-disabled="{{isFeatureRole}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for><span style="font-size: 12px; color: #48454E">{{capNote}}</span></div>
+        <div style="font-size: 12px; line-height: 16px; color: #48454E">The Feedback page button and thumbs on AI answers are user-initiated and never count against the cap. Prompts are never shown during a running action and are always dismissible.</div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{lInbox}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+        <sc-for list="{{inFeatChips}}" as="t" hint-placeholder-count="5"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" aria-disabled="{{t.locked}}" onClick="{{t.pick}}">{{t.label}}<span class="n">{{t.n}}</span></button></sc-for>
+        <span style="flex: 1"></span>
+        <sc-for list="{{inStatusChips}}" as="t" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+      </div>
+      <sc-for list="{{inbox}}" as="f" hint-placeholder-count="3">
+        <div class="card" style="display: flex; gap: 14px; align-items: flex-start; padding: 16px 20px">
+          <span class="av" style="background: {{f.bg}}">{{f.ini}}</span>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+            <div class="row" style="gap: 8px; flex-wrap: wrap"><b class="ui" style="font-size: 14px">{{f.who}}</b><span class="tag" style="background: #E3DFFF; color: #14085E">{{f.feature}}</span><span class="tag" style="background: #ECE5F4">{{f.source}}</span><sc-if value="{{f.hasScore}}" hint-placeholder-val="{{true}}"><span style="font-size: 12px; color: #48454E">scored {{f.score}}</span></sc-if><span style="font-size: 12px; color: #48454E">{{f.when}}</span><span style="flex: 1"></span><span class="tile {{f.tile}}"><i></i>{{f.status}}</span></div>
+            <p style="margin: 0; font-size: 14px; line-height: 20px">{{f.text}}</p>
+            <div class="row" style="gap: 6px; flex-wrap: wrap"><sc-for list="{{f.ctx}}" as="c" hint-placeholder-count="3"><span class="mono" style="font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #F2EBFA; color: #48454E">{{c}}</span></sc-for></div>
+            <sc-if value="{{f.hasReply}}" hint-placeholder-val="{{false}}"><div style="padding: 8px 12px; border-radius: 8px; background: #F2EBFA; font-size: 13px; line-height: 18px"><b>You replied:</b> {{f.reply}}</div></sc-if>
+            <sc-if value="{{f.replying}}" hint-placeholder-val="{{false}}"><div class="row"><div class="fld" style="flex: 1; min-height: 40px; padding: 8px 12px"><label for="{{f.rid}}">Reply to {{f.who}}</label><input id="{{f.rid}}" type="text" value="{{f.draft}}" onChange="{{f.onDraft}}" placeholder="Arrives in their notifications"></div><button type="button" class="btn f sm" onClick="{{f.send}}">Send</button></div></sc-if>
+            <div class="row" style="gap: 8px; flex-wrap: wrap">
+              <sc-if value="{{f.canAct}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" onClick="{{f.startReply}}">Reply</button><select class="sel sel-s" aria-label="Route" value="" onChange="{{f.onRoute}}"><option value="">Route to…</option><option value="Jira · SWEEP">Jira · SWEEP</option><option value="Jira · PLATFORM">Jira · PLATFORM</option><option value="Support">Support</option></select><button type="button" class="chip" onClick="{{f.toIdea}}">Propose as idea</button></sc-if>
+              <sc-if value="{{f.isIdeaAsk}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: #48454E">Waiting for {{f.who}} to agree to publish it as an idea</span><button type="button" class="lnk" onClick="{{f.simulateYes}}">Simulate consent</button></sc-if>
+              <sc-if value="{{f.isRouted}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: #48454E">{{f.routeNote}}</span></sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{noInbox}}" hint-placeholder-val="{{false}}"><div class="ocard" style="display: flex; align-items: center; gap: 16px; padding: 24px"><span class="tile ok"><i></i>Inbox zero</span><span style="font-size: 14px; color: #48454E">Nothing left with this filter.</span></div></sc-if>
+      </sc-if>
+
+      <!-- Surveys list -->
+      <sc-if value="{{mSurvList}}" hint-placeholder-val="{{false}}">
+      <div class="card" style="padding: 0; overflow: hidden">
+        <table class="r-tbl" style="width: 100%; border-collapse: collapse">
+          <thead><tr><th class="th">Survey</th><th class="th">Type</th><th class="th">Trigger</th><th class="th">Audience</th><th class="th">Status</th><th class="th">Responses</th><th class="th"></th></tr></thead>
+          <tbody>
+            <sc-for list="{{survRows}}" as="s" hint-placeholder-count="4">
+              <tr class="rw"><td class="td"><div class="ui" style="font-weight: 600">{{s.name}}</div><div style="font-size: 12px; color: #48454E">{{s.q}}</div></td><td class="td"><span class="tag" style="background: #ECE5F4">{{s.type}}</span></td><td class="td" style="font-size: 12px; color: #48454E">{{s.trigger}}</td><td class="td" style="font-size: 12px">{{s.aud}}</td><td class="td"><span class="tile {{s.tile}}"><i></i>{{s.status}}</span></td><td class="td">{{s.resp}}</td><td class="td" style="text-align: right; white-space: nowrap"><button type="button" class="chip" onClick="{{s.results}}">Results</button></td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <div class="ocard" style="display: flex; gap: 16px; align-items: flex-start"><span class="tile in" style="flex: none"><i></i>Rules</span><span style="font-size: 13px; line-height: 18px; color: #48454E">One micro-survey per user per week at most, never during a run, and never twice for the same trigger. Answers are linked to the account so the team can follow up. Policy checks are the exception: they are required and tracked per user.</span></div>
+      </sc-if>
+
+      <!-- Survey builder -->
+      <sc-if value="{{mSurvEdit}}" hint-placeholder-val="{{false}}">
+      <div class="r-split" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start">
+        <div class="card" style="display: flex; flex-direction: column; gap: 16px; padding: 24px">
+          <div class="row" style="justify-content: space-between"><h2 class="h2">New survey</h2><span class="tile ne"><i></i>Draft</span></div>
+          <div class="fld"><label for="sb-name">Name</label><input id="sb-name" type="text" value="{{sbName}}" onChange="{{onSbName}}" placeholder="Internal name"></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Type</span><sc-for list="{{sbTypes}}" as="t" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for><span style="font-size: 12px; color: #48454E">{{sbTypeHint}}</span></div>
+          <div class="fld"><label for="sb-q">Question</label><input id="sb-q" type="text" value="{{sbQ}}" onChange="{{onSbQ}}" placeholder="One question, plain words"></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Scale</span><sc-for list="{{sbScales}}" as="t" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for><button type="button" class="chip" aria-pressed="{{sbComment}}" style="{{sbCommentStyle}}" onClick="{{toggleSbComment}}"><sc-if value="{{sbComment}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>Optional comment</button></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Trigger</span><sc-for list="{{sbTriggers}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Audience</span><sc-for list="{{sbAud}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 80px">Cap</span><sc-for list="{{sbCaps}}" as="t" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+          <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><button type="button" class="btn x" onClick="{{sbBack}}">Cancel</button><button type="button" class="btn t" onClick="{{sbTest}}">Send me a test</button><button type="button" class="btn f" onClick="{{sbPublish}}">Publish</button></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Preview · as the user sees it</div>
+          <div class="pop" style="position: static; width: 360px; padding: 16px"><div class="row" style="justify-content: space-between; margin-bottom: 8px"><span class="tile in"><i></i>Quick question</span><span style="font-size: 12px; color: #48454E">10 seconds</span></div><div class="ui" style="font-size: 14px; line-height: 20px; font-weight: 600; margin-bottom: 10px">{{sbQOr}}</div><sc-if value="{{sbIs5}}" hint-placeholder-val="{{true}}"><div class="scale"><button type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">4</button><button type="button">5</button></div></sc-if><sc-if value="{{sbIs11}}" hint-placeholder-val="{{false}}"><div class="scale"><button type="button">0</button><button type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">4</button><button type="button">5</button><button type="button">6</button><button type="button">7</button><button type="button">8</button><button type="button">9</button><button type="button">10</button></div></sc-if><sc-if value="{{sbIsYN}}" hint-placeholder-val="{{false}}"><div class="row"><span class="chip">Yes</span><span class="chip">No</span></div></sc-if><sc-if value="{{sbComment}}" hint-placeholder-val="{{true}}"><div class="fld" style="min-height: 40px; padding: 8px 12px; margin-top: 10px"><input type="text" placeholder="Anything to add? (optional)"></div></sc-if><div class="row" style="justify-content: flex-end; margin-top: 8px"><span class="btn x">Not now</span><span class="btn f sm">Send</span></div></div>
+          <div class="ocard" style="font-size: 13px; line-height: 18px; color: #48454E"><b style="color: #1C1B1E">Reach</b> · {{sbReach}}</div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- Survey results -->
+      <sc-if value="{{mSurvRes}}" hint-placeholder-val="{{false}}">
+      <div class="subhdr "><button type="button" onClick="{{sbBack}}" class="ib sh-back" aria-label="Back to all surveys" title="Back to all surveys"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="sh-txt"><h2 class="sh-t">{{srName}}</h2><span class="tile ok"><i></i>Live</span><span class="sh-c">{{srMeta}}</span></div></div>
+      <div class="r-kpis" style="display: flex; gap: 16px"><div class="kpi"><b>{{srResp}}</b><span>responses</span></div><div class="kpi"><b>{{srRate}}</b><span>response rate</span></div><div class="kpi"><b>{{srAvg}}</b><span>average score</span></div><div class="kpi"><b>{{srTrend}}</b><span>vs last month</span></div></div>
+      <div class="r-split" style="display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 24px; align-items: start">
+        <div class="card" style="display: flex; flex-direction: column; gap: 10px"><div class="h2">Distribution</div>
+          <sc-for list="{{srDist}}" as="d" hint-placeholder-count="5"><div class="row" style="gap: 10px; font-size: 13px"><span style="width: 24px; text-align: right" class="ui">{{d.v}}</span><div class="bar" style="flex: 1; height: 16px; border-radius: 4px"><i style="width: {{d.pct}}; border-radius: 4px; background: {{d.color}}"></i></div><span style="width: 36px; font-size: 12px; color: #48454E">{{d.pct}}</span></div></sc-for>
+          <div style="font-size: 12px; color: #48454E; margin-top: 4px">By team: Client 3.1 · Facility 4.2 · Request 4.5 · Risk 3.8</div>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; gap: 10px">
+          <div class="row" style="justify-content: space-between"><div class="h2">Verbatims · {{srVerbN}}</div><span class="tile ai"><i></i>Themes by the assistant</span></div>
+          <div class="row" style="flex-wrap: wrap"><sc-for list="{{srThemes}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#006A6A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>{{t.label}}<span class="n">{{t.n}}</span></button></sc-for></div>
+          <sc-for list="{{srVerbs}}" as="v" hint-placeholder-count="3">
+            <div class="cmt" style="align-items: flex-start"><span class="av" style="background: {{v.bg}}">{{v.ini}}</span><div style="flex: 1; min-width: 0"><div class="row" style="gap: 8px"><b class="ui" style="font-size: 13px">{{v.who}}</b><span class="scale" style="gap: 2px"><span style="font-size: 12px; color: #48454E">scored {{v.score}}</span></span><span class="tile ai"><i></i>{{v.theme}}</span><span style="font-size: 12px; color: #48454E">{{v.when}}</span></div><p>{{v.text}}</p><div class="row" style="margin-top: 6px"><sc-if value="{{v.open}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" onClick="{{v.toIdea}}">Create idea from this</button><button type="button" class="lnk">Reply</button></sc-if><sc-if value="{{v.done}}" hint-placeholder-val="{{false}}"><span class="tile ok"><i></i>Idea created</span></sc-if></div></div></div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+      </div>
+      </div>
+      </sc-if><!-- /isAdmin -->

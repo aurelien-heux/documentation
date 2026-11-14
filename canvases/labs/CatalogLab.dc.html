@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Catalog lab, skills, tools and MCP servers for the assistant and Sweep</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif}
+button{cursor:pointer} a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+.ui{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif}
+.ib{position:relative;width:40px;height:40px;border:0;border-radius:999px;background:transparent;color:#48454E;display:inline-flex;align-items:center;justify-content:center;margin:4px}
+.ib:hover{background:rgba(57, 35, 95,.06)}
+.btn{height:40px;padding:0 24px;border:0;border-radius:16px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;text-decoration:none}
+.btn-i{padding-left:16px}
+.f{background:#39235F;color:#FFFFFF}.t{background:#DED7EB;color:#1D1A28}.o{background:transparent;border:1px solid #79757F;color:#39235F}.x{background:transparent;color:#39235F;padding:0 12px}
+.chip{height:32px;padding:0 12px;border-radius:8px;border:1px solid #79757F;background:transparent;color:#1C1B1E;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.chip:hover{background:rgba(57, 35, 95,.06)}
+.chip-on{background:#DED7EB;border-color:#DED7EB;color:#1D1A28}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:4px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+.tagt{padding-left:4px}
+.env{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:8px;background:#DED7EB;color:#1D1A28;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+.mono{font-family:'Open Sans',system-ui,sans-serif;font-weight:600}
+.card{background:#FFFFFF;border-radius:12px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15)}
+.ocard{background:#FDF8FD;border:1px solid #CAC4CF;border-radius:12px;padding:16px}
+.tab{height:48px;padding:0 16px;border:0;background:transparent;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;border-radius:3px 3px 0 0;color:#48454E;border-bottom:3px solid transparent}
+.tab-on{color:#39235F;border-bottom:3px solid #39235F}
+.n{font-size:11px;padding:1px 6px;border-radius:6px;background:#F2EBFA;color:#48454E}
+.fld{position:relative;box-sizing:border-box;min-height:56px;border:1px solid #79757F;border-radius:4px;padding:16px 16px 10px;background:#FDF8FD}
+.fld label{position:absolute;top:-9px;left:12px;padding:0 4px;background:#FDF8FD;font-size:12px;line-height:16px;color:#48454E}
+.fld input,.fld textarea,.fld select{width:100%;border:0;outline:0;background:transparent;font:400 16px/24px 'Open Sans',system-ui,sans-serif;color:#1C1B1E;padding:0;resize:none}
+.av{width:32px;height:32px;border-radius:999px;background:#DED7EB;color:#1D1A28;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.h2{margin:0;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:18px;line-height:24px;font-weight:600;color:#1C1B1E}
+.th{height:48px;padding:0 12px;text-align:left;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#48454E;white-space:nowrap}
+.td{height:52px;padding:6px 12px;font-size:14px;color:#1C1B1E;border-top:1px solid #CAC4CF;vertical-align:middle}
+.mi{width:100%;height:48px;padding:0 16px;border:0;background:transparent;display:flex;align-items:center;gap:12px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:500;color:#1C1B1E;text-align:left;text-decoration:none}
+.mi:hover{background:rgba(57, 35, 95,.06)}
+.subhdr{display:flex;align-items:flex-start;gap:4px 8px;min-height:48px;flex-wrap:wrap;min-width:0;padding-bottom:8px;border-bottom:1px solid #CAC4CF}
+.subhdr .sh-back{flex:none;margin:0 0 0 -8px!important;color:#1C1B1E;cursor:pointer}
+.subhdr .sh-back:hover{background:rgba(28,27,30,.08)}
+.sh-txt{flex:1 1 240px;min-width:0;display:flex;align-items:center;gap:12px;flex-wrap:nowrap;padding-top:6px}
+.sh-t{margin:0;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:20px;line-height:28px;font-weight:700;color:#1C1B1E;min-width:0;flex:0 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-txt>.tile,.sh-txt>.kind,.sh-txt>span:not(.sh-c){flex:none}
+.sh-c{position:relative;flex:0 100 auto;min-width:0;padding-left:13px;font-size:13px;line-height:18px;color:#48454E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-c::before{content:"";position:absolute;left:0;top:50%;width:1px;height:20px;margin-top:-10px;background:#CAC4CF}
+.sh-act{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto;min-height:48px}
+@container win (max-width: 599px){.sh-t{font-size:18px;line-height:24px;white-space:normal}.sh-txt{flex-wrap:wrap;gap:2px 12px;flex-basis:160px}.sh-c{flex-basis:100%;padding-left:0;white-space:normal}.sh-c::before{display:none}}
+.simbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #CAC4CF}
+.simbar .chip{height:28px;padding:0 10px;font-size:12px}
+.simlab{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;color:#48454E;letter-spacing:.3px}
+.simrange{flex:1 1 180px;min-width:140px;max-width:360px;accent-color:#39235F;margin:0 4px}
+.simval{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;color:#48454E;white-space:nowrap}
+.simval b{color:#1C1B1E}
+.simhost{width:100%;display:flex;justify-content:center;align-items:flex-start;overflow:clip;background-color:#ECE5F4;background-image:radial-gradient(#CAC4CF 1px,transparent 1px);background-size:12px 12px}
+.simframe{container:win / inline-size;flex:none;box-sizing:border-box}
+.nav-bar{display:none}
+.hdr-sbtn,.hdr-menu{display:none!important}
+@container win (max-width: 1199px){
+.hdr{grid-template-columns:minmax(0,1fr) minmax(180px,320px) auto!important;gap:12px!important}
+.hdr-search{width:100%!important}
+.hctx .hs,.hdr-uname,.hdr-div,.hdr-asklabel,.hdr-wm{display:none!important}
+.hdr-search button{padding:0 6px!important}
+main{padding-left:24px!important;padding-right:24px!important}
+}
+@container win (max-width: 839px){
+.hdr{grid-template-columns:minmax(0,1fr) minmax(150px,260px) auto!important;gap:8px!important;padding-left:16px!important}
+.hdr-kbd,.hdr-help,.hdr-chev{display:none!important}
+.nav-drawer{position:absolute!important;left:0;top:0;height:100vh;max-height:100%;overflow:auto;z-index:30;box-shadow:0 1px 3px rgba(0,0,0,.3),0 4px 8px 3px rgba(0,0,0,.15);border-radius:0 16px 16px 0}
+}
+@container win (max-width: 599px){
+.hdr{height:56px!important;grid-template-columns:minmax(0,1fr) auto!important;padding:0 4px 0 12px!important}
+.hdr-search{display:none!important}
+.hdr-sbtn,.hdr-menu{display:inline-flex!important}
+.hdr-asst{display:none!important}
+.hdr-menu{margin:0 4px 0 -8px!important}
+.hdr .ib{margin:4px 0!important}
+.hctx{margin-left:10px!important;padding-left:10px!important}
+.hdr-user{padding:0 4px!important;margin-right:0!important}
+.nav-rail{display:none!important}
+.nav-bar{display:flex!important}
+main{padding-left:16px!important;padding-right:16px!important;padding-top:16px!important}
+}.qa{display:flex;flex-direction:column}
+.qa-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:10px}
+.qa-q{display:flex;gap:12px;padding:12px 0;border-top:1px solid #CAC4CF}
+.qa-q p{margin:4px 0 0;font-size:14px;line-height:20px;color:#1C1B1E;max-width:72ch}
+.qa-q .qtext{font-weight:600}
+.qa-a{margin-top:8px;padding:8px 12px;border-radius:8px;background:#F2EBFA}
+.qa-a p{font-weight:400}
+.qa .sm{height:32px;padding:0 14px;border-radius:12px;font-size:13px}
+.qa-empty{padding:12px 0;border-top:1px solid #CAC4CF;font-size:13px;line-height:18px;color:#48454E}
+.qa-ask{display:flex;gap:12px;align-items:center;padding-top:12px;border-top:1px solid #CAC4CF}
+.qa .meta{font-size:12px;color:#48454E;white-space:nowrap}
+.qa{animation:qa-in .2s cubic-bezier(.2,0,0,1) both}
+@keyframes qa-in{from{opacity:0;transform:translateY(-4px)}}
+.qa-tog[aria-expanded="true"]{background:#DED7EB;border-color:#DED7EB;color:#1D1A28}
+.qa-tog svg.chev{transition:transform .2s cubic-bezier(.2,0,0,1)}
+.qa-tog[aria-expanded="true"] svg.chev{transform:rotate(180deg)}
+.qa-hide{margin-left:auto;height:32px;padding:0 8px 0 12px;border:0;border-radius:8px;background:transparent;color:#39235F;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.qa-hide:hover{background:rgba(57, 35, 95,.08)}
+.qa-wait{width:8px;height:8px;border-radius:50%;background:#E8A400;flex:none}
+/* summary bar: the one control of every thread, and its summary */
+.qa-bar{width:100%;min-height:48px;box-sizing:border-box;display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;padding:8px 14px 8px 10px;border:1px solid #CAC4CF;border-radius:12px;background:#F7F2FA;color:#1C1B1E;text-align:left;font:inherit;cursor:pointer}
+.qa-bar .meta{font-size:12px;color:#48454E;white-space:nowrap}
+.qa-bar>*{flex:none}.qa-bar>.meta{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.qa-bar:hover{background:#EFE7F7}
+.qa-bar[aria-expanded="true"]{border-color:#39235F;background:#F2EBFA;box-shadow:inset 0 0 0 1px #39235F}
+.qa-bar .chev{color:#48454E;transition:transform .2s cubic-bezier(.2,0,0,1)}
+.qa-bar[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.qa-bar-t{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:700}
+.qa-bar-act{margin-left:auto;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:600;color:#39235F}
+.qa-ppl{display:inline-flex;padding-left:4px}.qa-ppl .av{width:24px;height:24px;font-size:9px;letter-spacing:-.2px;margin-left:-4px;box-shadow:0 0 0 2px #FFFFFF}
+/* expansion panel: one container per thread, the summary bar is its header */
+.qa-panel{border:1px solid #CAC4CF;border-radius:12px;background:#FFFFFF;overflow:hidden}
+.qa-panel.open{}
+.qa-panel .qa-bar{border:0;border-radius:0;background:transparent;padding:8px 16px 8px 12px}
+.qa-panel .qa-bar:hover{background:rgba(57, 35, 95,.06)}
+.qa-panel .qa-bar[aria-expanded="true"]{background:transparent;box-shadow:none;border-bottom:1px solid #CAC4CF}
+.qa-panel .qa-bar:focus-visible{outline:2px solid #39235F;outline-offset:-3px;border-radius:10px}
+.qa-panel .qa{padding:0 16px 12px}
+.qa-panel .qa-list>.qa-q:first-child,.qa-panel .qa-empty{border-top:0}
+.qa-q:focus{outline:none}.qa-q:focus-visible{outline:2px solid #39235F;outline-offset:2px;border-radius:8px}
+/* show more: pages of three questions */
+.qa-morebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0 8px;border-top:1px solid #CAC4CF}
+.qa-more{min-height:32px;padding:0;border:0;background:transparent;color:#39235F;font-family:'Open Sans',system-ui,sans-serif;font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;cursor:pointer}
+.qa-more:hover{text-decoration-thickness:2px;color:#14085E}
+.qa-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* discussion threads: the opening message, its replies indented under it, Reply */
+.qa-q .qtext{font-weight:400}
+.qa-replies{margin:10px 0 0;padding-left:14px;border-left:2px solid #E3DFFF;display:flex;flex-direction:column;gap:10px}
+.qa-r{display:flex;gap:10px}.qa-r .av{width:24px;height:24px;font-size:10px}
+.qa-r p{margin:2px 0 0;font-size:14px;line-height:20px;color:#1C1B1E;max-width:72ch}
+.qa-r:focus{outline:none}.qa-r:focus-visible{outline:2px solid #39235F;outline-offset:2px;border-radius:6px}
+.qa-earlier{align-self:flex-start;min-height:24px;font-size:13px}
+.qa-acts{gap:12px!important;margin-top:8px}
+.qa-reply{margin-top:8px;gap:8px!important}
+@container win (max-width: 599px){.qa-bar{flex-wrap:wrap!important}.qa-q>.av{width:24px;height:24px;font-size:10px}.qa-q{gap:8px!important}.qa-replies{padding-left:10px}}
+@media (prefers-reduced-motion: reduce){.qa{animation:none}.qa-tog svg.chev,.qa-bar .chev{transition:none}}.r-wrap{flex-wrap:wrap}
+.ad-tscroll{overflow-x:auto}.ad-tbl{min-width:600px}
+.ad-two{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.ad-two:has(.ad-detail){grid-template-columns:minmax(0,1fr) 340px}
+.ad-detail{display:flex;flex-direction:column;gap:14px;padding:20px}
+.ad-fs{display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid #CAC4CF}
+.ad-fl{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.3px;color:#48454E;text-transform:uppercase}
+.ad-opt{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:18px;cursor:pointer}.ad-opt input{margin:2px 0 0;width:18px;height:18px;accent-color:#39235F;flex:none}
+.ad-opt .meta{white-space:normal}
+.ad-search input{border:0;outline:0;background:transparent;font:400 14px 'Open Sans',system-ui,sans-serif;color:#1C1B1E;min-width:0;flex:1}
+tr.rw[role="button"]{cursor:pointer}tr.rw.on td{background:#F2EBFA}tr.rw:focus-visible{outline:2px solid #39235F;outline-offset:-2px}
+.ad-split{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;align-items:start}
+.ad-side{position:sticky;top:0;display:flex;flex-direction:column;gap:4px;padding:4px 0}
+.ad-g{display:flex;flex-direction:column;gap:2px;padding-bottom:10px}
+.ad-gh{display:flex;align-items:center;gap:8px;padding:10px 12px 6px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#48454E}
+.ad-ni{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px 0 16px;border-radius:16px;color:#1C1B1E;text-decoration:none;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:500}
+.ad-ni:hover{background:rgba(57, 35, 95,.06)}
+.ad-ni.on{background:#DED7EB;color:#1D1A28;font-weight:700;box-shadow:inset 3px 0 0 #39235F}
+.ad-select,.ad-select.row{display:none}
+@container win (max-width: 1199px){
+.ad-split{grid-template-columns:minmax(0,1fr)!important}.ad-side{display:none!important}.ad-select{display:flex!important}
+.ad-two:has(.ad-detail){grid-template-columns:minmax(0,1fr)!important}
+}
+@container win (max-width: 839px){.ad-search{width:100%!important}}
+@container win (max-width: 599px){.ad-detail{padding:16px}.ad-banner{flex-direction:column;align-items:flex-start!important}.fbp .card{padding:16px!important}.fbp .step{flex-wrap:wrap}.fbp .step .fld{flex:1 1 100%!important;order:3}.fbp .step .sel{flex:1;min-width:0}.fbp-tabs .tile{white-space:normal;flex-basis:100%;margin:8px 0}}
+.fbp-tabs .tile{max-width:100%}
+/* FeedbackProfile: self-contained, so any feature module can embed it */
+.fbp .step{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid #CAC4CF;background:#FDF8FD}.fbp .num{width:24px;height:24px;flex:none;border-radius:999px;background:#E3DFFF;color:#14085E;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}.fbp .sel-s{height:32px;font-size:13px}.fbp .pop{box-sizing:border-box;border-radius:12px;background:#F2EBFA;box-shadow:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15)}
+.tile{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:4px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+.tile i{width:8px;height:8px;border-radius:2px;background:currentColor}
+.ok{background:#C3F4DC;color:#00391E}.wn{background:#FFDEA0;color:#261900}.er{background:#FFDAD6;color:#410002}.in{background:#E3DFFF;color:#14085E}.ne{background:#ECE5F4;color:#1C1B1E}
+.ttab{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px;border-radius:12px;border:1px solid #CAC4CF;background:#FDF8FD;text-align:left;cursor:pointer;min-width:0}
+.ttab:hover{background:rgba(57, 35, 95,.06)}
+.ttab-on{border-color:#39235F;box-shadow:inset 0 0 0 1px #39235F;background:#F2EBFA}
+.cmp td,.cmp th{padding:10px 12px;font-size:13px;line-height:18px;vertical-align:top;border-top:1px solid #CAC4CF}
+.cmp th{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#48454E;text-align:left;border-top:0}
+.cmp tr.on td{background:#F2EBFA}
+.row{display:flex;align-items:center;gap:12px}
+.stack{display:flex;flex-direction:column;gap:12px;min-width:0}
+.meta{font-size:12px;color:#48454E;white-space:nowrap}
+.sm{height:32px;padding:0 14px;border-radius:12px;font-size:13px}
+.kpi{flex:1;min-width:0;padding:12px 16px;border-radius:12px;background:#FFFFFF;box-shadow:0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15)}
+.kpi b{display:block;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:24px;line-height:32px;font-weight:700;color:#1C1B1E}
+.kpi span{font-size:12px;color:#48454E}
+.sel{height:40px;box-sizing:border-box;padding:0 36px 0 12px;border:1px solid #79757F;border-radius:8px;background:#FDF8FD;color:#1C1B1E;font:500 14px Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2348454E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:18px}
+tr.rw:hover td{background:rgba(57, 35, 95,.04)}
+/* C · tabs */
+.ad-tabs{display:flex;align-items:center;border-bottom:1px solid #CAC4CF;overflow-x:auto;scrollbar-width:none}
+.ad-tabs .tab{flex:none}
+.ad-chips{flex-wrap:wrap}
+/* D · console */
+.ad-console{width:260px;flex:none;display:flex;flex-direction:column;gap:4px;padding:12px;box-sizing:border-box;background:#EDE4FF;min-height:100%}
+.ad-back{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:16px;color:#39235F;text-decoration:none;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:600}
+.ad-back:hover{background:rgba(57, 35, 95,.06)}
+.ad-ch{display:flex;gap:10px;align-items:center;padding:8px 12px 14px;border-bottom:1px solid #CAC4CF;margin-bottom:6px}
+.ad-shield{width:36px;height:36px;border-radius:12px;background:#DED7EB;color:#1D1A28;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ad-tree{display:flex;flex-direction:column;gap:4px}
+.ad-tree .ad-ni{background:transparent}.ad-tree .ad-ni.on{background:#DED7EB}
+.ad-railwrap{display:contents}.ad-railwrap.ad-norail{display:none}
+.r-wrap{flex-wrap:wrap}
+.r-g3,.r-g2{min-width:0}
+@container win (max-width: 1199px){
+.ad-console{display:none!important}.ad-railwrap.ad-norail{display:contents!important}
+.r-g3{grid-template-columns:repeat(2,minmax(0,1fr))!important}.r-kpis{flex-wrap:wrap}.r-kpis>.kpi{flex:1 1 140px}
+}
+@container win (max-width: 839px){.ad-chips-a{width:100%}.r-g2{grid-template-columns:minmax(0,1fr)!important}}
+@container win (max-width: 599px){.r-g3{grid-template-columns:minmax(0,1fr)!important}.ad-chips .chip{height:28px;font-size:12px}}
+
+.kind{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;flex:none;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:11px;font-weight:800;letter-spacing:.3px}
+.k-skill{background:#E3DFFF;color:#14085E}.k-tool{background:#C3F4DC;color:#00391E}.k-mcp{background:#9CF1F0;color:#002020}
+.cat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ccard{display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:12px;background:#FFFFFF;border:1px solid #E6E0EC;text-align:left;font:inherit;color:inherit;cursor:pointer;min-width:0}
+.ccard:hover{border-color:#CAC4CF;background:#FDF8FD}.ccard:focus-visible{outline-offset:-3px}
+.ccard p{margin:0;font-size:13px;line-height:18px;color:#48454E;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{font-size:12px;color:#48454E;white-space:normal}
+.seg{display:inline-flex;border:1px solid #79757F;border-radius:16px;overflow:hidden}
+.seg button{height:36px;padding:0 14px;border:0;border-left:1px solid #79757F;background:transparent;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:600;color:#1C1B1E}
+.seg button:first-child{border-left:0}.seg button[aria-pressed="true"]{background:#DED7EB;color:#1D1A28}
+.proc{display:flex;align-items:center;gap:0;flex-wrap:wrap}
+.proc .s{display:flex;align-items:center;gap:8px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:600;color:#79757F}
+.proc .s b{width:22px;height:22px;border-radius:50%;border:1px solid #CAC4CF;font-size:11px;display:inline-flex;align-items:center;justify-content:center}
+.proc .s.on{color:#1D1A28}.proc .s.on b{background:#39235F;border-color:#39235F;color:#fff}
+.proc .s.done{color:#48454E}.proc .s.done b{background:#DED7EB;border-color:#DED7EB;color:#1D1A28}
+.proc .ln{width:28px;height:1px;background:#CAC4CF;margin:0 8px}
+.plain{list-style:none;margin:0;padding:0}.plain li{padding:8px 0;border-top:1px solid #ECE5F4;font-size:14px;line-height:20px;display:flex;gap:10px;align-items:baseline}.plain li:first-child{border-top:0}
+.pane{border:1px solid #CAC4CF;border-radius:12px;background:#FAF4FF;display:flex;flex-direction:column;gap:12px;padding:16px;min-width:0}
+.bub{align-self:flex-end;max-width:80%;padding:10px 14px;border-radius:16px 16px 4px 16px;background:#DED7EB;color:#1D1A28;font-size:14px;line-height:20px}
+.trace{border:1px solid #CAC4CF;border-radius:12px;padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:6px;background:#FFFFFF}
+.lnk{border:0;background:transparent;padding:0;color:#39235F;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.radio{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid #CAC4CF;border-radius:12px;cursor:pointer;font-size:14px;line-height:18px}
+.radio input{margin:2px 0 0;width:18px;height:18px;accent-color:#39235F;flex:none}.radio.on{border-color:#39235F;background:#F2EBFA}
+.cb{width:18px;height:18px;accent-color:#39235F;margin:0}
+.phase-tbl .td{text-align:center}.phase-tbl .td:first-child{text-align:left}
+.narrow{max-width:760px}
+.pstep{display:flex;gap:14px;align-items:flex-start;padding:10px 0;border-top:1px solid #ECE5F4}.pstep:first-of-type{border-top:0}
+.pstep .num{width:24px;height:24px;flex:none;border-radius:50%;background:#E3DFFF;color:#14085E;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+@container win (max-width: 1199px){.cat-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.r-split{grid-template-columns:minmax(0,1fr)!important}}
+@container win (max-width: 839px){.cat-grid{grid-template-columns:minmax(0,1fr)!important}.proc .s span{display:none}.proc .ln{width:16px}}
+@container win (max-width: 599px){.ccard{padding:12px}.bub{max-width:100%}.seg button{padding:0 10px}}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 2000px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column">
+  <div style="padding: 20px 32px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; align-items: center; gap: 16px">
+      <h1 class="ui" style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 700; white-space: nowrap">Catalog lab</h1>
+      <span style="font-size: 14px; color: #48454E">Skills, tools and MCP servers for the assistant and for Sweep, in a minimal interface: a card is a name, one line and who made it; status and actions appear only where they decide something. People publish skills through a five-step process; the platform publishes tools (Deploy environment, Create Jira ticket…) and MCP servers (DevOps, Knowledge base). Pick a screen and a role; press Play.</span>
+    </div>
+    <div class="row" style="gap: 12px; flex-wrap: wrap"><div class="simbar" role="group" aria-label="Simulated window width"><span class="simlab">WINDOW</span><sc-for list="{{simPresets}}" as="sp" hint-placeholder-count="7"><button type="button" class="chip {{sp.cls}}" aria-pressed="{{sp.on}}" title="{{sp.title}}" onClick="{{sp.pick}}">{{sp.label}}</button></sc-for><input type="range" class="simrange" min="360" max="1920" step="10" value="{{simW}}" aria-label="Window width in pixels" onChange="{{simInput}}"><span class="simval"><b>{{simW}} px</b> · {{simClass}}<sc-if value="{{simScaled}}" hint-placeholder-val="{{false}}"> · shown at {{simPct}}</sc-if></span></div><span class="row r-wrap" style="gap: 8px; padding: 6px 8px 6px 12px; border: 1px dashed #79757F; border-radius: 12px"><span class="ui" style="font-size: 12px; font-weight: 600; color: #48454E">Screen</span><sc-for list="{{screenChips}}" as="r" hint-placeholder-count="5"><button type="button" class="chip" style="height: 28px; font-size: 12px; {{r.style}}" aria-pressed="{{r.on}}" onClick="{{r.pick}}">{{r.label}}</button></sc-for></span><span class="row" style="gap: 8px; padding: 6px 8px 6px 12px; border: 1px dashed #79757F; border-radius: 12px"><span class="ui" style="font-size: 12px; font-weight: 600; color: #48454E">View as</span><sc-for list="{{roleChips}}" as="r" hint-placeholder-count="3"><button type="button" class="chip" style="height: 28px; font-size: 12px; {{r.style}}" aria-pressed="{{r.on}}" onClick="{{r.pick}}">{{r.label}}</button></sc-for></span></div>
+  </div>
+
+  <div style="margin: 0 32px; border-radius: 12px; overflow: hidden; border: 1px solid #CAC4CF">
+  <div class="simhost" id="sim-host-cl"><div class="simframe" style="width: {{simW}}px; zoom: {{simZoom}}; height: 1080px">
+  <div style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; background: #FDF8FD; overflow: hidden">
+    <header class="hdr" style="height: 64px; flex: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 0 8px 0 24px; background: #EDE4FF; border-bottom: 2px solid #FDF8FD">
+    <div style="justify-self: stretch; display: flex; align-items: center; min-width: 0; overflow: hidden"><button type="button" class="ib hdr-menu" aria-label="Open navigation"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><a href="#home" aria-label="AIToolbox home" style="display: flex; align-items: center; gap: 10px; text-decoration: none"><svg width="32" height="28" viewBox="0 0 74 64" aria-hidden="true"><mask id="sh-lg" maskUnits="userSpaceOnUse" x="0" y="0" width="74" height="64"><rect width="74" height="64" fill="#fff"/><rect x="37" y="3" width="36" height="24" rx="7" fill="#000"/></mask><g mask="url(#sh-lg)"><path d="M21 23v-6a6 6 0 0 1 6-6h10a6 6 0 0 1 6 6v6" fill="none" stroke="#0D0B14" stroke-width="6" stroke-linecap="round"/><rect x="4" y="22" width="56" height="36" rx="10" fill="#0D0B14"/><path d="M17.5 33l8 7-8 7" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M33.5 47h13" fill="none" stroke="#00F29E" stroke-width="5.5" stroke-linecap="round"/></g><rect x="39.5" y="5.5" width="31" height="19" rx="5" fill="#80D5D4"/><text x="55" y="20" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="800" font-size="14" fill="#003737">AI</text></svg><span class="hdr-wm" style="font-family: Manrope, sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.035em; line-height: 1"><span style="color: #1C1B1E">AI</span><span style="color: #39235F">Toolbox</span></span></a><div class="hctx" style="display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 0; margin-left: 16px; padding-left: 16px; border-left: 1px solid #CAC4CF"><span class="hf" style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 18px; font-weight: 600; color: #1C1B1E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{hdrFeature}}</span><span class="hs" style="font-family: 'Open Sans', system-ui, sans-serif; font-size: 12px; line-height: 16px; color: #48454E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 380px">{{hdrSummary}}</span></div></div>
+    <div role="search" class="hdr-search" style="width: 440px; height: 44px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 6px 0 14px; border-radius: 16px; background: #FFFFFF; color: #48454E">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <label for="sh-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search, or ask the assistant</label>
+      <input id="sh-q" type="text" placeholder="Search, or ask the assistant…" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: 400 14px 'Open Sans', system-ui, sans-serif; color: #1C1B1E">
+      <span class="mono hdr-kbd" style="font-size: 11px; padding: 2px 8px; border-radius: 6px; border: 1px solid #CAC4CF">⌘K</span>
+      <button type="button" class="ui" style="display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px 0 8px; border: 0; border-radius: 12px; background: #9CF1F0; color: #002020; font-size: 12px; font-weight: 700"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><path d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" fill="none" stroke="#39235F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 37l6 5-6 5" fill="none" stroke="#39235F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 49h5" fill="none" stroke="#008857" stroke-width="4.5" stroke-linecap="round"/></g></svg><span class="hdr-asklabel">Ask</span></button>
+    </div>
+    <div style="justify-self: end; display: flex; align-items: center">
+      <button type="button" class="ib hdr-sbtn" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      <button type="button" class="ib hdr-asst" aria-label="Open assistant"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><path d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" fill="none" stroke="#39235F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 37l6 5-6 5" fill="none" stroke="#39235F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 49h5" fill="none" stroke="#008857" stroke-width="4.5" stroke-linecap="round"/></g></svg></button>
+      <button type="button" class="ib hdr-bell" aria-label="Notifications, 3 unread"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="8" r="3.6" fill="#39235F"/><path d="M32 9C22 9 17 17 17 27V38L12 46Q11 48.5 13.5 48.5H50.5Q53 48.5 52 46L47 38V27C47 17 42 9 32 9Z" fill="#39235F"/><circle cx="32" cy="53.5" r="5" fill="#278383"/></svg><span class="ui" style="position: absolute; top: 3px; left: 22px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 9px; background: #93000A; color: #FFFFFF; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; box-shadow: 0 0 0 2px #EDE4FF">3</span></button>
+      <button type="button" class="ib hdr-help" aria-label="Help" aria-haspopup="menu" aria-expanded="false" style=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg></button>
+      <span class="hdr-div" style="width: 1px; height: 24px; background: #CAC4CF; margin: 0 6px"></span>
+      <button type="button" class="hdr-user" aria-label="Aurélien Heux, platform admin, account menu" aria-haspopup="menu" style="display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 10px 0 6px; border: 0; border-radius: 16px; background: transparent; color: #48454E; margin-right: 8px"><span class="av">AH</span><span class="hdr-uname" style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15"><span class="ui" style="font-size: 13px; font-weight: 700; color: #1C1B1E; white-space: nowrap">Aurélien Heux</span><span style="font-size: 11px; color: #48454E">platform · admin</span></span><svg class="hdr-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+    </div>
+  </header>
+    <div style="flex: 1; display: flex; min-height: 0">
+      <sc-if value="{{railCat}}" hint-placeholder-val="{{true}}"><div class="ad-railwrap"><nav aria-label="Primary" class="nav-side nav-rail" style="width: 80px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 12px 0; box-sizing: border-box; background: #EDE4FF"><div style="height: 48px; display: flex; align-items: center"><button type="button" aria-label="Open navigation" style="position: relative; width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center; margin: 4px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div><a href="#sweep" title="Sweep" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg3" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm3" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg3)" mask="url(#nvm3)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Sweep</span></a><a href="#env" title="Envs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-0.2 0.2)"><path d="M12 50L32 32L52 14" stroke="#39235F" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="12" cy="50" r="7" fill="#FDF8FD" stroke="#39235F" stroke-width="5"/><circle cx="32" cy="32" r="7.5" fill="#FDF8FD" stroke="#278383" stroke-width="5"/><circle cx="52" cy="14" r="10" fill="#00A56B"/><path d="M47.5 14.2l3 3 6-6" fill="none" stroke="#FDF8FD" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Envs</span></a><a href="#docs" title="Docs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-2.7 -2.5)"><rect x="6" y="10" width="13" height="48" rx="3.5" fill="#39235F"/><path d="M9.5 20H15.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="22" y="16" width="13" height="42" rx="3.5" fill="#278383"/><path d="M25.5 25H31.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="38" y="13" width="13" height="46" rx="3.5" fill="#00A56B" transform="rotate(16 51 58)"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Docs</span></a><a href="#catalog" aria-current="page" title="Catalog" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: #DED7EB; box-shadow: inset 3px 0 0 #39235F; color: #1D1A28; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><rect x="8" y="8" width="22" height="22" rx="6" fill="#39235F"/><rect x="34" y="8" width="22" height="22" rx="6" fill="#278383"/><rect x="8" y="34" width="22" height="22" rx="6" fill="#00A56B"/><rect x="35.5" y="35.5" width="19" height="19" rx="5" fill="none" stroke="#39235F" stroke-width="3" stroke-dasharray="4 3"/><path d="M45 40v10M40 45h10" stroke="#39235F" stroke-width="3.2" stroke-linecap="round"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 700; color: #1C1B1E; white-space: nowrap">Catalog</span></a><a href="#new" title="Community" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Community</span></a><div style="flex: 1"></div><a href="#admin" title="Admin" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M8.5 16.5c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Admin</span></a><a href="#cookies" target="_blank" rel="noopener" title="Cookies" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M21 12.3A9 9 0 1 1 11.7 3a3 3 0 0 0 3.3 3.6 3 3 0 0 0 3.4 3.4 3 3 0 0 0 2.6 2.3z"/><path d="M8.5 9.5h.01M15.5 15.5h.01M9.5 15h.01M12.5 12h.01"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Cookies</span></a></nav></div></sc-if><sc-if value="{{railAdm}}" hint-placeholder-val="{{false}}"><div class="ad-railwrap"><nav aria-label="Primary" class="nav-side nav-rail" style="width: 80px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 12px 0; box-sizing: border-box; background: #EDE4FF"><div style="height: 48px; display: flex; align-items: center"><button type="button" aria-label="Open navigation" style="position: relative; width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center; margin: 4px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div><a href="#sweep" title="Sweep" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg8" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm8" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg8)" mask="url(#nvm8)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Sweep</span></a><a href="#env" title="Envs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-0.2 0.2)"><path d="M12 50L32 32L52 14" stroke="#39235F" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="12" cy="50" r="7" fill="#FDF8FD" stroke="#39235F" stroke-width="5"/><circle cx="32" cy="32" r="7.5" fill="#FDF8FD" stroke="#278383" stroke-width="5"/><circle cx="52" cy="14" r="10" fill="#00A56B"/><path d="M47.5 14.2l3 3 6-6" fill="none" stroke="#FDF8FD" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Envs</span></a><a href="#docs" title="Docs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-2.7 -2.5)"><rect x="6" y="10" width="13" height="48" rx="3.5" fill="#39235F"/><path d="M9.5 20H15.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="22" y="16" width="13" height="42" rx="3.5" fill="#278383"/><path d="M25.5 25H31.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="38" y="13" width="13" height="46" rx="3.5" fill="#00A56B" transform="rotate(16 51 58)"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Docs</span></a><a href="#catalog" title="Catalog" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><rect x="8" y="8" width="22" height="22" rx="6" fill="#39235F"/><rect x="34" y="8" width="22" height="22" rx="6" fill="#278383"/><rect x="8" y="34" width="22" height="22" rx="6" fill="#00A56B"/><rect x="35.5" y="35.5" width="19" height="19" rx="5" fill="none" stroke="#39235F" stroke-width="3" stroke-dasharray="4 3"/><path d="M45 40v10M40 45h10" stroke="#39235F" stroke-width="3.2" stroke-linecap="round"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Catalog</span></a><a href="#new" title="Community" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Community</span></a><div style="flex: 1"></div><a href="#admin" aria-current="page" title="Admin" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: #DED7EB; box-shadow: inset 3px 0 0 #39235F; color: #1D1A28; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M8.5 16.5c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 700; color: #1C1B1E; white-space: nowrap">Admin</span></a><a href="#cookies" target="_blank" rel="noopener" title="Cookies" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M21 12.3A9 9 0 1 1 11.7 3a3 3 0 0 0 3.3 3.6 3 3 0 0 0 3.4 3.4 3 3 0 0 0 2.6 2.3z"/><path d="M8.5 9.5h.01M15.5 15.5h.01M9.5 15h.01M12.5 12h.01"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Cookies</span></a></nav></div></sc-if>
+      <main style="position: relative; flex: 1; min-width: 0; padding: 20px 32px 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; overflow: auto">
+        <div aria-live="polite" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">{{live}}</div>
+        <sc-if value="{{sCatalog}}" hint-placeholder-val="{{true}}"><div class="stack" style="gap: 16px">
+  <div class="row r-wrap" role="tablist" aria-label="Catalog" style="gap: 0; border-bottom: 1px solid #CAC4CF"><sc-for list="{{cTabs}}" as="t" hint-placeholder-count="2"><button type="button" role="tab" class="tab {{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.label}}<sc-if value="{{t.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{t.n}}</span></sc-if></button></sc-for><span style="flex: 1"></span><button type="button" class="btn f btn-i" onClick="{{goNew}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New skill</button></div>
+  <sc-if value="{{tBrowse}}" hint-placeholder-val="{{true}}">
+  <div class="row r-wrap" style="gap: 12px"><div class="seg" role="group" aria-label="Kind"><sc-for list="{{kindChips}}" as="c" hint-placeholder-count="4"><button type="button" aria-pressed="{{c.on}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div><span style="flex: 1"></span><div class="fld ad-search" style="min-height: 40px; padding: 8px 12px; width: 280px"><label for="cat-q">Search</label><div class="row" style="gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="cat-q" type="text" placeholder="Name, tool, team…"></div></div></div>
+  <div class="cat-grid"><sc-for list="{{items}}" as="it" hint-placeholder-count="6"><button type="button" class="ccard" onClick="{{it.open}}"><div class="row" style="gap: 10px; min-width: 0"><span class="kind {{it.kcls}}">{{it.kab}}</span><div class="ui" style="flex: 1; min-width: 0; font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{it.name}}</div></div><p>{{it.desc}}</p><div class="row" style="gap: 8px; margin-top: auto"><span class="meta">{{it.byShort}}</span><span style="flex: 1"></span><span class="meta">{{it.usageShort}}</span></div></button></sc-for></div>
+  </sc-if>
+  <sc-if value="{{tMine}}" hint-placeholder-val="{{false}}">
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Skill</th><th class="th">Stage</th><th class="th">Who can use it</th><th class="th">Version</th><th class="th"></th></tr></thead>
+    <tbody><sc-for list="{{mine}}" as="it" hint-placeholder-count="3"><tr class="rw"><td class="td"><b class="ui">{{it.name}}</b><div class="meta">{{it.usageShort}}</div></td><td class="td"><span class="tile {{it.stTile}}"><i></i>{{it.stage}}</span></td><td class="td"><span style="font-size: 13px">{{it.audience}}</span></td><td class="td"><span class="mono" style="font-size: 13px">{{it.version}}</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px" onClick="{{it.next}}">{{it.nextLabel}}</button></td></tr></sc-for></tbody></table></div></div>
+  </sc-if>
+</div></sc-if> <sc-if value="{{sItem}}" hint-placeholder-val="{{false}}"><div class="stack narrow" style="gap: 20px">
+  <div class="subhdr "><button type="button" onClick="{{goCatalog}}" class="ib sh-back" aria-label="Back to the Catalog" title="Back to the Catalog"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="sh-txt"><span class="kind {{sk.kcls}}">{{sk.kab}}</span><h2 class="sh-t">{{sk.name}}</h2><span class="sh-c">{{sk.kind}} by {{sk.by}} · {{sk.version}}</span></div><div class="sh-act"><sc-if value="{{sk.forAssistant}}" hint-placeholder-val="{{true}}"><button type="button" class="btn {{sk.addCls}} btn-i" aria-pressed="{{sk.added}}" onClick="{{sk.toggleAdd}}"><sc-if value="{{sk.added}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{sk.addLabel}}</button></sc-if></div></div>
+  <p style="margin: 0; font-size: 15px; line-height: 22px">{{sk.desc}}</p>
+  <sc-if value="{{sk.writes}}" hint-placeholder-val="{{false}}"><div class="row" style="gap: 8px; font-size: 13px; color: #48454E"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>{{sk.writeNote}}</span></div></sc-if>
+  <sc-if value="{{sk.hasEx}}" hint-placeholder-val="{{true}}"><div class="stack" style="gap: 6px"><div class="ui" style="font-size: 13px; font-weight: 700; color: #48454E">Try asking</div><ul class="plain"><sc-for list="{{sk.examples}}" as="e" hint-placeholder-count="2"><li><span style="flex: 1">“{{e.text}}”</span><button type="button" class="lnk" onClick="{{e.tryIt}}">Try it</button></li></sc-for></ul></div></sc-if>
+  <div class="stack" style="gap: 6px"><div class="ui" style="font-size: 13px; font-weight: 700; color: #48454E">{{sk.toolsTitle}}</div><ul class="plain"><sc-for list="{{sk.tools}}" as="t" hint-placeholder-count="3"><li><span style="flex: 1">{{t.name}}</span><span class="meta">{{t.note}}</span></li></sc-for></ul></div>
+  <div class="qa-panel {{sk.qaPanelCls}}"><button type="button" class="qa-bar" id="{{sk.qaTogId}}" aria-expanded="{{sk.qaOpen}}" aria-controls="{{sk.qaRegionId}}" aria-label="{{sk.qaBarAria}}" onClick="{{sk.qaToggle}}"><svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="qa-bar-t">Discussion</span><sc-if value="{{sk.qaHasPeople}}" hint-placeholder-val="{{true}}"><span class="qa-ppl" aria-hidden="true"><sc-for list="{{sk.qaPeople}}" as="p" hint-placeholder-count="3"><span class="av" style="background: {{p.bg}}">{{p.ini}}</span></sc-for></span></sc-if><span class="meta">{{sk.qaCountsLabel}}</span><sc-if value="{{sk.qaTeamIn}}" hint-placeholder-val="{{true}}"><span class="tile ne"><i></i>Platform team replied</span></sc-if><span class="meta">{{sk.qaLastLabel}}</span><span class="qa-bar-act">{{sk.qaAction}}</span></button><sc-if value="{{sk.qaOpen}}" hint-placeholder-val="{{false}}"><div class="qa" id="{{sk.qaRegionId}}" role="region" aria-label="Discussion"><sc-if value="{{sk.qaEmpty}}" hint-placeholder-val="{{false}}"><div class="qa-empty">No messages yet. Start the discussion: champions and the platform team take part.</div></sc-if><div class="qa-list" id="{{sk.qaListId}}"><sc-for list="{{sk.qaPage}}" as="q" hint-placeholder-count="2"><div class="qa-q" id="qa-q-{{q.id}}" tabindex="-1"><span class="av" style="background: {{q.bg}}">{{q.ini}}</span><div style="flex: 1; min-width: 0"><div class="row" style="gap: 8px; flex-wrap: wrap"><b class="ui" style="font-size: 13px">{{q.who}}</b><sc-if value="{{q.hasRole}}" hint-placeholder-val="{{false}}"><span class="tile {{q.roleTile}}"><i></i>{{q.role}}</span></sc-if><span class="meta">{{q.when}}</span></div><p class="qtext">{{q.text}}</p><sc-if value="{{q.hasReplies}}" hint-placeholder-val="{{true}}"><div class="qa-replies" id="qa-rp-{{q.id}}"><sc-if value="{{q.hasHidden}}" hint-placeholder-val="{{false}}"><button type="button" class="qa-more qa-earlier" aria-controls="qa-rp-{{q.id}}" onClick="{{q.showEarlier}}">{{q.earlierLabel}}</button></sc-if><sc-for list="{{q.shownReplies}}" as="m" hint-placeholder-count="2"><div class="qa-r" id="qa-m-{{m.id}}" tabindex="-1"><span class="av" style="background: {{m.bg}}">{{m.ini}}</span><div style="flex: 1; min-width: 0"><div class="row" style="gap: 8px; flex-wrap: wrap"><b class="ui" style="font-size: 13px">{{m.who}}</b><sc-if value="{{m.hasRole}}" hint-placeholder-val="{{false}}"><span class="tile {{m.roleTile}}"><i></i>{{m.role}}</span></sc-if><span class="meta">{{m.when}}</span></div><p>{{m.text}}</p></div></div></sc-for></div></sc-if><div class="row qa-acts"><button type="button" class="lnk" aria-expanded="{{q.replying}}" aria-controls="qa-rf-{{q.id}}" onClick="{{q.startReply}}">Reply</button><span class="meta">{{q.repliesLabel}}</span></div><sc-if value="{{q.replying}}" hint-placeholder-val="{{false}}"><div class="row qa-reply" id="qa-rf-{{q.id}}"><div class="fld" style="flex: 1; min-height: 40px; padding: 8px 12px"><label for="{{q.replyId}}">Reply to {{q.who}}</label><input id="{{q.replyId}}" type="text" value="{{q.replyDraft}}" onChange="{{q.onReplyDraft}}" placeholder="Everyone in the thread is notified"></div><button type="button" class="btn f sm" onClick="{{q.sendReply}}">Send</button></div></sc-if></div></div></sc-for></div><sc-if value="{{sk.qaHasNext}}" hint-placeholder-val="{{true}}"><div class="qa-morebar"><button type="button" class="qa-more" aria-controls="{{sk.qaListId}}" onClick="{{sk.qaShowMore}}">{{sk.qaMoreBtn}}</button><span class="meta">{{sk.qaShownLabel}}</span></div></sc-if><span class="qa-live" role="status" aria-live="polite">{{sk.qaLive}}</span><div class="qa-ask"><span class="av">AH</span><div class="fld" style="flex: 1; min-height: 44px; padding: 10px 12px"><label for="{{sk.qaAskId}}">New message</label><input id="{{sk.qaAskId}}" type="text" value="{{sk.qaDraft}}" onChange="{{sk.qaOnDraft}}" placeholder="{{sk.qaPlaceholder}}"></div><button type="button" class="btn t" onClick="{{sk.qaAsk}}">Post</button></div></div></sc-if></div>
+  <div class="row r-wrap" style="gap: 8px"><span class="meta">{{sk.foot}}</span><span style="flex: 1"></span><button type="button" class="lnk" onClick="{{reportIt}}">Report a problem</button></div>
+</div></sc-if> <sc-if value="{{sNew}}" hint-placeholder-val="{{false}}"><div class="stack" style="gap: 20px">
+  <div class="subhdr "><button type="button" onClick="{{goCatalog}}" class="ib sh-back" aria-label="Back to the Catalog" title="Back to the Catalog"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="sh-txt"><h2 class="sh-t">Publish a skill</h2><span class="sh-c">Your skill: {{nsNameOr}}</span></div><div class="sh-act"><div class="proc" aria-label="Publication process"><sc-for list="{{proc}}" as="p" hint-placeholder-count="5"><span class="s {{p.cls}}" aria-current="{{p.cur}}"><b>{{p.n}}</b><span>{{p.label}}</span></span><sc-if value="{{p.more}}" hint-placeholder-val="{{true}}"><span class="ln"></span></sc-if></sc-for></div></div></div>
+  <sc-if value="{{nWrite}}" hint-placeholder-val="{{true}}"><div class="card stack narrow" style="gap: 16px; padding: 24px">
+    <div class="h2">Write</div>
+    <div class="fld"><label for="ns-name">Name</label><input id="ns-name" type="text" value="{{nsName}}" onChange="{{onNsName}}" placeholder="Short, says what it does"></div>
+    <div class="fld"><label for="ns-desc">One line</label><input id="ns-desc" type="text" value="{{nsDesc}}" onChange="{{onNsDesc}}" placeholder="Shown in the Catalog and in the assistant’s Tools menu"></div>
+    <div class="fld" style="min-height: 150px"><label for="ns-body">Instructions</label><textarea id="ns-body" rows="6" value="{{nsBody}}" onChange="{{onNsBody}}" placeholder="How to proceed, step by step. Say when to stop and ask."></textarea></div>
+    <div class="stack" style="gap: 8px"><span class="meta">Tools it may use</span><div class="row r-wrap" style="gap: 8px"><sc-for list="{{toolChips}}" as="t" hint-placeholder-count="6"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div></div>
+    <div class="fld" style="min-height: 44px; padding: 10px 12px"><label for="ns-ex1">Example request</label><input id="ns-ex1" type="text" value="{{nsEx1}}" onChange="{{onNsEx1}}"></div>
+    <div class="row r-wrap" style="gap: 8px"><button type="button" class="lnk" onClick="{{pickSrcGit}}">{{srcLink}}</button><span style="flex: 1"></span><button type="button" class="btn x" onClick="{{saveDraft}}">Save draft</button><button type="button" class="btn f" onClick="{{toTest}}">Test it</button></div>
+  </div></sc-if>
+  <sc-if value="{{nTest}}" hint-placeholder-val="{{false}}"><div class="r-split" style="display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; align-items: start">
+    <div class="stack" style="gap: 10px"><div class="h2">Test</div><span class="meta">The assistant with your skill on, for this conversation only.</span>
+      <div class="pane"><div class="bub">{{nsEx1Or}}</div>
+        <div class="trace"><b class="ui" style="font-size: 13px">Used {{tryN}} tools</b><sc-for list="{{tryTools}}" as="t" hint-placeholder-count="2"><div class="row" style="gap: 8px"><span style="flex: 1">{{t.name}}</span><span class="meta">{{t.st}}</span></div></sc-for></div>
+        <sc-if value="{{tryNeedsAppr}}" hint-placeholder-val="{{false}}"><div class="card" style="border: 1px solid #79757F; box-shadow: none; background: #F2EBFA; display: flex; flex-direction: column; gap: 8px"><div class="row" style="gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><b class="ui" style="font-size: 14px">{{tryApprQ}}</b></div><div class="mono" style="font-size: 12px; color: #48454E">{{tryApprArgs}}</div><div class="row" style="justify-content: flex-end; gap: 8px"><button type="button" class="btn x sm">Don’t run</button><button type="button" class="btn f sm" onClick="{{tryApprove}}">Run</button></div></div></sc-if>
+        <div style="font-size: 14px; line-height: 20px">{{tryAnswer}}</div>
+      </div>
+    </div>
+    <div class="stack" style="gap: 10px"><div class="h2" style="font-size: 16px">Checks</div><ul class="plain"><sc-for list="{{checks}}" as="c" hint-placeholder-count="4"><li><span style="width: 20px; color: {{c.color}}">{{c.icon}}</span><span style="flex: 1">{{c.label}}<span class="meta" style="display: block">{{c.note}}</span></span></li></sc-for></ul>
+      <div class="row" style="gap: 8px; justify-content: flex-end"><button type="button" class="btn x" onClick="{{toWrite}}">Edit</button><button type="button" class="btn f" onClick="{{toSubmit}}">Continue</button></div></div>
+  </div></sc-if>
+  <sc-if value="{{nSubmit}}" hint-placeholder-val="{{false}}"><div class="card stack narrow" style="gap: 14px; padding: 24px">
+    <div class="h2">Submit</div><span class="meta">Who can use it. You can widen it later from Mine.</span>
+    <sc-for list="{{scopes}}" as="sc" hint-placeholder-count="3"><label class="radio {{sc.cls}}"><input type="radio" name="ns-scope" checked="{{sc.on}}" onChange="{{sc.pick}}"><span style="flex: 1"><b class="ui">{{sc.label}}</b><br><span class="meta">{{sc.note}}</span></span></label></sc-for>
+    <sc-if value="{{scopeOrg}}" hint-placeholder-val="{{false}}"><div class="fld" style="min-height: 72px"><label for="ns-note">Note for the reviewer</label><textarea id="ns-note" rows="2" placeholder="What it is for, who tried it"></textarea></div></sc-if>
+    <div class="row" style="gap: 8px; justify-content: flex-end"><button type="button" class="btn x" onClick="{{toTest}}">Back</button><button type="button" class="btn f" onClick="{{submit}}">{{submitCta}}</button></div>
+  </div></sc-if>
+  <sc-if value="{{nReview}}" hint-placeholder-val="{{false}}"><div class="card stack narrow" style="gap: 12px; padding: 24px">
+    <div class="h2">In review</div>
+    <p style="margin: 0; font-size: 14px; line-height: 20px">A champion or a platform admin looks at “{{nsNameOr}}” within 2 working days. You are notified, and you can talk with them in the skill’s discussion. Until then it stays usable by you.</p>
+    <div class="row" style="gap: 8px"><button type="button" class="btn t" onClick="{{openMine}}">Open in Mine</button><span style="flex: 1"></span><button type="button" class="lnk" onClick="{{simulateApprove}}">Simulate approval</button></div>
+  </div></sc-if>
+  <sc-if value="{{nDone}}" hint-placeholder-val="{{false}}"><div class="card stack narrow" style="gap: 12px; padding: 24px">
+    <div class="h2">Published</div>
+    <p style="margin: 0; font-size: 14px; line-height: 20px">{{doneText}}</p>
+    <div class="row" style="gap: 8px"><button type="button" class="btn f" onClick="{{openMine}}">Open in Mine</button><button type="button" class="btn x" onClick="{{goCatalog}}">Back to the Catalog</button></div>
+  </div></sc-if>
+</div></sc-if> <sc-if value="{{sAdmin}}" hint-placeholder-val="{{false}}"><div class="ad-split"><nav class="ad-side" aria-label="Administration"><sc-for list="{{groups}}" as="g" hint-placeholder-count="3"><div class="ad-g"><div class="ad-gh"><sc-if value="{{g.isSweep}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg1" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm1" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg1)" mask="url(#nvm1)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></sc-if><sc-if value="{{g.isNew}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></sc-if><span>{{g.label}}</span></div><sc-for list="{{g.items}}" as="s" hint-placeholder-count="5"><a href="#cl-{{s.key}}" class="ad-ni {{s.cls}}" aria-current="{{s.cur}}" onClick="{{s.pick}}"><span style="flex: 1">{{s.label}}</span><sc-if value="{{s.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{s.n}}</span></sc-if></a></sc-for></div></sc-for></nav><div class="ad-select row" style="gap: 8px"><label for="ad-sel" class="meta">Section</label><select id="ad-sel" class="sel" value="{{page}}" onChange="{{onSelect}}"><sc-for list="{{groups}}" as="g" hint-placeholder-count="3"><optgroup label="{{g.label}}"><sc-for list="{{g.items}}" as="s" hint-placeholder-count="4"><option value="{{s.key}}">{{s.label}}</option></sc-for></optgroup></sc-for></select></div><div class="stack" style="gap: 16px; min-width: 0"><sc-if value="{{aCatalog}}" hint-placeholder-val="{{true}}"><div class="row r-wrap" role="tablist" aria-label="Catalog" style="gap: 0; border-bottom: 1px solid #CAC4CF"><sc-for list="{{aTabs}}" as="t" hint-placeholder-count="3"><button type="button" role="tab" class="tab {{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.label}}<sc-if value="{{t.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{t.n}}</span></sc-if></button></sc-for></div></sc-if><sc-if value="{{aReview}}" hint-placeholder-val="{{true}}">
+  <sc-if value="{{rvList}}" hint-placeholder-val="{{true}}">
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Skill</th><th class="th">Author</th><th class="th">Submitted</th><th class="th"></th></tr></thead>
+    <tbody><sc-for list="{{queue}}" as="q" hint-placeholder-count="3"><tr class="rw"><td class="td"><b class="ui">{{q.name}}</b><div class="meta">{{q.desc}}</div></td><td class="td"><span style="font-size: 13px">{{q.by}}</span></td><td class="td"><span class="meta">{{q.when}}</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px" onClick="{{q.open}}">Review</button></td></tr></sc-for></tbody></table></div></div>
+  <span class="meta">Champions and platform admins review skills submitted to everyone, within 2 working days.</span>
+  </sc-if>
+  <sc-if value="{{rvOpen}}" hint-placeholder-val="{{false}}"><div class="stack narrow" style="gap: 16px">
+    <div class="subhdr "><button type="button" onClick="{{rvBack}}" class="ib sh-back" aria-label="Back to the review queue" title="Back to the review queue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="sh-txt"><h2 class="sh-t">{{rv.name}}</h2><span class="sh-c">{{rv.by}} · {{rv.when}}</span></div></div>
+    <div class="stack" style="gap: 6px"><div class="ui" style="font-size: 13px; font-weight: 700; color: #48454E">Instructions</div><div style="font-size: 14px; line-height: 20px; white-space: pre-line">{{rv.body}}</div><span class="meta">Uses {{rv.tools}} · {{rv.note}}</span></div>
+    <div class="stack" style="gap: 8px"><div class="ui" style="font-size: 13px; font-weight: 700; color: #48454E">Before publishing</div><sc-for list="{{rvChecks}}" as="c" hint-placeholder-count="3"><label class="row" style="gap: 10px; font-size: 14px; cursor: pointer"><input type="checkbox" class="cb" checked="{{c.on}}" onChange="{{c.toggle}}"><span style="flex: 1">{{c.label}}</span></label></sc-for></div>
+    <div class="qa-panel {{rv.qaPanelCls}}"><button type="button" class="qa-bar" id="{{rv.qaTogId}}" aria-expanded="{{rv.qaOpen}}" aria-controls="{{rv.qaRegionId}}" aria-label="{{rv.qaBarAria}}" onClick="{{rv.qaToggle}}"><svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="qa-bar-t">Discussion</span><sc-if value="{{rv.qaHasPeople}}" hint-placeholder-val="{{true}}"><span class="qa-ppl" aria-hidden="true"><sc-for list="{{rv.qaPeople}}" as="p" hint-placeholder-count="3"><span class="av" style="background: {{p.bg}}">{{p.ini}}</span></sc-for></span></sc-if><span class="meta">{{rv.qaCountsLabel}}</span><sc-if value="{{rv.qaTeamIn}}" hint-placeholder-val="{{true}}"><span class="tile ne"><i></i>Platform team replied</span></sc-if><span class="meta">{{rv.qaLastLabel}}</span><span class="qa-bar-act">{{rv.qaAction}}</span></button><sc-if value="{{rv.qaOpen}}" hint-placeholder-val="{{false}}"><div class="qa" id="{{rv.qaRegionId}}" role="region" aria-label="Discussion"><sc-if value="{{rv.qaEmpty}}" hint-placeholder-val="{{false}}"><div class="qa-empty">No messages yet. Start the discussion: champions and the platform team take part.</div></sc-if><div class="qa-list" id="{{rv.qaListId}}"><sc-for list="{{rv.qaPage}}" as="q" hint-placeholder-count="2"><div class="qa-q" id="qa-q-{{q.id}}" tabindex="-1"><span class="av" style="background: {{q.bg}}">{{q.ini}}</span><div style="flex: 1; min-width: 0"><div class="row" style="gap: 8px; flex-wrap: wrap"><b class="ui" style="font-size: 13px">{{q.who}}</b><sc-if value="{{q.hasRole}}" hint-placeholder-val="{{false}}"><span class="tile {{q.roleTile}}"><i></i>{{q.role}}</span></sc-if><span class="meta">{{q.when}}</span></div><p class="qtext">{{q.text}}</p><sc-if value="{{q.hasReplies}}" hint-placeholder-val="{{true}}"><div class="qa-replies" id="qa-rp-{{q.id}}"><sc-if value="{{q.hasHidden}}" hint-placeholder-val="{{false}}"><button type="button" class="qa-more qa-earlier" aria-controls="qa-rp-{{q.id}}" onClick="{{q.showEarlier}}">{{q.earlierLabel}}</button></sc-if><sc-for list="{{q.shownReplies}}" as="m" hint-placeholder-count="2"><div class="qa-r" id="qa-m-{{m.id}}" tabindex="-1"><span class="av" style="background: {{m.bg}}">{{m.ini}}</span><div style="flex: 1; min-width: 0"><div class="row" style="gap: 8px; flex-wrap: wrap"><b class="ui" style="font-size: 13px">{{m.who}}</b><sc-if value="{{m.hasRole}}" hint-placeholder-val="{{false}}"><span class="tile {{m.roleTile}}"><i></i>{{m.role}}</span></sc-if><span class="meta">{{m.when}}</span></div><p>{{m.text}}</p></div></div></sc-for></div></sc-if><div class="row qa-acts"><button type="button" class="lnk" aria-expanded="{{q.replying}}" aria-controls="qa-rf-{{q.id}}" onClick="{{q.startReply}}">Reply</button><span class="meta">{{q.repliesLabel}}</span></div><sc-if value="{{q.replying}}" hint-placeholder-val="{{false}}"><div class="row qa-reply" id="qa-rf-{{q.id}}"><div class="fld" style="flex: 1; min-height: 40px; padding: 8px 12px"><label for="{{q.replyId}}">Reply to {{q.who}}</label><input id="{{q.replyId}}" type="text" value="{{q.replyDraft}}" onChange="{{q.onReplyDraft}}" placeholder="Everyone in the thread is notified"></div><button type="button" class="btn f sm" onClick="{{q.sendReply}}">Send</button></div></sc-if></div></div></sc-for></div><sc-if value="{{rv.qaHasNext}}" hint-placeholder-val="{{true}}"><div class="qa-morebar"><button type="button" class="qa-more" aria-controls="{{rv.qaListId}}" onClick="{{rv.qaShowMore}}">{{rv.qaMoreBtn}}</button><span class="meta">{{rv.qaShownLabel}}</span></div></sc-if><span class="qa-live" role="status" aria-live="polite">{{rv.qaLive}}</span><div class="qa-ask"><span class="av">AH</span><div class="fld" style="flex: 1; min-height: 44px; padding: 10px 12px"><label for="{{rv.qaAskId}}">New message</label><input id="{{rv.qaAskId}}" type="text" value="{{rv.qaDraft}}" onChange="{{rv.qaOnDraft}}" placeholder="{{rv.qaPlaceholder}}"></div><button type="button" class="btn t" onClick="{{rv.qaAsk}}">Post</button></div></div></sc-if></div>
+    <div class="row r-wrap" style="gap: 8px; justify-content: flex-end"><button type="button" class="btn x" onClick="{{rvChanges}}">Ask for changes</button><button type="button" class="btn f" aria-disabled="{{rvNotReady}}" onClick="{{rvPublish}}">Publish</button></div>
+  </div></sc-if>
+</sc-if><sc-if value="{{aItems}}" hint-placeholder-val="{{false}}">
+  <div class="row r-wrap" style="gap: 12px"><div class="seg" role="group" aria-label="Kind"><sc-for list="{{kindChips}}" as="c" hint-placeholder-count="4"><button type="button" aria-pressed="{{c.on}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div><span style="flex: 1"></span><button type="button" class="btn t btn-i"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add tool or MCP server</button></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Item</th><th class="th">Owner</th><th class="th">Who can use it</th><th class="th">Uses · 30 days</th><th class="th"></th></tr></thead>
+    <tbody><sc-for list="{{adminItems}}" as="it" hint-placeholder-count="8"><tr class="rw"><td class="td"><div class="row" style="gap: 10px"><span class="kind {{it.kcls}}" style="width: 30px; height: 30px; font-size: 10px; border-radius: 8px">{{it.kab}}</span><b class="ui">{{it.name}}</b></div></td><td class="td"><span style="font-size: 13px">{{it.byShort}}</span></td><td class="td"><span style="font-size: 13px">{{it.audience}}</span></td><td class="td">{{it.usage}}</td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px" onClick="{{it.open}}">Open</button></td></tr></sc-for></tbody></table></div></div>
+</sc-if><sc-if value="{{aPolicies}}" hint-placeholder-val="{{false}}"><div class="stack narrow" style="gap: 20px">
+  <div class="stack" style="gap: 6px"><div class="h2">Who can publish</div><ul class="plain">
+    <li><span style="flex: 1">Skills for yourself or your team</span><span class="meta">Everyone · automatic checks</span></li>
+    <li><span style="flex: 1">Skills for everyone</span><span class="meta">After review by a champion or a platform admin</span></li>
+    <li><span style="flex: 1">Tools and MCP servers</span><span class="meta">Platform team</span></li></ul></div>
+  <div class="stack" style="gap: 6px"><div class="h2">Actions that change something</div><span class="meta">The most a user can allow. Users can only be stricter.</span>
+    <div class="card" style="padding: 0; overflow: hidden; margin-top: 6px"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+      <thead><tr><th class="th">Action</th><th class="th">Assistant</th><th class="th">Sweep runs</th></tr></thead>
+      <tbody><sc-for list="{{policyRows}}" as="p" hint-placeholder-count="5"><tr class="rw"><td class="td"><b class="ui">{{p.name}}</b><div class="meta">{{p.src}}</div></td><td class="td"><select class="sel sel-s" aria-label="Assistant ceiling for {{p.name}}" value="{{p.a}}" onChange="{{p.onA}}"><option value="ask">Ask first</option><option value="always">Allowed</option><option value="off">Off</option></select></td><td class="td"><select class="sel sel-s" aria-label="Sweep ceiling for {{p.name}}" value="{{p.s}}" onChange="{{p.onS}}"><option value="ask">Ask first</option><option value="always">Allowed</option><option value="off">Off</option></select></td></tr></sc-for></tbody></table></div></div>
+    <span class="meta">Reading (searching the knowledge base, reading logs and pipelines) is allowed everywhere.</span></div>
+</div></sc-if><sc-if value="{{aSweep}}" hint-placeholder-val="{{false}}">
+  <div class="row r-wrap" style="gap: 8px"><span class="meta" style="flex: 1; min-width: 220px">What a run may use in each phase. Actions that change something ask first and stop the run until someone approves.</span><button type="button" class="btn t btn-i" onClick="{{goCatalog}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add from the Catalog</button></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl phase-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Item</th><sc-for list="{{phases}}" as="p" hint-placeholder-count="4"><th class="th" style="text-align: center">{{p}}</th></sc-for></tr></thead>
+    <tbody><sc-for list="{{sweepRows}}" as="r" hint-placeholder-count="6"><tr class="rw"><td class="td"><div class="row" style="gap: 10px"><span class="kind {{r.kcls}}" style="width: 30px; height: 30px; font-size: 10px; border-radius: 8px">{{r.kab}}</span><b class="ui">{{r.name}}</b></div></td><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="4"><td class="td"><input type="checkbox" class="cb" aria-label="{{c.aria}}" checked="{{c.on}}" onChange="{{c.toggle}}"></td></sc-for></tr></sc-for></tbody></table></div></div>
+</sc-if><sc-if value="{{aOther}}" hint-placeholder-val="{{false}}"><div class="ocard" style="display: flex; gap: 16px; align-items: center; padding: 24px"><span class="tile ne" style="flex: none"><i></i>{{pageTitle}}</span><span style="font-size: 14px; color: #48454E">This section is not in the lab. It uses the same shell, with its own content.</span></div></sc-if></div></div></sc-if>
+        <sc-if value="{{hasSnack}}" hint-placeholder-val="{{false}}"><div role="status" style="position: sticky; bottom: 8px; align-self: flex-start; display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: 8px; background: #322F35; color: #F5EFF7; font-size: 14px; box-shadow: 0 4px 8px 3px rgba(0,0,0,.15)">{{snack}}<button type="button" class="ib" aria-label="Dismiss" style="margin: -8px -8px -8px 0; color: #F5EFF7" onClick="{{closeSnack}}">✕</button></div></sc-if>
+      </main>
+    </div>
+    <nav aria-label="Primary" class="nav-bar" style="position: sticky; bottom: 0; z-index: 3; height: 80px; flex: none; box-sizing: border-box; justify-content: space-around; align-items: center; padding: 0 4px; background: #EDE4FF; border-top: 1px solid #CAC4CF"><a href="#sweep" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg13" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm13" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg13)" mask="url(#nvm13)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Sweep</span></a><a href="#env" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-0.2 0.2)"><path d="M12 50L32 32L52 14" stroke="#39235F" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="12" cy="50" r="7" fill="#FDF8FD" stroke="#39235F" stroke-width="5"/><circle cx="32" cy="32" r="7.5" fill="#FDF8FD" stroke="#278383" stroke-width="5"/><circle cx="52" cy="14" r="10" fill="#00A56B"/><path d="M47.5 14.2l3 3 6-6" fill="none" stroke="#FDF8FD" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Envs</span></a><a href="#docs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-2.7 -2.5)"><rect x="6" y="10" width="13" height="48" rx="3.5" fill="#39235F"/><path d="M9.5 20H15.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="22" y="16" width="13" height="42" rx="3.5" fill="#278383"/><path d="M25.5 25H31.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="38" y="13" width="13" height="46" rx="3.5" fill="#00A56B" transform="rotate(16 51 58)"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Docs</span></a><a href="#new" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Community</span></a><button type="button" aria-label="Open assistant" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><path d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" fill="none" stroke="#39235F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 37l6 5-6 5" fill="none" stroke="#39235F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 49h5" fill="none" stroke="#008857" stroke-width="4.5" stroke-linecap="round"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Assistant</span></button></nav>
+  </div>
+  </div></div>
+  </div>
+
+  <div style="padding: 20px 32px 32px; display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 24px; align-items: start">
+    <div class="card stack" style="gap: 4px; padding: 20px">
+        <div class="row r-wrap" style="justify-content: space-between; margin-bottom: 6px"><span class="h2">Skill publication process</span><span class="meta">the same for a new skill and a new version</span></div>
+        <div class="pstep"><span class="num">1</span><div><b class="ui">Write</b><div class="meta">In the app, or from a Git repository (SKILL.md and skill.json; versions follow tags). A draft is usable by its author only.</div></div></div>
+        <div class="pstep"><span class="num">2</span><div><b class="ui">Test</b><div class="meta">Automatic checks: the manifest, no secrets in the text, every tool exists, and whether it changes something (worked out from its tools). Then one try in the assistant with the skill on. Both are required to continue.</div></div></div>
+        <div class="pstep"><span class="num">3</span><div><b class="ui">Submit</b><div class="meta">Pick who can use it: just you, your team (live at once; the team is responsible), or everyone (goes to review).</div></div></div>
+        <div class="pstep"><span class="num">4</span><div><b class="ui">Review</b><div class="meta">For everyone only. A champion or a platform admin tries it, ticks three points, talks with the author in the skill’s discussion, then publishes or asks for changes. Target: 2 working days.</div></div></div>
+        <div class="pstep"><span class="num">5</span><div><b class="ui">Published</b><div class="meta">In the Catalog and the assistant’s Tools menu; admins can turn it on for Sweep phases. A new version goes through Test again, and back to Review only if it adds an action that changes something. Retiring a skill names its successor and gives users 30 days.</div></div></div>
+      </div>
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="card stack" style="gap: 8px; padding: 20px"><span class="h2">What is in the Catalog</span>
+        <ul class="plain">
+          <li><span class="kind k-mcp" style="width: 30px; height: 30px; font-size: 10px; border-radius: 8px">MCP</span><span style="flex: 1"><b class="ui">DevOps</b><span class="meta" style="display: block">Pipelines, builds, deployments, pull requests</span></span></li>
+          <li><span class="kind k-mcp" style="width: 30px; height: 30px; font-size: 10px; border-radius: 8px">MCP</span><span style="flex: 1"><b class="ui">Knowledge base</b><span class="meta" style="display: block">Docs, runbooks, architecture model, ARB decisions</span></span></li>
+          <li><span class="kind k-tool" style="width: 30px; height: 30px; font-size: 10px; border-radius: 8px">TL</span><span style="flex: 1"><b class="ui">Deploy environment · Reserve environment</b><span class="meta" style="display: block">From Environments; they change something, so they ask first</span></span></li>
+          <li><span class="kind k-tool" style="width: 30px; height: 30px; font-size: 10px; border-radius: 8px">TL</span><span style="flex: 1"><b class="ui">Create Jira ticket</b><span class="meta" style="display: block">With the run or the conversation as context</span></span></li>
+          <li><span class="kind k-skill" style="width: 30px; height: 30px; font-size: 10px; border-radius: 8px">SK</span><span style="flex: 1"><b class="ui">Skills</b><span class="meta" style="display: block">Published by people: migrations, runbooks, reviews, release notes</span></span></li>
+        </ul></div>
+      <div class="ocard" style="font-size: 13px; line-height: 18px; color: #48454E"><b style="color: #1C1B1E">Minimal by default.</b> No tags on cards. The item page has one action (Add to my assistant) and says in one line when the item can change something. Reviewed, usage and source sit in one line of metadata. Filters are a kind switch and a search.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.simHostId = 'sim-host-cl'; this.simDefault = 1374; this.state = { screen: 'catalog', tab: 'browse', role: 'user', kind: 'all', skill: null, added: { s2: true, m2: true }, step: 1, nsName: '', nsDesc: '', nsBody: '', nsEx1: '', nsTools: { t_logs: true, t_jira: true }, src: 'app', scope: 'team', tryAppr: false, published: null, adminPage: 'catalog', aTab: 'review', rv: null, rvChecks: {}, pol: {}, sweepOn: { s1: { implement: true }, m1: { implement: true, test: true }, m2: { implement: true, review: true }, t1: { release: true }, t3: { review: true, test: true } }, snack: null, live: '', simW: null, simAvail: 0 }; }
+
+  simSync() {
+    if (typeof document === 'undefined') return;
+    var h = document.getElementById(this.simHostId); if (!h) return;
+    var a = Math.round(h.clientWidth);
+    // screen-fit boards: the frame takes the height left under the controls, so the rail's bottom items stay on screen
+    var top = h.getBoundingClientRect().top + (window.scrollY || 0), ah = Math.round((window.innerHeight || 0) - top - 12);
+    var o = {};
+    if (a > 0 && Math.abs((this.state.simAvail || 0) - a) > 1) o.simAvail = a;
+    if (ah > 0 && Math.abs((this.state.simAvailH || 0) - ah) > 1) o.simAvailH = ah;
+    if (o.simAvail || o.simAvailH) this.setState(o);
+  }
+  simScale() {
+    // rects are divided by this before positioning anything inside the (possibly zoomed) frame
+    if (typeof document === 'undefined') return 1;
+    var h = document.getElementById(this.simHostId), f = h && h.firstElementChild;
+    if (!f || !this._simW) return 1;
+    var z = f.getBoundingClientRect().width / this._simW;
+    return z > 0.05 ? z : 1;
+  }
+  simVals() {
+    var s = this.state, self = this, avail = s.simAvail || this.simDefault;
+    var fit = s.simW == null, W = fit ? Math.max(360, Math.min(1920, avail)) : s.simW;
+    var z = W > avail ? avail / W : 1;
+    this._simW = W;
+    var cls = W < 600 ? 'Compact' : W < 840 ? 'Medium' : W < 1200 ? 'Expanded' : W < 1600 ? 'Large' : 'Extra-large';
+    var pick = function (v) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState({ simW: v }); }; };
+    var P = [[null, 'Fit'], [360, 'Compact'], [600, 'Medium'], [840, 'Expanded'], [1200, 'Large'], [1440, 'Large'], [1920, 'Extra-large']];
+    return {
+      simW: W, simZoom: String(Math.round(z * 1000) / 1000), simFrameH: Math.round(Math.max(this.simMinH || 560, Math.min(this.simMaxH || 100000, s.simAvailH || this.simDefaultH || 900)) / z), simClass: cls, simScaled: z < 0.999, simPct: Math.round(z * 100) + ' %',
+      simCompact: W < 600, simMediumUp: W >= 600, simExpandedUp: W >= 840, simLargeUp: W >= 1200,
+      simPresets: P.map(function (p) { var v = p[0], on = fit ? v === null : v === W; return { label: v === null ? 'Fit · ' + Math.round(avail) : String(v), title: p[1], on: on, cls: on ? 'chip-on' : '', pick: pick(v) }; }),
+      simInput: function (e) { var v = parseInt((e && e.target && e.target.value) || W, 10); if (v && v !== self.state.simW) self.setState({ simW: v }); }
+    };
+  }
+
+
+  adminUsers() {
+    // Users and permissions: filters, the table, the Edit rights panel. State: uf (filter), usel (selected user id).
+    var s = this.state, self = this, ON = 'background: #DED7EB; border-color: #DED7EB; color: #1D1A28';
+    var set = function (o) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState(o); }; };
+    var U = [
+      { id: 'u1', ini: 'AH', bg: '#DED7EB', name: 'Aurélien Heux', mail: 'aurelien.heux@bnpp.example', admin: true, sweep: true, community: true, groups: 'Platform', last: 'today' },
+      { id: 'u2', ini: 'MK', bg: '#9CF1F0', name: 'Marta Kowalski', mail: 'marta.kowalski@bnpp.example', admin: false, sweep: true, community: false, groups: 'Client', last: '2 h ago' },
+      { id: 'u3', ini: 'SB', bg: '#FFDEA0', name: 'Sami Ben Ali', mail: 'sami.benali@bnpp.example', admin: true, sweep: false, community: true, groups: 'Platform', last: '1 h ago' },
+      { id: 'u4', ini: 'PS', bg: '#9CF1F0', name: 'Priya Sharma', mail: 'priya.sharma@bnpp.example', admin: false, sweep: false, community: true, groups: 'Request', last: 'yesterday' },
+      { id: 'u5', ini: 'LB', bg: '#FFDEA0', name: 'Lucas Bernard', mail: 'lucas.bernard@bnpp.example', admin: false, sweep: false, community: false, groups: 'Facility', last: '3 days ago', pending: 'Sweep admin' },
+      { id: 'u6', ini: 'YD', bg: '#C3F4DC', name: 'Yann Dupont', mail: 'yann.dupont@bnpp.example', admin: false, sweep: false, community: false, fbSweep: true, groups: 'Client', last: 'today' }
+    ];
+    var uf = s.uf === 'admins' || s.uf === 'req' ? s.uf : 'all';
+    var isAdm = function (u) { return u.admin || u.sweep || u.community || u.fbSweep; };
+    var uFilters = [ { k: 'all', label: 'All', n: '1,284' }, { k: 'admins', label: 'Admins', n: 46 }, { k: 'req', label: 'Requests', n: 1 } ].map(function (f) { var on = uf === f.k; return { label: f.label, n: f.n, on: on, style: on ? ON : '', pick: set({ uf: f.k }) }; });
+    var users = U.filter(function (u) { return uf === 'all' || (uf === 'admins' && isAdm(u)) || (uf === 'req' && u.pending); }).map(function (u) {
+      var rights = (u.admin ? [{ label: 'Platform admin', bg: '#E3DFFF' }] : []).concat(u.sweep ? [{ label: 'Sweep admin', bg: '#ECE5F4' }] : [], u.community ? [{ label: 'Community admin', bg: '#ECE5F4' }] : [], u.fbSweep ? [{ label: 'Feedback · Sweep', bg: '#ECE5F4' }] : []), on = s.usel === u.id;
+      return Object.assign({}, u, { on: on, cls: on ? 'on' : '', rights: rights, noRights: !rights.length && !u.pending, pending: !!u.pending, pendingLabel: u.pending ? u.pending + ' requested' : '', pick: set({ usel: on ? null : u.id }) });
+    });
+    var selRaw = U.filter(function (u) { return u.id === s.usel; })[0];
+    return { uFilters: uFilters, users: users, uCount: uf === 'all' ? '1–6 of 1,284' : users.length + ' shown', hasUsr: !!selRaw, closeUsr: set({ usel: null }),
+      usr: selRaw ? Object.assign({}, selRaw, { pending: !!selRaw.pending, pendingRight: selRaw.pending || '', fbSweep: !!selRaw.fbSweep }) : {} };
+  }
+  adminGroups(platform, counts) {
+    // the navigation groups, filtered by rights: a platform admin sees everything; a Sweep admin sees the Sweep group and,
+    // under Community, only "Feedback · Sweep" (scoped right Feedback · <feature>, separate from Community admin)
+    var c = counts || {};
+    var ALL = [
+      { key: 'core', label: 'Core', core: true, items: [ { key: 'general', label: 'General' }, { key: 'users', label: 'Users and permissions', n: c.users }, { key: 'groups', label: 'Groups' }, { key: 'audit', label: 'Audit log' } ] },
+      { key: 'sweep', label: 'Sweep', isSweep: true, remote: 'sweep-admin@1.4', owner: 'Platform team', items: [ { key: 'connectors', label: 'Connectors', n: c.connectors } ] },
+      { key: 'new', label: 'Community', isNew: true, remote: 'community-admin@4.6', owner: 'Platform team', items: [ { key: 'releases', label: 'Releases', n: c.releases }, { key: 'tours', label: 'Tours', n: c.tours }, { key: 'listen', label: 'Feedback', n: c.listen }, { key: 'ideas', label: 'Ideas triage', n: c.ideas }, { key: 'insights', label: 'Insights' } ] }
+    ];
+    return ALL.filter(function (g) { return platform || !g.core; }).map(function (g) {
+      var items = g.items.filter(function (i) { return platform || g.key === 'sweep' || i.key === 'listen'; }).map(function (i) { return Object.assign({}, i, !platform && i.key === 'listen' ? { label: 'Feedback · Sweep', n: c.listenScoped } : {}); });
+      return Object.assign({}, g, { items: items });
+    });
+  }
+  feedbackProfiles(s, set, opts) {
+    // FeedbackProfile: the editor for one feature's feedback form, used in Community > Feedback > Profiles (kept as its own component).
+    // s.fp holds the edits per profile key; opts.onSave(name) returns the state patch shown after saving
+    var o = opts || {}, ON = 'background: #DED7EB; border-color: #DED7EB; color: #1D1A28';
+    var val = function (e) { return e && e.target ? e.target.value : ''; };
+    var FP0 = {
+      sweep: { name: 'Sweep', owner: 'Sweep team', home: 'Community › Feedback', on: true, entries: { page: true, after: true, ai: false, global: false }, qs: [ { type: 'scale', text: 'How did this Sweep run go?' }, { type: 'single', text: 'Which phase needs work?' }, { type: 'text', text: 'Anything to add?' } ], sampling: '20', routing: 'jira', anon: true, ctx: true },
+      env: { name: 'Environments', owner: 'Release team', home: 'Community › Feedback', on: true, entries: { page: true, after: true, ai: false, global: false }, qs: [ { type: 'thumbs', text: 'Did this promotion go as expected?' }, { type: 'text', text: 'What went wrong?' } ], sampling: '10', routing: 'inbox', anon: false, ctx: true },
+      docs: { name: 'Docs', owner: 'Platform team', home: 'Community › Feedback', on: true, entries: { page: true, after: false, ai: false, global: false }, qs: [ { type: 'thumbs', text: 'Was this page useful?' } ], sampling: '100', routing: 'inbox', anon: true, ctx: true },
+      assistant: { name: 'Assistant', owner: 'AI platform team', home: 'Community › Feedback', on: true, entries: { page: false, after: false, ai: true, global: false }, qs: [ { type: 'thumbs', text: 'Rate this answer' }, { type: 'single', text: 'What was wrong?' } ], sampling: '100', routing: 'teams', anon: false, ctx: true },
+      global: { name: 'AIToolbox (global)', owner: 'Platform team', home: 'Community › Feedback', on: true, entries: { page: false, after: false, ai: false, global: true }, qs: [ { type: 'text', text: 'Tell us anything about AIToolbox' } ], sampling: '100', routing: 'inbox', anon: true, ctx: false }
+    };
+    var FPS = Object.assign({}, FP0, s.fp || {});
+    var ENTRY = { page: 'Page button', after: 'After an action', ai: 'On AI answers', global: 'Account menu' };
+    var ROUTE = { inbox: 'Team inbox', jira: 'Inbox + Jira', teams: 'Inbox + Teams' };
+    var QT = { thumbs: 'Thumbs', scale: 'Scale 1–5', nps: 'NPS 0–10', single: 'Single choice', multi: 'Multiple choice', text: 'Text' };
+    var setFp = function (key, patch) { var all = Object.assign({}, s.fp || {}); all[key] = Object.assign({}, FPS[key], patch); return { fp: all }; };
+    var summary = function (k) { var p = FPS[k]; return { key: k, name: p.name, owner: p.owner, home: p.home, status: p.on ? 'On' : 'Off', tile: p.on ? 'ok' : 'ne', entries: Object.keys(p.entries).filter(function (e) { return p.entries[e]; }).map(function (e) { return ENTRY[e]; }).join(', ') || '—', nq: p.qs.length, sampling: p.entries.after ? p.sampling + '%' : '—', routing: ROUTE[p.routing] }; };
+    var editor = function (fk, extra) {
+      var fpv = FPS[fk]; if (!fpv) return {};
+      return Object.assign({
+        key: fk, name: fpv.name, owner: fpv.owner, on: fpv.on, onLabel: fpv.on ? 'Profile on' : 'Profile off', onStyle: fpv.on ? ON : '', toggle: set(setFp(fk, { on: !fpv.on })),
+        entryChips: Object.keys(ENTRY).map(function (e) { return { label: ENTRY[e], on: !!fpv.entries[e], style: fpv.entries[e] ? ON : '', pick: set(function () { var en = Object.assign({}, fpv.entries); en[e] = !en[e]; return setFp(fk, { entries: en }); }) }; }),
+        nq: fpv.qs.length, canAdd: fpv.qs.length < 3, noQ: fpv.qs.length === 0, addQ: set(setFp(fk, { qs: fpv.qs.concat([{ type: 'text', text: '' }]) })),
+        qs: fpv.qs.map(function (q, i) { var upd = function (patch) { var arr = fpv.qs.map(function (x) { return Object.assign({}, x); }); Object.assign(arr[i], patch); return setFp(fk, { qs: arr }); }; return { n: i + 1, type: q.type, text: q.text, textOr: q.text || 'Question ' + (i + 1), typeLabel: QT[q.type], onType: set(function (e) { return upd({ type: val(e) }); }), onText: set(function (e) { return upd({ text: val(e) }); }), del: set(function () { return setFp(fk, { qs: fpv.qs.filter(function (x, k) { return k !== i; }) }); }) }; }),
+        samplingChips: ['10', '20', '50', '100'].map(function (v) { return { label: v + '%', on: fpv.sampling === v, style: fpv.sampling === v ? ON : '', pick: set(setFp(fk, { sampling: v })) }; }),
+        routing: fpv.routing, onRouting: set(function (e) { return setFp(fk, { routing: val(e) }); }),
+        optChips: [ { k: 'anon', label: 'Allow anonymous' }, { k: 'ctx', label: 'Attach context' } ].map(function (x) { return { label: x.label, on: !!fpv[x.k], style: fpv[x.k] ? ON : '', pick: set(function () { var p = {}; p[x.k] = !fpv[x.k]; return setFp(fk, p); }) }; }),
+        ctx: !!fpv.ctx, canClose: false, close: set({}),
+        save: set(function () { return o.onSave ? o.onSave(fpv.name) : {}; })
+      }, extra || {});
+    };
+    return { FPS: FPS, keys: Object.keys(FPS), summary: summary, editor: editor };
+  }
+  adminNav(groupsRaw, curKey, go) {
+    // groups / sections holes for the sidebar, the select and the section chips; `go(key)` returns the click handler
+    var find = function (key) { for (var i = 0; i < groupsRaw.length; i++) for (var j = 0; j < groupsRaw[i].items.length; j++) if (groupsRaw[i].items[j].key === key) return { g: groupsRaw[i], s: groupsRaw[i].items[j] }; return null; };
+    var cur = find(curKey) || find(groupsRaw[0].items[0].key);
+    var groups = groupsRaw.map(function (g) { var on = g.key === cur.g.key; return Object.assign({}, g, { on: on, tabCls: on ? 'tab-on' : '', pick: go(g.items[0].key),
+      items: g.items.map(function (i) { var o = i.key === cur.s.key; return Object.assign({}, i, { on: o, cur: o ? 'page' : 'false', cls: o ? 'on' : '', hasN: !!i.n, pick: go(i.key) }); }) }); });
+    var ON = 'background: #DED7EB; border-color: #DED7EB; color: #1D1A28';
+    var sections = cur.g.items.map(function (i) { var o = i.key === cur.s.key; return Object.assign({}, i, { on: o, style: o ? ON : '', hasN: !!i.n, pick: go(i.key) }); });
+    return { cur: cur, groups: groups, sections: sections };
+  }
+
+
+  qaSeed() {
+    // threads, latest activity first; r = replies; d = days since the message (for "Last reply"); role chips for the team, champions and authors
+    var T = 'Platform team', C = 'Champion', A = 'Author';
+    var SB = { ini: 'SB', bg: '#FFDEA0', who: 'Sami Ben Ali', role: T }, MK = { ini: 'MK', bg: '#9CF1F0', who: 'Marta Kowalski', role: C }, MKA = { ini: 'MK', bg: '#9CF1F0', who: 'Marta Kowalski', role: A };
+    var P = function (o, extra) { return Object.assign({}, o, extra); };
+    return {
+      r1: [
+        { id: 'r1t1', ini: 'PS', bg: '#9CF1F0', who: 'Priya Sharma', when: '3 h ago', d: 0.12, text: 'Can a repository opt out of PR summaries? Some of ours only hold generated code.', r: [
+          P(MK, { id: 'r1t1m1', when: '2 h ago', d: 0.08, text: 'Not today as far as I know. You can collapse the summary on each pull request in the meantime.' }),
+          { id: 'r1t1m2', ini: 'PS', bg: '#9CF1F0', who: 'Priya Sharma', when: '1 h ago', d: 0.04, text: 'Collapsing works for us until then, thanks.' } ] },
+        { id: 'r1t2', ini: 'EL', bg: '#FFDEA0', who: 'Emma Laurent', when: '5 h ago', d: 0.2, text: 'Do PR summaries run on draft pull requests?', r: [] },
+        { id: 'r1t3', ini: 'NR', bg: '#E3DFFF', who: 'Nadia Rahal', when: 'yesterday', d: 1, text: 'Is the approval card shown in the VS Code extension too?', r: [
+          P(SB, { id: 'r1t3m1', when: 'today', d: 0.5, text: 'Not yet: the extension opens the approval in the browser. Native cards come with 4.7.' }),
+          { id: 'r1t3m2', ini: 'NR', bg: '#E3DFFF', who: 'Nadia Rahal', when: 'today', d: 0.45, text: 'Good to know. Is there a date for 4.7?' },
+          P(SB, { id: 'r1t3m3', when: 'today', d: 0.4, text: 'Mid-December; it will be announced here in What’s new.' }) ] },
+        { id: 'r1t4', ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', when: 'yesterday', d: 1, text: 'Do the ratings on PR summaries change anything, or are they just stats?', r: [
+          P(MK, { id: 'r1t4m1', when: 'yesterday', d: 1, text: 'They feed the summary prompt directly, so ask your reviewers to rate them: that is how summaries get better for your repositories.' }) ] },
+        { id: 'r1t5', ini: 'KO', bg: '#9CF1F0', who: 'Karim Ouali', when: 'yesterday', d: 1, text: 'Is there a size limit on the diff for a summary?', r: [
+          P(MK, { id: 'r1t5m1', when: 'yesterday', d: 1, text: 'Above 5 000 changed lines the summary covers the files with the most changes and says so at the top.' }) ] },
+        { id: 'r1t6', ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', when: '2 days ago', d: 2, text: 'Does the approval card also show up when a skill calls the tool, not only in chat?', r: [
+          P(SB, { id: 'r1t6m1', when: '2 days ago', d: 2, text: 'Yes. Any tool that deploys, deletes or edits asks first, whoever calls it: chat, a skill or an MCP server.' }),
+          { id: 'r1t6m2', ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', when: '2 days ago', d: 2, text: 'Perfect, that covers our deploy skill.' },
+          { id: 'r1t6m3', ini: 'TD', bg: '#C3F4DC', who: 'Thomas Durand', when: 'yesterday', d: 1, text: 'Same for us with our MCP server: confirmed in staging.' } ] },
+        { id: 'r1t7', ini: 'TD', bg: '#C3F4DC', who: 'Thomas Durand', when: '2 days ago', d: 2, text: 'Can I see afterwards who approved a tool call?', r: [
+          P(SB, { id: 'r1t7m1', when: '2 days ago', d: 2, text: 'Yes, in the activity log of the run: who approved, when, and the arguments that were sent.' }) ] }
+      ],
+      r2: [
+        { id: 'r2t1', ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', when: '3 days ago', d: 3, text: 'Will the old model stay available for a fallback period?', r: [
+          P(SB, { id: 'r2t1m1', when: '3 days ago', d: 3, text: 'Two weeks, per workspace, from Settings › Assistant. After 17 Nov the switch is final.' }),
+          { id: 'r2t1m2', ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', when: '2 days ago', d: 2, text: 'Thanks. We will test on our staging workspace first.' } ] },
+        { id: 'r2t2', ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', when: '3 days ago', d: 3, text: 'Do MCP servers pinned to the old tool schema need a redeploy before 3 November?', r: [] }
+      ],
+      r3: [], r4: [],
+      i1: [
+        { id: 'i1t1', ini: 'EL', bg: '#FFDEA0', who: 'Emma Laurent', when: '15 Oct', d: 13, text: 'Will the partial re-run work from the CLI as well?', r: [
+          P(MKA, { id: 'i1t1m1', when: '16 Oct', d: 12, text: 'That is the next step if the PR page works out; I opened a separate idea for it.' }) ] },
+        { id: 'i1t2', ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', when: '12 Oct', d: 16, text: 'Could the PR page list the checks that will run again before I confirm?', r: [
+          P(MKA, { id: 'i1t2m1', when: '13 Oct', d: 15, text: 'Good point, I added it to the description.' }),
+          P(SB, { id: 'i1t2m2', when: '14 Oct', d: 14, text: 'We will show the list in the confirmation dialog.' }) ] },
+        { id: 'i1t3', ini: 'NR', bg: '#E3DFFF', who: 'Nadia Rahal', when: '6 Oct', d: 22, text: 'Would the re-run reuse the build cache of the failed run?', r: [
+          P(SB, { id: 'i1t3m1', when: '9 Oct', d: 19, text: 'Yes, when the commit is the same, the artefacts of the failed run are reused.' }) ] },
+        { id: 'i1t4', ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', when: '4 Oct', d: 24, text: 'Would scheduled sweeps get the partial re-run too, or only runs started from a pull request?', r: [
+          P(MKA, { id: 'i1t4m1', when: '5 Oct', d: 23, text: 'From the PR page first: that is where the 10 minutes are lost. Scheduled sweeps could follow.' }),
+          { id: 'i1t4m2', ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', when: '5 Oct', d: 23, text: 'Makes sense, scheduled sweeps can wait.' } ] },
+        { id: 'i1t5', ini: 'PS', bg: '#9CF1F0', who: 'Priya Sharma', when: '25 Sep', d: 33, text: 'Same here on monorepos: a full re-run is 25 minutes for us.', r: [
+          { id: 'i1t5m1', ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', when: '26 Sep', d: 32, text: 'Same, and a docs-only change should skip the Test phase too.' },
+          P(SB, { id: 'i1t5m2', when: '2 Oct', d: 26, text: 'Docs-only detection is a separate idea, worth opening.' }) ] }
+      ],
+      i2: [ { id: 'i2t1', ini: 'MK', bg: '#9CF1F0', who: 'Marta Kowalski', when: '6 Oct', d: 22, text: 'Would the exported conversation include the tool calls, or only the messages?', r: [] } ],
+      i3: [], i4: [], i5: [], i6: []
+    };
+  }
+  qaFocusSync() {
+    // after Show more / Show earlier replies, focus goes to the first message that appeared
+    if (typeof document === 'undefined') return;
+    var el = null;
+    if (this._qaFocus) { el = document.getElementById(this._qaFocus); this._qaFocus = null; }
+    else if (this._qaFocusQ) { el = document.getElementById(this._qaFocusQ); this._qaFocusQ = null; }
+    if (el) try { el.focus(); } catch (e) {}
+  }
+  qaVals(key, base, placeholder, me, defOpen) {
+    // me: { who, role } when the viewer posts with a role chip (platform team, author), else null
+    var s = this.state, self = this, om = s.qaOpen || {}, open = om[key] === undefined ? !!defOpen : !!om[key];
+    var ex = (s.qaExtra || {})[key] || [], rx = s.qaReplies || {}, ing = s.qaReplying || {}, rd = s.qaReplyDrafts || {}, er = s.qaEarlier || {}, dr = s.qaDrafts || {};
+    var up = function (path, k, v) { var o = {}; o[path] = Object.assign({}, self.state[path] || {}); o[path][k] = v; return o; };
+    var click = function (f) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState(f()); }; };
+    var typed = function (path, k) { return function (e) { self.setState(up(path, k, e && e.target ? e.target.value : '')); }; };
+    var roleTile = function (r) { return r === 'Champion' ? 'in' : 'ne'; };
+    var deco = function (m) { return Object.assign({}, m, { hasRole: !!m.role, role: m.role || '', roleTile: roleTile(m.role) }); };
+    var mine = function (id, t) { return { id: id, ini: 'AH', bg: '#DED7EB', who: 'Aurélien Heux', role: me ? me.role : '', when: 'just now', d: 0, text: t }; };
+    // your new threads first, then the seed (latest activity first)
+    var list = ex.slice().reverse().concat(base || []).map(function (q) {
+      var replies = (q.r || []).concat(rx[q.id] || []).map(deco), all = !!er[q.id], KEEP = 2;
+      var shown = all || replies.length <= KEEP ? replies : replies.slice(replies.length - KEEP), hidden = replies.length - shown.length;
+      return Object.assign(deco(q), {
+        replies: replies, shownReplies: shown, hasReplies: replies.length > 0, hasHidden: hidden > 0,
+        earlierLabel: 'Show ' + hidden + (hidden > 1 ? ' earlier replies' : ' earlier reply'),
+        showEarlier: function (e) { if (e && e.preventDefault) e.preventDefault(); if (replies[0]) self._qaFocusQ = 'qa-m-' + replies[0].id; self.setState(up('qaEarlier', q.id, true)); },
+        repliesLabel: replies.length ? replies.length + (replies.length > 1 ? ' replies' : ' reply') : 'No reply yet',
+        lastD: replies.length ? Math.min.apply(null, replies.map(function (m) { return m.d; })) : q.d,
+        teamIn: replies.some(function (m) { return m.role === 'Platform team'; }),
+        replying: !!ing[q.id], replyId: 'qa-rf-in-' + q.id, replyDraft: rd[q.id] || '', onReplyDraft: typed('qaReplyDrafts', q.id),
+        startReply: click(function () { return up('qaReplying', q.id, !(self.state.qaReplying || {})[q.id]); }),
+        sendReply: click(function () { var t = ((self.state.qaReplyDrafts || {})[q.id] || '').trim(); if (!t) return {}; var cur = (self.state.qaReplies || {})[q.id] || [];
+          return Object.assign(up('qaReplies', q.id, cur.concat([mine(q.id + '-r' + (cur.length + 1), t)])), up('qaReplyDrafts', q.id, ''), up('qaReplying', q.id, false), up('qaEarlier', q.id, true)); })
+      });
+    });
+    var nMsg = list.reduce(function (n, q) { return n + 1 + q.replies.length; }, 0);
+    var people = []; list.forEach(function (q) { [q].concat(q.replies).forEach(function (m) { if (people.length < 3 && !people.some(function (p) { return p.ini === m.ini; })) people.push({ ini: m.ini, bg: m.bg }); }); });
+    var lastD = list.length ? Math.min.apply(null, list.map(function (q) { return q.lastD; })) : null;
+    var lastWhen = (function () { var best = null; list.forEach(function (q) { [q].concat(q.replies).forEach(function (m) { if (!best || m.d < best.d) best = m; }); }); return best ? best.when : ''; })();
+    var teamIn = list.some(function (q) { return q.teamIn; });
+    var setOpen = function (v) { return function (e) { if (e && e.preventDefault) e.preventDefault();
+      var o = Object.assign({}, self.state.qaOpen || {}); o[key] = v; var sh = Object.assign({}, self.state.qaShown || {}); delete sh[key]; var lv = Object.assign({}, self.state.qaLive || {}); delete lv[key];
+      self.setState({ qaOpen: o, qaShown: sh, qaLive: lv }); }; };
+    // pages of three threads: Show more reveals the next three and moves focus to the first of them
+    var PAGE = 3, shownN = Math.max(PAGE, (s.qaShown || {})[key] || PAGE), nextN = Math.min(PAGE, Math.max(0, list.length - shownN));
+    var showMore = function (e) { if (e && e.preventDefault) e.preventDefault(); var first = list[shownN]; if (first) self._qaFocusQ = 'qa-q-' + first.id;
+      var n = Math.min(list.length, shownN + PAGE), sh = Object.assign({}, self.state.qaShown || {}); sh[key] = n; var lv = Object.assign({}, self.state.qaLive || {}); lv[key] = (n - shownN) + (n - shownN > 1 ? ' more threads shown, ' : ' more thread shown, ') + n + ' of ' + list.length;
+      self.setState({ qaShown: sh, qaLive: lv }); };
+    var counts = list.length + (list.length === 1 ? ' thread' : ' threads') + ' · ' + nMsg + (nMsg === 1 ? ' message' : ' messages');
+    return { qaOpen: open, qaClosed: !open, qaPanelCls: open ? 'open' : '', qaAction: open ? 'Hide' : 'Show', qaListId: 'qa-l-' + key,
+      qaToggle: setOpen(!open), qaTogId: 'qa-t-' + key, qaRegionId: 'qa-r-' + key,
+      qaPage: list.slice(0, shownN), qaHasNext: nextN > 0, qaNextN: nextN, qaMoreBtn: 'Show ' + nextN + ' more thread' + (nextN > 1 ? 's' : ''), qaShowMore: showMore,
+      qaShownLabel: Math.min(shownN, list.length) + ' of ' + list.length + ' threads shown', qaLive: (s.qaLive || {})[key] || '',
+      qaCountsLabel: list.length ? counts : '', qaTeamIn: teamIn, qaHasPeople: people.length > 0, qaPeople: people,
+      qaLastLabel: lastWhen ? 'Last message ' + lastWhen : 'No messages yet',
+      qaBarAria: 'Discussion · ' + (list.length ? counts.replace(' · ', ', ') : 'no messages yet') + (teamIn ? ', platform team replied' : '') + (lastWhen ? ', last message ' + lastWhen : ''),
+      qaSummary: list.length ? counts : 'No messages yet', qaMsgCount: nMsg,
+      qa: list, qaN: list.length, qaEmpty: !list.length,
+      qaAskId: 'qa-ask-' + key, qaDraft: dr[key] || '', qaPlaceholder: placeholder, qaOnDraft: typed('qaDrafts', key),
+      qaAsk: click(function () { var t = ((self.state.qaDrafts || {})[key] || '').trim(); if (!t) return {}; var cur = (self.state.qaExtra || {})[key] || []; var m = mine(key + '-t' + (cur.length + 1), t); m.r = [];
+        return Object.assign(up('qaExtra', key, cur.concat([m])), up('qaDrafts', key, '')); }) };
+  }
+
+  componentDidMount() { var self = this; this.simSync(); if (typeof window !== 'undefined') window.addEventListener('resize', function () { self.simSync(); }); }
+  componentDidUpdate() { this.simSync(); this.qaFocusSync(); }
+  renderVals() {
+    var s = this.state, self = this, sim = this.simVals();
+    var set = function (o) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState(typeof o === 'function' ? o(e) : o); }; };
+    var val = function (e) { return e && e.target ? e.target.value : ''; };
+    var ON = 'background: #DED7EB; border-color: #DED7EB; color: #1D1A28';
+    var role = s.role, platform = role === 'platform', champion = role === 'champion';
+    var ME = { user: { who: 'Priya Sharma', team: 'Request' }, champion: { who: 'Marta Kowalski', team: 'Client' }, platform: { who: 'Aurélien Heux', team: 'Platform' } }[role];
+
+    // ---- tools: what skills and runs can call
+    var TOOLS = {
+      t_deploy: { name: 'Deploy environment', write: true, src: 'Environments' },
+      t_reserve: { name: 'Reserve environment', write: true, src: 'Environments' },
+      t_jira: { name: 'Create Jira ticket', write: true, src: 'Jira' },
+      t_logs: { name: 'Read run logs', write: false, src: 'Sweep' },
+      t_pipe: { name: 'Run pipeline', write: true, src: 'DevOps' },
+      t_pipestat: { name: 'Read pipeline status', write: false, src: 'DevOps' },
+      t_build: { name: 'Read build logs', write: false, src: 'DevOps' },
+      t_pr: { name: 'Open pull request', write: true, src: 'DevOps' },
+      t_kb: { name: 'Search the knowledge base', write: false, src: 'Knowledge base' },
+      t_arch: { name: 'Query the architecture model', write: false, src: 'Knowledge base' }
+    };
+    var ITEMS = [
+      { id: 'm1', kind: 'MCP server', name: 'DevOps', by: 'Platform team', team: 'Platform', aud: 'Everyone', usage: 3100, version: '2.3', tools: ['t_pipestat', 't_build', 't_pipe', 't_pr'], works: ['Assistant', 'Sweep'], desc: 'Pipelines, builds, deployments and pull requests on the DevOps platform. Reading is open; running a pipeline or opening a pull request asks first.', examples: ['Why did the credit-request pipeline fail last night?', 'Re-run the integration stage on build 4821'], source: 'MCP · devops.example.internal', reviewed: true },
+      { id: 'm2', kind: 'MCP server', name: 'Knowledge base', by: 'Platform team', team: 'Platform', aud: 'Everyone', usage: 2480, version: '1.4', tools: ['t_kb', 't_arch'], works: ['Assistant', 'Sweep'], desc: 'Docs, runbooks, the architecture model and ARB decisions, searched and read with their source. Reads only.', examples: ['What is the rollback procedure for facility-management?', 'Which modules depend on client-referential?'], source: 'MCP · kb.example.internal', reviewed: true },
+      { id: 't1', kind: 'Tool', name: 'Deploy environment', by: 'Environments team', team: 'Release', aud: 'Everyone', usage: 860, version: '1.2', tools: ['t_deploy'], works: ['Assistant', 'Sweep'], desc: 'Deploys a module branch to an environment: checks reservations, opens the auto-merge pull request and follows the first rollout.', examples: ['Deploy credit-request feature/limits to staging-2'], source: 'Built-in · Environments', reviewed: true },
+      { id: 't2', kind: 'Tool', name: 'Reserve environment', by: 'Environments team', team: 'Release', aud: 'Everyone', usage: 310, version: '1.2', tools: ['t_reserve'], works: ['Assistant'], desc: 'Reserves an environment for a module until a date, with a reason; extend or release it later.', examples: ['Reserve staging-2 for credit-request until Friday'], source: 'Built-in · Environments', reviewed: true },
+      { id: 't3', kind: 'Tool', name: 'Create Jira ticket', by: 'Platform team', team: 'Platform', aud: 'Everyone', usage: 640, version: '2.1', tools: ['t_jira'], works: ['Assistant', 'Sweep'], desc: 'Creates a ticket in the project of the repository, with the run or the conversation attached as context.', examples: ['Open a ticket for the flaky facility export test'], source: 'Jira connector', reviewed: true },
+      { id: 's1', kind: 'Skill', name: 'Spring Boot 3 migration', by: 'Marta Kowalski', team: 'Client', aud: 'Everyone', usage: 212, version: '1.4.0', tools: ['t_logs', 't_pipe', 't_pr'], works: ['Assistant', 'Sweep'], desc: 'Upgrades a service to Spring Boot 3, runs the pipeline and opens a pull request with what changed.', examples: ['Migrate credit-request to Spring Boot 3 on a branch'], source: 'Git · client/skill-spring-boot-3', reviewed: true },
+      { id: 's2', kind: 'Skill', name: 'Incident runbook', by: 'Lucas Bernard', team: 'Facility', aud: 'Everyone', usage: 188, version: '1.1.0', tools: ['t_kb', 't_logs', 't_jira'], works: ['Assistant'], desc: 'Walks the on-call engineer through the incident checklist with the right runbook, recent logs, and a ticket at the end.', examples: ['Facility exports are failing since 02:00, where do I start?'], source: 'Written in the app', reviewed: true },
+      { id: 's3', kind: 'Skill', name: 'Release notes from changelog', by: 'Sami Ben Ali', team: 'Platform', aud: 'Everyone', usage: 356, version: '2.0.1', tools: ['t_pipestat', 't_kb'], works: ['Assistant'], desc: 'Drafts a What’s new entry from the changelog and the pull request summaries.', examples: ['Draft the release notes for 4.6.1'], source: 'Git · platform/skill-release-notes', reviewed: true },
+      { id: 's4', kind: 'Skill', name: 'Deploy to staging with checks', by: 'Karim Ouali', team: 'Request', aud: 'Request', usage: 41, version: '0.4.0', tools: ['t_pipestat', 't_reserve', 't_deploy'], works: ['Assistant', 'Sweep'], desc: 'Checks the pipeline is green, reserves a staging environment if needed, deploys, then reports the rollout.', examples: ['Ship my branch to staging'], source: 'Written in the app', reviewed: false },
+      { id: 's5', kind: 'Skill', name: 'Flaky test triage', by: 'you', team: 'Request', aud: 'Just you', usage: 6, version: '0.1.0', tools: ['t_logs', 't_jira'], works: ['Assistant'], desc: 'Finds tests that fail only sometimes, groups them by cause and opens one ticket per cause.', examples: ['Which tests were flaky this week on credit-request?'], source: 'Written in the app', mine: true, stage: 'Draft' },
+      { id: 's6', kind: 'Skill', name: 'Liquibase changelog review', by: 'Yann Dupont', team: 'Environments', aud: 'Everyone', usage: 0, version: '1.0.0', tools: ['t_kb', 't_jira'], works: ['Assistant', 'Sweep'], desc: 'Reviews a Liquibase changelog: destructive changes, missing rollbacks, naming.', examples: ['Review the changelog in PR #4830'], source: 'Git · environments/skill-liquibase-review', stage: 'In review' }
+    ];
+    var KAB = { Skill: 'SK', Tool: 'TL', 'MCP server': 'MCP' }, KCLS = { Skill: 'k-skill', Tool: 'k-tool', 'MCP server': 'k-mcp' };
+    var writesOf = function (it) { return it.tools.filter(function (k) { return TOOLS[k].write; }); };
+    var deco = function (it) { return Object.assign({}, it, { kab: KAB[it.kind], kcls: KCLS[it.kind], byShort: it.kind === 'Skill' ? it.by + ' · ' + it.team : it.by, usageShort: it.usage ? it.usage.toLocaleString('en') + ' uses' : 'Not used yet', audience: it.aud, open: set({ screen: 'item', skill: it.id, snack: null }) }); };
+    var published = ITEMS.filter(function (it) { return !it.stage && (it.aud === 'Everyone' || it.aud === ME.team); });
+    var KINDS = [ { k: 'all', label: 'All' }, { k: 'Skill', label: 'Skills' }, { k: 'Tool', label: 'Tools' }, { k: 'MCP server', label: 'MCP servers' } ];
+    var kindChips = KINDS.map(function (k) { var on = s.kind === k.k; return { label: k.label, on: on, pick: set({ kind: k.k }) }; });
+    var browse = published.filter(function (it) { return s.kind === 'all' || it.kind === s.kind; }).sort(function (a, b) { return b.usage - a.usage; }).map(deco);
+    var STAGE_TILE = { Draft: 'ne', 'In review': 'wn', Published: 'ok' };
+    var mineRaw = ITEMS.filter(function (it) { return it.mine || (role === 'champion' && it.id === 's1') || (role === 'platform' && it.id === 's3'); });
+    if (s.published) mineRaw = [ { id: 'sNew', kind: 'Skill', name: s.nsName || 'Flaky test triage', by: 'you', team: ME.team, aud: s.published.aud, usage: 0, version: '1.0.0', tools: [], works: ['Assistant'], desc: s.nsDesc, examples: [], stage: s.published.stage } ].concat(mineRaw.filter(function (it) { return it.id !== 's5'; }));
+    var mine = mineRaw.map(function (it) { var st = it.stage || 'Published'; return Object.assign(deco(it), { stage: st, stTile: STAGE_TILE[st], nextLabel: st === 'Draft' ? 'Continue' : st === 'In review' ? 'Open' : 'New version', next: st === 'Draft' ? set({ screen: 'new', step: 1, nsName: it.name, nsDesc: it.desc, nsEx1: it.examples[0] || '', published: null }) : set({ screen: 'item', skill: it.id === 'sNew' ? 's5' : it.id }) }); });
+    var cTabs = [ { k: 'browse', label: 'Browse' }, { k: 'mine', label: 'Mine', n: mine.length } ].map(function (t) { var on = s.tab === t.k; return { label: t.label, n: t.n, hasN: !!t.n, on: on, cls: on ? 'tab-on' : '', pick: set({ tab: t.k }) }; });
+
+    // ---- item page
+    var skRaw = ITEMS.filter(function (it) { return it.id === s.skill; })[0] || ITEMS[0], sk = deco(skRaw);
+    var added = !!s.added[sk.id], writes = writesOf(skRaw);
+    var lower = function (t) { return t.charAt(0).toLowerCase() + t.slice(1); };
+    Object.assign(sk, {
+      by: sk.kind === 'Skill' ? sk.by + ' · ' + sk.team : sk.by, version: 'v' + sk.version,
+      forAssistant: sk.works.indexOf('Assistant') >= 0, added: added, addLabel: added ? 'In my assistant' : 'Add to my assistant', addCls: added ? 't' : 'f',
+      toggleAdd: set(function () { var a = Object.assign({}, s.added); a[sk.id] = !added; return { added: a, snack: !added ? sk.name + ' is in your assistant’s Tools menu.' : sk.name + ' removed from your assistant.' }; }),
+      writes: writes.length > 0, writeNote: 'Asks before it does anything that changes something: ' + writes.map(function (k) { return lower(TOOLS[k].name); }).join(', ') + '.',
+      hasEx: sk.examples.length > 0, examples: sk.examples.map(function (t) { return { text: t, tryIt: set({ snack: 'Assistant opened with ' + sk.name + ' on for this conversation.' }) }; }),
+      toolsTitle: sk.kind === 'MCP server' ? 'Tools it provides' : sk.kind === 'Tool' ? 'Action' : 'Uses',
+      tools: sk.tools.map(function (k) { var t = TOOLS[k]; return { name: t.name, note: (t.write ? 'changes something · ' : '') + t.src }; }),
+      foot: [sk.reviewed ? 'Reviewed' : (sk.stage || (sk.aud === 'Everyone' ? '' : 'Shared with ' + sk.aud)), sk.usage ? sk.usage.toLocaleString('en') + ' uses in 30 days' : '', sk.works.join(' and '), sk.source].filter(Boolean).join(' · ')
+    });
+    var qaAs = platform ? { who: ME.who, role: 'Platform team' } : champion ? { who: ME.who, role: 'Champion' } : null;
+    var SKQA = { s1: [ { id: 'skq1', ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', when: '2 days ago', d: 2, text: 'Does it handle Spring Security 6 config, or do we do that by hand?', r: [ { id: 'skq1a', ini: 'MK', bg: '#9CF1F0', who: 'Marta Kowalski', role: 'Author', when: 'yesterday', d: 1, text: 'Since 1.4.0 it rewrites the common patterns and stops to ask on anything custom.' } ] } ], m1: [ { id: 'mq1', ini: 'NR', bg: '#E3DFFF', who: 'Nadia Rahal', when: 'yesterday', d: 1, text: 'Can it read pipelines of repositories my team does not own?', r: [ { id: 'mq1a', ini: 'SB', bg: '#FFDEA0', who: 'Sami Ben Ali', role: 'Platform team', when: 'today', d: 0.3, text: 'Only those you can open on the DevOps platform: it uses your own rights.' } ] } ] };
+    Object.assign(sk, this.qaVals('sk-' + sk.id, SKQA[sk.id] || [], 'Ask the author or share how it went…', sk.mine ? { who: ME.who, role: 'Author' } : qaAs, false));
+
+    // ---- publish a skill
+    var stepName = ['Write', 'Test', 'Submit', 'Review', 'Published'];
+    var skipped = s.published && s.scope !== 'org';
+    var proc = stepName.map(function (l, i) { var n = i + 1; return { n: n, label: l, cls: n === s.step ? 'on' : (n < s.step && !(n === 4 && skipped) ? 'done' : ''), cur: n === s.step ? 'step' : 'false', more: i < stepName.length - 1 }; });
+    var nsTools = Object.keys(TOOLS).filter(function (k) { return s.nsTools[k]; }), nsWrites = nsTools.filter(function (k) { return TOOLS[k].write; });
+    var PICK = ['t_logs', 't_kb', 't_pipestat', 't_jira', 't_deploy', 't_pr'];
+    var toolChips = PICK.map(function (k) { var on = !!s.nsTools[k]; return { label: TOOLS[k].name, on: on, style: on ? ON : '', pick: set(function () { var t = Object.assign({}, s.nsTools); t[k] = !on; return { nsTools: t }; }) }; });
+    var nsNameOr = s.nsName || 'Flaky test triage', nsEx1Or = s.nsEx1 || 'Which tests were flaky this week on credit-request?';
+    var G = '#006D3B', A = '#7A5900';
+    var checks = [ { label: 'Manifest', note: 'Name, one line, ' + nsTools.length + ' tools, 1 example', icon: '✓', color: G },
+      { label: 'No secrets in the text', note: 'Instructions and example scanned', icon: '✓', color: G },
+      { label: 'Tools exist', note: nsTools.map(function (k) { return TOOLS[k].name; }).join(', ') || 'None: instructions only', icon: '✓', color: G },
+      { label: nsWrites.length ? 'Changes something' : 'Reads only', note: nsWrites.length ? 'Because of ' + nsWrites.map(function (k) { return TOOLS[k].name; }).join(', ') + '. It will ask first.' : 'Worked out from its tools', icon: nsWrites.length ? '!' : '✓', color: nsWrites.length ? A : G } ];
+    var wTool = nsWrites[0];
+    var tryTools = nsTools.slice(0, 3).map(function (k) { var t = TOOLS[k]; return { name: t.name, st: t.write ? (s.tryAppr ? 'done' : 'waiting for you') : 'done' }; });
+    var scopes = [ { k: 'me', label: 'Just me', note: 'Live at once, for you only.' }, { k: 'team', label: 'My team · ' + ME.team, note: 'Live at once. Your team is responsible for it.' }, { k: 'org', label: 'Everyone', note: 'A champion or a platform admin reviews it first, within 2 working days.' } ].map(function (x) { var on = s.scope === x.k; return Object.assign(x, { on: on, cls: on ? 'on' : '', pick: set({ scope: x.k }) }); });
+    var AUD = { me: 'Just you', team: ME.team, org: 'Everyone' };
+    var submit = set(function () { var org = s.scope === 'org'; return { step: org ? 4 : 5, published: { aud: org ? 'Everyone, once reviewed' : AUD[s.scope], stage: org ? 'In review' : 'Published' }, live: org ? 'Sent for review' : 'Published' }; });
+
+    // ---- administration
+    var core = { key: 'core', label: 'Core', core: true, items: [ { key: 'general', label: 'General' }, { key: 'users', label: 'Users and permissions', n: 1 }, { key: 'groups', label: 'Groups' }, { key: 'audit', label: 'Audit log' }, { key: 'catalog', label: 'Catalog', n: 2 } ] };
+    var sweep = { key: 'sweep', label: 'Sweep', isSweep: true, items: [ { key: 'connectors', label: 'Connectors', n: 1 }, { key: 'stools', label: 'Tools and skills' } ] };
+    var comm = { key: 'new', label: 'Community', isNew: true, items: [ { key: 'releases', label: 'Releases' }, { key: 'tours', label: 'Tours' }, { key: 'listen', label: 'Feedback' }, { key: 'ideas', label: 'Ideas triage' }, { key: 'insights', label: 'Insights' } ] };
+    var groupsRaw = platform ? [core, sweep, comm] : [ { key: 'core', label: 'Core', core: true, items: [ { key: 'catalog', label: 'Catalog review', n: 2 } ] } ];
+    var goA = function (key) { return set({ screen: 'admin', adminPage: key, rv: null }); };
+    var nav = this.adminNav(groupsRaw, s.adminPage, goA), cur = nav.cur, akey = cur.s.key;
+    var aDefs = [ { k: 'review', label: 'Review', n: 2 }, { k: 'items', label: 'Items' }, { k: 'policies', label: 'Policies' } ].filter(function (t) { return platform || t.k === 'review'; });
+    var aTab = aDefs.some(function (t) { return t.k === s.aTab; }) ? s.aTab : 'review';
+    var aTabs = aDefs.map(function (t) { var on = aTab === t.k; return { label: t.label, n: t.n, hasN: !!t.n, on: on, cls: on ? 'tab-on' : '', pick: set({ aTab: t.k, rv: null }) }; });
+    var queue = [ { id: 's6', name: 'Liquibase changelog review', by: 'Yann Dupont · Environments', when: '2 days ago', desc: 'Destructive changes, missing rollbacks, naming.' }, { id: 'q2', name: 'Explain a failed quality gate', by: 'Emma Laurent · Docs', when: 'yesterday', desc: 'Says what to fix first, with the lines.' } ].map(function (q) { return Object.assign(q, { open: set({ rv: q.id }) }); });
+    var rvDefs = [ 'I tried it and it does what it says', 'No sensitive data in the instructions or the example', 'The actions that change something are needed' ];
+    var rvChecks = rvDefs.map(function (l, i) { var on = !!s.rvChecks[i]; return { label: l, on: on, toggle: set(function () { var c = Object.assign({}, s.rvChecks); c[i] = !on; return { rvChecks: c }; }) }; });
+    var rvReady = rvDefs.every(function (l, i) { return s.rvChecks[i]; });
+    var rv = { name: 'Liquibase changelog review', by: 'Yann Dupont · Environments', when: 'submitted 2 days ago', body: '1. Read the changelog files in the pull request.\n2. Flag destructive changes and changesets without a rollback.\n3. Check naming against the conventions in the knowledge base.\n4. For anything blocking, create one Jira ticket in the project of the repository and link it in the review.', tools: 'Search the knowledge base, Create Jira ticket', note: 'tried on 6 pull requests in Environments' };
+    Object.assign(rv, this.qaVals('rv-s6', [ { id: 'rvq1', ini: 'MK', bg: '#9CF1F0', who: 'Marta Kowalski', role: 'Champion', when: 'yesterday', d: 1, text: 'One ticket per pull request, not one per finding?', r: [ { id: 'rvq1a', ini: 'YD', bg: '#C3F4DC', who: 'Yann Dupont', role: 'Author', when: 'today', d: 0.3, text: 'Yes, step 4 says one ticket; the other findings go in the review comment.' } ] } ], 'Write to the author…', qaAs || { who: ME.who, role: '' }, false));
+    var WRITE_ACTIONS = [ ['t_deploy', 'ask', 'ask'], ['t_reserve', 'ask', 'off'], ['t_jira', 'ask', 'always'], ['t_pipe', 'ask', 'always'], ['t_pr', 'ask', 'always'] ];
+    var policyRows = WRITE_ACTIONS.map(function (w) { var k = w[0], pk = s.pol[k] || {}; return { name: TOOLS[k].name, src: TOOLS[k].src, a: pk.a || w[1], s: pk.s || w[2], onA: set(function (e) { var p = Object.assign({}, s.pol); p[k] = Object.assign({}, pk, { a: val(e) }); return { pol: p }; }), onS: set(function (e) { var p = Object.assign({}, s.pol); p[k] = Object.assign({}, pk, { s: val(e) }); return { pol: p }; }) }; });
+    var PH = ['implement', 'review', 'test', 'release'];
+    var sweepRows = ITEMS.filter(function (it) { return it.works.indexOf('Sweep') >= 0 && !it.stage && it.aud === 'Everyone'; }).map(function (it) { var d = deco(it), on = s.sweepOn[it.id] || {}; return { name: it.name, kab: d.kab, kcls: d.kcls, cells: PH.map(function (p) { var v = !!on[p]; return { on: v, aria: it.name + ' in ' + p, toggle: set(function () { var all = Object.assign({}, s.sweepOn); all[it.id] = Object.assign({}, on); all[it.id][p] = !v; return { sweepOn: all }; }) }; }) }; });
+
+    // ---- lab chrome
+    var SCREENS = [ { k: 'catalog', label: 'Catalog', o: { screen: 'catalog', tab: 'browse' } }, { k: 'item', label: 'Item page', o: { screen: 'item', skill: 'm1' } }, { k: 'new', label: 'Publish a skill', o: { screen: 'new', step: 1, published: null, tryAppr: false } }, { k: 'review', label: 'Admin · Review', o: { screen: 'admin', adminPage: 'catalog', aTab: 'review', rv: null } }, { k: 'stools', label: 'Admin · Sweep tools', o: { screen: 'admin', adminPage: 'stools' } } ];
+    var curScreen = s.screen === 'admin' ? (s.adminPage === 'stools' ? 'stools' : 'review') : s.screen;
+    var screenChips = SCREENS.map(function (x) { var on = curScreen === x.k; return { label: x.label, on: on, style: on ? ON : '', pick: set(Object.assign({ snack: null }, x.o)) }; });
+    var roleChips = [ { k: 'user', label: 'User' }, { k: 'champion', label: 'Champion' }, { k: 'platform', label: 'Platform admin' } ].map(function (r) { var on = role === r.k; return { label: r.label, on: on, style: on ? ON : '', pick: set(function () { var o = { role: r.k, rv: null }; if (r.k === 'user' && s.screen === 'admin') { o.screen = 'catalog'; o.snack = 'Without a reviewer or admin right there is no Administration entry.'; } if (r.k === 'champion' && s.screen === 'admin') { o.adminPage = 'catalog'; o.aTab = 'review'; } return o; }) }; });
+    var isAdm = s.screen === 'admin' && role !== 'user';
+    var hdr = isAdm ? ['Administration · ' + cur.g.label, cur.s.label + ' · ' + ({ catalog: '2 skills to review', stools: 'per phase', connectors: '5 connectors' }[akey] || '')]
+      : s.screen === 'item' ? ['Catalog · ' + sk.kind, sk.name] : s.screen === 'new' ? ['Catalog · Publish a skill', stepName[s.step - 1] + ' · ' + nsNameOr] : ['Catalog', published.length + ' items for the assistant and Sweep'];
+    var pubAud = s.published ? s.published.aud : '';
+    return Object.assign(sim, { screenChips: screenChips, roleChips: roleChips, live: s.live || '', hasSnack: !!s.snack, snack: s.snack || '', closeSnack: set({ snack: null }),
+      hdrFeature: hdr[0], hdrSummary: hdr[1], railCat: !isAdm, railAdm: isAdm,
+      sCatalog: s.screen === 'catalog' || (s.screen === 'admin' && role === 'user'), sItem: s.screen === 'item', sNew: s.screen === 'new', sAdmin: isAdm,
+      cTabs: cTabs, tBrowse: s.tab === 'browse', tMine: s.tab === 'mine', kindChips: kindChips, items: browse, mine: mine,
+      goNew: set({ screen: 'new', step: 1, published: null, tryAppr: false, snack: null }), goCatalog: set({ screen: 'catalog', snack: null }),
+      sk: sk, reportIt: set({ snack: 'Reported to Community › Feedback with the item and its version attached.' }),
+      proc: proc, nWrite: s.step === 1, nTest: s.step === 2, nSubmit: s.step === 3, nReview: s.step === 4, nDone: s.step === 5,
+      nsName: s.nsName, onNsName: set(function (e) { return { nsName: val(e) }; }), nsDesc: s.nsDesc, onNsDesc: set(function (e) { return { nsDesc: val(e) }; }), nsBody: s.nsBody, onNsBody: set(function (e) { return { nsBody: val(e) }; }), nsEx1: s.nsEx1, onNsEx1: set(function (e) { return { nsEx1: val(e) }; }),
+      toolChips: toolChips, srcLink: s.src === 'git' ? 'Reading devops.example.internal/request/skill-flaky-tests · write here instead' : 'Or import from a Git repository', pickSrcGit: set({ src: s.src === 'git' ? 'app' : 'git' }),
+      saveDraft: set({ snack: 'Draft saved in Mine.' }), toWrite: set({ step: 1 }), toTest: set({ step: 2 }), toSubmit: set({ step: 3 }),
+      nsNameOr: nsNameOr, nsEx1Or: nsEx1Or, checks: checks, tryN: tryTools.length, tryTools: tryTools,
+      tryNeedsAppr: !!wTool && !s.tryAppr, tryApprQ: wTool ? TOOLS[wTool].name + '?' : '', tryApprArgs: wTool === 't_jira' ? 'project SWP · “Flaky: FacilityExportTest” · Bug' : wTool === 't_deploy' ? 'credit-request · feature/flaky · staging-2' : 'credit-request · build 4821', tryApprove: set({ tryAppr: true }),
+      tryAnswer: wTool && !s.tryAppr ? 'Three tests in FacilityExportTest fail on and off, all for one cause: a fixed timestamp in the fixture. I can ' + lower(TOOLS[wTool].name) + ' once you approve.' : 'Three tests in FacilityExportTest fail on and off, all for one cause: a fixed timestamp in the fixture. Fix: use the test clock.' + (wTool === 't_jira' ? ' Ticket SWP-1288 created.' : ''),
+      scopes: scopes, scopeOrg: s.scope === 'org', submitCta: s.scope === 'org' ? 'Send for review' : 'Publish', submit: submit,
+      simulateApprove: set({ step: 5, published: { aud: 'Everyone', stage: 'Published' } }), openMine: set({ screen: 'catalog', tab: 'mine' }),
+      doneText: '“' + nsNameOr + '” is published for ' + ({ 'Just you': 'you', Everyone: 'everyone' }[pubAud] || 'your team') + '. It is in the assistant’s Tools menu now; a new version goes through Test again.',
+      groups: nav.groups, page: akey, pageTitle: cur.s.label, onSelect: function (e) { var k = e && e.target ? e.target.value : null; if (k) goA(k)(e); },
+      aCatalog: akey === 'catalog', aTabs: aTabs, aReview: akey === 'catalog' && aTab === 'review', aItems: akey === 'catalog' && aTab === 'items', aPolicies: akey === 'catalog' && aTab === 'policies', aSweep: akey === 'stools', aOther: ['catalog', 'stools'].indexOf(akey) < 0,
+      rvList: !s.rv, rvOpen: !!s.rv, queue: queue, rv: rv, rvBack: set({ rv: null }), rvChecks: rvChecks, rvNotReady: !rvReady,
+      rvPublish: rvReady ? set({ rv: null, snack: 'Liquibase changelog review is published for everyone. Yann Dupont is notified.' }) : set({}), rvChanges: set({ rv: null, snack: 'Yann Dupont sees your request in the skill’s discussion.' }),
+      adminItems: ITEMS.filter(function (it) { return s.kind === 'all' || it.kind === s.kind; }).map(deco), policyRows: policyRows, phases: PH, sweepRows: sweepRows });
+  }
+}
+</script>
+</body>
+</html>

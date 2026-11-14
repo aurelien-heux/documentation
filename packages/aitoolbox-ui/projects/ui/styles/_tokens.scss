@@ -1,0 +1,176 @@
+/* AIToolbox — generated from tokens.json (v4.5.0) by tools/build-tokens.mjs. Do not edit by hand. */
+/* Colours use light-dark(): they follow `color-scheme`, which the theme files set (html.light / html.dark, or the system setting). */
+
+@font-face {
+  font-family: 'BNPP Type';
+  src: url('../fonts/BNPPType-Regular.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --md-sys-color-primary: light-dark(#35307e, #c4c0ff);
+  --md-sys-color-on-primary: light-dark(#ffffff, #2a2473);
+  --md-sys-color-primary-container: light-dark(#e3dfff, #413c8a);
+  --md-sys-color-on-primary-container: light-dark(#14085e, #e3dfff);
+  --md-sys-color-secondary: light-dark(#514f71, #c6c2ea);
+  --md-sys-color-on-secondary: light-dark(#ffffff, #2e2d4d);
+  --md-sys-color-secondary-container: light-dark(#e3dfff, #454364);
+  --md-sys-color-on-secondary-container: light-dark(#191836, #e3dfff);
+  --md-sys-color-tertiary: light-dark(#005232, #00f29e);
+  --md-sys-color-run: light-dark(#0d0b14, #ece5f8);
+  --md-sys-color-on-run: light-dark(#ffffff, #14121e);
+  --md-sys-color-run-icon: light-dark(#00f29e, #006c44);
+  --md-sys-color-on-tertiary: light-dark(#ffffff, #002111);
+  --md-sys-color-tertiary-container: light-dark(#50ffaf, #005232);
+  --md-sys-color-on-tertiary-container: light-dark(#002111, #50ffaf);
+  --md-sys-color-error: light-dark(#93000a, #ffb4ab);
+  --md-sys-color-on-error: light-dark(#ffffff, #690005);
+  --md-sys-color-error-container: light-dark(#ffdad6, #93000a);
+  --md-sys-color-on-error-container: light-dark(#410002, #ffdad6);
+  --md-sys-color-surface: light-dark(#fdf8fd, #14121e);
+  --md-sys-color-on-surface: light-dark(#1c1b1e, #ece5f8);
+  --md-sys-color-surface-variant: light-dark(#e6e0ec, #494458);
+  --md-sys-color-on-surface-variant: light-dark(#48454e, #cac3dc);
+  --md-sys-color-surface-dim: light-dark(#ddd9dd, #14121e);
+  --md-sys-color-surface-bright: light-dark(#fdf8fd, #484553);
+  --md-sys-color-nav-container: light-dark(#ede4ff, #1d1a27);
+  --md-sys-color-nav-active: light-dark(#d4d0f9, #454364);
+  --md-sys-color-surface-container-lowest: light-dark(#ffffff, #0f0c19);
+  --md-sys-color-surface-container-low: light-dark(#faf4ff, #1d1a27);
+  --md-sys-color-surface-container: light-dark(#f8f1ff, #23202d);
+  --md-sys-color-surface-container-high: light-dark(#f2ebfa, #2b2836);
+  --md-sys-color-surface-container-highest: light-dark(#ece5f4, #363341);
+  --md-sys-color-outline: light-dark(#79757f, #948da5);
+  --md-sys-color-outline-variant: light-dark(#cac4cf, #494458);
+  --md-sys-color-inverse-surface: light-dark(#313033, #e6dff2);
+  --md-sys-color-inverse-on-surface: light-dark(#f4eff4, #322e3c);
+  --md-sys-color-inverse-primary: light-dark(#c4c0ff, #413c8a);
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-ai: #80d5d4;
+  --md-sys-color-on-ai: #003737;
+  --md-sys-color-ai-container: light-dark(#9cf1f0, #004f50);
+  --md-sys-color-on-ai-container: light-dark(#002020, #9cf1f0);
+  --md-sys-color-focus-ring: light-dark(#35307e, #c4c0ff);
+  --md-sys-color-ai-strong: light-dark(#006a6a, #80d5d4);
+  --md-sys-color-logo-box: light-dark(#0d0b14, #c4c0ff);
+  --md-sys-color-on-logo-box: light-dark(#ffffff, #0d0b14);
+  --md-sys-color-logo-cursor: light-dark(#00f29e, #006c44);
+  --md-sys-color-success: light-dark(#1b5f1f, #91d888);
+  --md-sys-color-on-success: light-dark(#ffffff, #003908);
+  --md-sys-color-success-container: light-dark(#acf4a2, #0b5314);
+  --md-sys-color-on-success-container: light-dark(#002203, #acf4a2);
+  --md-sys-color-warning: light-dark(#6a4e00, #fcbc00);
+  --md-sys-color-on-warning: light-dark(#ffffff, #402d00);
+  --md-sys-color-warning-container: light-dark(#ffdea0, #5c4300);
+  --md-sys-color-on-warning-container: light-dark(#261900, #ffdea0);
+
+  --md-ref-typeface-brand: 'BNPP Type', 'Open Sans', system-ui, sans-serif;
+  --md-ref-typeface-plain: 'Open Sans', system-ui, sans-serif;
+  --ait-font-ui: var(--md-ref-typeface-brand);
+  --ait-font-body: var(--md-ref-typeface-plain);
+  --ait-type-display-large: 500 57px/64px var(--ait-font-ui);
+  --ait-type-display-large-tracking: -0.25px;
+  --ait-type-display-medium: 500 45px/52px var(--ait-font-ui);
+  --ait-type-display-medium-tracking: 0px;
+  --ait-type-display-small: 500 36px/44px var(--ait-font-ui);
+  --ait-type-display-small-tracking: 0px;
+  --ait-type-headline-large: 500 32px/40px var(--ait-font-ui);
+  --ait-type-headline-large-tracking: 0px;
+  --ait-type-headline-medium: 500 28px/36px var(--ait-font-ui);
+  --ait-type-headline-medium-tracking: 0px;
+  --ait-type-headline-small: 500 24px/32px var(--ait-font-ui);
+  --ait-type-headline-small-tracking: 0px;
+  --ait-type-title-large: 500 22px/28px var(--ait-font-ui);
+  --ait-type-title-large-tracking: 0px;
+  --ait-type-title-medium: 500 16px/24px var(--ait-font-ui);
+  --ait-type-title-medium-tracking: 0.15px;
+  --ait-type-title-small: 500 14px/20px var(--ait-font-ui);
+  --ait-type-title-small-tracking: 0.1px;
+  --ait-type-body-large: 400 16px/24px var(--ait-font-body);
+  --ait-type-body-large-tracking: 0.5px;
+  --ait-type-body-medium: 400 14px/20px var(--ait-font-body);
+  --ait-type-body-medium-tracking: 0.25px;
+  --ait-type-body-small: 400 12px/16px var(--ait-font-body);
+  --ait-type-body-small-tracking: 0.4px;
+  --ait-type-label-large: 500 14px/20px var(--ait-font-ui);
+  --ait-type-label-large-tracking: 0.1px;
+  --ait-type-label-medium: 500 12px/16px var(--ait-font-ui);
+  --ait-type-label-medium-tracking: 0.5px;
+  --ait-type-label-small: 500 11px/16px var(--ait-font-ui);
+  --ait-type-label-small-tracking: 0.5px;
+  --ait-type-code: 600 13px/20px var(--ait-font-body);
+  --ait-type-code-tracking: 0px;
+
+  --ait-space-1: 4px;
+  --ait-space-2: 8px;
+  --ait-space-3: 12px;
+  --ait-space-4: 16px;
+  --ait-space-5: 20px;
+  --ait-space-6: 24px;
+  --ait-space-8: 32px;
+  --ait-space-12: 48px;
+  --ait-space-16: 64px;
+  --ait-radius-none: 0px;
+  --ait-radius-xs: 4px;
+  --ait-radius-sm: 8px;
+  --ait-radius-md: 12px;
+  --ait-radius-lg: 16px;
+  --ait-radius-xl: 16px;
+  --ait-radius-full: 9999px;
+  --ait-elevation-1: 0 1px 2px rgba(0,0,0,0.30), 0 1px 3px 1px rgba(0,0,0,0.15);
+  --ait-elevation-2: 0 1px 2px rgba(0,0,0,0.30), 0 2px 6px 2px rgba(0,0,0,0.15);
+  --ait-elevation-3: 0 1px 3px rgba(0,0,0,0.30), 0 4px 8px 3px rgba(0,0,0,0.15);
+  --ait-elevation-4: 0 2px 3px rgba(0,0,0,0.30), 0 6px 10px 4px rgba(0,0,0,0.15);
+  --ait-elevation-5: 0 4px 4px rgba(0,0,0,0.30), 0 8px 12px 6px rgba(0,0,0,0.15);
+  --ait-breakpoint-medium: 600px;
+  --ait-breakpoint-expanded: 840px;
+  --ait-breakpoint-large: 1200px;
+  --ait-breakpoint-extra-large: 1600px;
+
+  --md-sys-state-hover-opacity: 0.06;
+  --md-sys-state-focus-opacity: 0;
+  --md-sys-state-pressed-opacity: 0.1;
+  --md-sys-state-dragged-opacity: 0.14;
+  --ait-state-layer: var(--md-sys-color-primary);
+  --ait-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --ait-duration-short: 150ms;
+  --ait-duration-medium: 300ms;
+  --ait-duration-long: 500ms;
+
+  --ait-page-margin: 16px;
+  --ait-grid-columns: 4;
+  --ait-grid-gutter: 16px;
+}
+@media (min-width: 600px) {
+  :root { --ait-page-margin: 24px; --ait-grid-columns: 8; --ait-grid-gutter: 24px; }
+}
+@media (min-width: 840px) {
+  :root { --ait-page-margin: 24px; --ait-grid-columns: 12; --ait-grid-gutter: 24px; }
+}
+@media (min-width: 1200px) {
+  :root { --ait-page-margin: 32px; --ait-grid-columns: 12; --ait-grid-gutter: 24px; }
+}
+@media (min-width: 1600px) {
+  :root { --ait-page-margin: 32px; --ait-grid-columns: 12; --ait-grid-gutter: 24px; }
+}
+
+/* Type utility classes (one per style of the scale). */
+.ait-display-large { font: var(--ait-type-display-large); letter-spacing: var(--ait-type-display-large-tracking); }
+.ait-display-medium { font: var(--ait-type-display-medium); letter-spacing: var(--ait-type-display-medium-tracking); }
+.ait-display-small { font: var(--ait-type-display-small); letter-spacing: var(--ait-type-display-small-tracking); }
+.ait-headline-large { font: var(--ait-type-headline-large); letter-spacing: var(--ait-type-headline-large-tracking); }
+.ait-headline-medium { font: var(--ait-type-headline-medium); letter-spacing: var(--ait-type-headline-medium-tracking); }
+.ait-headline-small { font: var(--ait-type-headline-small); letter-spacing: var(--ait-type-headline-small-tracking); }
+.ait-title-large { font: var(--ait-type-title-large); letter-spacing: var(--ait-type-title-large-tracking); }
+.ait-title-medium { font: var(--ait-type-title-medium); letter-spacing: var(--ait-type-title-medium-tracking); }
+.ait-title-small { font: var(--ait-type-title-small); letter-spacing: var(--ait-type-title-small-tracking); }
+.ait-body-large { font: var(--ait-type-body-large); letter-spacing: var(--ait-type-body-large-tracking); }
+.ait-body-medium { font: var(--ait-type-body-medium); letter-spacing: var(--ait-type-body-medium-tracking); }
+.ait-body-small { font: var(--ait-type-body-small); letter-spacing: var(--ait-type-body-small-tracking); }
+.ait-label-large { font: var(--ait-type-label-large); letter-spacing: var(--ait-type-label-large-tracking); }
+.ait-label-medium { font: var(--ait-type-label-medium); letter-spacing: var(--ait-type-label-medium-tracking); }
+.ait-label-small { font: var(--ait-type-label-small); letter-spacing: var(--ait-type-label-small-tracking); }
+.ait-code { font: var(--ait-type-code); letter-spacing: var(--ait-type-code-tracking); }

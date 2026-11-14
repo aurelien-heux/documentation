@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Administration layout lab, four shells for core and feature administration</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif}
+button{cursor:pointer} a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+.ui{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif}
+.ib{position:relative;width:40px;height:40px;border:0;border-radius:999px;background:transparent;color:#48454E;display:inline-flex;align-items:center;justify-content:center;margin:4px}
+.ib:hover{background:rgba(57, 35, 95,.06)}
+.btn{height:40px;padding:0 24px;border:0;border-radius:16px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;text-decoration:none}
+.btn-i{padding-left:16px}
+.f{background:#39235F;color:#FFFFFF}.t{background:#DED7EB;color:#1D1A28}.o{background:transparent;border:1px solid #79757F;color:#39235F}.x{background:transparent;color:#39235F;padding:0 12px}
+.chip{height:32px;padding:0 12px;border-radius:8px;border:1px solid #79757F;background:transparent;color:#1C1B1E;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.chip:hover{background:rgba(57, 35, 95,.06)}
+.chip-on{background:#DED7EB;border-color:#DED7EB;color:#1D1A28}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:4px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+.tagt{padding-left:4px}
+.env{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:8px;background:#DED7EB;color:#1D1A28;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+.mono{font-family:'Open Sans',system-ui,sans-serif;font-weight:600}
+.card{background:#FFFFFF;border-radius:12px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15)}
+.ocard{background:#FDF8FD;border:1px solid #CAC4CF;border-radius:12px;padding:16px}
+.tab{height:48px;padding:0 16px;border:0;background:transparent;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;border-radius:3px 3px 0 0;color:#48454E;border-bottom:3px solid transparent}
+.tab-on{color:#39235F;border-bottom:3px solid #39235F}
+.n{font-size:11px;padding:1px 6px;border-radius:6px;background:#F2EBFA;color:#48454E}
+.fld{position:relative;box-sizing:border-box;min-height:56px;border:1px solid #79757F;border-radius:4px;padding:16px 16px 10px;background:#FDF8FD}
+.fld label{position:absolute;top:-9px;left:12px;padding:0 4px;background:#FDF8FD;font-size:12px;line-height:16px;color:#48454E}
+.fld input,.fld textarea,.fld select{width:100%;border:0;outline:0;background:transparent;font:400 16px/24px 'Open Sans',system-ui,sans-serif;color:#1C1B1E;padding:0;resize:none}
+.av{width:32px;height:32px;border-radius:999px;background:#DED7EB;color:#1D1A28;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.h2{margin:0;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:18px;line-height:24px;font-weight:600;color:#1C1B1E}
+.th{height:48px;padding:0 12px;text-align:left;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#48454E;white-space:nowrap}
+.td{height:52px;padding:6px 12px;font-size:14px;color:#1C1B1E;border-top:1px solid #CAC4CF;vertical-align:middle}
+.mi{width:100%;height:48px;padding:0 16px;border:0;background:transparent;display:flex;align-items:center;gap:12px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:500;color:#1C1B1E;text-align:left;text-decoration:none}
+.mi:hover{background:rgba(57, 35, 95,.06)}
+.subhdr{display:flex;align-items:flex-start;gap:4px 8px;min-height:48px;flex-wrap:wrap;min-width:0;padding-bottom:8px;border-bottom:1px solid #CAC4CF}
+.subhdr .sh-back{flex:none;margin:0 0 0 -8px!important;color:#1C1B1E;cursor:pointer}
+.subhdr .sh-back:hover{background:rgba(28,27,30,.08)}
+.sh-txt{flex:1 1 240px;min-width:0;display:flex;align-items:center;gap:12px;flex-wrap:nowrap;padding-top:6px}
+.sh-t{margin:0;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:20px;line-height:28px;font-weight:700;color:#1C1B1E;min-width:0;flex:0 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-txt>.tile,.sh-txt>.kind,.sh-txt>span:not(.sh-c){flex:none}
+.sh-c{position:relative;flex:0 100 auto;min-width:0;padding-left:13px;font-size:13px;line-height:18px;color:#48454E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-c::before{content:"";position:absolute;left:0;top:50%;width:1px;height:20px;margin-top:-10px;background:#CAC4CF}
+.sh-act{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto;min-height:48px}
+@container win (max-width: 599px){.sh-t{font-size:18px;line-height:24px;white-space:normal}.sh-txt{flex-wrap:wrap;gap:2px 12px;flex-basis:160px}.sh-c{flex-basis:100%;padding-left:0;white-space:normal}.sh-c::before{display:none}}
+.simbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #CAC4CF}
+.simbar .chip{height:28px;padding:0 10px;font-size:12px}
+.simlab{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;color:#48454E;letter-spacing:.3px}
+.simrange{flex:1 1 180px;min-width:140px;max-width:360px;accent-color:#39235F;margin:0 4px}
+.simval{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;color:#48454E;white-space:nowrap}
+.simval b{color:#1C1B1E}
+.simhost{width:100%;display:flex;justify-content:center;align-items:flex-start;overflow:clip;background-color:#ECE5F4;background-image:radial-gradient(#CAC4CF 1px,transparent 1px);background-size:12px 12px}
+.simframe{container:win / inline-size;flex:none;box-sizing:border-box}
+.nav-bar{display:none}
+.hdr-sbtn,.hdr-menu{display:none!important}
+@container win (max-width: 1199px){
+.hdr{grid-template-columns:minmax(0,1fr) minmax(180px,320px) auto!important;gap:12px!important}
+.hdr-search{width:100%!important}
+.hctx .hs,.hdr-uname,.hdr-div,.hdr-asklabel,.hdr-wm{display:none!important}
+.hdr-search button{padding:0 6px!important}
+main{padding-left:24px!important;padding-right:24px!important}
+}
+@container win (max-width: 839px){
+.hdr{grid-template-columns:minmax(0,1fr) minmax(150px,260px) auto!important;gap:8px!important;padding-left:16px!important}
+.hdr-kbd,.hdr-help,.hdr-chev{display:none!important}
+.nav-drawer{position:absolute!important;left:0;top:0;height:100vh;max-height:100%;overflow:auto;z-index:30;box-shadow:0 1px 3px rgba(0,0,0,.3),0 4px 8px 3px rgba(0,0,0,.15);border-radius:0 16px 16px 0}
+}
+@container win (max-width: 599px){
+.hdr{height:56px!important;grid-template-columns:minmax(0,1fr) auto!important;padding:0 4px 0 12px!important}
+.hdr-search{display:none!important}
+.hdr-sbtn,.hdr-menu{display:inline-flex!important}
+.hdr-asst{display:none!important}
+.hdr-menu{margin:0 4px 0 -8px!important}
+.hdr .ib{margin:4px 0!important}
+.hctx{margin-left:10px!important;padding-left:10px!important}
+.hdr-user{padding:0 4px!important;margin-right:0!important}
+.nav-rail{display:none!important}
+.nav-bar{display:flex!important}
+main{padding-left:16px!important;padding-right:16px!important;padding-top:16px!important}
+}.r-wrap{flex-wrap:wrap}
+.ad-tscroll{overflow-x:auto}.ad-tbl{min-width:600px}
+.ad-two{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.ad-two:has(.ad-detail){grid-template-columns:minmax(0,1fr) 340px}
+.ad-detail{display:flex;flex-direction:column;gap:14px;padding:20px}
+.ad-fs{display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid #CAC4CF}
+.ad-fl{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.3px;color:#48454E;text-transform:uppercase}
+.ad-opt{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:18px;cursor:pointer}.ad-opt input{margin:2px 0 0;width:18px;height:18px;accent-color:#39235F;flex:none}
+.ad-opt .meta{white-space:normal}
+.ad-search input{border:0;outline:0;background:transparent;font:400 14px 'Open Sans',system-ui,sans-serif;color:#1C1B1E;min-width:0;flex:1}
+tr.rw[role="button"]{cursor:pointer}tr.rw.on td{background:#F2EBFA}tr.rw:focus-visible{outline:2px solid #39235F;outline-offset:-2px}
+.ad-split{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;align-items:start}
+.ad-side{position:sticky;top:0;display:flex;flex-direction:column;gap:4px;padding:4px 0}
+.ad-g{display:flex;flex-direction:column;gap:2px;padding-bottom:10px}
+.ad-gh{display:flex;align-items:center;gap:8px;padding:10px 12px 6px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#48454E}
+.ad-ni{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px 0 16px;border-radius:16px;color:#1C1B1E;text-decoration:none;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:500}
+.ad-ni:hover{background:rgba(57, 35, 95,.06)}
+.ad-ni.on{background:#DED7EB;color:#1D1A28;font-weight:700;box-shadow:inset 3px 0 0 #39235F}
+.ad-select,.ad-select.row{display:none}
+@container win (max-width: 1199px){
+.ad-split{grid-template-columns:minmax(0,1fr)!important}.ad-side{display:none!important}.ad-select{display:flex!important}
+.ad-two:has(.ad-detail){grid-template-columns:minmax(0,1fr)!important}
+}
+@container win (max-width: 839px){.ad-search{width:100%!important}}
+@container win (max-width: 599px){.ad-detail{padding:16px}.ad-banner{flex-direction:column;align-items:flex-start!important}.fbp .card{padding:16px!important}.fbp .step{flex-wrap:wrap}.fbp .step .fld{flex:1 1 100%!important;order:3}.fbp .step .sel{flex:1;min-width:0}.fbp-tabs .tile{white-space:normal;flex-basis:100%;margin:8px 0}}
+.fbp-tabs .tile{max-width:100%}
+/* FeedbackProfile: self-contained, so any feature module can embed it */
+.fbp .step{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid #CAC4CF;background:#FDF8FD}.fbp .num{width:24px;height:24px;flex:none;border-radius:999px;background:#E3DFFF;color:#14085E;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}.fbp .sel-s{height:32px;font-size:13px}.fbp .pop{box-sizing:border-box;border-radius:12px;background:#F2EBFA;box-shadow:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15)}
+.tile{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:4px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+.tile i{width:8px;height:8px;border-radius:2px;background:currentColor}
+.ok{background:#C3F4DC;color:#00391E}.wn{background:#FFDEA0;color:#261900}.er{background:#FFDAD6;color:#410002}.in{background:#E3DFFF;color:#14085E}.ne{background:#ECE5F4;color:#1C1B1E}
+.ttab{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px;border-radius:12px;border:1px solid #CAC4CF;background:#FDF8FD;text-align:left;cursor:pointer;min-width:0}
+.ttab:hover{background:rgba(57, 35, 95,.06)}
+.ttab-on{border-color:#39235F;box-shadow:inset 0 0 0 1px #39235F;background:#F2EBFA}
+.cmp td,.cmp th{padding:10px 12px;font-size:13px;line-height:18px;vertical-align:top;border-top:1px solid #CAC4CF}
+.cmp th{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#48454E;text-align:left;border-top:0}
+.cmp tr.on td{background:#F2EBFA}
+.row{display:flex;align-items:center;gap:12px}
+.stack{display:flex;flex-direction:column;gap:12px;min-width:0}
+.meta{font-size:12px;color:#48454E;white-space:nowrap}
+.sm{height:32px;padding:0 14px;border-radius:12px;font-size:13px}
+.kpi{flex:1;min-width:0;padding:12px 16px;border-radius:12px;background:#FFFFFF;box-shadow:0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15)}
+.kpi b{display:block;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:24px;line-height:32px;font-weight:700;color:#1C1B1E}
+.kpi span{font-size:12px;color:#48454E}
+.sel{height:40px;box-sizing:border-box;padding:0 36px 0 12px;border:1px solid #79757F;border-radius:8px;background:#FDF8FD;color:#1C1B1E;font:500 14px Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2348454E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:18px}
+tr.rw:hover td{background:rgba(57, 35, 95,.04)}
+/* C · tabs */
+.ad-tabs{display:flex;align-items:center;border-bottom:1px solid #CAC4CF;overflow-x:auto;scrollbar-width:none}
+.ad-tabs .tab{flex:none}
+.ad-chips{flex-wrap:wrap}
+/* D · console */
+.ad-console{width:260px;flex:none;display:flex;flex-direction:column;gap:4px;padding:12px;box-sizing:border-box;background:#EDE4FF;min-height:100%}
+.ad-back{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:16px;color:#39235F;text-decoration:none;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:600}
+.ad-back:hover{background:rgba(57, 35, 95,.06)}
+.ad-ch{display:flex;gap:10px;align-items:center;padding:8px 12px 14px;border-bottom:1px solid #CAC4CF;margin-bottom:6px}
+.ad-shield{width:36px;height:36px;border-radius:12px;background:#DED7EB;color:#1D1A28;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ad-tree{display:flex;flex-direction:column;gap:4px}
+.ad-tree .ad-ni{background:transparent}.ad-tree .ad-ni.on{background:#DED7EB}
+.ad-railwrap{display:contents}.ad-railwrap.ad-norail{display:none}
+.r-wrap{flex-wrap:wrap}
+.r-g3,.r-g2{min-width:0}
+@container win (max-width: 1199px){
+.ad-console{display:none!important}.ad-railwrap.ad-norail{display:contents!important}
+.r-g3{grid-template-columns:repeat(2,minmax(0,1fr))!important}.r-kpis{flex-wrap:wrap}.r-kpis>.kpi{flex:1 1 140px}
+}
+@container win (max-width: 839px){.ad-chips-a{width:100%}.r-g2{grid-template-columns:minmax(0,1fr)!important}}
+@container win (max-width: 599px){.r-g3{grid-template-columns:minmax(0,1fr)!important}.ad-chips .chip{height:28px;font-size:12px}}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 2080px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column">
+  <div style="padding: 20px 32px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; align-items: center; gap: 16px">
+      <h1 class="ui" style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 700; white-space: nowrap">Administration layout lab</h1>
+      <span style="font-size: 14px; color: #48454E">Four shells for the Administration module, same content in each: Core (general, users and permissions, groups, audit log) and the two feature modules, Sweep and Community. General, Users and permissions, Sweep · Connectors and Community · Feedback carry content; the other sections are placeholders. View as platform admin or Sweep admin to see how rights filter the navigation.</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+        <button type="button" class="ttab {{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}"><span class="row" style="gap: 8px"><span style="width: 24px; height: 24px; border-radius: 999px; background: {{t.numBg}}; color: {{t.numFg}}; font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">{{t.k}}</span><span class="ui" style="font-size: 14px; font-weight: 600">{{t.name}}</span></span><span style="font-size: 12px; line-height: 16px; color: #48454E">{{t.sub}}</span><sc-if value="{{t.rec}}" hint-placeholder-val="{{false}}"><span class="tile ok"><i></i>Adopted</span></sc-if><sc-if value="{{t.cur}}" hint-placeholder-val="{{false}}"><span class="tile ne"><i></i>Today</span></sc-if></button>
+      </sc-for>
+    </div>
+    <div class="row" style="gap: 12px; flex-wrap: wrap"><div class="simbar" role="group" aria-label="Simulated window width"><span class="simlab">WINDOW</span><sc-for list="{{simPresets}}" as="sp" hint-placeholder-count="7"><button type="button" class="chip {{sp.cls}}" aria-pressed="{{sp.on}}" title="{{sp.title}}" onClick="{{sp.pick}}">{{sp.label}}</button></sc-for><input type="range" class="simrange" min="360" max="1920" step="10" value="{{simW}}" aria-label="Window width in pixels" onChange="{{simInput}}"><span class="simval"><b>{{simW}} px</b> · {{simClass}}<sc-if value="{{simScaled}}" hint-placeholder-val="{{false}}"> · shown at {{simPct}}</sc-if></span></div><span class="row" style="gap: 8px; padding: 6px 8px 6px 12px; border: 1px dashed #79757F; border-radius: 12px"><span class="ui" style="font-size: 12px; font-weight: 600; color: #48454E">View as</span><sc-for list="{{roleChips}}" as="r" hint-placeholder-count="2"><button type="button" class="chip" style="height: 28px; font-size: 12px; {{r.style}}" aria-pressed="{{r.on}}" onClick="{{r.pick}}">{{r.label}}</button></sc-for></span><span class="row" style="gap: 8px; padding: 6px 8px 6px 12px; border: 1px dashed #79757F; border-radius: 12px"><span class="ui" style="font-size: 12px; font-weight: 600; color: #48454E">Go to</span><sc-for list="{{goChips}}" as="r" hint-placeholder-count="3"><button type="button" class="chip" style="height: 28px; font-size: 12px; {{r.style}}" aria-pressed="{{r.on}}" onClick="{{r.pick}}">{{r.label}}</button></sc-for></span></div>
+  </div>
+
+  <div style="margin: 0 32px; border-radius: 12px; overflow: hidden; border: 1px solid #CAC4CF">
+  <div class="simhost" id="sim-host-ad"><div class="simframe" style="width: {{simW}}px; zoom: {{simZoom}}; height: 1000px">
+  <div style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; background: #FDF8FD; overflow: hidden">
+    <header class="hdr" style="height: 64px; flex: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 0 8px 0 24px; background: #EDE4FF; border-bottom: 2px solid #FDF8FD">
+    <div style="justify-self: stretch; display: flex; align-items: center; min-width: 0; overflow: hidden"><button type="button" class="ib hdr-menu" aria-label="Open navigation"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><a href="#home" aria-label="AIToolbox home" style="display: flex; align-items: center; gap: 10px; text-decoration: none"><svg width="32" height="28" viewBox="0 0 74 64" aria-hidden="true"><mask id="sh-lg" maskUnits="userSpaceOnUse" x="0" y="0" width="74" height="64"><rect width="74" height="64" fill="#fff"/><rect x="37" y="3" width="36" height="24" rx="7" fill="#000"/></mask><g mask="url(#sh-lg)"><path d="M21 23v-6a6 6 0 0 1 6-6h10a6 6 0 0 1 6 6v6" fill="none" stroke="#0D0B14" stroke-width="6" stroke-linecap="round"/><rect x="4" y="22" width="56" height="36" rx="10" fill="#0D0B14"/><path d="M17.5 33l8 7-8 7" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M33.5 47h13" fill="none" stroke="#00F29E" stroke-width="5.5" stroke-linecap="round"/></g><rect x="39.5" y="5.5" width="31" height="19" rx="5" fill="#80D5D4"/><text x="55" y="20" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="800" font-size="14" fill="#003737">AI</text></svg><span class="hdr-wm" style="font-family: Manrope, sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.035em; line-height: 1"><span style="color: #1C1B1E">AI</span><span style="color: #39235F">Toolbox</span></span></a><div class="hctx" style="display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 0; margin-left: 16px; padding-left: 16px; border-left: 1px solid #CAC4CF"><span class="hf" style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 18px; font-weight: 600; color: #1C1B1E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{hdrFeature}}</span><span class="hs" style="font-family: 'Open Sans', system-ui, sans-serif; font-size: 12px; line-height: 16px; color: #48454E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 380px">{{hdrSummary}}</span></div></div>
+    <div role="search" class="hdr-search" style="width: 440px; height: 44px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 6px 0 14px; border-radius: 16px; background: #FFFFFF; color: #48454E">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <label for="sh-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search, or ask the assistant</label>
+      <input id="sh-q" type="text" placeholder="Search, or ask the assistant…" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: 400 14px 'Open Sans', system-ui, sans-serif; color: #1C1B1E">
+      <span class="mono hdr-kbd" style="font-size: 11px; padding: 2px 8px; border-radius: 6px; border: 1px solid #CAC4CF">⌘K</span>
+      <button type="button" class="ui" style="display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px 0 8px; border: 0; border-radius: 12px; background: #9CF1F0; color: #002020; font-size: 12px; font-weight: 700"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><path d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" fill="none" stroke="#39235F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 37l6 5-6 5" fill="none" stroke="#39235F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 49h5" fill="none" stroke="#008857" stroke-width="4.5" stroke-linecap="round"/></g></svg><span class="hdr-asklabel">Ask</span></button>
+    </div>
+    <div style="justify-self: end; display: flex; align-items: center">
+      <button type="button" class="ib hdr-sbtn" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      <button type="button" class="ib hdr-asst" aria-label="Open assistant"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><path d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" fill="none" stroke="#39235F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 37l6 5-6 5" fill="none" stroke="#39235F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 49h5" fill="none" stroke="#008857" stroke-width="4.5" stroke-linecap="round"/></g></svg></button>
+      <button type="button" class="ib hdr-bell" aria-label="Notifications, 3 unread"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="8" r="3.6" fill="#39235F"/><path d="M32 9C22 9 17 17 17 27V38L12 46Q11 48.5 13.5 48.5H50.5Q53 48.5 52 46L47 38V27C47 17 42 9 32 9Z" fill="#39235F"/><circle cx="32" cy="53.5" r="5" fill="#278383"/></svg><span class="ui" style="position: absolute; top: 3px; left: 22px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 9px; background: #93000A; color: #FFFFFF; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; box-shadow: 0 0 0 2px #EDE4FF">3</span></button>
+      <button type="button" class="ib hdr-help" aria-label="Help" aria-haspopup="menu" aria-expanded="false" style=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg></button>
+      <span class="hdr-div" style="width: 1px; height: 24px; background: #CAC4CF; margin: 0 6px"></span>
+      <button type="button" class="hdr-user" aria-label="Aurélien Heux, platform admin, account menu" aria-haspopup="menu" style="display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 10px 0 6px; border: 0; border-radius: 16px; background: transparent; color: #48454E; margin-right: 8px"><span class="av">AH</span><span class="hdr-uname" style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15"><span class="ui" style="font-size: 13px; font-weight: 700; color: #1C1B1E; white-space: nowrap">Aurélien Heux</span><span style="font-size: 11px; color: #48454E">platform · admin</span></span><svg class="hdr-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+    </div>
+  </header>
+    <div style="flex: 1; display: flex; min-height: 0">
+      <div class="ad-railwrap {{railCls}}"><nav aria-label="Primary" class="nav-side nav-rail" style="width: 80px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 12px 0; box-sizing: border-box; background: #EDE4FF"><div style="height: 48px; display: flex; align-items: center"><button type="button" aria-label="Open navigation" style="position: relative; width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center; margin: 4px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div><a href="#sweep" title="Sweep" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg7" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm7" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg7)" mask="url(#nvm7)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Sweep</span></a><a href="#env" title="Envs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-0.2 0.2)"><path d="M12 50L32 32L52 14" stroke="#39235F" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="12" cy="50" r="7" fill="#FDF8FD" stroke="#39235F" stroke-width="5"/><circle cx="32" cy="32" r="7.5" fill="#FDF8FD" stroke="#278383" stroke-width="5"/><circle cx="52" cy="14" r="10" fill="#00A56B"/><path d="M47.5 14.2l3 3 6-6" fill="none" stroke="#FDF8FD" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Envs</span></a><a href="#docs" title="Docs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-2.7 -2.5)"><rect x="6" y="10" width="13" height="48" rx="3.5" fill="#39235F"/><path d="M9.5 20H15.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="22" y="16" width="13" height="42" rx="3.5" fill="#278383"/><path d="M25.5 25H31.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="38" y="13" width="13" height="46" rx="3.5" fill="#00A56B" transform="rotate(16 51 58)"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Docs</span></a><a href="#new" title="Community" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Community</span></a><div style="flex: 1"></div><a href="#admin" aria-current="page" title="Admin" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: #DED7EB; box-shadow: inset 3px 0 0 #39235F; color: #1D1A28; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M8.5 16.5c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 700; color: #1C1B1E; white-space: nowrap">Admin</span></a><a href="#cookies" target="_blank" rel="noopener" title="Cookies" style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; text-decoration: none"><span style="position: relative; width: 56px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M21 12.3A9 9 0 1 1 11.7 3a3 3 0 0 0 3.3 3.6 3 3 0 0 0 3.4 3.4 3 3 0 0 0 2.6 2.3z"/><path d="M8.5 9.5h.01M15.5 15.5h.01M9.5 15h.01M12.5 12h.01"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; letter-spacing: -.1px; font-weight: 500; color: #48454E; white-space: nowrap">Cookies</span></a></nav></div>
+      <sc-if value="{{isD}}" hint-placeholder-val="{{false}}"><div class="ad-console"><a href="#app" class="ad-back" onClick="{{noop}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>Back to AIToolbox</span></a><div class="ad-ch"><span class="ad-shield"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin: 0 1px"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M8.5 16.5c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/></svg></span><div><div class="ui" style="font-size: 14px; font-weight: 700">Administration</div><div class="meta" style="white-space: normal">{{scopeLabel}}</div></div></div><nav class="ad-tree" aria-label="Administration"><sc-for list="{{groups}}" as="g" hint-placeholder-count="3"><div class="ad-g"><div class="ad-gh"><sc-if value="{{g.isSweep}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg5" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm5" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg5)" mask="url(#nvm5)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></sc-if><sc-if value="{{g.isNew}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></sc-if><span>{{g.label}}</span></div><sc-for list="{{g.items}}" as="s" hint-placeholder-count="4"><a href="#adm-{{s.key}}" class="ad-ni {{s.cls}}" aria-current="{{s.cur}}" onClick="{{s.pick}}"><span style="flex: 1">{{s.label}}</span><sc-if value="{{s.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{s.n}}</span></sc-if></a></sc-for></div></sc-for></nav></div></sc-if>
+      <main style="position: relative; flex: 1; min-width: 0; padding: 20px 32px 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; overflow: auto">
+        <sc-if value="{{isA}}" hint-placeholder-val="{{true}}"><sc-if value="{{hubOn}}" hint-placeholder-val="{{true}}"><div class="stack" style="gap: 16px"><sc-if value="{{hasCore}}" hint-placeholder-val="{{true}}"><h2 class="h2">Platform</h2>
+<div class="r-g3" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px"><sc-for list="{{hubCore}}" as="c" hint-placeholder-count="4">
+  <div class="card stack" style="gap: 8px; min-height: 120px"><div class="row" style="justify-content: space-between"><div class="ui" style="font-size: 16px; font-weight: 600">{{c.label}}</div><sc-if value="{{c.hasN}}" hint-placeholder-val="{{false}}"><span class="tile wn"><i></i>{{c.n}} requests</span></sc-if></div><div style="flex: 1; font-size: 13px; line-height: 18px; color: #48454E">{{c.sub}}</div><div class="row"><span class="mono" style="font-size: 11px; color: #48454E">platform-core@2.3</span><span style="flex: 1"></span><button type="button" class="btn t sm" onClick="{{c.pick}}">Open</button></div></div>
+</sc-for></div></sc-if>
+<h2 class="h2" style="margin-top: 8px">Features</h2>
+<div class="r-g2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px"><sc-for list="{{hubFeat}}" as="f" hint-placeholder-count="2">
+  <div class="card stack" style="gap: 12px; padding: 20px"><div class="row"><span style="width: 40px; height: 40px; border-radius: 12px; background: #EDE4FF; display: inline-flex; align-items: center; justify-content: center; flex: none"><sc-if value="{{f.isSweep}}" hint-placeholder-val="{{true}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg1" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm1" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg1)" mask="url(#nvm1)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></sc-if><sc-if value="{{f.isNew}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></sc-if></span><div style="flex: 1; min-width: 0"><div class="ui" style="font-size: 16px; font-weight: 700">{{f.label}}</div><div style="font-size: 12px; color: #48454E">Owned by {{f.owner}} · your role: {{f.role}}</div></div><button type="button" class="btn f sm" onClick="{{f.pick}}">Manage</button></div>
+  <div class="stack" style="gap: 6px"><sc-for list="{{f.stats}}" as="x" hint-placeholder-count="3"><div class="row" style="gap: 8px; font-size: 13px"><span class="tile {{x.tile}}" style="min-width: 28px; justify-content: center"><i></i>{{x.v}}</span><span>{{x.label}}</span></div></sc-for></div>
+  <div class="row" style="border-top: 1px solid #ECE5F4; padding-top: 10px; font-size: 11px; color: #48454E"><span class="mono">{{f.remote}}</span><span style="flex: 1"></span><span>{{f.scope}}</span></div></div>
+</sc-for></div></div></sc-if><sc-if value="{{hubOff}}" hint-placeholder-val="{{false}}"><div class="stack" style="gap: 16px"><div class="subhdr "><button type="button" onClick="{{goHub}}" class="ib sh-back" aria-label="Back to Administration" title="Back to Administration"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="sh-txt"><h2 class="sh-t">{{groupLabel}}</h2><span class="sh-c">Settings and rights for this module</span></div><div class="sh-act"><div class="row ad-chips ad-chips-a" style="gap: 8px"><sc-for list="{{sections}}" as="s" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{s.on}}" style="{{s.style}}" onClick="{{s.pick}}">{{s.label}}<sc-if value="{{s.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{s.n}}</span></sc-if></button></sc-for></div></div></div><sc-if value="{{isFeaturePage}}" hint-placeholder-val="{{true}}"><div class="row r-wrap" style="gap: 8px; font-size: 12px; color: #48454E"><span class="tag" style="background: #ECE5F4">Remote module</span><span class="mono">{{modRemote}}</span><span>· owned by {{modOwner}}</span><span style="flex: 1"></span><span>{{modScope}}</span></div></sc-if><sc-if value="{{pGeneral}}" hint-placeholder-val="{{true}}"><div class="stack">
+  <div class="card stack" style="gap: 16px; padding: 24px; max-width: 760px">
+    <div class="h2">Workspace</div>
+    <div class="fld"><label for="g-name">Workspace name</label><input id="g-name" type="text" value="AIToolbox"></div>
+    <div class="row r-wrap" style="gap: 16px"><div class="fld" style="flex: 1 1 220px"><label for="g-lang">Default language</label><input id="g-lang" type="text" value="English"></div><div class="fld" style="flex: 1 1 220px"><label for="g-tz">Time zone</label><input id="g-tz" type="text" value="Europe/Paris (CET)"></div></div>
+    <div class="fld"><label for="g-sup">Support contact</label><input id="g-sup" type="text" value="Platform team · Teams channel “AIToolbox support”"></div>
+  </div>
+  <div class="card stack" style="gap: 12px; padding: 24px; max-width: 760px">
+    <div class="h2">Retention</div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Audit log</span><span class="chip chip-on">90 days</span><span class="chip">1 year</span><span class="chip">3 years</span></div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Feedback and surveys</span><span class="chip">6 months</span><span class="chip chip-on">12 months</span><span class="chip">24 months</span></div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Assistant history</span><span class="chip chip-on">30 days</span><span class="chip">90 days</span></div>
+    <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><button type="button" class="btn x">Cancel</button><button type="button" class="btn f">Save</button></div>
+  </div>
+</div></sc-if><sc-if value="{{pUsers}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px 12px"><span class="tile ok" style="flex: none"><i></i>Directory sync · 10 min ago</span><span class="meta" style="white-space: normal; flex: 1; min-width: 220px">Accounts are created and removed automatically from the company directory (SSO), with their team. This page only gives admin rights.</span></div>
+  <div class="row r-wrap" style="gap: 8px">
+    <sc-for list="{{uFilters}}" as="f" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{f.on}}" style="{{f.style}}" onClick="{{f.pick}}">{{f.label}}<span class="n">{{f.n}}</span></button></sc-for>
+    <span style="flex: 1"></span>
+    <div class="fld ad-search" style="min-height: 40px; padding: 8px 12px; width: 240px"><label for="ad-q">Search</label><div class="row" style="gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="ad-q" type="text" placeholder="Name, email, team…"></div></div>
+  </div>
+  <div class="ad-two">
+    <div class="card" style="padding: 0; overflow: hidden; min-width: 0">
+      <div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+        <thead><tr><th class="th">User</th><th class="th">Admin rights</th><th class="th">Team</th><th class="th">Last active</th></tr></thead>
+        <tbody>
+          <sc-for list="{{users}}" as="u" hint-placeholder-count="6">
+            <tr class="rw {{u.cls}}" tabindex="0" role="button" aria-pressed="{{u.on}}" onClick="{{u.pick}}">
+              <td class="td"><div class="row" style="gap: 10px"><span class="av" style="background: {{u.bg}}">{{u.ini}}</span><div style="min-width: 0"><div class="ui" style="font-weight: 600; white-space: nowrap">{{u.name}}</div><div class="mono" style="font-size: 11px; color: #48454E">{{u.mail}}</div></div></div></td>
+              <td class="td"><div class="row" style="gap: 6px; flex-wrap: wrap"><sc-for list="{{u.rights}}" as="r" hint-placeholder-count="2"><span class="tag" style="background: {{r.bg}}">{{r.label}}</span></sc-for><sc-if value="{{u.pending}}" hint-placeholder-val="{{false}}"><span class="tile wn"><i></i>{{u.pendingLabel}}</span></sc-if><sc-if value="{{u.noRights}}" hint-placeholder-val="{{false}}"><span class="meta">None</span></sc-if></div></td>
+              <td class="td"><span style="font-size: 13px">{{u.groups}}</span></td>
+              <td class="td"><span class="meta">{{u.last}}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table></div>
+      <div class="row" style="padding: 10px 16px; border-top: 1px solid #CAC4CF; font-size: 12px; color: #48454E"><span>{{uCount}}</span><span style="flex: 1"></span><button type="button" class="chip" style="height: 28px">Next</button></div>
+    </div>
+    <sc-if value="{{hasUsr}}" hint-placeholder-val="{{true}}">
+    <aside class="card ad-detail" aria-label="Admin rights of {{usr.name}}">
+      <div class="row" style="justify-content: space-between"><div class="row" style="gap: 10px"><span class="av" style="background: {{usr.bg}}">{{usr.ini}}</span><div><div class="ui" style="font-weight: 700">{{usr.name}}</div><div class="mono" style="font-size: 11px; color: #48454E">{{usr.mail}}</div></div></div><button type="button" class="ib" aria-label="Close" style="margin: -8px -8px -8px 0" onClick="{{closeUsr}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="meta" style="white-space: normal">Team <b style="color: #1C1B1E">{{usr.groups}}</b>, from the directory</div>
+      <sc-if value="{{usr.pending}}" hint-placeholder-val="{{false}}"><div class="ocard row r-wrap ad-banner" style="gap: 8px; border-color: #E8A400; background: #FFF4DE"><span style="flex: 1; min-width: 0; font-size: 13px; line-height: 18px">Asks for <b>{{usr.pendingRight}}</b></span><button type="button" class="chip" style="height: 28px">Decline</button><button type="button" class="btn f sm">Approve</button></div></sc-if>
+      <div class="ad-fs"><div class="ad-fl">Admin rights</div>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.admin}}"> <span><b>Platform admin</b><br><span class="meta">Everything, including users, groups and the audit log</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.sweep}}"> <span><b>Sweep admin</b><br><span class="meta">Connectors</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.community}}"> <span><b>Community admin</b><br><span class="meta">Releases, tours, feedback, ideas, insights</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.fbSweep}}"> <span><b>Feedback · Sweep</b><br><span class="meta">Sweep feedback profile and inbox, in Community › Feedback</span></span></label></div>
+      <div class="row" style="justify-content: flex-end; gap: 8px; padding-top: 4px"><button type="button" class="btn x" onClick="{{closeUsr}}">Cancel</button><button type="button" class="btn f">Save</button></div>
+    </aside>
+    </sc-if>
+  </div>
+</div></sc-if><sc-if value="{{pConnectors}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px"><span class="meta" style="white-space: normal; flex: 1; min-width: 220px">The outside services Sweep reads from and writes to. Credentials are kept in the vault and never shown again after saving.</span><button type="button" class="btn f btn-i"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add connector</button></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Connector</th><th class="th">Used for</th><th class="th">Scope</th><th class="th">Status</th><th class="th">Last sync</th><th class="th"></th></tr></thead>
+    <tbody>
+      <tr class="rw"><td class="td"><b class="ui">DevOps platform</b><div class="meta">devops.example.internal · also used by the DevOps MCP server</div></td><td class="td"><span style="font-size: 13px">Repositories, pipelines, pull requests</span></td><td class="td">64 repositories</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">2 min ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Jira</b><div class="meta">Projects SWP, PAY, CB · used by Create Jira ticket</div></td><td class="td"><span style="font-size: 13px">Blocking findings become tickets</span></td><td class="td">3 projects</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">10 min ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Microsoft Teams</b><div class="meta">Run notifications</div></td><td class="td"><span style="font-size: 13px">Run results and failures</span></td><td class="td">12 channels</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">1 h ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">SonarQube</b><div class="meta">Quality gate</div></td><td class="td"><span style="font-size: 13px">Quality gate in the Test phase</span></td><td class="td">1 instance</td><td class="td"><span class="tile wn"><i></i>Token expires in 6 days</span></td><td class="td"><span class="meta">3 h ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Renew token</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Artifactory</b><div class="meta">Build artefacts</div></td><td class="td"><span style="font-size: 13px">Publish and scan artefacts</span></td><td class="td">—</td><td class="td"><span class="tile ne"><i></i>Not connected</span></td><td class="td"><span class="meta">—</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Connect</button></td></tr>
+    </tbody></table></div></div>
+</div></sc-if><sc-if value="{{pListening}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px"><span class="tab tab-on">{{profilesTab}}</span><span class="tab">Inbox<span class="n">{{inboxN}}</span></span><sc-if value="{{hasCore}}" hint-placeholder-val="{{true}}"><span class="tab">Surveys<span class="n">3</span></span></sc-if><span class="tab">Solicitation policy</span><span style="flex: 1"></span><span class="tile in"><i></i>Shared cap · 1 prompt per user every 7 days</span></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Feedback profile</th><th class="th">Status</th><th class="th">Entry points</th><th class="th">Questions</th><th class="th">Routing</th><th class="th"></th></tr></thead>
+    <tbody>
+      <sc-for list="{{profiles}}" as="p" hint-placeholder-count="4">
+      <tr class="rw"><td class="td"><b class="ui">{{p.name}}</b><div class="meta">{{p.owner}}</div></td><td class="td"><span class="tile {{p.tile}}"><i></i>{{p.status}}</span></td><td class="td"><span style="font-size: 13px">{{p.entries}}</span></td><td class="td">{{p.q}} of 3</td><td class="td"><span style="font-size: 13px">{{p.route}}</span></td><td class="td" style="text-align: right; white-space: nowrap"><button type="button" class="chip" style="height: 28px" aria-label="Edit the {{p.name}} feedback profile" onClick="{{p.go}}">Edit</button></td></tr>
+      </sc-for>
+    </tbody></table></div></div>
+  <div class="meta" style="white-space: normal">{{profilesNote}}</div>
+  <sc-if value="{{fpOn}}" hint-placeholder-val="{{true}}"><div class="r-split fbp" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start">
+  <div class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 24px">
+    <div class="row r-wrap" style="justify-content: space-between; gap: 8px"><div style="min-width: 0"><h2 class="h2">{{fp.name}} · feedback profile</h2><div style="font-size: 12px; color: #48454E; margin-top: 2px">FeedbackProfile component · one editor for every feature’s profile</div></div><button type="button" class="chip" aria-pressed="{{fp.on}}" style="{{fp.onStyle}}" onClick="{{fp.toggle}}"><sc-if value="{{fp.on}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{fp.onLabel}}</button></div>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Entry points</span><sc-for list="{{fp.entryChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+    <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Questions · {{fp.nq}} of 3</div>
+    <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2">
+      <div class="step" style="align-items: center"><span class="num">{{q.n}}</span><select class="sel sel-s" aria-label="Question type" value="{{q.type}}" onChange="{{q.onType}}"><option value="thumbs">Thumbs</option><option value="scale">Scale 1–5</option><option value="nps">NPS 0–10</option><option value="single">Single choice</option><option value="multi">Multiple choice</option><option value="text">Text</option></select><div class="fld" style="flex: 1; min-width: 0; min-height: 40px; padding: 8px 12px"><input type="text" aria-label="Question {{q.n}}" value="{{q.text}}" onChange="{{q.onText}}"></div><button type="button" class="ib" aria-label="Remove question {{q.n}}" style="width: 32px; height: 32px; margin: 0" onClick="{{q.del}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
+    </sc-for>
+    <sc-if value="{{fp.canAdd}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" style="align-self: flex-start" onClick="{{fp.addQ}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add question</button></sc-if>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Sampling</span><sc-for list="{{fp.samplingChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for><span style="font-size: 12px; color: #48454E">after-action prompts only</span></div>
+    <div class="row" style="flex-wrap: wrap"><label for="fp-route" style="font-size: 13px; color: #48454E; width: 96px">Routing</label><select id="fp-route" class="sel sel-s" value="{{fp.routing}}" onChange="{{fp.onRouting}}"><option value="inbox">Team inbox only</option><option value="jira">Inbox + Jira project</option><option value="teams">Inbox + Teams channel</option></select><span style="font-size: 12px; color: #48454E">Bugs always go to Jira; never to Ideas</span></div>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Options</span><sc-for list="{{fp.optChips}}" as="t" hint-placeholder-count="2"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+    <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><sc-if value="{{fp.canClose}}" hint-placeholder-val="{{false}}"><button type="button" class="btn x" onClick="{{fp.close}}">Close</button></sc-if><button type="button" class="btn f" onClick="{{fp.save}}">Save profile</button></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 12px; min-width: 0">
+    <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Preview · side sheet in {{fp.name}}</div>
+    <div class="pop" style="position: static; width: auto; max-width: 360px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+      <div class="row" style="justify-content: space-between"><span class="ui" style="font-size: 16px; font-weight: 700">Feedback · {{fp.name}}</span><span style="font-size: 12px; color: #48454E">Goes to {{fp.owner}}</span></div>
+      <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2"><div><div class="ui" style="font-size: 14px; font-weight: 600; margin-bottom: 6px">{{q.textOr}}</div><span class="tag" style="background: #ECE5F4">{{q.typeLabel}}</span></div></sc-for>
+      <sc-if value="{{fp.noQ}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: #48454E">Add at least one question.</span></sc-if>
+      <sc-if value="{{fp.ctx}}" hint-placeholder-val="{{true}}"><div class="row" style="gap: 6px; font-size: 12px; color: #48454E"><span class="chip chip-on" style="height: 28px; font-size: 12px">Attach context</span>page, run, environment, app version</div></sc-if>
+      <div class="row" style="justify-content: flex-end"><span class="btn f sm">Send</span></div>
+    </div>
+  </div>
+</div></sc-if>
+</div></sc-if><sc-if value="{{pOther}}" hint-placeholder-val="{{false}}"><div class="ocard" style="display: flex; gap: 16px; align-items: center; padding: 24px"><span class="tile ne" style="flex: none"><i></i>{{pageTitle}}</span><span style="font-size: 14px; color: #48454E">This section is not in the lab. It uses the same shell, with its own content.</span></div></sc-if></div></sc-if></sc-if><sc-if value="{{isB}}" hint-placeholder-val="{{false}}"><div class="ad-split"><nav class="ad-side" aria-label="Administration"><sc-for list="{{groups}}" as="g" hint-placeholder-count="3"><div class="ad-g"><div class="ad-gh"><sc-if value="{{g.isSweep}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg3" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm3" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg3)" mask="url(#nvm3)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></sc-if><sc-if value="{{g.isNew}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></sc-if><span>{{g.label}}</span></div><sc-for list="{{g.items}}" as="s" hint-placeholder-count="4"><a href="#adm-{{s.key}}" class="ad-ni {{s.cls}}" aria-current="{{s.cur}}" onClick="{{s.pick}}"><span style="flex: 1">{{s.label}}</span><sc-if value="{{s.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{s.n}}</span></sc-if></a></sc-for></div></sc-for></nav><div class="ad-select row" style="gap: 8px"><label for="ad-sel" class="meta">Section</label><select id="ad-sel" class="sel" value="{{page}}" onChange="{{onSelect}}"><sc-for list="{{groups}}" as="g" hint-placeholder-count="3"><optgroup label="{{g.label}}"><sc-for list="{{g.items}}" as="s" hint-placeholder-count="4"><option value="{{s.key}}">{{s.label}}</option></sc-for></optgroup></sc-for></select></div><div class="stack" style="gap: 16px; min-width: 0"><sc-if value="{{isFeaturePage}}" hint-placeholder-val="{{true}}"><div class="row r-wrap" style="gap: 8px; font-size: 12px; color: #48454E"><span class="tag" style="background: #ECE5F4">Remote module</span><span class="mono">{{modRemote}}</span><span>· owned by {{modOwner}}</span><span style="flex: 1"></span><span>{{modScope}}</span></div></sc-if><sc-if value="{{pGeneral}}" hint-placeholder-val="{{true}}"><div class="stack">
+  <div class="card stack" style="gap: 16px; padding: 24px; max-width: 760px">
+    <div class="h2">Workspace</div>
+    <div class="fld"><label for="g-name">Workspace name</label><input id="g-name" type="text" value="AIToolbox"></div>
+    <div class="row r-wrap" style="gap: 16px"><div class="fld" style="flex: 1 1 220px"><label for="g-lang">Default language</label><input id="g-lang" type="text" value="English"></div><div class="fld" style="flex: 1 1 220px"><label for="g-tz">Time zone</label><input id="g-tz" type="text" value="Europe/Paris (CET)"></div></div>
+    <div class="fld"><label for="g-sup">Support contact</label><input id="g-sup" type="text" value="Platform team · Teams channel “AIToolbox support”"></div>
+  </div>
+  <div class="card stack" style="gap: 12px; padding: 24px; max-width: 760px">
+    <div class="h2">Retention</div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Audit log</span><span class="chip chip-on">90 days</span><span class="chip">1 year</span><span class="chip">3 years</span></div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Feedback and surveys</span><span class="chip">6 months</span><span class="chip chip-on">12 months</span><span class="chip">24 months</span></div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Assistant history</span><span class="chip chip-on">30 days</span><span class="chip">90 days</span></div>
+    <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><button type="button" class="btn x">Cancel</button><button type="button" class="btn f">Save</button></div>
+  </div>
+</div></sc-if><sc-if value="{{pUsers}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px 12px"><span class="tile ok" style="flex: none"><i></i>Directory sync · 10 min ago</span><span class="meta" style="white-space: normal; flex: 1; min-width: 220px">Accounts are created and removed automatically from the company directory (SSO), with their team. This page only gives admin rights.</span></div>
+  <div class="row r-wrap" style="gap: 8px">
+    <sc-for list="{{uFilters}}" as="f" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{f.on}}" style="{{f.style}}" onClick="{{f.pick}}">{{f.label}}<span class="n">{{f.n}}</span></button></sc-for>
+    <span style="flex: 1"></span>
+    <div class="fld ad-search" style="min-height: 40px; padding: 8px 12px; width: 240px"><label for="ad-q">Search</label><div class="row" style="gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="ad-q" type="text" placeholder="Name, email, team…"></div></div>
+  </div>
+  <div class="ad-two">
+    <div class="card" style="padding: 0; overflow: hidden; min-width: 0">
+      <div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+        <thead><tr><th class="th">User</th><th class="th">Admin rights</th><th class="th">Team</th><th class="th">Last active</th></tr></thead>
+        <tbody>
+          <sc-for list="{{users}}" as="u" hint-placeholder-count="6">
+            <tr class="rw {{u.cls}}" tabindex="0" role="button" aria-pressed="{{u.on}}" onClick="{{u.pick}}">
+              <td class="td"><div class="row" style="gap: 10px"><span class="av" style="background: {{u.bg}}">{{u.ini}}</span><div style="min-width: 0"><div class="ui" style="font-weight: 600; white-space: nowrap">{{u.name}}</div><div class="mono" style="font-size: 11px; color: #48454E">{{u.mail}}</div></div></div></td>
+              <td class="td"><div class="row" style="gap: 6px; flex-wrap: wrap"><sc-for list="{{u.rights}}" as="r" hint-placeholder-count="2"><span class="tag" style="background: {{r.bg}}">{{r.label}}</span></sc-for><sc-if value="{{u.pending}}" hint-placeholder-val="{{false}}"><span class="tile wn"><i></i>{{u.pendingLabel}}</span></sc-if><sc-if value="{{u.noRights}}" hint-placeholder-val="{{false}}"><span class="meta">None</span></sc-if></div></td>
+              <td class="td"><span style="font-size: 13px">{{u.groups}}</span></td>
+              <td class="td"><span class="meta">{{u.last}}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table></div>
+      <div class="row" style="padding: 10px 16px; border-top: 1px solid #CAC4CF; font-size: 12px; color: #48454E"><span>{{uCount}}</span><span style="flex: 1"></span><button type="button" class="chip" style="height: 28px">Next</button></div>
+    </div>
+    <sc-if value="{{hasUsr}}" hint-placeholder-val="{{true}}">
+    <aside class="card ad-detail" aria-label="Admin rights of {{usr.name}}">
+      <div class="row" style="justify-content: space-between"><div class="row" style="gap: 10px"><span class="av" style="background: {{usr.bg}}">{{usr.ini}}</span><div><div class="ui" style="font-weight: 700">{{usr.name}}</div><div class="mono" style="font-size: 11px; color: #48454E">{{usr.mail}}</div></div></div><button type="button" class="ib" aria-label="Close" style="margin: -8px -8px -8px 0" onClick="{{closeUsr}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="meta" style="white-space: normal">Team <b style="color: #1C1B1E">{{usr.groups}}</b>, from the directory</div>
+      <sc-if value="{{usr.pending}}" hint-placeholder-val="{{false}}"><div class="ocard row r-wrap ad-banner" style="gap: 8px; border-color: #E8A400; background: #FFF4DE"><span style="flex: 1; min-width: 0; font-size: 13px; line-height: 18px">Asks for <b>{{usr.pendingRight}}</b></span><button type="button" class="chip" style="height: 28px">Decline</button><button type="button" class="btn f sm">Approve</button></div></sc-if>
+      <div class="ad-fs"><div class="ad-fl">Admin rights</div>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.admin}}"> <span><b>Platform admin</b><br><span class="meta">Everything, including users, groups and the audit log</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.sweep}}"> <span><b>Sweep admin</b><br><span class="meta">Connectors</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.community}}"> <span><b>Community admin</b><br><span class="meta">Releases, tours, feedback, ideas, insights</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.fbSweep}}"> <span><b>Feedback · Sweep</b><br><span class="meta">Sweep feedback profile and inbox, in Community › Feedback</span></span></label></div>
+      <div class="row" style="justify-content: flex-end; gap: 8px; padding-top: 4px"><button type="button" class="btn x" onClick="{{closeUsr}}">Cancel</button><button type="button" class="btn f">Save</button></div>
+    </aside>
+    </sc-if>
+  </div>
+</div></sc-if><sc-if value="{{pConnectors}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px"><span class="meta" style="white-space: normal; flex: 1; min-width: 220px">The outside services Sweep reads from and writes to. Credentials are kept in the vault and never shown again after saving.</span><button type="button" class="btn f btn-i"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add connector</button></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Connector</th><th class="th">Used for</th><th class="th">Scope</th><th class="th">Status</th><th class="th">Last sync</th><th class="th"></th></tr></thead>
+    <tbody>
+      <tr class="rw"><td class="td"><b class="ui">DevOps platform</b><div class="meta">devops.example.internal · also used by the DevOps MCP server</div></td><td class="td"><span style="font-size: 13px">Repositories, pipelines, pull requests</span></td><td class="td">64 repositories</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">2 min ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Jira</b><div class="meta">Projects SWP, PAY, CB · used by Create Jira ticket</div></td><td class="td"><span style="font-size: 13px">Blocking findings become tickets</span></td><td class="td">3 projects</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">10 min ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Microsoft Teams</b><div class="meta">Run notifications</div></td><td class="td"><span style="font-size: 13px">Run results and failures</span></td><td class="td">12 channels</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">1 h ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">SonarQube</b><div class="meta">Quality gate</div></td><td class="td"><span style="font-size: 13px">Quality gate in the Test phase</span></td><td class="td">1 instance</td><td class="td"><span class="tile wn"><i></i>Token expires in 6 days</span></td><td class="td"><span class="meta">3 h ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Renew token</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Artifactory</b><div class="meta">Build artefacts</div></td><td class="td"><span style="font-size: 13px">Publish and scan artefacts</span></td><td class="td">—</td><td class="td"><span class="tile ne"><i></i>Not connected</span></td><td class="td"><span class="meta">—</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Connect</button></td></tr>
+    </tbody></table></div></div>
+</div></sc-if><sc-if value="{{pListening}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px"><span class="tab tab-on">{{profilesTab}}</span><span class="tab">Inbox<span class="n">{{inboxN}}</span></span><sc-if value="{{hasCore}}" hint-placeholder-val="{{true}}"><span class="tab">Surveys<span class="n">3</span></span></sc-if><span class="tab">Solicitation policy</span><span style="flex: 1"></span><span class="tile in"><i></i>Shared cap · 1 prompt per user every 7 days</span></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Feedback profile</th><th class="th">Status</th><th class="th">Entry points</th><th class="th">Questions</th><th class="th">Routing</th><th class="th"></th></tr></thead>
+    <tbody>
+      <sc-for list="{{profiles}}" as="p" hint-placeholder-count="4">
+      <tr class="rw"><td class="td"><b class="ui">{{p.name}}</b><div class="meta">{{p.owner}}</div></td><td class="td"><span class="tile {{p.tile}}"><i></i>{{p.status}}</span></td><td class="td"><span style="font-size: 13px">{{p.entries}}</span></td><td class="td">{{p.q}} of 3</td><td class="td"><span style="font-size: 13px">{{p.route}}</span></td><td class="td" style="text-align: right; white-space: nowrap"><button type="button" class="chip" style="height: 28px" aria-label="Edit the {{p.name}} feedback profile" onClick="{{p.go}}">Edit</button></td></tr>
+      </sc-for>
+    </tbody></table></div></div>
+  <div class="meta" style="white-space: normal">{{profilesNote}}</div>
+  <sc-if value="{{fpOn}}" hint-placeholder-val="{{true}}"><div class="r-split fbp" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start">
+  <div class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 24px">
+    <div class="row r-wrap" style="justify-content: space-between; gap: 8px"><div style="min-width: 0"><h2 class="h2">{{fp.name}} · feedback profile</h2><div style="font-size: 12px; color: #48454E; margin-top: 2px">FeedbackProfile component · one editor for every feature’s profile</div></div><button type="button" class="chip" aria-pressed="{{fp.on}}" style="{{fp.onStyle}}" onClick="{{fp.toggle}}"><sc-if value="{{fp.on}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{fp.onLabel}}</button></div>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Entry points</span><sc-for list="{{fp.entryChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+    <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Questions · {{fp.nq}} of 3</div>
+    <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2">
+      <div class="step" style="align-items: center"><span class="num">{{q.n}}</span><select class="sel sel-s" aria-label="Question type" value="{{q.type}}" onChange="{{q.onType}}"><option value="thumbs">Thumbs</option><option value="scale">Scale 1–5</option><option value="nps">NPS 0–10</option><option value="single">Single choice</option><option value="multi">Multiple choice</option><option value="text">Text</option></select><div class="fld" style="flex: 1; min-width: 0; min-height: 40px; padding: 8px 12px"><input type="text" aria-label="Question {{q.n}}" value="{{q.text}}" onChange="{{q.onText}}"></div><button type="button" class="ib" aria-label="Remove question {{q.n}}" style="width: 32px; height: 32px; margin: 0" onClick="{{q.del}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
+    </sc-for>
+    <sc-if value="{{fp.canAdd}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" style="align-self: flex-start" onClick="{{fp.addQ}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add question</button></sc-if>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Sampling</span><sc-for list="{{fp.samplingChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for><span style="font-size: 12px; color: #48454E">after-action prompts only</span></div>
+    <div class="row" style="flex-wrap: wrap"><label for="fp-route" style="font-size: 13px; color: #48454E; width: 96px">Routing</label><select id="fp-route" class="sel sel-s" value="{{fp.routing}}" onChange="{{fp.onRouting}}"><option value="inbox">Team inbox only</option><option value="jira">Inbox + Jira project</option><option value="teams">Inbox + Teams channel</option></select><span style="font-size: 12px; color: #48454E">Bugs always go to Jira; never to Ideas</span></div>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Options</span><sc-for list="{{fp.optChips}}" as="t" hint-placeholder-count="2"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+    <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><sc-if value="{{fp.canClose}}" hint-placeholder-val="{{false}}"><button type="button" class="btn x" onClick="{{fp.close}}">Close</button></sc-if><button type="button" class="btn f" onClick="{{fp.save}}">Save profile</button></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 12px; min-width: 0">
+    <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Preview · side sheet in {{fp.name}}</div>
+    <div class="pop" style="position: static; width: auto; max-width: 360px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+      <div class="row" style="justify-content: space-between"><span class="ui" style="font-size: 16px; font-weight: 700">Feedback · {{fp.name}}</span><span style="font-size: 12px; color: #48454E">Goes to {{fp.owner}}</span></div>
+      <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2"><div><div class="ui" style="font-size: 14px; font-weight: 600; margin-bottom: 6px">{{q.textOr}}</div><span class="tag" style="background: #ECE5F4">{{q.typeLabel}}</span></div></sc-for>
+      <sc-if value="{{fp.noQ}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: #48454E">Add at least one question.</span></sc-if>
+      <sc-if value="{{fp.ctx}}" hint-placeholder-val="{{true}}"><div class="row" style="gap: 6px; font-size: 12px; color: #48454E"><span class="chip chip-on" style="height: 28px; font-size: 12px">Attach context</span>page, run, environment, app version</div></sc-if>
+      <div class="row" style="justify-content: flex-end"><span class="btn f sm">Send</span></div>
+    </div>
+  </div>
+</div></sc-if>
+</div></sc-if><sc-if value="{{pOther}}" hint-placeholder-val="{{false}}"><div class="ocard" style="display: flex; gap: 16px; align-items: center; padding: 24px"><span class="tile ne" style="flex: none"><i></i>{{pageTitle}}</span><span style="font-size: 14px; color: #48454E">This section is not in the lab. It uses the same shell, with its own content.</span></div></sc-if></div></div></sc-if><sc-if value="{{isC}}" hint-placeholder-val="{{false}}"><div class="stack" style="gap: 16px"><div role="tablist" class="ad-tabs" aria-label="Administration"><sc-for list="{{groups}}" as="g" hint-placeholder-count="3"><button type="button" role="tab" class="tab {{g.tabCls}}" aria-selected="{{g.on}}" onClick="{{g.pick}}"><sc-if value="{{g.isSweep}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg1" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm1" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg1)" mask="url(#nvm1)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></sc-if><sc-if value="{{g.isNew}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></sc-if>{{g.label}}</button></sc-for></div><div class="row ad-chips" style="gap: 8px"><sc-for list="{{sections}}" as="s" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{s.on}}" style="{{s.style}}" onClick="{{s.pick}}">{{s.label}}<sc-if value="{{s.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{s.n}}</span></sc-if></button></sc-for></div><sc-if value="{{isFeaturePage}}" hint-placeholder-val="{{true}}"><div class="row r-wrap" style="gap: 8px; font-size: 12px; color: #48454E"><span class="tag" style="background: #ECE5F4">Remote module</span><span class="mono">{{modRemote}}</span><span>· owned by {{modOwner}}</span><span style="flex: 1"></span><span>{{modScope}}</span></div></sc-if><sc-if value="{{pGeneral}}" hint-placeholder-val="{{true}}"><div class="stack">
+  <div class="card stack" style="gap: 16px; padding: 24px; max-width: 760px">
+    <div class="h2">Workspace</div>
+    <div class="fld"><label for="g-name">Workspace name</label><input id="g-name" type="text" value="AIToolbox"></div>
+    <div class="row r-wrap" style="gap: 16px"><div class="fld" style="flex: 1 1 220px"><label for="g-lang">Default language</label><input id="g-lang" type="text" value="English"></div><div class="fld" style="flex: 1 1 220px"><label for="g-tz">Time zone</label><input id="g-tz" type="text" value="Europe/Paris (CET)"></div></div>
+    <div class="fld"><label for="g-sup">Support contact</label><input id="g-sup" type="text" value="Platform team · Teams channel “AIToolbox support”"></div>
+  </div>
+  <div class="card stack" style="gap: 12px; padding: 24px; max-width: 760px">
+    <div class="h2">Retention</div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Audit log</span><span class="chip chip-on">90 days</span><span class="chip">1 year</span><span class="chip">3 years</span></div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Feedback and surveys</span><span class="chip">6 months</span><span class="chip chip-on">12 months</span><span class="chip">24 months</span></div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Assistant history</span><span class="chip chip-on">30 days</span><span class="chip">90 days</span></div>
+    <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><button type="button" class="btn x">Cancel</button><button type="button" class="btn f">Save</button></div>
+  </div>
+</div></sc-if><sc-if value="{{pUsers}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px 12px"><span class="tile ok" style="flex: none"><i></i>Directory sync · 10 min ago</span><span class="meta" style="white-space: normal; flex: 1; min-width: 220px">Accounts are created and removed automatically from the company directory (SSO), with their team. This page only gives admin rights.</span></div>
+  <div class="row r-wrap" style="gap: 8px">
+    <sc-for list="{{uFilters}}" as="f" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{f.on}}" style="{{f.style}}" onClick="{{f.pick}}">{{f.label}}<span class="n">{{f.n}}</span></button></sc-for>
+    <span style="flex: 1"></span>
+    <div class="fld ad-search" style="min-height: 40px; padding: 8px 12px; width: 240px"><label for="ad-q">Search</label><div class="row" style="gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="ad-q" type="text" placeholder="Name, email, team…"></div></div>
+  </div>
+  <div class="ad-two">
+    <div class="card" style="padding: 0; overflow: hidden; min-width: 0">
+      <div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+        <thead><tr><th class="th">User</th><th class="th">Admin rights</th><th class="th">Team</th><th class="th">Last active</th></tr></thead>
+        <tbody>
+          <sc-for list="{{users}}" as="u" hint-placeholder-count="6">
+            <tr class="rw {{u.cls}}" tabindex="0" role="button" aria-pressed="{{u.on}}" onClick="{{u.pick}}">
+              <td class="td"><div class="row" style="gap: 10px"><span class="av" style="background: {{u.bg}}">{{u.ini}}</span><div style="min-width: 0"><div class="ui" style="font-weight: 600; white-space: nowrap">{{u.name}}</div><div class="mono" style="font-size: 11px; color: #48454E">{{u.mail}}</div></div></div></td>
+              <td class="td"><div class="row" style="gap: 6px; flex-wrap: wrap"><sc-for list="{{u.rights}}" as="r" hint-placeholder-count="2"><span class="tag" style="background: {{r.bg}}">{{r.label}}</span></sc-for><sc-if value="{{u.pending}}" hint-placeholder-val="{{false}}"><span class="tile wn"><i></i>{{u.pendingLabel}}</span></sc-if><sc-if value="{{u.noRights}}" hint-placeholder-val="{{false}}"><span class="meta">None</span></sc-if></div></td>
+              <td class="td"><span style="font-size: 13px">{{u.groups}}</span></td>
+              <td class="td"><span class="meta">{{u.last}}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table></div>
+      <div class="row" style="padding: 10px 16px; border-top: 1px solid #CAC4CF; font-size: 12px; color: #48454E"><span>{{uCount}}</span><span style="flex: 1"></span><button type="button" class="chip" style="height: 28px">Next</button></div>
+    </div>
+    <sc-if value="{{hasUsr}}" hint-placeholder-val="{{true}}">
+    <aside class="card ad-detail" aria-label="Admin rights of {{usr.name}}">
+      <div class="row" style="justify-content: space-between"><div class="row" style="gap: 10px"><span class="av" style="background: {{usr.bg}}">{{usr.ini}}</span><div><div class="ui" style="font-weight: 700">{{usr.name}}</div><div class="mono" style="font-size: 11px; color: #48454E">{{usr.mail}}</div></div></div><button type="button" class="ib" aria-label="Close" style="margin: -8px -8px -8px 0" onClick="{{closeUsr}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="meta" style="white-space: normal">Team <b style="color: #1C1B1E">{{usr.groups}}</b>, from the directory</div>
+      <sc-if value="{{usr.pending}}" hint-placeholder-val="{{false}}"><div class="ocard row r-wrap ad-banner" style="gap: 8px; border-color: #E8A400; background: #FFF4DE"><span style="flex: 1; min-width: 0; font-size: 13px; line-height: 18px">Asks for <b>{{usr.pendingRight}}</b></span><button type="button" class="chip" style="height: 28px">Decline</button><button type="button" class="btn f sm">Approve</button></div></sc-if>
+      <div class="ad-fs"><div class="ad-fl">Admin rights</div>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.admin}}"> <span><b>Platform admin</b><br><span class="meta">Everything, including users, groups and the audit log</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.sweep}}"> <span><b>Sweep admin</b><br><span class="meta">Connectors</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.community}}"> <span><b>Community admin</b><br><span class="meta">Releases, tours, feedback, ideas, insights</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.fbSweep}}"> <span><b>Feedback · Sweep</b><br><span class="meta">Sweep feedback profile and inbox, in Community › Feedback</span></span></label></div>
+      <div class="row" style="justify-content: flex-end; gap: 8px; padding-top: 4px"><button type="button" class="btn x" onClick="{{closeUsr}}">Cancel</button><button type="button" class="btn f">Save</button></div>
+    </aside>
+    </sc-if>
+  </div>
+</div></sc-if><sc-if value="{{pConnectors}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px"><span class="meta" style="white-space: normal; flex: 1; min-width: 220px">The outside services Sweep reads from and writes to. Credentials are kept in the vault and never shown again after saving.</span><button type="button" class="btn f btn-i"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add connector</button></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Connector</th><th class="th">Used for</th><th class="th">Scope</th><th class="th">Status</th><th class="th">Last sync</th><th class="th"></th></tr></thead>
+    <tbody>
+      <tr class="rw"><td class="td"><b class="ui">DevOps platform</b><div class="meta">devops.example.internal · also used by the DevOps MCP server</div></td><td class="td"><span style="font-size: 13px">Repositories, pipelines, pull requests</span></td><td class="td">64 repositories</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">2 min ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Jira</b><div class="meta">Projects SWP, PAY, CB · used by Create Jira ticket</div></td><td class="td"><span style="font-size: 13px">Blocking findings become tickets</span></td><td class="td">3 projects</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">10 min ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Microsoft Teams</b><div class="meta">Run notifications</div></td><td class="td"><span style="font-size: 13px">Run results and failures</span></td><td class="td">12 channels</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">1 h ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">SonarQube</b><div class="meta">Quality gate</div></td><td class="td"><span style="font-size: 13px">Quality gate in the Test phase</span></td><td class="td">1 instance</td><td class="td"><span class="tile wn"><i></i>Token expires in 6 days</span></td><td class="td"><span class="meta">3 h ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Renew token</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Artifactory</b><div class="meta">Build artefacts</div></td><td class="td"><span style="font-size: 13px">Publish and scan artefacts</span></td><td class="td">—</td><td class="td"><span class="tile ne"><i></i>Not connected</span></td><td class="td"><span class="meta">—</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Connect</button></td></tr>
+    </tbody></table></div></div>
+</div></sc-if><sc-if value="{{pListening}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px"><span class="tab tab-on">{{profilesTab}}</span><span class="tab">Inbox<span class="n">{{inboxN}}</span></span><sc-if value="{{hasCore}}" hint-placeholder-val="{{true}}"><span class="tab">Surveys<span class="n">3</span></span></sc-if><span class="tab">Solicitation policy</span><span style="flex: 1"></span><span class="tile in"><i></i>Shared cap · 1 prompt per user every 7 days</span></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Feedback profile</th><th class="th">Status</th><th class="th">Entry points</th><th class="th">Questions</th><th class="th">Routing</th><th class="th"></th></tr></thead>
+    <tbody>
+      <sc-for list="{{profiles}}" as="p" hint-placeholder-count="4">
+      <tr class="rw"><td class="td"><b class="ui">{{p.name}}</b><div class="meta">{{p.owner}}</div></td><td class="td"><span class="tile {{p.tile}}"><i></i>{{p.status}}</span></td><td class="td"><span style="font-size: 13px">{{p.entries}}</span></td><td class="td">{{p.q}} of 3</td><td class="td"><span style="font-size: 13px">{{p.route}}</span></td><td class="td" style="text-align: right; white-space: nowrap"><button type="button" class="chip" style="height: 28px" aria-label="Edit the {{p.name}} feedback profile" onClick="{{p.go}}">Edit</button></td></tr>
+      </sc-for>
+    </tbody></table></div></div>
+  <div class="meta" style="white-space: normal">{{profilesNote}}</div>
+  <sc-if value="{{fpOn}}" hint-placeholder-val="{{true}}"><div class="r-split fbp" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start">
+  <div class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 24px">
+    <div class="row r-wrap" style="justify-content: space-between; gap: 8px"><div style="min-width: 0"><h2 class="h2">{{fp.name}} · feedback profile</h2><div style="font-size: 12px; color: #48454E; margin-top: 2px">FeedbackProfile component · one editor for every feature’s profile</div></div><button type="button" class="chip" aria-pressed="{{fp.on}}" style="{{fp.onStyle}}" onClick="{{fp.toggle}}"><sc-if value="{{fp.on}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{fp.onLabel}}</button></div>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Entry points</span><sc-for list="{{fp.entryChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+    <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Questions · {{fp.nq}} of 3</div>
+    <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2">
+      <div class="step" style="align-items: center"><span class="num">{{q.n}}</span><select class="sel sel-s" aria-label="Question type" value="{{q.type}}" onChange="{{q.onType}}"><option value="thumbs">Thumbs</option><option value="scale">Scale 1–5</option><option value="nps">NPS 0–10</option><option value="single">Single choice</option><option value="multi">Multiple choice</option><option value="text">Text</option></select><div class="fld" style="flex: 1; min-width: 0; min-height: 40px; padding: 8px 12px"><input type="text" aria-label="Question {{q.n}}" value="{{q.text}}" onChange="{{q.onText}}"></div><button type="button" class="ib" aria-label="Remove question {{q.n}}" style="width: 32px; height: 32px; margin: 0" onClick="{{q.del}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
+    </sc-for>
+    <sc-if value="{{fp.canAdd}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" style="align-self: flex-start" onClick="{{fp.addQ}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add question</button></sc-if>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Sampling</span><sc-for list="{{fp.samplingChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for><span style="font-size: 12px; color: #48454E">after-action prompts only</span></div>
+    <div class="row" style="flex-wrap: wrap"><label for="fp-route" style="font-size: 13px; color: #48454E; width: 96px">Routing</label><select id="fp-route" class="sel sel-s" value="{{fp.routing}}" onChange="{{fp.onRouting}}"><option value="inbox">Team inbox only</option><option value="jira">Inbox + Jira project</option><option value="teams">Inbox + Teams channel</option></select><span style="font-size: 12px; color: #48454E">Bugs always go to Jira; never to Ideas</span></div>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Options</span><sc-for list="{{fp.optChips}}" as="t" hint-placeholder-count="2"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+    <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><sc-if value="{{fp.canClose}}" hint-placeholder-val="{{false}}"><button type="button" class="btn x" onClick="{{fp.close}}">Close</button></sc-if><button type="button" class="btn f" onClick="{{fp.save}}">Save profile</button></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 12px; min-width: 0">
+    <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Preview · side sheet in {{fp.name}}</div>
+    <div class="pop" style="position: static; width: auto; max-width: 360px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+      <div class="row" style="justify-content: space-between"><span class="ui" style="font-size: 16px; font-weight: 700">Feedback · {{fp.name}}</span><span style="font-size: 12px; color: #48454E">Goes to {{fp.owner}}</span></div>
+      <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2"><div><div class="ui" style="font-size: 14px; font-weight: 600; margin-bottom: 6px">{{q.textOr}}</div><span class="tag" style="background: #ECE5F4">{{q.typeLabel}}</span></div></sc-for>
+      <sc-if value="{{fp.noQ}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: #48454E">Add at least one question.</span></sc-if>
+      <sc-if value="{{fp.ctx}}" hint-placeholder-val="{{true}}"><div class="row" style="gap: 6px; font-size: 12px; color: #48454E"><span class="chip chip-on" style="height: 28px; font-size: 12px">Attach context</span>page, run, environment, app version</div></sc-if>
+      <div class="row" style="justify-content: flex-end"><span class="btn f sm">Send</span></div>
+    </div>
+  </div>
+</div></sc-if>
+</div></sc-if><sc-if value="{{pOther}}" hint-placeholder-val="{{false}}"><div class="ocard" style="display: flex; gap: 16px; align-items: center; padding: 24px"><span class="tile ne" style="flex: none"><i></i>{{pageTitle}}</span><span style="font-size: 14px; color: #48454E">This section is not in the lab. It uses the same shell, with its own content.</span></div></sc-if></div></sc-if><sc-if value="{{isD}}" hint-placeholder-val="{{false}}"><div class="stack" style="gap: 16px; min-width: 0"><div class="ad-select ad-select-d row" style="gap: 8px"><label for="ad-sel" class="meta">Section</label><select id="ad-sel" class="sel" value="{{page}}" onChange="{{onSelect}}"><sc-for list="{{groups}}" as="g" hint-placeholder-count="3"><optgroup label="{{g.label}}"><sc-for list="{{g.items}}" as="s" hint-placeholder-count="4"><option value="{{s.key}}">{{s.label}}</option></sc-for></optgroup></sc-for></select></div><sc-if value="{{isFeaturePage}}" hint-placeholder-val="{{true}}"><div class="row r-wrap" style="gap: 8px; font-size: 12px; color: #48454E"><span class="tag" style="background: #ECE5F4">Remote module</span><span class="mono">{{modRemote}}</span><span>· owned by {{modOwner}}</span><span style="flex: 1"></span><span>{{modScope}}</span></div></sc-if><sc-if value="{{pGeneral}}" hint-placeholder-val="{{true}}"><div class="stack">
+  <div class="card stack" style="gap: 16px; padding: 24px; max-width: 760px">
+    <div class="h2">Workspace</div>
+    <div class="fld"><label for="g-name">Workspace name</label><input id="g-name" type="text" value="AIToolbox"></div>
+    <div class="row r-wrap" style="gap: 16px"><div class="fld" style="flex: 1 1 220px"><label for="g-lang">Default language</label><input id="g-lang" type="text" value="English"></div><div class="fld" style="flex: 1 1 220px"><label for="g-tz">Time zone</label><input id="g-tz" type="text" value="Europe/Paris (CET)"></div></div>
+    <div class="fld"><label for="g-sup">Support contact</label><input id="g-sup" type="text" value="Platform team · Teams channel “AIToolbox support”"></div>
+  </div>
+  <div class="card stack" style="gap: 12px; padding: 24px; max-width: 760px">
+    <div class="h2">Retention</div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Audit log</span><span class="chip chip-on">90 days</span><span class="chip">1 year</span><span class="chip">3 years</span></div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Feedback and surveys</span><span class="chip">6 months</span><span class="chip chip-on">12 months</span><span class="chip">24 months</span></div>
+    <div class="row r-wrap" style="gap: 8px"><span class="meta" style="width: 140px">Assistant history</span><span class="chip chip-on">30 days</span><span class="chip">90 days</span></div>
+    <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><button type="button" class="btn x">Cancel</button><button type="button" class="btn f">Save</button></div>
+  </div>
+</div></sc-if><sc-if value="{{pUsers}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px 12px"><span class="tile ok" style="flex: none"><i></i>Directory sync · 10 min ago</span><span class="meta" style="white-space: normal; flex: 1; min-width: 220px">Accounts are created and removed automatically from the company directory (SSO), with their team. This page only gives admin rights.</span></div>
+  <div class="row r-wrap" style="gap: 8px">
+    <sc-for list="{{uFilters}}" as="f" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{f.on}}" style="{{f.style}}" onClick="{{f.pick}}">{{f.label}}<span class="n">{{f.n}}</span></button></sc-for>
+    <span style="flex: 1"></span>
+    <div class="fld ad-search" style="min-height: 40px; padding: 8px 12px; width: 240px"><label for="ad-q">Search</label><div class="row" style="gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="ad-q" type="text" placeholder="Name, email, team…"></div></div>
+  </div>
+  <div class="ad-two">
+    <div class="card" style="padding: 0; overflow: hidden; min-width: 0">
+      <div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+        <thead><tr><th class="th">User</th><th class="th">Admin rights</th><th class="th">Team</th><th class="th">Last active</th></tr></thead>
+        <tbody>
+          <sc-for list="{{users}}" as="u" hint-placeholder-count="6">
+            <tr class="rw {{u.cls}}" tabindex="0" role="button" aria-pressed="{{u.on}}" onClick="{{u.pick}}">
+              <td class="td"><div class="row" style="gap: 10px"><span class="av" style="background: {{u.bg}}">{{u.ini}}</span><div style="min-width: 0"><div class="ui" style="font-weight: 600; white-space: nowrap">{{u.name}}</div><div class="mono" style="font-size: 11px; color: #48454E">{{u.mail}}</div></div></div></td>
+              <td class="td"><div class="row" style="gap: 6px; flex-wrap: wrap"><sc-for list="{{u.rights}}" as="r" hint-placeholder-count="2"><span class="tag" style="background: {{r.bg}}">{{r.label}}</span></sc-for><sc-if value="{{u.pending}}" hint-placeholder-val="{{false}}"><span class="tile wn"><i></i>{{u.pendingLabel}}</span></sc-if><sc-if value="{{u.noRights}}" hint-placeholder-val="{{false}}"><span class="meta">None</span></sc-if></div></td>
+              <td class="td"><span style="font-size: 13px">{{u.groups}}</span></td>
+              <td class="td"><span class="meta">{{u.last}}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table></div>
+      <div class="row" style="padding: 10px 16px; border-top: 1px solid #CAC4CF; font-size: 12px; color: #48454E"><span>{{uCount}}</span><span style="flex: 1"></span><button type="button" class="chip" style="height: 28px">Next</button></div>
+    </div>
+    <sc-if value="{{hasUsr}}" hint-placeholder-val="{{true}}">
+    <aside class="card ad-detail" aria-label="Admin rights of {{usr.name}}">
+      <div class="row" style="justify-content: space-between"><div class="row" style="gap: 10px"><span class="av" style="background: {{usr.bg}}">{{usr.ini}}</span><div><div class="ui" style="font-weight: 700">{{usr.name}}</div><div class="mono" style="font-size: 11px; color: #48454E">{{usr.mail}}</div></div></div><button type="button" class="ib" aria-label="Close" style="margin: -8px -8px -8px 0" onClick="{{closeUsr}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="meta" style="white-space: normal">Team <b style="color: #1C1B1E">{{usr.groups}}</b>, from the directory</div>
+      <sc-if value="{{usr.pending}}" hint-placeholder-val="{{false}}"><div class="ocard row r-wrap ad-banner" style="gap: 8px; border-color: #E8A400; background: #FFF4DE"><span style="flex: 1; min-width: 0; font-size: 13px; line-height: 18px">Asks for <b>{{usr.pendingRight}}</b></span><button type="button" class="chip" style="height: 28px">Decline</button><button type="button" class="btn f sm">Approve</button></div></sc-if>
+      <div class="ad-fs"><div class="ad-fl">Admin rights</div>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.admin}}"> <span><b>Platform admin</b><br><span class="meta">Everything, including users, groups and the audit log</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.sweep}}"> <span><b>Sweep admin</b><br><span class="meta">Connectors</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.community}}"> <span><b>Community admin</b><br><span class="meta">Releases, tours, feedback, ideas, insights</span></span></label>
+        <label class="ad-opt"><input type="checkbox" checked="{{usr.fbSweep}}"> <span><b>Feedback · Sweep</b><br><span class="meta">Sweep feedback profile and inbox, in Community › Feedback</span></span></label></div>
+      <div class="row" style="justify-content: flex-end; gap: 8px; padding-top: 4px"><button type="button" class="btn x" onClick="{{closeUsr}}">Cancel</button><button type="button" class="btn f">Save</button></div>
+    </aside>
+    </sc-if>
+  </div>
+</div></sc-if><sc-if value="{{pConnectors}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px"><span class="meta" style="white-space: normal; flex: 1; min-width: 220px">The outside services Sweep reads from and writes to. Credentials are kept in the vault and never shown again after saving.</span><button type="button" class="btn f btn-i"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add connector</button></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Connector</th><th class="th">Used for</th><th class="th">Scope</th><th class="th">Status</th><th class="th">Last sync</th><th class="th"></th></tr></thead>
+    <tbody>
+      <tr class="rw"><td class="td"><b class="ui">DevOps platform</b><div class="meta">devops.example.internal · also used by the DevOps MCP server</div></td><td class="td"><span style="font-size: 13px">Repositories, pipelines, pull requests</span></td><td class="td">64 repositories</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">2 min ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Jira</b><div class="meta">Projects SWP, PAY, CB · used by Create Jira ticket</div></td><td class="td"><span style="font-size: 13px">Blocking findings become tickets</span></td><td class="td">3 projects</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">10 min ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Microsoft Teams</b><div class="meta">Run notifications</div></td><td class="td"><span style="font-size: 13px">Run results and failures</span></td><td class="td">12 channels</td><td class="td"><span class="tile ok"><i></i>Connected</span></td><td class="td"><span class="meta">1 h ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Configure</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">SonarQube</b><div class="meta">Quality gate</div></td><td class="td"><span style="font-size: 13px">Quality gate in the Test phase</span></td><td class="td">1 instance</td><td class="td"><span class="tile wn"><i></i>Token expires in 6 days</span></td><td class="td"><span class="meta">3 h ago</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Renew token</button></td></tr>
+      <tr class="rw"><td class="td"><b class="ui">Artifactory</b><div class="meta">Build artefacts</div></td><td class="td"><span style="font-size: 13px">Publish and scan artefacts</span></td><td class="td">—</td><td class="td"><span class="tile ne"><i></i>Not connected</span></td><td class="td"><span class="meta">—</span></td><td class="td" style="text-align: right"><button type="button" class="chip" style="height: 28px">Connect</button></td></tr>
+    </tbody></table></div></div>
+</div></sc-if><sc-if value="{{pListening}}" hint-placeholder-val="{{false}}"><div class="stack">
+  <div class="row r-wrap" style="gap: 8px"><span class="tab tab-on">{{profilesTab}}</span><span class="tab">Inbox<span class="n">{{inboxN}}</span></span><sc-if value="{{hasCore}}" hint-placeholder-val="{{true}}"><span class="tab">Surveys<span class="n">3</span></span></sc-if><span class="tab">Solicitation policy</span><span style="flex: 1"></span><span class="tile in"><i></i>Shared cap · 1 prompt per user every 7 days</span></div>
+  <div class="card" style="padding: 0; overflow: hidden"><div class="ad-tscroll"><table class="ad-tbl" style="width: 100%; border-collapse: collapse">
+    <thead><tr><th class="th">Feedback profile</th><th class="th">Status</th><th class="th">Entry points</th><th class="th">Questions</th><th class="th">Routing</th><th class="th"></th></tr></thead>
+    <tbody>
+      <sc-for list="{{profiles}}" as="p" hint-placeholder-count="4">
+      <tr class="rw"><td class="td"><b class="ui">{{p.name}}</b><div class="meta">{{p.owner}}</div></td><td class="td"><span class="tile {{p.tile}}"><i></i>{{p.status}}</span></td><td class="td"><span style="font-size: 13px">{{p.entries}}</span></td><td class="td">{{p.q}} of 3</td><td class="td"><span style="font-size: 13px">{{p.route}}</span></td><td class="td" style="text-align: right; white-space: nowrap"><button type="button" class="chip" style="height: 28px" aria-label="Edit the {{p.name}} feedback profile" onClick="{{p.go}}">Edit</button></td></tr>
+      </sc-for>
+    </tbody></table></div></div>
+  <div class="meta" style="white-space: normal">{{profilesNote}}</div>
+  <sc-if value="{{fpOn}}" hint-placeholder-val="{{true}}"><div class="r-split fbp" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start">
+  <div class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 24px">
+    <div class="row r-wrap" style="justify-content: space-between; gap: 8px"><div style="min-width: 0"><h2 class="h2">{{fp.name}} · feedback profile</h2><div style="font-size: 12px; color: #48454E; margin-top: 2px">FeedbackProfile component · one editor for every feature’s profile</div></div><button type="button" class="chip" aria-pressed="{{fp.on}}" style="{{fp.onStyle}}" onClick="{{fp.toggle}}"><sc-if value="{{fp.on}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{fp.onLabel}}</button></div>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Entry points</span><sc-for list="{{fp.entryChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+    <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Questions · {{fp.nq}} of 3</div>
+    <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2">
+      <div class="step" style="align-items: center"><span class="num">{{q.n}}</span><select class="sel sel-s" aria-label="Question type" value="{{q.type}}" onChange="{{q.onType}}"><option value="thumbs">Thumbs</option><option value="scale">Scale 1–5</option><option value="nps">NPS 0–10</option><option value="single">Single choice</option><option value="multi">Multiple choice</option><option value="text">Text</option></select><div class="fld" style="flex: 1; min-width: 0; min-height: 40px; padding: 8px 12px"><input type="text" aria-label="Question {{q.n}}" value="{{q.text}}" onChange="{{q.onText}}"></div><button type="button" class="ib" aria-label="Remove question {{q.n}}" style="width: 32px; height: 32px; margin: 0" onClick="{{q.del}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
+    </sc-for>
+    <sc-if value="{{fp.canAdd}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" style="align-self: flex-start" onClick="{{fp.addQ}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add question</button></sc-if>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Sampling</span><sc-for list="{{fp.samplingChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for><span style="font-size: 12px; color: #48454E">after-action prompts only</span></div>
+    <div class="row" style="flex-wrap: wrap"><label for="fp-route" style="font-size: 13px; color: #48454E; width: 96px">Routing</label><select id="fp-route" class="sel sel-s" value="{{fp.routing}}" onChange="{{fp.onRouting}}"><option value="inbox">Team inbox only</option><option value="jira">Inbox + Jira project</option><option value="teams">Inbox + Teams channel</option></select><span style="font-size: 12px; color: #48454E">Bugs always go to Jira; never to Ideas</span></div>
+    <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Options</span><sc-for list="{{fp.optChips}}" as="t" hint-placeholder-count="2"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+    <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><sc-if value="{{fp.canClose}}" hint-placeholder-val="{{false}}"><button type="button" class="btn x" onClick="{{fp.close}}">Close</button></sc-if><button type="button" class="btn f" onClick="{{fp.save}}">Save profile</button></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 12px; min-width: 0">
+    <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Preview · side sheet in {{fp.name}}</div>
+    <div class="pop" style="position: static; width: auto; max-width: 360px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+      <div class="row" style="justify-content: space-between"><span class="ui" style="font-size: 16px; font-weight: 700">Feedback · {{fp.name}}</span><span style="font-size: 12px; color: #48454E">Goes to {{fp.owner}}</span></div>
+      <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2"><div><div class="ui" style="font-size: 14px; font-weight: 600; margin-bottom: 6px">{{q.textOr}}</div><span class="tag" style="background: #ECE5F4">{{q.typeLabel}}</span></div></sc-for>
+      <sc-if value="{{fp.noQ}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: #48454E">Add at least one question.</span></sc-if>
+      <sc-if value="{{fp.ctx}}" hint-placeholder-val="{{true}}"><div class="row" style="gap: 6px; font-size: 12px; color: #48454E"><span class="chip chip-on" style="height: 28px; font-size: 12px">Attach context</span>page, run, environment, app version</div></sc-if>
+      <div class="row" style="justify-content: flex-end"><span class="btn f sm">Send</span></div>
+    </div>
+  </div>
+</div></sc-if>
+</div></sc-if><sc-if value="{{pOther}}" hint-placeholder-val="{{false}}"><div class="ocard" style="display: flex; gap: 16px; align-items: center; padding: 24px"><span class="tile ne" style="flex: none"><i></i>{{pageTitle}}</span><span style="font-size: 14px; color: #48454E">This section is not in the lab. It uses the same shell, with its own content.</span></div></sc-if></div></sc-if>
+      </main>
+    </div>
+    <nav aria-label="Primary" class="nav-bar" style="position: sticky; bottom: 0; z-index: 3; height: 80px; flex: none; box-sizing: border-box; justify-content: space-around; align-items: center; padding: 0 4px; background: #EDE4FF; border-top: 1px solid #CAC4CF"><a href="#sweep" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><defs><linearGradient id="nvg11" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="61"><stop offset="0" stop-color="#278383"/><stop offset="1" stop-color="#00A56B"/></linearGradient><mask id="nvm11" maskUnits="userSpaceOnUse" x="-20" y="-20" width="104" height="104"><rect x="-20" y="-20" width="104" height="104" fill="#fff"/><path d="M25.5 48L23.9 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M32 48L32.0 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><path d="M38.5 48L40.1 62" stroke="#000" stroke-width="2.6" stroke-linecap="round"/></mask></defs><g transform="translate(-0.8 -3.6)"><g transform="rotate(32 32 34)"><path d="M32 4V28" stroke="#39235F" stroke-width="6.5" stroke-linecap="round"/><rect x="21" y="26" width="22" height="9" rx="3.5" fill="#39235F"/><path d="M24 35H40L49 56.5Q50 61 45.5 61H18.5Q14 61 15 56.5Z" fill="url(#nvg11)" mask="url(#nvm11)"/></g><path d="M50 41.5C51.53 48.47 51.53 48.47 58.5 50C51.53 51.53 51.53 51.53 50 58.5C48.47 51.53 48.47 51.53 41.5 50C48.47 48.47 48.47 48.47 50 41.5Z" fill="#00A56B"/><path d="M58.5 33C59.22 36.28 59.22 36.28 62.5 37C59.22 37.72 59.22 37.72 58.5 41C57.78 37.72 57.78 37.72 54.5 37C57.78 36.28 57.78 36.28 58.5 33Z" fill="#278383"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Sweep</span></a><a href="#env" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-0.2 0.2)"><path d="M12 50L32 32L52 14" stroke="#39235F" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="12" cy="50" r="7" fill="#FDF8FD" stroke="#39235F" stroke-width="5"/><circle cx="32" cy="32" r="7.5" fill="#FDF8FD" stroke="#278383" stroke-width="5"/><circle cx="52" cy="14" r="10" fill="#00A56B"/><path d="M47.5 14.2l3 3 6-6" fill="none" stroke="#FDF8FD" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Envs</span></a><a href="#docs" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><g transform="translate(-2.7 -2.5)"><rect x="6" y="10" width="13" height="48" rx="3.5" fill="#39235F"/><path d="M9.5 20H15.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="22" y="16" width="13" height="42" rx="3.5" fill="#278383"/><path d="M25.5 25H31.5" stroke="#FDF8FD" stroke-width="2.6" stroke-linecap="round"/><rect x="38" y="13" width="13" height="46" rx="3.5" fill="#00A56B" transform="rotate(16 51 58)"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Docs</span></a><a href="#new" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible; flex: none"><path d="M8 27a5 5 0 0 1 5-5h9l20-11v42L22 42h-9a5 5 0 0 1-5-5z" fill="#39235F"/><path d="M16 43l4 11a3 3 0 0 0 3 2h3a2 2 0 0 0 2-2.6L24.5 43z" fill="#278383"/><path d="M52 15.5c1.53 6.97 1.53 6.97 8.5 8.5-6.97 1.53-6.97 1.53-8.5 8.5-1.53-6.97-1.53-6.97-8.5-8.5 6.97-1.53 6.97-1.53 8.5-8.5z" fill="#00A56B"/><path d="M56 39c.72 3.28.72 3.28 4 4-3.28.72-3.28.72-4 4-.72-3.28-.72-3.28-4-4 3.28-.72 3.28-.72 4-4z" fill="#278383"/></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Community</span></a><button type="button" aria-label="Open assistant" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 0; border: 0; background: transparent; text-decoration: none"><span style="width: 64px; height: 32px; border-radius: 16px; background: transparent; color: #48454E; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible"><g transform="translate(-3.200 -8.150) scale(1.1)"><path d="M26 56h-3a9 9 0 0 1-9-9v-4.0l-5-4 5-4v-4.0a9 9 0 0 1 9-9h2.0l7-5 7 5h2.0a9 9 0 0 1 9 9v4.0l5 4-5 4v4.0a9 9 0 0 1-9 9h-3" fill="none" stroke="#39235F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 37l6 5-6 5" fill="none" stroke="#39235F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 49h5" fill="none" stroke="#008857" stroke-width="4.5" stroke-linecap="round"/></g></svg></span><span style="font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #48454E; white-space: nowrap">Assistant</span></button></nav>
+  </div>
+  </div></div>
+  </div>
+
+  <div style="padding: 20px 32px 32px; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 24px; align-items: start">
+    <div class="card" style="padding: 0; overflow: hidden">
+      <table class="cmp" style="width: 100%; border-collapse: collapse">
+        <thead><tr><th style="width: 30px"></th><th style="width: 130px">Shell</th><th>Landing</th><th>Reaching a section</th><th>Rights</th><th>Below 1200 px</th><th>Trade-off</th></tr></thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+            <tr class="{{r.cls}}"><td><span class="ui" style="font-weight: 700">{{r.k}}</span></td><td><span class="ui" style="font-weight: 600">{{r.name}}</span></td><td>{{r.landing}}</td><td>{{r.reach}}</td><td>{{r.rights}}</td><td>{{r.small}}</td><td style="color: #48454E">{{r.trade}}</td></tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px">
+        <div class="row" style="justify-content: space-between"><span class="h2">Adopted · B</span><span class="tile ok"><i></i>Admin sidebar</span></div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E">One page with a 240 px sidebar: Core, then one group per feature module, each group being what the remote module declares in its manifest. Every section is one click away and the current one is always visible; rights simply remove groups and items (a Sweep admin sees Sweep, and Feedback · Sweep under Community). New feature modules add a group; nothing else moves. Below 1200 px the sidebar becomes a grouped Section select above the content. Applied to the live Community prototype.</div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E"><b style="color: #1C1B1E">Second choice: D</b>, the console, if Administration becomes a place people stay in for long sessions: the admin tree takes the rail’s place and the page gets the full width, at the cost of leaving the app’s navigation.</div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E"><b style="color: #1C1B1E">A</b> keeps a hub that is pleasant to land on but adds a click to every section and a back chip to every page; <b style="color: #1C1B1E">C</b> needs two rows (scope tabs, section chips) and the scope tabs scroll on phones.</div>
+      </div>
+      <div class="ocard" style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 18px; color: #48454E">
+        <span class="ui" style="font-size: 14px; font-weight: 700; color: #1C1B1E">Same in every shell</span>
+        <span><b style="color: #1C1B1E">Core</b> (platform admins only): General (landing), Users and permissions, Groups, Audit log. Accounts come from the company directory (SSO), so Users and permissions only gives admin rights: filters All, Admins, Requests, search, the user table (admin rights, team, last active) and an Admin rights panel (Platform admin, Sweep admin, Community admin, Feedback · Sweep; approve or decline a request).</span>
+        <span><b style="color: #1C1B1E">Sweep</b> (remote module sweep-admin@1.4): Connectors. <b style="color: #1C1B1E">Community</b> (community-admin@4.6): Releases, Tours, Feedback, Ideas triage, Insights. Feature pages carry the Remote module line (id, owner, scope).</span>
+        <span>Header context: “Administration · Core” over the section, or “Administration · Sweep” over the section. Administration stays the last rail destination; the rail’s own active item is Admin.</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2080}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.simHostId = 'sim-host-ad'; this.simDefault = 1374; this.state = { v: 'B', role: 'platform', page: 'general', hub: true, usel: 'u2', uf: 'all', fpEdit: null, fp: null, simW: null, simAvail: 0 }; }
+
+  simSync() {
+    if (typeof document === 'undefined') return;
+    var h = document.getElementById(this.simHostId); if (!h) return;
+    var a = Math.round(h.clientWidth);
+    // screen-fit boards: the frame takes the height left under the controls, so the rail's bottom items stay on screen
+    var top = h.getBoundingClientRect().top + (window.scrollY || 0), ah = Math.round((window.innerHeight || 0) - top - 12);
+    var o = {};
+    if (a > 0 && Math.abs((this.state.simAvail || 0) - a) > 1) o.simAvail = a;
+    if (ah > 0 && Math.abs((this.state.simAvailH || 0) - ah) > 1) o.simAvailH = ah;
+    if (o.simAvail || o.simAvailH) this.setState(o);
+  }
+  simScale() {
+    // rects are divided by this before positioning anything inside the (possibly zoomed) frame
+    if (typeof document === 'undefined') return 1;
+    var h = document.getElementById(this.simHostId), f = h && h.firstElementChild;
+    if (!f || !this._simW) return 1;
+    var z = f.getBoundingClientRect().width / this._simW;
+    return z > 0.05 ? z : 1;
+  }
+  simVals() {
+    var s = this.state, self = this, avail = s.simAvail || this.simDefault;
+    var fit = s.simW == null, W = fit ? Math.max(360, Math.min(1920, avail)) : s.simW;
+    var z = W > avail ? avail / W : 1;
+    this._simW = W;
+    var cls = W < 600 ? 'Compact' : W < 840 ? 'Medium' : W < 1200 ? 'Expanded' : W < 1600 ? 'Large' : 'Extra-large';
+    var pick = function (v) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState({ simW: v }); }; };
+    var P = [[null, 'Fit'], [360, 'Compact'], [600, 'Medium'], [840, 'Expanded'], [1200, 'Large'], [1440, 'Large'], [1920, 'Extra-large']];
+    return {
+      simW: W, simZoom: String(Math.round(z * 1000) / 1000), simFrameH: Math.round(Math.max(this.simMinH || 560, Math.min(this.simMaxH || 100000, s.simAvailH || this.simDefaultH || 900)) / z), simClass: cls, simScaled: z < 0.999, simPct: Math.round(z * 100) + ' %',
+      simCompact: W < 600, simMediumUp: W >= 600, simExpandedUp: W >= 840, simLargeUp: W >= 1200,
+      simPresets: P.map(function (p) { var v = p[0], on = fit ? v === null : v === W; return { label: v === null ? 'Fit · ' + Math.round(avail) : String(v), title: p[1], on: on, cls: on ? 'chip-on' : '', pick: pick(v) }; }),
+      simInput: function (e) { var v = parseInt((e && e.target && e.target.value) || W, 10); if (v && v !== self.state.simW) self.setState({ simW: v }); }
+    };
+  }
+
+
+  adminUsers() {
+    // Users and permissions: filters, the table, the Edit rights panel. State: uf (filter), usel (selected user id).
+    var s = this.state, self = this, ON = 'background: #DED7EB; border-color: #DED7EB; color: #1D1A28';
+    var set = function (o) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState(o); }; };
+    var U = [
+      { id: 'u1', ini: 'AH', bg: '#DED7EB', name: 'Aurélien Heux', mail: 'aurelien.heux@bnpp.example', admin: true, sweep: true, community: true, groups: 'Platform', last: 'today' },
+      { id: 'u2', ini: 'MK', bg: '#9CF1F0', name: 'Marta Kowalski', mail: 'marta.kowalski@bnpp.example', admin: false, sweep: true, community: false, groups: 'Client', last: '2 h ago' },
+      { id: 'u3', ini: 'SB', bg: '#FFDEA0', name: 'Sami Ben Ali', mail: 'sami.benali@bnpp.example', admin: true, sweep: false, community: true, groups: 'Platform', last: '1 h ago' },
+      { id: 'u4', ini: 'PS', bg: '#9CF1F0', name: 'Priya Sharma', mail: 'priya.sharma@bnpp.example', admin: false, sweep: false, community: true, groups: 'Request', last: 'yesterday' },
+      { id: 'u5', ini: 'LB', bg: '#FFDEA0', name: 'Lucas Bernard', mail: 'lucas.bernard@bnpp.example', admin: false, sweep: false, community: false, groups: 'Facility', last: '3 days ago', pending: 'Sweep admin' },
+      { id: 'u6', ini: 'YD', bg: '#C3F4DC', name: 'Yann Dupont', mail: 'yann.dupont@bnpp.example', admin: false, sweep: false, community: false, fbSweep: true, groups: 'Client', last: 'today' }
+    ];
+    var uf = s.uf === 'admins' || s.uf === 'req' ? s.uf : 'all';
+    var isAdm = function (u) { return u.admin || u.sweep || u.community || u.fbSweep; };
+    var uFilters = [ { k: 'all', label: 'All', n: '1,284' }, { k: 'admins', label: 'Admins', n: 46 }, { k: 'req', label: 'Requests', n: 1 } ].map(function (f) { var on = uf === f.k; return { label: f.label, n: f.n, on: on, style: on ? ON : '', pick: set({ uf: f.k }) }; });
+    var users = U.filter(function (u) { return uf === 'all' || (uf === 'admins' && isAdm(u)) || (uf === 'req' && u.pending); }).map(function (u) {
+      var rights = (u.admin ? [{ label: 'Platform admin', bg: '#E3DFFF' }] : []).concat(u.sweep ? [{ label: 'Sweep admin', bg: '#ECE5F4' }] : [], u.community ? [{ label: 'Community admin', bg: '#ECE5F4' }] : [], u.fbSweep ? [{ label: 'Feedback · Sweep', bg: '#ECE5F4' }] : []), on = s.usel === u.id;
+      return Object.assign({}, u, { on: on, cls: on ? 'on' : '', rights: rights, noRights: !rights.length && !u.pending, pending: !!u.pending, pendingLabel: u.pending ? u.pending + ' requested' : '', pick: set({ usel: on ? null : u.id }) });
+    });
+    var selRaw = U.filter(function (u) { return u.id === s.usel; })[0];
+    return { uFilters: uFilters, users: users, uCount: uf === 'all' ? '1–6 of 1,284' : users.length + ' shown', hasUsr: !!selRaw, closeUsr: set({ usel: null }),
+      usr: selRaw ? Object.assign({}, selRaw, { pending: !!selRaw.pending, pendingRight: selRaw.pending || '', fbSweep: !!selRaw.fbSweep }) : {} };
+  }
+  adminGroups(platform, counts) {
+    // the navigation groups, filtered by rights: a platform admin sees everything; a Sweep admin sees the Sweep group and,
+    // under Community, only "Feedback · Sweep" (scoped right Feedback · <feature>, separate from Community admin)
+    var c = counts || {};
+    var ALL = [
+      { key: 'core', label: 'Core', core: true, items: [ { key: 'general', label: 'General' }, { key: 'users', label: 'Users and permissions', n: c.users }, { key: 'groups', label: 'Groups' }, { key: 'audit', label: 'Audit log' } ] },
+      { key: 'sweep', label: 'Sweep', isSweep: true, remote: 'sweep-admin@1.4', owner: 'Platform team', items: [ { key: 'connectors', label: 'Connectors', n: c.connectors } ] },
+      { key: 'new', label: 'Community', isNew: true, remote: 'community-admin@4.6', owner: 'Platform team', items: [ { key: 'releases', label: 'Releases', n: c.releases }, { key: 'tours', label: 'Tours', n: c.tours }, { key: 'listen', label: 'Feedback', n: c.listen }, { key: 'ideas', label: 'Ideas triage', n: c.ideas }, { key: 'insights', label: 'Insights' } ] }
+    ];
+    return ALL.filter(function (g) { return platform || !g.core; }).map(function (g) {
+      var items = g.items.filter(function (i) { return platform || g.key === 'sweep' || i.key === 'listen'; }).map(function (i) { return Object.assign({}, i, !platform && i.key === 'listen' ? { label: 'Feedback · Sweep', n: c.listenScoped } : {}); });
+      return Object.assign({}, g, { items: items });
+    });
+  }
+  feedbackProfiles(s, set, opts) {
+    // FeedbackProfile: the editor for one feature's feedback form, used in Community > Feedback > Profiles (kept as its own component).
+    // s.fp holds the edits per profile key; opts.onSave(name) returns the state patch shown after saving
+    var o = opts || {}, ON = 'background: #DED7EB; border-color: #DED7EB; color: #1D1A28';
+    var val = function (e) { return e && e.target ? e.target.value : ''; };
+    var FP0 = {
+      sweep: { name: 'Sweep', owner: 'Sweep team', home: 'Community › Feedback', on: true, entries: { page: true, after: true, ai: false, global: false }, qs: [ { type: 'scale', text: 'How did this Sweep run go?' }, { type: 'single', text: 'Which phase needs work?' }, { type: 'text', text: 'Anything to add?' } ], sampling: '20', routing: 'jira', anon: true, ctx: true },
+      env: { name: 'Environments', owner: 'Release team', home: 'Community › Feedback', on: true, entries: { page: true, after: true, ai: false, global: false }, qs: [ { type: 'thumbs', text: 'Did this promotion go as expected?' }, { type: 'text', text: 'What went wrong?' } ], sampling: '10', routing: 'inbox', anon: false, ctx: true },
+      docs: { name: 'Docs', owner: 'Platform team', home: 'Community › Feedback', on: true, entries: { page: true, after: false, ai: false, global: false }, qs: [ { type: 'thumbs', text: 'Was this page useful?' } ], sampling: '100', routing: 'inbox', anon: true, ctx: true },
+      assistant: { name: 'Assistant', owner: 'AI platform team', home: 'Community › Feedback', on: true, entries: { page: false, after: false, ai: true, global: false }, qs: [ { type: 'thumbs', text: 'Rate this answer' }, { type: 'single', text: 'What was wrong?' } ], sampling: '100', routing: 'teams', anon: false, ctx: true },
+      global: { name: 'AIToolbox (global)', owner: 'Platform team', home: 'Community › Feedback', on: true, entries: { page: false, after: false, ai: false, global: true }, qs: [ { type: 'text', text: 'Tell us anything about AIToolbox' } ], sampling: '100', routing: 'inbox', anon: true, ctx: false }
+    };
+    var FPS = Object.assign({}, FP0, s.fp || {});
+    var ENTRY = { page: 'Page button', after: 'After an action', ai: 'On AI answers', global: 'Account menu' };
+    var ROUTE = { inbox: 'Team inbox', jira: 'Inbox + Jira', teams: 'Inbox + Teams' };
+    var QT = { thumbs: 'Thumbs', scale: 'Scale 1–5', nps: 'NPS 0–10', single: 'Single choice', multi: 'Multiple choice', text: 'Text' };
+    var setFp = function (key, patch) { var all = Object.assign({}, s.fp || {}); all[key] = Object.assign({}, FPS[key], patch); return { fp: all }; };
+    var summary = function (k) { var p = FPS[k]; return { key: k, name: p.name, owner: p.owner, home: p.home, status: p.on ? 'On' : 'Off', tile: p.on ? 'ok' : 'ne', entries: Object.keys(p.entries).filter(function (e) { return p.entries[e]; }).map(function (e) { return ENTRY[e]; }).join(', ') || '—', nq: p.qs.length, sampling: p.entries.after ? p.sampling + '%' : '—', routing: ROUTE[p.routing] }; };
+    var editor = function (fk, extra) {
+      var fpv = FPS[fk]; if (!fpv) return {};
+      return Object.assign({
+        key: fk, name: fpv.name, owner: fpv.owner, on: fpv.on, onLabel: fpv.on ? 'Profile on' : 'Profile off', onStyle: fpv.on ? ON : '', toggle: set(setFp(fk, { on: !fpv.on })),
+        entryChips: Object.keys(ENTRY).map(function (e) { return { label: ENTRY[e], on: !!fpv.entries[e], style: fpv.entries[e] ? ON : '', pick: set(function () { var en = Object.assign({}, fpv.entries); en[e] = !en[e]; return setFp(fk, { entries: en }); }) }; }),
+        nq: fpv.qs.length, canAdd: fpv.qs.length < 3, noQ: fpv.qs.length === 0, addQ: set(setFp(fk, { qs: fpv.qs.concat([{ type: 'text', text: '' }]) })),
+        qs: fpv.qs.map(function (q, i) { var upd = function (patch) { var arr = fpv.qs.map(function (x) { return Object.assign({}, x); }); Object.assign(arr[i], patch); return setFp(fk, { qs: arr }); }; return { n: i + 1, type: q.type, text: q.text, textOr: q.text || 'Question ' + (i + 1), typeLabel: QT[q.type], onType: set(function (e) { return upd({ type: val(e) }); }), onText: set(function (e) { return upd({ text: val(e) }); }), del: set(function () { return setFp(fk, { qs: fpv.qs.filter(function (x, k) { return k !== i; }) }); }) }; }),
+        samplingChips: ['10', '20', '50', '100'].map(function (v) { return { label: v + '%', on: fpv.sampling === v, style: fpv.sampling === v ? ON : '', pick: set(setFp(fk, { sampling: v })) }; }),
+        routing: fpv.routing, onRouting: set(function (e) { return setFp(fk, { routing: val(e) }); }),
+        optChips: [ { k: 'anon', label: 'Allow anonymous' }, { k: 'ctx', label: 'Attach context' } ].map(function (x) { return { label: x.label, on: !!fpv[x.k], style: fpv[x.k] ? ON : '', pick: set(function () { var p = {}; p[x.k] = !fpv[x.k]; return setFp(fk, p); }) }; }),
+        ctx: !!fpv.ctx, canClose: false, close: set({}),
+        save: set(function () { return o.onSave ? o.onSave(fpv.name) : {}; })
+      }, extra || {});
+    };
+    return { FPS: FPS, keys: Object.keys(FPS), summary: summary, editor: editor };
+  }
+  adminNav(groupsRaw, curKey, go) {
+    // groups / sections holes for the sidebar, the select and the section chips; `go(key)` returns the click handler
+    var find = function (key) { for (var i = 0; i < groupsRaw.length; i++) for (var j = 0; j < groupsRaw[i].items.length; j++) if (groupsRaw[i].items[j].key === key) return { g: groupsRaw[i], s: groupsRaw[i].items[j] }; return null; };
+    var cur = find(curKey) || find(groupsRaw[0].items[0].key);
+    var groups = groupsRaw.map(function (g) { var on = g.key === cur.g.key; return Object.assign({}, g, { on: on, tabCls: on ? 'tab-on' : '', pick: go(g.items[0].key),
+      items: g.items.map(function (i) { var o = i.key === cur.s.key; return Object.assign({}, i, { on: o, cur: o ? 'page' : 'false', cls: o ? 'on' : '', hasN: !!i.n, pick: go(i.key) }); }) }); });
+    var ON = 'background: #DED7EB; border-color: #DED7EB; color: #1D1A28';
+    var sections = cur.g.items.map(function (i) { var o = i.key === cur.s.key; return Object.assign({}, i, { on: o, style: o ? ON : '', hasN: !!i.n, pick: go(i.key) }); });
+    return { cur: cur, groups: groups, sections: sections };
+  }
+
+  componentDidMount() { var self = this; this.simSync(); if (typeof window !== 'undefined') window.addEventListener('resize', function () { self.simSync(); }); }
+  componentDidUpdate() { this.simSync(); }
+  renderVals() {
+    var s = this.state, self = this, sim = this.simVals();
+    var set = function (o) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState(typeof o === 'function' ? o(e) : o); }; };
+    var ON = 'background: #DED7EB; border-color: #DED7EB; color: #1D1A28';
+    var defs = [
+      { k: 'A', name: 'Hub and modules', sub: 'Today: cards, then a page with a back chip.', landing: 'A hub: Platform cards and one card per feature', reach: 'Open a card, then a section chip; back chip to the hub', rights: 'Cards disappear', small: 'Cards 2 then 1 per row; chips wrap', trade: 'One extra click to every section; no overview of where you are inside a module.' },
+      { k: 'B', name: 'Admin sidebar', sub: 'A 240 px sidebar: Core, Sweep, Community.', landing: 'Users and permissions (first section you have rights on)', reach: 'One click in the sidebar; the current section is highlighted', rights: 'Groups and items disappear', small: 'Sidebar becomes a grouped Section select', trade: 'A second navigation column beside the rail; 240 px less for tables.', rec: true, adopted: true },
+      { k: 'C', name: 'Scope tabs', sub: 'Tabs Core · Sweep · Community, then section chips.', landing: 'Core tab, first section', reach: 'A tab, then a chip', rights: 'Tabs and chips disappear', small: 'Tabs scroll sideways; chips wrap', trade: 'Two rows of navigation above every page; two clicks across scopes.' },
+      { k: 'D', name: 'Admin console', sub: 'The admin tree takes the rail’s place.', landing: 'Users and permissions, in a dedicated console', reach: 'One click in the 260 px tree; “Back to AIToolbox” leaves it', rights: 'Groups and items disappear', small: 'Rail returns and the tree becomes a Section select', trade: 'Leaves the app shell: no rail, so Sweep or Community are two clicks away.' }
+    ];
+    var tabs = defs.map(function (d) { var on = s.v === d.k; return { k: d.k, name: d.name, sub: d.sub, on: on, cls: on ? 'ttab-on' : '', numBg: on ? '#39235F' : '#E3DFFF', numFg: on ? '#FFFFFF' : '#14085E', rec: !!d.rec, cur: !!d.cur, pick: set({ v: d.k }) }; });
+    var rows = defs.map(function (d) { return Object.assign({}, d, { cls: s.v === d.k ? 'on' : '' }); });
+    var platform = s.role === 'platform';
+    // sections, filtered by rights
+    var groupsRaw = this.adminGroups(platform, { users: 1, connectors: 1, releases: 5, listen: 12, listenScoped: 2, ideas: 5 });
+    var go = function (key) { return set({ page: key, hub: false, usel: key === 'users' ? s.usel : null }); };
+    var nav = this.adminNav(groupsRaw, s.page, go), cur = nav.cur, groups = nav.groups, sections = nav.sections;
+    var hubCore = (platform ? groupsRaw[0].items : []).map(function (i) { return { label: i.label, sub: { users: '1,284 users from the directory · admin rights per feature', groups: '18 groups · Client, Facility, Request…', audit: 'Sign-ins, rights changes, admin actions · 90 days', general: 'Workspace name, time zone, retention' }[i.key], hasN: !!i.n, n: i.n, pick: go(i.key) }; });
+    var hubFeat = groupsRaw.filter(function (g) { return !g.core; }).map(function (g) { return { label: g.label, isSweep: !!g.isSweep, isNew: !!g.isNew, owner: g.owner, role: platform ? 'admin (platform)' : (g.isSweep ? 'Sweep admin' : 'Feedback · Sweep'), remote: g.remote, scope: platform || g.isSweep ? 'Full module' : 'Feedback · Sweep only', pick: go(g.items[0].key),
+      stats: g.isSweep ? [ { v: '4', tile: 'ok', label: 'connectors connected' }, { v: '1', tile: 'wn', label: 'token expiring in 6 days' }, { v: '1', tile: 'ne', label: 'not connected (Artifactory)' } ] : [ { v: '5', tile: 'in', label: 'releases scheduled' }, { v: '12', tile: 'wn', label: 'open items in the inbox' }, { v: '5', tile: 'ne', label: 'ideas to triage' } ] }; });
+    var SUMM = { users: '1,284 users from the directory · 46 admins · 1 request', groups: '18 groups', audit: 'Last 90 days', general: 'Workspace, language, time zone, retention', connectors: '5 connectors · 1 needs attention', releases: '5 scheduled', tours: '4 tours', listen: platform ? 'Profiles, inbox, surveys, solicitation policy' : 'Sweep profile, Sweep inbox, shared cap (read-only)', ideas: '5 ideas to triage', insights: 'Feedback forms, surveys and tours, last 30 days' };
+    var hubOn = s.v === 'A' && s.hub;
+    var hdrFeature = hubOn ? 'Administration' : 'Administration · ' + cur.g.label, hdrSummary = hubOn ? (platform ? 'Platform admin · everything you can administer' : 'Sweep admin · Sweep, and Feedback · Sweep in Community') : cur.s.label + ' · ' + SUMM[cur.s.key];
+    var au = this.adminUsers();
+    var FB = this.feedbackProfiles(s, set);
+    var fpOpen = platform ? (s.fpEdit || 'sweep') : 'sweep';
+    var profiles = FB.keys.filter(function (k) { return platform || k === 'sweep'; }).map(function (k) { var p = FB.summary(k); return { name: p.name, owner: p.owner, status: p.status, tile: p.tile, entries: p.entries, q: p.nq, route: p.routing, go: set({ fpEdit: k }) }; });
+    var roleChips = [ { k: 'platform', label: 'Platform admin' }, { k: 'sweep', label: 'Sweep admin' } ].map(function (r) { var on = s.role === r.k; return { label: r.label, on: on, style: on ? ON : '', pick: set(function () { var o = { role: r.k }; if (r.k === 'sweep' && ['users', 'groups', 'audit', 'general'].indexOf(s.page) >= 0) o.page = 'connectors'; return o; }) }; });
+    var goChips = [ { k: 'general', label: 'General', core: true }, { k: 'users', label: 'Users and permissions', core: true }, { k: 'connectors', label: 'Sweep · Connectors' }, { k: 'listen', label: 'Community · Feedback' } ].filter(function (g) { return platform || !g.core; }).map(function (g) { var on = cur.s.key === g.k && !hubOn; return { label: g.label, on: on, style: on ? ON : '', pick: go(g.k) }; });
+    return Object.assign(sim, { tabs: tabs, rows: rows, isA: s.v === 'A', isB: s.v === 'B', isC: s.v === 'C', isD: s.v === 'D',
+      railCls: s.v === 'D' ? 'ad-norail' : '', hubOn: hubOn, hubOff: !hubOn, goHub: set({ hub: true }), noop: set({}),
+      groups: groups, sections: sections, groupLabel: cur.g.label, page: cur.s.key, pageTitle: cur.s.label, onSelect: set(function (e) { return { page: e && e.target ? e.target.value : s.page, hub: false }; }),
+      hubCore: hubCore, hubFeat: hubFeat, hasCore: platform, scopeLabel: platform ? 'Platform admin · everything' : 'Sweep admin · Sweep and Feedback · Sweep',
+      hdrFeature: hdrFeature, hdrSummary: hdrSummary,
+      isFeaturePage: !cur.g.core, modRemote: cur.g.remote || '', modOwner: cur.g.owner || '', modScope: platform || cur.g.isSweep ? 'Full module' : 'Feedback · Sweep only',
+      pGeneral: cur.s.key === 'general', pUsers: cur.s.key === 'users', pConnectors: cur.s.key === 'connectors', pListening: cur.s.key === 'listen', pOther: ['general', 'users', 'connectors', 'listen'].indexOf(cur.s.key) < 0, fp: FB.editor(fpOpen), fpOn: true, profilesTab: platform ? 'Profiles' : 'Profile', inboxN: platform ? 12 : 2, profilesNote: platform ? 'Every feature’s feedback form is edited here, in Community › Feedback. Feature admins with a Feedback · <feature> right see only their own profile and inbox.' : 'Your Feedback · Sweep right covers this profile and the Sweep inbox; the cap is read-only.',
+      uCount: au.uCount, uFilters: au.uFilters, users: au.users, hasUsr: au.hasUsr, usr: au.usr, closeUsr: au.closeUsr, profiles: profiles,
+      roleChips: roleChips, goChips: goChips });
+  }
+}
+</script>
+</body>
+</html>

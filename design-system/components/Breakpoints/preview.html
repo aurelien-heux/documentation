@@ -1,0 +1,109 @@
+<!-- @dsCard group="Layout" height=520 subtitle="Window size classes · drag the width" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><style>
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+body{margin:0;padding:16px;background:var(--surface);color:var(--on-surface);font-family:var(--font-body);font-size:13px}
+.ctl{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-bottom:12px}
+.ctl label{font-family:var(--font-ui);font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px}
+input[type=range]{width:min(420px,60vw);accent-color:var(--primary)}
+.cls{font-family:var(--font-ui);font-size:20px;font-weight:500;color:var(--on-surface)}
+.rng{font-weight:600;color:var(--primary)}
+.facts{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--on-surface-variant);margin-bottom:12px}
+.facts b{color:var(--on-surface);font-weight:600}
+.stage{height:330px;display:flex;align-items:flex-start;justify-content:center;overflow:hidden}
+.frame{border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.25),0 4px 12px rgba(0,0,0,.1);background:var(--surface);flex:none}
+.scale{transform-origin:0 0}
+.ticks{position:relative;height:16px;width:min(420px,60vw);font-size:11px;color:var(--on-surface-variant)}
+.ticks span{position:absolute;transform:translateX(-50%)}
+.sw{display:flex;align-items:center;gap:8px}
+.sw button{height:32px;padding:0 14px;border-radius:8px;border:1px solid var(--outline);background:transparent;color:var(--on-surface-variant);font-family:var(--font-ui);font-weight:500;cursor:pointer}
+.sw button[aria-pressed=true]{background:var(--secondary-container);color:var(--on-secondary-container);border-color:transparent}
+</style></head>
+<body>
+<div class="ctl">
+  <div><label for="w">Window width <output id="wo">1440 px</output></label>
+    <input id="w" type="range" min="320" max="1920" step="8" value="1440" aria-describedby="facts">
+    <div class="ticks" aria-hidden="true"><span style="left:17.5%">600</span><span style="left:32.5%">840</span><span style="left:55%">1200</span><span style="left:80%">1600</span></div></div>
+  <div class="sw"><button type="button" id="as" aria-pressed="false">Assistant open</button></div>
+</div>
+<div><span class="cls" id="cls">Large</span> <span class="rng" id="rng">1200–1599 px</span></div>
+<div class="facts" id="facts" aria-live="polite"></div>
+<div class="stage"><div class="frame" id="frame"><div class="scale" id="scale"></div></div></div>
+<script>
+(function () {
+  var C = [['Compact', 0, 599, 16], ['Medium', 600, 839, 24], ['Expanded', 840, 1199, 24], ['Large', 1200, 1599, 32], ['Extra-large', 1600, null, 32]];
+  var v = function (n) { return 'var(--' + n + ')'; };
+  function bx(w, h, c, x) { return '<div style="width:' + (typeof w === 'number' ? w + 'px' : w) + ';height:' + h + 'px;background:' + c + ';border-radius:6px;flex:none;' + (x || '') + '"></div>'; }
+  function bar(w, h, c) { return bx(w, h || 10, c || v('outline-variant'), 'border-radius:5px'); }
+  function ci(d, c) { return '<div style="width:' + d + 'px;height:' + d + 'px;border-radius:50%;background:' + c + ';flex:none"></div>'; }
+  function burger() { return '<div style="width:22px;display:flex;flex-direction:column;gap:4px">' + bar(20, 3, v('on-surface-variant')) + bar(20, 3, v('on-surface-variant')) + bar(20, 3, v('on-surface-variant')) + '</div>'; }
+  function logo(word) { return '<div style="width:32px;height:32px;border-radius:5px;background:' + v('logo-box') + ';flex:none;display:flex;justify-content:center;align-items:flex-end;padding-bottom:9px;box-sizing:border-box"><div style="width:12px;height:4px;background:' + v('logo-cursor') + '"></div></div>' + (word ? bar(96, 14, v('primary')) : ''); }
+  function header(k, open) {
+    if (k === 0) return '<div style="height:56px;flex:none;background:' + v('nav-container') + ';display:flex;align-items:center;gap:16px;padding:0 16px">' + burger() + logo(false) + '<div style="flex:1"></div>' + ci(24, v('on-surface-variant')) + ci(24, v('on-surface-variant')) + ci(32, v('secondary-container')) + '</div>';
+    var lo = k === 1 ? 240 : k === 2 ? 320 : 440, ask = k >= 3 ? 72 : 32, n = k === 1 ? 3 : 4, ic = '';
+    for (var i = 0; i < n; i++) ic += ci(24, i === 0 && open ? v('primary') : v('on-surface-variant'));
+    var user = k >= 3 ? '<div style="display:flex;gap:8px;align-items:center">' + ci(32, v('secondary-container')) + '<div style="display:flex;flex-direction:column;gap:4px">' + bar(80, 9, v('on-surface-variant')) + bar(56, 7) + '</div></div>' : ci(32, v('secondary-container'));
+    return '<div style="height:64px;flex:none;background:' + v('nav-container') + ';display:flex;align-items:center;gap:16px;padding:0 24px">' + logo(true) +
+      '<div style="flex:1;display:flex;justify-content:center;min-width:0"><div style="flex:1 1 440px;min-width:' + lo + 'px;max-width:440px;height:44px;border-radius:16px;background:' + v('surface-container-lowest') + ';display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 16px;box-sizing:border-box">' + bar(120) + bx(ask, 28, v('ai-container'), 'border-radius:10px') + '</div></div>' +
+      '<div style="display:flex;gap:20px;align-items:center">' + ic + '</div>' + user + '</div>';
+  }
+  function rail() { var s = ''; for (var i = 0; i < 5; i++) s += '<div style="display:flex;flex-direction:column;align-items:center;gap:4px">' + bx(56, 32, i === 1 ? v('secondary-container') : 'transparent', 'border-radius:16px') + bar(36, 7, v('on-surface-variant')) + '</div>';
+    return '<div style="width:80px;flex:none;background:' + v('nav-container') + ';display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:16px">' + burger() + s + '</div>'; }
+  function drawer() { var s = ''; for (var i = 0; i < 6; i++) s += '<div style="height:56px;border-radius:16px;display:flex;align-items:center;gap:12px;padding:0 16px;background:' + (i === 1 ? v('secondary-container') + ';box-shadow:inset 3px 0 0 ' + v('primary') : 'transparent') + '">' + bx(24, 24, v('outline'), 'border-radius:6px') + bar(110, 10, v('on-surface-variant')) + '</div>';
+    return '<div style="width:300px;flex:none;background:' + v('nav-container') + ';display:flex;flex-direction:column;gap:4px;padding:24px 12px;box-sizing:border-box">' + s + '</div>'; }
+  function navbar(a) { var s = ''; for (var i = 0; i < 4; i++) s += '<div style="display:flex;flex-direction:column;align-items:center;gap:6px">' + bx(64, 32, i === a ? v('secondary-container') : 'transparent', 'border-radius:16px') + bar(44, 7, v('on-surface-variant')) + '</div>';
+    return '<div style="height:80px;flex:none;background:' + v('nav-container') + ';display:flex;justify-content:space-around;align-items:center">' + s + '</div>'; }
+  function kpis(n) { var c = '<div style="height:76px;border-radius:12px;background:' + v('surface-container-lowest') + ';box-shadow:0 1px 2px rgba(0,0,0,.18);padding:14px;box-sizing:border-box;display:flex;flex-direction:column;gap:10px">' + bar(70, 8) + bar(56, 18, v('on-surface')) + '</div>';
+    return '<div style="display:grid;grid-template-columns:repeat(' + n + ',minmax(0,1fr));gap:16px">' + c + c + c + c + '</div>'; }
+  var st = [v('success'), v('primary'), v('error'), v('warning'), v('primary'), v('success')];
+  function table(cols) { var w = [1.3, 1.6, 1, 1, .9].slice(0, cols), h = '', r = '';
+    w.forEach(function (x) { h += '<div style="flex:' + x + '">' + bar(60, 8) + '</div>'; });
+    for (var i = 0; i < 5; i++) { r += '<div style="height:56px;display:flex;align-items:center;gap:16px;padding:0 16px;border-top:1px solid ' + v('outline-variant') + '"><div style="flex:' + w[0] + ';display:flex;gap:8px;align-items:center">' + bx(22, 22, st[i], 'border-radius:5px') + bar(64, 9, v('on-surface-variant')) + '</div>';
+      for (var k = 1; k < cols; k++) r += '<div style="flex:' + w[k] + '">' + bar(70 + 20 * ((i + k) % 3), 9, k === 1 ? v('on-surface') : v('outline-variant')) + '</div>';
+      r += ci(6, v('on-surface-variant')) + '</div>'; }
+    return '<div style="border-radius:12px;border:1px solid ' + v('outline-variant') + ';background:' + v('surface-container-lowest') + ';overflow:hidden"><div style="height:44px;display:flex;align-items:center;gap:16px;padding:0 16px">' + h + '<div style="width:6px"></div></div>' + r + '</div>'; }
+  function list() { var r = ''; for (var i = 0; i < 5; i++) r += '<div style="height:64px;display:flex;align-items:center;gap:12px;padding:0 12px;border-top:' + (i ? '1px solid ' + v('outline-variant') : '0') + '">' + bx(24, 24, st[i], 'border-radius:5px') + '<div style="flex:1;display:flex;flex-direction:column;gap:7px">' + bar('60%', 10, v('on-surface')) + bar('40%', 8) + '</div>' + ci(6, v('on-surface-variant')) + '</div>';
+    return '<div style="border-radius:12px;border:1px solid ' + v('outline-variant') + ';background:' + v('surface-container-lowest') + ';overflow:hidden">' + r + '</div>'; }
+  function alertC() { return '<div style="height:64px;border-radius:12px;background:' + v('warning-container') + ';display:flex;align-items:center;gap:12px;padding:0 16px">' + bx(28, 28, v('warning'), 'border-radius:6px') + bar(220, 10, v('on-warning-container')) + '</div>'; }
+  function aiC(h) { return '<div style="height:' + h + 'px;border-radius:12px;background:' + v('ai-container') + ';padding:16px;box-sizing:border-box;display:flex;flex-direction:column;gap:10px">' + bar(100, 8, v('on-ai-container')) + bar('90%', 12, v('on-ai-container')) + bar('70%', 12, v('on-ai-container')) + '</div>'; }
+  function head(k) { var a = k === 0 ? ci(6, v('on-surface-variant')) : k === 1 ? ci(36, v('secondary-container')) + bx(130, 40, v('primary'), 'border-radius:16px') : bx(k === 2 ? 40 : 90, 40, v('secondary-container'), 'border-radius:16px') + bx(150, 40, v('primary'), 'border-radius:16px') + bx(150, 40, v('tertiary-container'), 'border-radius:16px');
+    return '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="display:flex;flex-direction:column;gap:10px">' + bar(110, 8) + bar(k ? 150 : 120, k ? 22 : 18, v('on-surface')) + '</div><div style="display:flex;gap:12px;align-items:center">' + a + '</div></div>'; }
+  function page(k, pw) { var nk = pw >= 720 ? 4 : pw >= 300 ? 2 : 1, cols = pw >= 800 ? 5 : 3, main = pw < 600 ? list() : table(cols), p = head(k);
+    if (pw >= 1040) p += kpis(nk) + '<div style="display:grid;grid-template-columns:minmax(0,1fr) ' + (pw >= 1380 ? 400 : 360) + 'px;gap:24px">' + main + '<div style="display:flex;flex-direction:column;gap:16px">' + alertC() + aiC(180) + '</div></div>';
+    else p += alertC() + kpis(nk) + main + aiC(150);
+    return { html: '<div style="display:flex;flex-direction:column;gap:20px">' + p + '</div>', nk: nk, mode: pw < 600 ? 'list' : pw < 800 ? 'priority columns' : 'every column', side: pw >= 1040 ? 'beside the table' : 'stacked' }; }
+  function assistant(fill) { var m = function (r, w) { return '<div style="align-self:' + (r ? 'flex-end' : 'flex-start') + ';width:' + w + ';height:' + (r ? 44 : 70) + 'px;border-radius:16px;background:' + (r ? v('primary-container') : 'transparent') + '"></div>'; };
+    var lines = '<div style="display:flex;gap:10px">' + bx(24, 24, v('primary'), 'border-radius:6px') + '<div style="flex:1;display:flex;flex-direction:column;gap:8px">' + bar('95%', 9, v('on-surface-variant')) + bar('80%', 9, v('on-surface-variant')) + bar('60%', 9, v('on-surface-variant')) + '</div></div>';
+    var inner = '<div style="height:48px;display:flex;align-items:center;gap:10px">' + bx(28, 28, v('primary'), 'border-radius:6px') + bar(140, 11, v('on-surface')) + '</div><div style="flex:1;display:flex;flex-direction:column;gap:18px;overflow:hidden">' + m(1, '60%') + lines + m(1, '45%') + lines + '</div><div style="height:96px;border-radius:16px;border:1px solid ' + v('outline') + ';background:' + v('surface-container-lowest') + ';flex:none"></div>';
+    return fill ? '<div style="flex:1;min-width:0;background:' + v('surface-container-low') + ';display:flex;justify-content:center"><div style="width:100%;max-width:720px;display:flex;flex-direction:column;gap:18px;padding:12px 24px 16px;box-sizing:border-box">' + inner + '</div></div>'
+                : '<div style="width:400px;flex:none;background:' + v('surface-container-low') + ';border-left:1px solid ' + v('outline-variant') + ';display:flex;flex-direction:column;gap:18px;padding:12px 20px 16px;box-sizing:border-box">' + inner + '</div>'; }
+  var w = document.getElementById('w'), wo = document.getElementById('wo'), as = document.getElementById('as');
+  function draw() {
+    var W = +w.value, open = as.getAttribute('aria-pressed') === 'true', k = 0;
+    for (var i = 0; i < C.length; i++) if (W >= C[i][1]) k = i;
+    var H = k === 0 ? 780 : k === 1 ? 1024 : Math.round(W * 0.6), m = C[k][3], navW = k === 0 ? 0 : 80, body, pg = null, inner;
+    if (k === 0) { pg = page(0, W - 2 * m); body = open ? assistant(true) : '<div style="flex:1;overflow:hidden;padding:16px ' + m + 'px;position:relative">' + pg.html + '<div style="position:absolute;right:16px;bottom:16px;height:56px;width:150px;border-radius:16px;background:' + v('primary-container') + ';box-shadow:0 3px 8px rgba(0,0,0,.25)"></div></div>';
+      inner = header(0, open) + '<div style="flex:1;display:flex;flex-direction:column;min-height:0">' + body + '</div>' + navbar(open ? 3 : 1); }
+    else { var aw = open && k >= 3 ? 400 : 0;
+      if (open && k < 3) body = assistant(true);
+      else { pg = page(k, W - navW - aw - 2 * m); body = '<div style="flex:1;min-width:0;overflow:hidden;padding:24px ' + m + 'px">' + pg.html + '</div>' + (aw ? assistant(false) : ''); }
+      inner = header(k, open) + '<div style="height:2px"></div><div style="flex:1;display:flex;min-height:0">' + (navW === 80 ? rail() : drawer()) + body + '</div>'; }
+    var avail = Math.max(200, document.body.clientWidth - 32), s = Math.min(avail / W, 330 / H);
+    var sc = document.getElementById('scale'), fr = document.getElementById('frame');
+    sc.style.transform = 'scale(' + s + ')'; sc.innerHTML = '<div style="width:' + W + 'px;height:' + H + 'px;display:flex;flex-direction:column;background:' + v('surface') + ';overflow:hidden">' + inner + '</div>';
+    fr.style.width = Math.round(W * s) + 'px'; fr.style.height = Math.round(H * s) + 'px';
+    wo.textContent = W + ' px';
+    document.getElementById('cls').textContent = C[k][0];
+    document.getElementById('rng').textContent = C[k][2] ? C[k][1] + '–' + C[k][2] + ' px' : '≥ ' + C[k][1] + ' px';
+    var nav = k === 0 ? 'NavigationBar' : k <= 2 ? 'rail (default), drawer over on demand' : 'rail (default), standard drawer on demand';
+    var am = k === 0 ? 'full screen' : k <= 2 ? 'in place of the page' : 'docked 400 px';
+    var f = '<span><b>Margin</b> ' + m + ' px · ' + (k === 0 ? 4 : k === 1 ? 8 : 12) + ' columns</span><span><b>Navigation</b> ' + nav + '</span><span><b>Assistant</b> ' + am + '</span>';
+    if (pg) f += '<span><b>Page area</b> ' + (k === 0 ? W - 2 * m : W - navW - (open && k >= 3 ? 400 : 0) - 2 * m) + ' px</span><span><b>KPI</b> ' + pg.nk + ' per row</span><span><b>Table</b> ' + pg.mode + '</span><span><b>Side cards</b> ' + pg.side + '</span>';
+    document.getElementById('facts').innerHTML = f;
+  }
+  w.addEventListener('input', draw);
+  as.addEventListener('click', function () { as.setAttribute('aria-pressed', as.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); draw(); });
+  window.addEventListener('resize', draw);
+  draw();
+})();
+</script>
+</body></html>

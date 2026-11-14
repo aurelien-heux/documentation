@@ -1,0 +1,29 @@
+<!-- @dsCard group="Communication" height=460 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"><style>
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+body{margin:0;padding:16px;background:var(--surface-container-lowest);color:var(--on-surface);font-family:var(--font-body);font-size:14px;display:flex;flex-direction:column;gap:12px}
+button,.ui{font-family:var(--font-ui)}button{cursor:pointer}
+.cap{font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.5px;color:var(--on-surface-variant);text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--outline-variant);text-align:left;font:inherit;color:inherit;min-width:0}
+.card:hover{background:var(--surface-container-low)}.card:focus-visible{outline-offset:-3px}
+.row{display:flex;align-items:center;gap:8px}
+.kind{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;flex:none;font-family:var(--font-ui);font-size:11px;font-weight:800}
+.sk{background:var(--primary-container);color:var(--on-primary-container)}.tl{background:var(--tertiary-container);color:var(--on-tertiary-container)}.mcp{background:var(--ai-container,#9CF1F0);color:var(--on-ai-container,#002020)}
+.name{font-family:var(--font-ui);font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:12px;color:var(--on-surface-variant)}
+p{margin:0;font-size:13px;line-height:18px;color:var(--on-surface-variant)}
+.seg{display:inline-flex;border:1px solid var(--outline);border-radius:16px;overflow:hidden;align-self:flex-start}
+.seg button{height:36px;padding:0 14px;border:0;border-left:1px solid var(--outline);background:transparent;font-size:13px;font-weight:600;color:var(--on-surface)}
+.seg button:first-child{border-left:0}.seg button[aria-pressed=true]{background:var(--secondary-container);color:var(--on-secondary-container)}
+</style></head><body>
+<div class="seg" role="group" aria-label="Kind"><button aria-pressed="true">All</button><button aria-pressed="false">Skills</button><button aria-pressed="false">Tools</button><button aria-pressed="false">MCP servers</button></div>
+<div class="grid">
+  <button class="card"><div class="row"><span class="kind mcp">MCP</span><span class="name">DevOps</span></div><p>Pipelines, builds, deployments and pull requests on the DevOps platform.</p><div class="row"><span class="meta">Platform team</span><span style="flex:1"></span><span class="meta">3,100 uses</span></div></button>
+  <button class="card"><div class="row"><span class="kind tl">TL</span><span class="name">Deploy environment</span></div><p>Deploys a module branch to an environment and follows the first rollout.</p><div class="row"><span class="meta">Environments team</span><span style="flex:1"></span><span class="meta">860 uses</span></div></button>
+  <button class="card"><div class="row"><span class="kind sk">SK</span><span class="name">Incident runbook</span></div><p>Walks the on-call engineer through the checklist with the right runbook and recent logs.</p><div class="row"><span class="meta">Lucas Bernard · Facility</span><span style="flex:1"></span><span class="meta">188 uses</span></div></button>
+  <button class="card"><div class="row"><span class="kind mcp">MCP</span><span class="name">Knowledge base</span></div><p>Docs, runbooks, the architecture model and ARB decisions, with their source.</p><div class="row"><span class="meta">Platform team</span><span style="flex:1"></span><span class="meta">2,480 uses</span></div></button>
+  <button class="card"><div class="row"><span class="kind tl">TL</span><span class="name">Create Jira ticket</span></div><p>Creates a ticket in the project of the repository, with the run attached.</p><div class="row"><span class="meta">Platform team</span><span style="flex:1"></span><span class="meta">640 uses</span></div></button>
+  <button class="card"><div class="row"><span class="kind sk">SK</span><span class="name">Spring Boot 3 migration</span></div><p>Upgrades a service, runs the pipeline and opens a pull request with what changed.</p><div class="row"><span class="meta">Marta Kowalski · Client</span><span style="flex:1"></span><span class="meta">212 uses</span></div></button>
+</div>
+</body></html>

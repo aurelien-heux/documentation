@@ -1,0 +1,8 @@
+# ProgressIndicator
+The in-screen indicators, in the Constructor family of the brand loader: a teal pen that leads, dashed construction guides, violet for what is done. Material roles and sizes are unchanged.
+- **Pen orbit** (circular): a violet arc with the teal pen at its head on a faint `primary-container` track. 48 px in content, 24 px inline, 18 px inside a button.
+- **Guide line** (linear, 4 px): the track is a dashed teal guide, the violet bar runs along it with the pen on its edge; determinate = violet to the value. Indeterminate at the top of the app bar during navigation.
+- **Constructor determinate**: for long operations with a known value (install, deploy, migration) the pen draws the box in proportion to progress and the toolbox fills at 100 %; 64–96 px in dialogs and empty states.
+- For app-level waits (boot, workspace switch) use the brand Loader; for a pending request that will end in a state, use the pending ring of StateMark.
+- **Keyboard and screen reader:** `role="progressbar"` with a name and, when known, `aria-valuenow`; the AI pen and guide use `ai` (deep teal on light grounds, 8.9:1); under reduced motion the indicator stops and the label ("Deploying…") carries the state.
+- **Angular Material:** `mat-progress-bar` (`mode="indeterminate" | "determinate" | "buffer"`) and `mat-progress-spinner` (`diameter` 48 / 24 / 18) keep their slots and APIs; the pen orbit and guide line are their skins — inline SVG from `loading-states/` with `loading-states.css`, or a thin wrapper around the Material components for the value binding. AI tasks `.dt-ai`. Full map and theme files: `angular-material.md`.

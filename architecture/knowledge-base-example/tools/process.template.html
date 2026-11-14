@@ -1,0 +1,372 @@
+<title>Architecture Change Process</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Open+Sans:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: AIToolbox feature page — a reading column for prose, full-width bands for the two diagrams. */
+/*__TOKENS__*/
+:root {
+  --atb-branch: #005232;            /* tertiary, light */
+  --atb-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --atb-brand: var(--md-sys-typescale-brand-family);
+  --atb-plain: var(--md-sys-typescale-plain-family);
+}
+@media (prefers-color-scheme: dark) { :root:not(.light):not([data-theme="light"]) { --atb-branch: #00F29E; } }
+html.dark, :root[data-theme="dark"] { --atb-branch: #00F29E; }
+
+body { background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); font: 400 15px/1.55 var(--atb-plain);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
+.wrap { max-width: 1120px; margin: 0 auto; }
+.wide { max-width: 1680px; margin: 0 auto; }
+h1, h2, h3, h4 { font-family: var(--atb-brand); text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.15; font-weight: 800; letter-spacing: -.01em; }
+h2 { font-size: 24px; line-height: 1.25; font-weight: 700; }
+h3 { font-size: 19px; font-weight: 700; }
+h4 { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+p { margin: 0; }
+code { font: 500 13px/1.4 var(--atb-mono); background: var(--md-sys-color-surface-container-highest); padding: 1px 6px; border-radius: 4px; }
+a { color: var(--md-sys-color-primary); }
+:focus-visible { outline: 2px solid var(--md-sys-color-focus-ring); outline-offset: 2px; border-radius: 4px; }
+
+/* app bar */
+.bar { display: flex; align-items: center; gap: 10px; padding-block: 14px; font: 600 13px/1 var(--atb-brand); color: var(--md-sys-color-on-surface-variant); }
+.bar .crumb b { color: var(--md-sys-color-on-surface); }
+.logo { width: 28px; height: 28px; border-radius: 8px; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); display: grid; place-items: center; font: 800 12px/1 var(--atb-brand); }
+
+/* hero */
+.hero { display: grid; gap: 28px; padding-block: 28px 36px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: start; }
+.hero .lead { color: var(--md-sys-color-on-surface-variant); font-size: 16px; max-width: 60ch; margin-top: 12px; }
+.eyebrow { font: 700 12px/1 var(--atb-brand); letter-spacing: .08em; text-transform: uppercase; color: var(--md-sys-color-primary); margin-bottom: 10px; }
+.keys { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.key { font: 600 12px/1 var(--atb-brand); padding: 7px 10px; border-radius: 4px; background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface-variant); }
+
+/* change card mock */
+.card { background: var(--md-sys-color-surface-container-lowest); border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; padding: 18px; display: grid; gap: 14px; }
+.card .top { display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; }
+.card .id { font: 500 12px/1 var(--atb-mono); color: var(--md-sys-color-on-surface-variant); }
+.card h3 { font-size: 17px; margin-top: 6px; }
+.card .facts { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--md-sys-color-on-surface-variant); }
+.stepper { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.stepper li { border-radius: 8px; padding: 10px; background: var(--md-sys-color-surface-container); display: grid; gap: 8px; align-content: start; min-width: 0; }
+.stepper li.now { background: var(--md-sys-color-secondary-container); }
+.stepper .s-name { font: 700 14px/1.2 var(--atb-brand); }
+.stepper .s-sub { font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+.stepper li.now .s-sub { color: var(--md-sys-color-on-secondary-container); }
+.card .foot { font-size: 12.5px; color: var(--md-sys-color-on-surface-variant); border-top: 1px solid var(--md-sys-color-outline-variant); padding-top: 12px; }
+.mock-note { font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 8px; }
+
+/* status chip (AIToolbox StatusChip: glyph + word) */
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 9px 0 4px; border-radius: 4px; white-space: nowrap; font: 600 12px/1 var(--atb-brand); width: max-content; max-width: 100%; }
+.chip .tile, .done .tile { width: 18px; height: 18px; border-radius: 4px; display: inline-grid; place-items: center; font: 700 11px/1 var(--atb-plain); flex: none; }
+.c-ok { background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container); } .c-ok .tile { background: var(--md-sys-color-success); color: var(--md-sys-color-on-success); }
+.c-warn { background: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container); } .c-warn .tile { background: var(--md-sys-color-warning); color: var(--md-sys-color-on-warning); }
+.c-err { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); } .c-err .tile { background: var(--md-sys-color-error); color: var(--md-sys-color-on-error); }
+.c-off { background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface-variant); } .c-off .tile { background: var(--md-sys-color-outline); color: var(--md-sys-color-surface-container-lowest); }
+.c-info { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); } .c-info .tile { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+
+/* sections */
+section.block { padding-block: 40px 8px; display: grid; gap: 16px; }
+.intro { color: var(--md-sys-color-on-surface-variant); max-width: 70ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 13px; color: var(--md-sys-color-on-surface-variant); align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.sw { width: 22px; height: 14px; border-radius: 4px; border: 1.5px solid var(--md-sys-color-outline); background: var(--md-sys-color-surface-container-lowest); }
+.sw.tb { background: var(--md-sys-color-secondary-container); border-color: var(--md-sys-color-primary); }
+.sw.ci { border-style: dashed; }
+.sw.bd { background: var(--md-sys-color-surface-container-highest); }
+.sw.gt { background: var(--md-sys-color-inverse-surface); border-color: var(--md-sys-color-inverse-surface); }
+.ln { width: 30px; height: 0; border-top: 2px solid var(--md-sys-color-on-surface-variant); }
+.ln.loop { border-top: 2px dashed var(--md-sys-color-warning); }
+.ln.fast { border-top: 2px dotted var(--md-sys-color-outline); }
+.scroll { overflow-x: auto; border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; background: var(--md-sys-color-surface-container-lowest); }
+.scroll:focus-visible { outline-offset: 3px; }
+.hint { font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+
+/* flow svg */
+svg.flow { display: block; width: 100%; min-width: 1180px; height: auto; }
+.flow .lane { fill: var(--md-sys-color-surface-container-lowest); }
+.flow .lane.alt { fill: var(--md-sys-color-surface-container-low); }
+.flow .lane-sep { stroke: var(--md-sys-color-outline-variant); stroke-width: 1; }
+.flow .lane-l { fill: var(--md-sys-color-on-surface); font: 700 15px var(--atb-brand); }
+.flow .lane-s { fill: var(--md-sys-color-on-surface-variant); font: 400 12px var(--atb-plain); }
+.flow .ph { fill: var(--md-sys-color-surface-container-high); }
+.flow .ph-n { fill: var(--md-sys-color-primary); font: 800 15px var(--atb-brand); }
+.flow .ph-s { fill: var(--md-sys-color-on-surface-variant); font: 400 11.5px var(--atb-plain); }
+.flow .node rect { stroke-width: 1.4; }
+.flow .n-t { font: 700 14.5px var(--atb-brand); fill: var(--md-sys-color-on-surface); }
+.flow .n-s { font: 400 12px var(--atb-plain); fill: var(--md-sys-color-on-surface-variant); }
+.flow .n-people rect { fill: var(--md-sys-color-surface); stroke: var(--md-sys-color-outline); }
+.flow .n-toolbox rect { fill: var(--md-sys-color-secondary-container); stroke: var(--md-sys-color-primary); stroke-width: 1.8; }
+.flow .n-toolbox .n-t, .flow .n-toolbox .n-s { fill: var(--md-sys-color-on-secondary-container); }
+.flow .n-ci rect { fill: var(--md-sys-color-surface); stroke: var(--md-sys-color-outline); stroke-dasharray: 6 4; }
+.flow .n-board rect { fill: var(--md-sys-color-surface-container-highest); stroke: var(--md-sys-color-outline); }
+.flow .n-git rect { fill: var(--md-sys-color-inverse-surface); stroke: var(--md-sys-color-inverse-surface); }
+.flow .n-git .n-t { fill: var(--md-sys-color-inverse-on-surface); font-family: var(--atb-mono); font-size: 13.5px; font-weight: 500; }
+.flow .n-git .n-s { fill: var(--md-sys-color-inverse-on-surface); }
+.flow .e { fill: none; stroke: var(--md-sys-color-on-surface-variant); stroke-width: 1.6; stroke-linejoin: round; }
+.flow .e.loop { stroke: var(--md-sys-color-warning); stroke-width: 2; stroke-dasharray: 7 5; }
+.flow .e.fast { stroke: var(--md-sys-color-outline); stroke-width: 2; stroke-dasharray: 1 6; stroke-linecap: round; }
+.mk-e { fill: var(--md-sys-color-on-surface-variant); }
+.mk-loop { fill: var(--md-sys-color-warning); }
+.mk-fast { fill: var(--md-sys-color-outline); }
+.flow .lbl { font: 600 12px var(--atb-plain); fill: var(--md-sys-color-on-surface-variant); paint-order: stroke; stroke: var(--md-sys-color-surface-container-lowest); stroke-width: 5px; stroke-linejoin: round; }
+.flow .lbl.loop { fill: var(--md-sys-color-warning); }
+
+/* git svg */
+svg.git { display: block; width: 100%; min-width: 980px; height: auto; }
+.git .g-l { font: 500 14px var(--atb-mono); fill: var(--md-sys-color-on-surface); }
+.git .g-s { font: 400 12px var(--atb-plain); fill: var(--md-sys-color-on-surface-variant); }
+.git .g-main { fill: none; stroke: var(--md-sys-color-primary); stroke-width: 3.5; }
+.git .g-br { fill: none; stroke: var(--atb-branch); stroke-width: 3; }
+.git .g-app { fill: none; stroke: var(--md-sys-color-outline); stroke-width: 2.5; stroke-dasharray: 8 5; }
+.git .g-c { fill: var(--md-sys-color-surface-container-lowest); stroke: var(--md-sys-color-on-surface); stroke-width: 2.5; }
+.git .g-merge { fill: var(--md-sys-color-primary); stroke: var(--md-sys-color-surface-container-lowest); stroke-width: 2.5; }
+.git .g-bot { fill: var(--md-sys-color-surface-container-lowest); stroke: var(--md-sys-color-on-surface-variant); stroke-width: 2.5; stroke-dasharray: 3 2.5; }
+.git .g-pin { fill: var(--md-sys-color-secondary-container); stroke: var(--md-sys-color-primary); stroke-width: 3.5; }
+.git .g-warn { fill: var(--md-sys-color-warning-container); stroke: var(--md-sys-color-warning); stroke-width: 3; }
+.git .g-t { font: 400 12px var(--atb-plain); fill: var(--md-sys-color-on-surface-variant); }
+.git .g-t.warn { fill: var(--md-sys-color-warning); font-weight: 600; }
+.git .g-tag rect { fill: var(--md-sys-color-primary); }
+.git .g-tag text { font: 500 12px var(--atb-mono); fill: var(--md-sys-color-on-primary); }
+.git .g-chk rect { fill: var(--md-sys-color-surface-container); stroke: var(--md-sys-color-outline-variant); }
+.git .g-chk text { font: 600 12.5px var(--atb-plain); fill: var(--md-sys-color-on-surface); }
+.git .g-chk .ok { fill: var(--md-sys-color-success); font-family: var(--atb-mono); font-weight: 500; }
+
+/* steps */
+.toc { display: flex; flex-wrap: wrap; gap: 8px; }
+.toc a { text-decoration: none; font: 600 13px/1 var(--atb-brand); color: var(--md-sys-color-on-secondary-container); background: var(--md-sys-color-secondary-container); padding: 9px 12px; border-radius: 16px; }
+.toc a:hover { background: var(--md-sys-color-nav-active); }
+.steps { display: grid; gap: 18px; }
+.step { background: var(--md-sys-color-surface-container-lowest); border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; padding: 20px; display: grid; gap: 16px; scroll-margin-top: 16px; }
+.step-h { display: flex; gap: 14px; align-items: center; }
+.num { width: 40px; height: 40px; border-radius: 10px; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); display: grid; place-items: center; font: 800 18px/1 var(--atb-brand); flex: none; }
+.phase { font-size: 13.5px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px; }
+.meta { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.meta div { background: var(--md-sys-color-surface-container); border-radius: 8px; padding: 10px 12px; min-width: 0; }
+.meta dt { font: 700 11.5px/1.2 var(--atb-brand); letter-spacing: .05em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+.meta dd { margin: 4px 0 0; font-size: 14px; }
+.cols { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 24px; }
+.cols section { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.cols ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.pairs li { display: grid; gap: 2px; }
+.pairs b { font: 600 14px/1.35 var(--atb-brand); }
+.pairs span { font-size: 14px; color: var(--md-sys-color-on-surface-variant); }
+.git-l li { position: relative; padding-left: 20px; font-size: 14px; }
+.git-l li::before { content: ""; position: absolute; left: 3px; top: 7px; width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--atb-branch); }
+.outcomes { display: grid; gap: 8px; margin-top: 6px; }
+.outcomes li { display: grid; gap: 4px; font-size: 13.5px; color: var(--md-sys-color-on-surface-variant); }
+.done { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container); border-radius: 8px; padding: 10px 12px; }
+.done .tile { background: var(--md-sys-color-success); color: var(--md-sys-color-on-success); margin-top: 1px; }
+
+/* tables */
+.tbl { overflow-x: auto; border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; background: var(--md-sys-color-surface-container-lowest); }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--md-sys-color-outline-variant); }
+thead th { font: 700 12px/1.2 var(--atb-brand); letter-spacing: .05em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); background: var(--md-sys-color-surface-container); }
+tbody th { font: 700 14px/1.35 var(--atb-brand); white-space: nowrap; }
+tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+td code { white-space: nowrap; }
+.foot-note { font-size: 13px; color: var(--md-sys-color-on-surface-variant); padding-top: 32px; max-width: 80ch; }
+
+
+/* parallel changes */
+.overlap { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; font-size: 13px; background: var(--md-sys-color-surface-container); border-radius: 8px; padding: 10px; }
+.overlap > span:last-child { flex: 1 1 220px; min-width: 0; }
+.levels td:first-child, .levels th:first-child { width: 18%; }
+.opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.opt { background: var(--md-sys-color-surface-container-lowest); border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.opt h4 { color: var(--md-sys-color-on-surface); font-size: 15px; letter-spacing: 0; text-transform: none; }
+.opt p { font-size: 14px; color: var(--md-sys-color-on-surface-variant); }
+.opt p b { color: var(--md-sys-color-on-surface); font-weight: 600; }
+.sub-h { font: 700 17px/1.3 var(--atb-brand); margin-top: 12px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+pre.code { margin: 0; overflow-x: auto; background: var(--md-sys-color-surface-container); border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; padding: 14px 16px; font: 500 12.5px/1.6 var(--atb-mono); color: var(--md-sys-color-on-surface); min-width: 0; }
+.code-cap { font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 6px; }
+ul.plain { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 14.5px; }
+.outlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.outlist li { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 12px; align-items: start; font-size: 14px; }
+.git .g-br2 { fill: none; stroke: var(--md-sys-color-on-surface-variant); stroke-width: 3; }
+.git .g-upd { fill: none; stroke: var(--md-sys-color-outline); stroke-width: 2.5; stroke-dasharray: 6 5; }
+@media (max-width: 900px) { .opts, .two { grid-template-columns: minmax(0, 1fr); } .outlist li { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .cols, .meta { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .stepper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .step { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
+</style>
+
+<div class="wrap">
+  <div class="bar"><span class="logo" aria-hidden="true">AI</span><span class="crumb">Docs › Architecture › <b>Process</b></span></div>
+
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Architecture change management</p>
+      <h1>Architecture Change Process</h1>
+      <p class="lead">How a change to the architecture goes from a request to an approved target and a reached plateau, following the TOGAF ADM. The toolbox is where people work; Git is where every version lives. Each change is one work package, one branch and one pull request in the central architecture repository.</p>
+      <div class="keys" aria-label="Steps">
+        <span class="key">0 Trigger</span><span class="key">1 Decide</span><span class="key">2 Design</span><span class="key">3 Review</span><span class="key">4 Deliver</span>
+      </div>
+    </div>
+    <div>
+      <div class="card" aria-label="Example: a change in the toolbox">
+        <div class="top">
+          <div><span class="id">WP-FAC-02 · PR #88 · arb.facility.2026-14</span><h3>Extract facility-service from the Credit origination monolith</h3></div>
+          <span class="chip c-info"><span class="tile" aria-hidden="true">i</span>Re-architecting</span>
+        </div>
+        <div class="facts"><span>Portfolio: Corporate credit</span><span>Baseline → Transition 1 · Dec 2026</span><span>Owner: Facility architect</span></div>
+        <ol class="stepper">
+          <li><span class="s-name">Decide</span><span class="chip c-ok"><span class="tile" aria-hidden="true">✓</span>Done</span><span class="s-sub">Scope and reviewers set</span></li>
+          <li><span class="s-name">Design</span><span class="chip c-ok"><span class="tile" aria-hidden="true">✓</span>Done</span><span class="s-sub">0 errors · coverage 13/13</span></li>
+          <li class="now" aria-current="step"><span class="s-name">Review</span><span class="chip c-warn"><span class="tile" aria-hidden="true">!</span>Needs attention</span><span class="s-sub">Security requested changes</span></li>
+          <li><span class="s-name">Deliver</span><span class="chip c-off"><span class="tile" aria-hidden="true">–</span>Not started</span><span class="s-sub">2 conditions to come</span></li>
+        </ol>
+        <div class="overlap" role="note"><span class="chip c-info"><span class="tile" aria-hidden="true">i</span>Overlap</span><span>Shares 2 building blocks with <b>WP-REQ-05</b> (Request team, in Design). Order declared: WP-REQ-05 depends on this change.</span></div>
+        <p class="foot">12 checks · 4 reviewers · 2 conditions · 3 asks to the board · reviewed at <code>7c1e9a0</code>, updated since review</p>
+      </div>
+      <p class="mock-note">Example change from the Corporate credit worked example, as it appears in Process › Changes.</p>
+    </div>
+  </header>
+</div>
+
+<section class="block wide" aria-labelledby="flow-h">
+  <div class="wrap" style="max-width:none">
+    <h2 id="flow-h">The flow</h2>
+    <p class="intro">Columns are the steps, mapped to TOGAF phases. Rows are who acts. A request for changes from the board loops back to design; a simplification change skips the board.</p>
+  </div>
+  <div class="legend">
+    <span><i class="sw"></i>People</span><span><i class="sw tb"></i>Toolbox screen</span><span><i class="sw ci"></i>Automated (agent or CI)</span>
+    <span><i class="sw bd"></i>Board</span><span><i class="sw gt"></i>Git</span>
+    <span><i class="ln"></i>Next</span><span><i class="ln loop"></i>Request changes</span><span><i class="ln fast"></i>Simplification path</span>
+  </div>
+  <div class="scroll" tabindex="0" aria-label="Flow diagram, scrolls sideways on small screens">
+<!--FLOW-->
+  </div>
+  <p class="hint">On a small screen, scroll the diagram sideways.</p>
+</section>
+
+<div class="wrap">
+  <section class="block" aria-labelledby="class-h">
+    <h2 id="class-h">Three classes of change</h2>
+    <p class="intro">TOGAF Phase H classifies each change request. In the toolbox the owner picks the class in step 1; it decides who approves and how much of the ASD is needed.</p>
+<!--CLASSES-->
+  </section>
+
+  <section class="block" aria-labelledby="steps-h">
+    <h2 id="steps-h">The steps in the toolbox</h2>
+    <p class="intro">Each step says what the TOGAF deliverable is, which toolbox screen does the work, what happens in Git, and when the step is done. Screens refer to the Process area of the architecture space: Changes, Decisions, Reviews, Roadmap.</p>
+    <nav class="toc" aria-label="Steps"><a href="#step-0">0 Trigger</a><a href="#step-1">1 Decide</a><a href="#step-2">2 Design</a><a href="#step-3">3 Review</a><a href="#step-4">4 Deliver</a></nav>
+    <div class="steps">
+<!--STEPS-->
+    </div>
+  </section>
+</div>
+
+<section class="block wide" aria-labelledby="git-h">
+  <h2 id="git-h">Versioning in Git</h2>
+  <p class="intro"><code>main</code> holds the approved architecture: the baseline and every approved plateau. A change lives on its branch until the board decides; the board decides on one pinned commit; the decision itself is a commit.</p>
+  <div class="scroll" tabindex="0" aria-label="Git history diagram, scrolls sideways on small screens">
+<!--GIT-->
+  </div>
+</section>
+
+
+<div class="wrap">
+  <section class="block" aria-labelledby="par-h">
+    <h2 id="par-h">Parallel changes</h2>
+    <p class="intro">Several changes can be open on the same Application at once. They can collide at three levels; each level has its own guard, and most of the work is preventing collisions rather than resolving them.</p>
+    <div class="tbl"><table class="levels"><thead><tr><th scope="col">Level</th><th scope="col">Example</th><th scope="col">Caught by</th><th scope="col">When</th></tr></thead><tbody>
+      <tr><th scope="row">Scope overlap</th><td>WP-FAC-02 and WP-REQ-05 both touch <code>sbb.facility.facility-api</code></td><td>The toolbox, intersecting the scope and the diff of open changes</td><td>Decide, then on every push</td></tr>
+      <tr><th scope="row">Text conflict</th><td>Both branches edit the same lines of an element file</td><td>Git, on the merge preview of each pull request</td><td>Design, before review</td></tr>
+      <tr><th scope="row">Meaning conflict</th><td>Git merges cleanly, but one change retires a block the other now uses</td><td>The validator, on the merged result in the merge queue (P5, C2–C4)</td><td>At every merge</td></tr>
+    </tbody></table></div>
+
+    <h3 class="sub-h">1. Detect overlap when the change is opened</h3>
+    <p class="intro">When a change is opened, its scope (elements, plateaus, Applications) is compared with every open change; while designing, the comparison uses each branch's actual diff. The change card shows the overlap, and the owner picks one of three answers.</p>
+    <div class="opts">
+      <div class="opt"><h4>Sequence</h4><p>B depends on A. B's branch builds on A's preview and cannot enter the merge queue before A is merged.</p><p><b>Recorded as</b> <code>dependsOn</code> on B's work package.</p></div>
+      <div class="opt"><h4>Combine</h4><p>Both become one change with one work package, one branch and one review.</p><p><b>Recorded as</b> one change file; the other change is closed with a link.</p></div>
+      <div class="opt"><h4>Run in parallel</h4><p>Both go on. The owner who merges second integrates, and the board can approve with an order condition.</p><p><b>Recorded as</b> a note on both changes; C4 warns until an order is declared.</p></div>
+    </div>
+
+    <h3 class="sub-h">2. One file per change</h3>
+    <div class="two">
+      <div style="display:grid;gap:12px;align-content:start;min-width:0">
+        <ul class="plain">
+          <li>A change's work package, the blocks it introduces (inside <code>extend abb.&lt;app&gt; { … }</code>) and its relationships live in <code>model/bb/changes/&lt;work package&gt;.c4</code>. Two changes adding blocks never edit the same lines.</li>
+          <li>Plateau membership is made of relationships, never tags: the baseline aggregates what exists; each later plateau is the previous one, plus what its work packages realize, minus what they retire. New, changed and retired are derived.</li>
+          <li>Editing an existing block (description, owner, metadata) still happens in its own file. A conflict there is a real one, and a person resolves it.</li>
+          <li>When the plateau is promoted, the bot folds the change files into the model and deletes them.</li>
+        </ul>
+        <pre class="code" tabindex="0" aria-label="Folder layout">model/bb/
+├─ environments.c4        approved model + baseline membership
+└─ changes/
+   ├─ reservations-v1.c4         → transition-1
+   ├─ retire-booking-sheet.c4    → transition-1
+   └─ request-deployment-v1.c4   → target, dependsOn reservations-v1</pre>
+      </div>
+      <div style="min-width:0">
+        <pre class="code" tabindex="0" aria-label="Example change file">model {
+  extend imp.environments {
+    retire-booking-sheet = work-package &#x27;Retire the booking sheet&#x27; {
+      #draft
+      metadata {
+        workItemId &#x27;WI-322&#x27;
+        start &#x27;2026-11-02&#x27;
+        end &#x27;2026-11-13&#x27;
+        owner &#x27;team-platform&#x27;
+      }
+    }
+  }
+
+  imp.environments.retire-booking-sheet -[realization]-&gt; imp.environments.transition-1
+  imp.environments.retire-booking-sheet -[association]-&gt; sbb.environments.booking-sheet &#x27;retires&#x27;
+  imp.environments.retire-booking-sheet -[association]-&gt; abb.environments.booking-entry &#x27;retires&#x27;
+}</pre>
+        <p class="code-cap"><code>changes/retire-booking-sheet.c4</code> from the example model: the whole change in one file.</p>
+      </div>
+    </div>
+
+    <h3 class="sub-h">3. Merge one at a time, and keep approvals honest</h3>
+    <p class="intro">Each merge goes through the merge queue (GitLab merge train or GitHub merge queue): <code>arch-validate</code> runs on the branch plus the latest <code>main</code>, so the second change is checked against the first.</p>
+  </section>
+</div>
+<section class="block wide" aria-label="Timeline of two parallel changes" style="padding-top:0">
+  <div class="scroll" tabindex="0" aria-label="Timeline of two parallel changes, scrolls sideways on small screens">
+<!--PARALLEL-->
+  </div>
+</section>
+<div class="wrap">
+  <section class="block" aria-label="What happens to the second approval" style="padding-top:16px">
+    <p class="intro">The board approved WP-REQ-05's own diff at commit <code>5d2e8f1</code>. After <code>main</code> is taken in, the toolbox compares that diff with the new one:</p>
+    <ul class="outlist">
+      <li><span class="chip c-ok"><span class="tile" aria-hidden="true">✓</span>Same diff, checks green</span><span>The approval stands and <code>arb-decision</code> stays green. No new review.</span></li>
+      <li><span class="chip c-warn"><span class="tile" aria-hidden="true">!</span>Updated since review</span><span>The resolution changed blocks in the reviewed scope. The chair chooses a review of the delta only, or a full review.</span></li>
+      <li><span class="chip c-err"><span class="tile" aria-hidden="true">✕</span>Back to Design</span><span>The result contradicts the target: it uses a block the other change retires (P5) or changes a retired one (C2).</span></li>
+    </ul>
+    <p class="intro">The owner of the change that merges second resolves conflicts. Agents may propose the resolution as a commit; a person accepts it. Only the bot writes ARB records, so nobody resolves a conflict in one.</p>
+
+    <h3 class="sub-h">Checks that guard parallel changes</h3>
+    <div class="tbl"><table><thead><tr><th scope="col">Check</th><th scope="col">Rule</th><th scope="col">Effect</th></tr></thead><tbody>
+      <tr><th scope="row">P5</th><td>No building block uses a block retired by another change</td><td>Blocks the merge</td></tr>
+      <tr><th scope="row">C1</th><td>Each change file declares one work package, named after the file</td><td>Blocks the merge</td></tr>
+      <tr><th scope="row">C2</th><td>No building block is retired twice or changed after it is retired</td><td>Blocks the merge</td></tr>
+      <tr><th scope="row">C3</th><td><code>dependsOn</code> targets exist, have no cycle and follow plateau order</td><td>Blocks the merge</td></tr>
+      <tr><th scope="row">C4</th><td>Blocks touched by two changes have a <code>dependsOn</code> between them</td><td>Warning to the board</td></tr>
+      <tr><th scope="row">LikeC4</th><td>Two changes creating the same id fail <code>likec4 validate</code></td><td>Blocks the merge</td></tr>
+    </tbody></table></div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="block" aria-labelledby="rules-h">
+    <h2 id="rules-h">Git conventions</h2>
+<!--GITRULES-->
+    <p class="foot-note">Based on the AIToolbox project notes: architecture knowledge base (DEC-KB-01 to 06), delivery and repositories (central model, CI/CD, ARB loop), docs way in and architecture navigation (Process area, ARB coverage). Board decisions are Checkpoints (INV-12); automated Git writes go through CTX-INT (INV-07).</p>
+  </section>
+</div>

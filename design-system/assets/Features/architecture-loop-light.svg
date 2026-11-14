@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Architecture, working">
+<title>Architecture, working</title>
+
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <rect class="l1" x="6" y="6" width="30" height="12" rx="4" stroke="#39235F" stroke-width="4"></rect>
+  <rect class="l2" x="17" y="26" width="30" height="12" rx="4" stroke="#39235F" stroke-width="4"></rect>
+  <rect class="l3" x="28" y="46" width="30" height="12" rx="4" stroke="#39235F" stroke-width="4"></rect>
+  <path class="c1" d="M12 18v14h5" stroke="#278383" stroke-width="3" stroke-dasharray="3 4"></path>
+  <path class="c2" d="M23 38v14h5" stroke="#278383" stroke-width="3" stroke-dasharray="3 4"></path>
+</g>
+<circle class="dot" cx="51" cy="52" r="3.5" fill="#00A56B"></circle>
+</svg>

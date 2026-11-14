@@ -1,0 +1,237 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-14T19:10:00Z"
+  },
+  "title": "AIToolbox labs",
+  "launch": {
+    "view": "canvas"
+  },
+  "boards": {
+    "HoverStates.dc.html": {
+      "h": 4536,
+      "is_interactive": true,
+      "title": "Hover lab · B violet tint adopted (before: grey, A–D), hover the specimens · light and dark",
+      "w": 1760,
+      "x": 0,
+      "y": 0
+    },
+    "RunButton2.dc.html": {
+      "h": 2610,
+      "is_interactive": true,
+      "title": "Run button lab · round 2 · E night terminal (adopted then, replaced by round 3 L2 lime on 2026-11-14), vs green, azure, magenta, lime",
+      "w": 1760,
+      "x": 1840,
+      "y": 0
+    },
+    "TourFocusLab.dc.html": {
+      "title": "Tour focus lab · D Spotlight adopted (scrim 42 % with a cutout, 2 px primary ring, 350 ms fade) · six alternatives kept for the record · press Play, pick one, Replay · window width slider: the card goes below the target when it cannot sit beside it",
+      "x": 3680,
+      "y": 0,
+      "w": 1440,
+      "h": 1610,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "IdeasLayoutLab.dc.html": {
+      "title": "Ideas layout lab · same row and detail block in six layouts: side column, master–detail, idea page, side sheet, stack + detail (adopted), expanded row · press Play, pick one · one Discussion panel in the detail block · window width slider (Compact to Extra-large)",
+      "x": 0,
+      "y": 5136,
+      "w": 1440,
+      "h": 1940,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "WhatsNewLayoutLab.dc.html": {
+      "title": "What's new layout lab · five layouts for a news item, same content: stacked, meta gutter, split, changelog table (adopted), progressive · side column: champions, office hours, rating · press Play · same Discussion panel in every layout · window width slider (Compact to Extra-large)",
+      "x": 1520,
+      "y": 5136,
+      "w": 1440,
+      "h": 1860,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "QAPatternLab.dc.html": {
+      "title": "Q&A pattern lab · one open/close mechanic and one set of Q&A metadata for every feature: summary bar with Show more by three (adopted), action chip, section heading, preview first · each applied to a What's new release (D) and an idea (E) · window width slider · press Play",
+      "x": 3040,
+      "y": 5136,
+      "w": 1440,
+      "h": 2000,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "AdminLayoutLab.dc.html": {
+      "title": "Administration layout lab · four shells for core and feature administration, same content: hub and modules, admin sidebar (adopted), scope tabs, admin console · Core (general, users and permissions, groups, audit log) + Sweep (connectors) + Community (with Feedback) modules · view as platform admin or Sweep admin · window width slider · press Play",
+      "x": 0,
+      "y": 7736,
+      "w": 1440,
+      "h": 2080,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "FeedbackAdminLab.dc.html": {
+      "title": "Feedback administration lab · three places to administer feedback in the admin sidebar: 1 in each feature (Feedback section per module), A Community › Feedback (adopted: admin only, scoped right per feature), B Feedback module (own group and remote module beside Core) · view as platform admin or Sweep admin · window width slider · press Play",
+      "x": 1520,
+      "y": 7736,
+      "w": 1440,
+      "h": 2000,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "CatalogLab.dc.html": {
+      "title": "Catalog lab · minimal: skills, tools (Deploy environment, Reserve environment, Create Jira ticket) and MCP servers (DevOps, Knowledge base) for the assistant and Sweep · Browse and Mine, item page with one action, skill publication process Write · Test · Submit · Review · Published, Core › Catalog review and policies, Sweep › Tools and skills per phase · view as user, champion or platform admin · press Play",
+      "x": 3040,
+      "y": 7736,
+      "w": 1440,
+      "h": 2000,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "DocsLab.dc.html": {
+      "title": "Docs lab · one Docs, several sources, one knowledge base: the architecture of a worked example, the corporate credit platform (microservices for the Request, Client and Facility teams), drawn with the AIToolbox ArchiMate notation and read as LikeC4 views, in three areas: Catalogue (133 building blocks on a rich baseline: Credit origination monolith with its modules, Oracle schema, MQ, Control-M and file interfaces by layer, element page with relationships, plateaus, detailed design, decisions, review and LikeC4 source), Views (13 LikeC4 views by TOGAF ADM phase that drill down with crumbs and back: value stream › stage › business process, application cooperation › inside the monolith or inside a hexagonal service › the detailed design of each element: domain, events, ports, use cases, adapters, API, state machine, data model; on each plateau and as gaps between two plateaus) and Process (each change through decide · design · review · deliver, with ADR, ARB and the roadmap; an ARB in review with 12 checks, 4 reviewers and their notes, conditions, what is asked of the board, and an ASD showing the 13 items it must cover, written sections and sections generated from the model), the AI wiki (tips, procedures and news written by the community), operations (release train, Request · Client · Facility teams and on-call, incidents, design system), the new joiner path, and Administration › Core › Knowledge base · search and questions only from the header, going back with a subheader · way in A · Spaces adopted (B Application lens and C Ask first kept for the record) · press Play",
+      "x": 0,
+      "y": 10416,
+      "w": 1440,
+      "h": 1840,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "CatalogueLab.dc.html": {
+      "title": "Catalogue lab · four reductions of the architecture catalogue, same shell and data: A One tree, one field (adopted 2026-11-03, applied to the Architecture board with the header field as the only search: the tree is the catalogue, search flattens it into matching elements with their path, Group by portfolio or layer) · B Explorer (containers tree on the left, table of the selected node on the right) · C Facets (Where and Layer side lists, one table) · D Search first (one field, four starting points, results grouped by type) · pick one, press Play, window width 360 to 1920",
+      "x": 1520,
+      "y": 10416,
+      "w": 1440,
+      "h": 1400,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "ViewsLab.dc.html": {
+      "title": "Views lab · four ways into the architecture views, same content: A By steering level (adopted 2026-11-03: level picker then side list) · B By TOGAF ADM phase (one side list, Vision · Business · Information systems · Technology · Opportunities and migration · Governance, scope as a tag) · C Gallery (cards with rendering, For and Decides; a card opens the view, back to the gallery) · D By role (CIO, portfolio architect, solution architect, data owner, CTO, PMO, business owner; the side list shows that role's views) · pick one, press Play, window width 360 to 1920",
+      "x": 3040,
+      "y": 10416,
+      "w": 1440,
+      "h": 1400,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "ProcessLab.dc.html": {
+      "title": "Process lab · four shapes for the Process area, same data: A By object (adopted 2026-11-03: Changes, Reviews, Decisions, Model checks, How it works) · B Board (the changes by step, Decide · Design · Review · Deliver · Delivered, tinted when a step needs attention; decisions, checks and the guide as chips) · C Agenda and roadmap (ARB sessions with their submissions and readiness, the enterprise roadmap, conditions and asks by due date) · D Inbox (what needs the person viewing: owner, reviewer, chair, reader; then everything else) · view as change owner, reviewer, board chair or reader · press Play",
+      "x": 4560,
+      "y": 10416,
+      "w": 1440,
+      "h": 1400,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "StartLab.dc.html": {
+      "title": "Change start lab (decided 2026-11-10: start = C signals + B assistant, follow = B tracks, intake and changes in two places) · two decisions on the Process, same example data (19 changes on every phase of the adjusted TOGAF flow and at every gate G1–G4: waiting, in review, changes requested, rejected, passed, passed with conditions; each with where it comes from: business request, conversation, exploration, technology standard, decision, code first, model finding, incident) · START a change: A a form in three questions (origin, kind, scope → entry phase, documents, next gate computed) · B in the assistant (say what happened, the assistant proposes origin, entry, class, scope and overlaps) · C from the signal (Incoming: tickets, pull requests, radar, findings, ADRs, incidents → open as a change, attach, dismiss) · FOLLOW the phases: A board by phase · B tracks (one row per change: skipped, done, current, gates) · C by gate (waiting, sent back, passed, who decides) · D ADM phases (TOGAF A to H, what each produces, its gate, its changes) · click a change for its origin, phases, documents and gate · press Play",
+      "x": 0,
+      "y": 12416,
+      "w": 1440,
+      "h": 1500,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "RunButton3.dc.html": {
+      "h": 2830,
+      "title": "Run button lab · round 3 · L2 adopted (2026-11-14): Sweep lime #DCEAB4 with a Sweep purple #39235F label, icon and light-theme edge, vs the night button, plain lime, the inverse and the whole Sweep palette · hover the specimens · light and dark",
+      "w": 1760,
+      "x": 5200,
+      "y": 0
+    },
+    "SweepPurples.dc.html": {
+      "h": 5276,
+      "title": "Purples trial · Sweep purple #39235F and pale purple #DED7EB everywhere (trial; only the light primary #39235F adopted on 2026-11-14, tokens 4.7): before / after of the app shell (light, dark), components and dialog, the 29-token diff and contrast",
+      "w": 1760,
+      "x": 7040,
+      "y": 0
+    },
+    "ColourLab.dc.html": {
+      "h": 6420,
+      "w": 1760,
+      "x": 8880,
+      "y": 0,
+      "is_interactive": true,
+      "title": "Colour system review · decision lab (decided 2026-11-14: C Sweep palette adopted with the dark lavender primary kept, tokens 5.0): ten findings on tokens 4.7, four ways forward — A keep 4.7 · B tidy · C Sweep palette (recommended, lime Run kept in dark) · D Material 3 as generated — each live on the app screen in light and dark next to today, with the colour rules, the token diff, contrast checks and a scorecard · press Play, click an option"
+    }
+  },
+  "order": [
+    "HoverStates.dc.html",
+    "RunButton2.dc.html",
+    "TourFocusLab.dc.html",
+    "IdeasLayoutLab.dc.html",
+    "WhatsNewLayoutLab.dc.html",
+    "QAPatternLab.dc.html",
+    "AdminLayoutLab.dc.html",
+    "FeedbackAdminLab.dc.html",
+    "CatalogLab.dc.html",
+    "DocsLab.dc.html",
+    "CatalogueLab.dc.html",
+    "ViewsLab.dc.html",
+    "ProcessLab.dc.html",
+    "StartLab.dc.html",
+    "RunButton3.dc.html",
+    "SweepPurples.dc.html",
+    "ColourLab.dc.html"
+  ],
+  "notes": {
+    "l1": {
+      "kind": "title1",
+      "maxW": 10640,
+      "text": "Visual labs · hover states (B adopted), the Run button (round 3 · L2 Sweep lime adopted, replacing round 2 E), tour focus (D Spotlight adopted), Sweep purples trial (only the light primary #39235F adopted, tokens 4.7), colour system review (C adopted, tokens 5.0)",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "l2": {
+      "kind": "title1",
+      "maxW": 4480,
+      "text": "Community labs · Ideas layout (E adopted), What’s new layout (D adopted), Q&A pattern (A adopted, now the Discussion panel)",
+      "w": 240,
+      "x": 0,
+      "y": 4836
+    },
+    "l3": {
+      "kind": "title1",
+      "maxW": 4480,
+      "text": "Administration labs · admin shell (B adopted), feedback administration (A adopted), catalog (proposal, minimal)",
+      "w": 240,
+      "x": 0,
+      "y": 7436
+    },
+    "l4": {
+      "kind": "title1",
+      "maxW": 1440,
+      "text": "Docs lab · several sources, one knowledge base (proposal, A Spaces recommended)",
+      "w": 240,
+      "x": 0,
+      "y": 10116
+    },
+    "l5": {
+      "kind": "title1",
+      "maxW": 4480,
+      "text": "Architecture labs · Catalogue (A One tree adopted) · Views (A By level adopted) · Process (A By object adopted) · B, C, D kept for the record",
+      "w": 240,
+      "x": 1520,
+      "y": 10116
+    }
+  },
+  "noteOrder": [
+    "l1",
+    "l2",
+    "l3",
+    "l4",
+    "l5"
+  ],
+  "attachments": {},
+  "designSystems": [
+    {
+      "artifact": "https://claude.ai/artifact/Vx3WX1dqVqxSQ466jAfKpP",
+      "copiedAt": "2026-11-14T19:10:00Z",
+      "namespace": "devtoolbox",
+      "title": "AIToolbox",
+      "version": "1794678546-f2c8"
+    }
+  ]
+}

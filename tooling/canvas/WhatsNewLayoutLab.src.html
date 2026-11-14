@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>What's new layout lab, five layouts for a news item</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;display=swap">
+<style>
+<!--CSS-->
+.tile{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:4px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+.tile i{width:8px;height:8px;border-radius:2px;background:currentColor}
+.ok{background:#C3F4DC;color:#00391E}.wn{background:#FFDEA0;color:#261900}.in{background:#E3DFFF;color:#14085E}.ne{background:#ECE5F4;color:#1C1B1E}
+.ttab{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px;border-radius:12px;border:1px solid #CAC4CF;background:#FDF8FD;text-align:left;cursor:pointer;min-width:0}
+.ttab:hover{background:rgba(53,48,126,.06)}
+.ttab-on{border-color:#35307E;box-shadow:inset 0 0 0 1px #35307E;background:#F2EBFA}
+.cmp td,.cmp th{padding:10px 12px;font-size:13px;line-height:18px;vertical-align:top;border-top:1px solid #CAC4CF}
+.cmp th{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#48454E;text-align:left;border-top:0}
+.cmp tr.on td{background:#F2EBFA}
+.row{display:flex;align-items:center;gap:12px}
+.stack{display:flex;flex-direction:column;gap:12px;min-width:0}
+.meta{font-size:12px;color:#48454E;white-space:nowrap}
+.ttl{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-weight:700;color:#1C1B1E}
+.lnk{color:#35307E;font-family:'Open Sans',system-ui,sans-serif;font-size:13px;font-weight:600}
+.filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.foot{border-top:1px solid #CAC4CF;padding-top:10px}
+.chg{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.chg li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:20px;max-width:80ch}
+.gut{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding-right:16px;border-right:1px solid #CAC4CF}
+.gut .meta{white-space:normal}
+.gut .tile{white-space:normal;height:auto;min-height:24px;padding:3px 8px;line-height:16px}
+.rail{display:flex;flex-direction:column;gap:12px;padding-left:20px;border-left:1px solid #CAC4CF}
+.rail .btn,.rail .chip{justify-content:center}
+.chgt{border:1px solid #CAC4CF;border-radius:8px;overflow:hidden}
+.chgr{display:grid;grid-template-columns:96px 200px minmax(0,1fr);gap:12px;align-items:start;padding:8px 12px;font-size:13px;line-height:18px;border-top:1px solid #ECE5F4}
+.chgr:first-child{border-top:0}
+.thumb{width:40px;justify-content:center;padding:0}
+<!--SIMCSS-->
+<!--QACSS-->
+.lab-tabs{flex:none}.lab-tabs .tab{flex:none}
+@container win (max-width: 1199px){
+.wn-two{flex-direction:column!important;align-items:stretch!important}
+.wn-side{width:auto!important}
+}
+@container win (max-width: 839px){
+.lay-b{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+.gut{flex-direction:row!important;flex-wrap:wrap;align-items:center!important;padding:0 0 10px!important;border-right:0!important;border-bottom:1px solid #CAC4CF}
+.lay-c{grid-template-columns:minmax(0,1fr)!important}
+.rail{padding:12px 0 0!important;border-left:0!important;border-top:1px solid #CAC4CF}
+.rail>.stack:first-child{flex-direction:row!important;flex-wrap:wrap}
+.chgr{grid-template-columns:auto minmax(0,1fr)!important}
+.chgr>span:last-child{grid-column:1 / -1}
+.lab-tabs{overflow-x:auto;scrollbar-width:none}
+}
+@container win (max-width: 599px){
+article.card{padding:16px!important}
+}
+.scale{display:flex;gap:4px;flex-wrap:wrap}.scale span{width:28px;height:28px;border-radius:8px;border:1px solid #79757F;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1780px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column">
+
+  <div style="padding: 20px 32px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; align-items: center; gap: 16px">
+      <h1 class="ui" style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 700">What's new layout lab</h1>
+      <span style="font-size: 14px; color: #48454E">Five layouts for a news item. Same content in each (meta, title, summary, changes, actions, feedback, discussion), same page around it; only the inside of the item changes. Set the window width to see each one from Compact to Extra-large.</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+        <button type="button" class="ttab {{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}"><span class="row" style="gap: 8px"><span style="width: 24px; height: 24px; border-radius: 999px; background: {{t.numBg}}; color: {{t.numFg}}; font-family: Manrope, 'BNPP Type', 'Segoe UI', system-ui, sans-serif; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">{{t.k}}</span><span class="ui" style="font-size: 14px; font-weight: 600">{{t.name}}</span></span><span style="font-size: 12px; line-height: 16px; color: #48454E">{{t.sub}}</span><sc-if value="{{t.rec}}" hint-placeholder-val="{{false}}"><span class="tile ok"><i></i>Adopted</span></sc-if><sc-if value="{{t.cur}}" hint-placeholder-val="{{false}}"><span class="tile ne"><i></i>Today</span></sc-if></button>
+      </sc-for>
+    </div>
+    <!--SIMBAR-->
+  </div>
+
+  <div style="margin: 0 32px; border-radius: 12px; overflow: hidden; border: 1px solid #CAC4CF">
+  <!--SIMOPEN-->
+  <div style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; background: #FDF8FD; overflow: hidden">
+    <!--HEADER-->
+    <div style="flex: 1; display: flex; min-height: 0">
+      <!--RAIL-->
+      <main style="position: relative; flex: 1; min-width: 0; padding: 16px 32px 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; overflow: auto">
+        <div role="tablist" class="lab-tabs" style="display: flex; align-items: center; border-bottom: 1px solid #CAC4CF"><span class="tab tab-on">What's new<span class="n">3</span></span><span class="tab">Guides<span class="n">4 left</span></span><span class="tab">Ideas<span class="n">6</span></span><span style="flex: 1"></span><span class="btn t btn-i" style="margin-bottom: 4px">Notification preferences</span></div>
+        <div class="wn-two" style="display: flex; gap: 24px; align-items: flex-start">
+          <div class="stack" style="flex: 1; min-width: 0; gap: 16px"><!--FILTERS-->
+            <sc-if value="{{isA}}" hint-placeholder-val="{{true}}"><!--ITEMS:A--></sc-if>
+            <sc-if value="{{isB}}" hint-placeholder-val="{{false}}"><!--ITEMS:B--></sc-if>
+            <sc-if value="{{isC}}" hint-placeholder-val="{{false}}"><!--ITEMS:C--></sc-if>
+            <sc-if value="{{isD}}" hint-placeholder-val="{{false}}"><!--ITEMS:D--></sc-if>
+            <sc-if value="{{isE}}" hint-placeholder-val="{{false}}"><!--ITEMS:E--></sc-if>
+          </div>
+          <aside class="stack wn-side" style="width: 320px; flex: none; gap: 16px"><!--SIDE--></aside>
+        </div>
+      </main>
+    </div>
+    <!--NAVBAR-->
+  </div>
+  <!--SIMCLOSE-->
+  </div>
+
+  <div style="padding: 20px 32px 32px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start">
+    <div class="card" style="padding: 0; overflow: hidden">
+      <table class="cmp" style="width: 100%; border-collapse: collapse">
+        <thead><tr><th style="width: 36px"></th><th style="width: 140px">News layout</th><th>How it reads</th><th style="width: 110px">Height (4.6.0)</th><th>Good for</th><th>Trade-off</th></tr></thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+            <tr class="{{r.cls}}"><td><span class="ui" style="font-weight: 700">{{r.k}}</span></td><td><span class="ui" style="font-weight: 600">{{r.name}}</span></td><td>{{r.how}}</td><td>{{r.height}}</td><td style="color: #48454E">{{r.good}}</td><td style="color: #48454E">{{r.trade}}</td></tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px">
+        <div class="row" style="justify-content: space-between"><span class="h2">Adopted · D</span><span class="tile ok"><i></i>Changelog</span></div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E">Each change is a row: tag, what changed, detail. Versions and changes stay scannable down the feed, and a release with many small changes keeps its height. Actions sit on the line under the table, with Useful? at its end; the item ends with the Discussion panel. Applied to the live Community prototype.</div>
+        <div style="font-size: 13px; line-height: 18px; color: #48454E"><b style="color: #1C1B1E">Below 840 px</b> a row puts the tag and the title on one line and the detail under them; the actions and the feedback wrap as two groups.</div>
+      </div>
+      <div class="ocard" style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 18px; color: #48454E">
+        <span class="ui" style="font-size: 14px; font-weight: 700; color: #1C1B1E">Same in every layout</span>
+        <span>Meta: version, type (sparkle only on AI topics), action-required tile, date · areas, unread. Then title, summary (72 ch max), tagged changes, actions (Read, Try it, Watch, Acknowledge), useful?, then the Discussion expansion panel shared with Ideas: summary bar as header (threads, messages, who took part, last message); open, threads by three with Show more, each an opening message with its replies (the last two shown, earlier ones on demand), role chips for the platform team, champions and authors, Reply, and the new-message field.</span>
+        <span>Side column, in this order: champions, office hours, rating. The get-started checklist is gone: a release proposes its own first step ("Try it in the app").</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1860}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.simHostId = 'sim-host-wn'; this.simDefault = 1374; this.state = { v: 'D', open: { 0: true }, simW: null, simAvail: 0 }; }
+/*SIMJS*/
+/*QAJS*/
+  componentDidMount() { var self = this; this.simSync(); if (typeof window !== 'undefined') window.addEventListener('resize', function () { self.simSync(); }); }
+  componentDidUpdate() { this.simSync(); this.qaFocusSync(); }
+  renderVals() {
+    var s = this.state, self = this, sim = this.simVals(), QA = this.qaSeed(), qaAs = { who: 'Aurélien Heux', role: 'Platform team' };
+    var set = function (o) { return function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState(o); }; };
+    var defs = [
+      { k: 'A', name: 'Stacked', sub: 'Everything in one column.', how: 'Meta, title, summary, changes, actions, feedback, top to bottom', height: '~330 px', good: 'Short releases', trade: 'Every release is long; two fill the screen.' },
+      { k: 'B', name: 'Meta gutter', sub: 'Version, type, date in a left column.', how: 'Meta stacked in a 140 px gutter; the content starts at the title', height: '~300 px', good: 'A changelog read by version and date', trade: 'The gutter costs 160 px of text width.' },
+      { k: 'C', name: 'Split', sub: 'What changed | what to do.', how: 'Content on the left, actions and feedback in a 240 px rail on the right', height: '~260 px', good: 'Releases with several calls to action', trade: 'The text column narrows to ~520 px; the rail is empty for a short fix.' },
+      { k: 'D', name: 'Changelog table', sub: 'Changes as rows, actions on one line.', how: 'Changes in a 3-column table (tag, what, detail); actions and feedback share the last line', height: '~290 px', good: 'Releases with many small changes', trade: 'Denser; the table reads as data rather than as news.', rec: true },
+      { k: 'E', name: 'Progressive', sub: 'Summary and actions; changes on demand.', how: 'Title, summary, actions and a "What changed · 3" toggle; the changes open in place', height: '~190 px closed', good: 'Scanning several releases, acting on one', trade: 'The changes are one click away.' }
+    ];
+    var tabs = defs.map(function (d) { var on = s.v === d.k; return { k: d.k, name: d.name, sub: d.sub, on: on, cls: on ? 'ttab-on' : '', numBg: on ? '#35307E' : '#E3DFFF', numFg: on ? '#FFFFFF' : '#14085E', rec: !!d.rec, cur: !!d.cur, pick: set({ v: d.k }) }; });
+    var rows = defs.map(function (d) { return Object.assign({}, d, { cls: s.v === d.k ? 'on' : '' }); });
+    var NEW = { bg: '#E3DFFF', fg: '#14085E' }, AI = { bg: '#9CF1F0', fg: '#002020' }, NEU = { bg: '#ECE5F4', fg: '#1C1B1E' };
+    var rels = [
+      { hasVersion: true, version: '4.6.0', typeLabel: 'Feature release', typeBg: NEW.bg, typeFg: NEW.fg, unread: true, meta: '24 Oct · Sweep, Assistant, Environments', title: 'Approval cards for assistant tools, PR summaries in Sweep', summary: 'The assistant now asks before any tool that changes something, Sweep writes a review summary on every pull request, and Environments warns you before a promotion window closes.', bullets: [ { tag: 'New', bg: NEW.bg, fg: NEW.fg, lead: 'Approval card', text: 'a tool that deploys, deletes or edits shows its arguments and waits for Run or Don’t run.' }, { tag: 'AI', bg: AI.bg, fg: AI.fg, lead: 'Sweep PR summaries', text: 'written from the diff and the pipeline logs; reviewers can rate them.' }, { tag: 'Improved', bg: NEU.bg, fg: NEU.fg, lead: 'Promotion window alerts', text: '30 minutes before a window closes, a notification names what is still in staging.' } ], readLabel: 'Read the notes · 4 min', hasTour: true, hasVideo: true, videoLen: '2:10', comments: 2, helpfulStat: 'Useful for 87% · 212 votes' },
+      { isAi: true, typeLabel: 'AI topic', typeBg: AI.bg, typeFg: AI.fg, action: true, actionLabel: 'Action required · by 3 Nov', unread: true, meta: '20 Oct · Assistant', title: 'The assistant moves to a new model on 3 November', summary: 'Answers get longer context and tool calls get more reliable. Skills keep working; two behaviours change and your team should check them before the switch.', bullets: [ { tag: 'Changes', bg: NEU.bg, fg: NEU.fg, lead: 'Answers', text: 'code blocks carry a language tag; Explain on logs cites line numbers.' }, { tag: 'Check', bg: '#FFDEA0', fg: '#261900', lead: 'Your integrations', text: 'skills that parse the answer text, MCP servers pinned to the old tool schema.' } ], readLabel: 'Migration guide · 6 min', hasVideo: true, videoLen: '4:35', comments: 2, helpfulStat: 'Useful for 72% · 96 votes' },
+      { typeLabel: 'Policy', typeBg: NEU.bg, typeFg: NEU.fg, action: true, actionLabel: 'Acknowledge by 1 Nov', unread: true, meta: '18 Oct · All users', title: 'AI usage policy v3 applies from 1 November', summary: 'Customer data stays out of prompts unless the workspace is tagged data:approved. Prompts and answers are kept 90 days.', bullets: [], readLabel: 'Read the policy · 3 min', hasAck: true, comments: 0, helpfulStat: 'Useful for 64% · 58 votes' }
+    ].map(function (r, i) {
+      var open = !!s.open[i], qv = self.qaVals('r' + (i + 1), QA['r' + (i + 1)], 'Ask a question or share how you use this release…', qaAs, false);
+      return Object.assign(qv, { hasVersion: false, isAi: false, action: false, hasTour: false, hasVideo: false, hasAck: false, version: '', actionLabel: '', videoLen: '' }, r, {
+        hasBullets: r.bullets.length > 0, nBullets: r.bullets.length, open: open, chev: open ? 'rotate(180deg)' : 'none',
+        togStyle: open ? 'background: #E3DFFF; border-color: #E3DFFF; color: #191836' : '',
+        toggle: null
+      });
+    });
+    // toggle handlers need the computed patch at click time
+    rels.forEach(function (r, i) { r.toggle = function (e) { if (e && e.preventDefault) e.preventDefault(); var o = Object.assign({}, self.state.open); o[i] = !o[i]; self.setState({ open: o }); }; });
+    return Object.assign(sim, { tabs: tabs, rows: rows, rels: rels,
+      champs: [ { ini: 'MK', bg: '#9CF1F0', who: 'Marta Kowalski', team: 'Client', topics: 'Sweep, pipelines' }, { ini: 'PS', bg: '#C3F4DC', who: 'Priya Sharma', team: 'Request', topics: 'Assistant, skills' }, { ini: 'LB', bg: '#FFDEA0', who: 'Lucas Bernard', team: 'Facility', topics: 'Environments, promotions' } ],
+      isA: s.v === 'A', isB: s.v === 'B', isC: s.v === 'C', isD: s.v === 'D', isE: s.v === 'E' });
+  }
+}
+</script>
+</body>
+</html>

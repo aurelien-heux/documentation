@@ -1,0 +1,87 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+}
+
+// 2 px of the page surface between the header and the navigation, which form one frame of nav-container.
+.body { flex: 1; min-height: 0; display: flex; gap: 2px; padding-top: 2px; }
+.container { flex: 1; min-width: 0; height: 100%; background: transparent; }
+.content { background: var(--md-sys-color-surface); }
+.spacer { flex: 1; }
+
+.badge {
+  position: absolute; top: -6px; right: -8px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 9999px;
+  background: var(--md-sys-color-error); color: var(--md-sys-color-on-error);
+  font-family: var(--ait-font-body); font-weight: 600; font-size: 11px; line-height: 16px; text-align: center;
+  box-shadow: 0 0 0 2px var(--md-sys-color-nav-container);
+}
+
+// ---- Drawer: 300 px on nav-container, 12 px inset, 56 px items at radius 16, active = nav-active pill + 3 px primary bar.
+.drawer {
+  width: 300px;
+  border: 0;
+  border-radius: 0 16px 16px 0;
+  background: var(--md-sys-color-nav-container);
+  color: var(--md-sys-color-on-surface-variant);
+  --mat-list-list-item-one-line-container-height: 56px;
+  --mat-list-active-indicator-shape: 16px;
+  --mat-list-active-indicator-color: var(--md-sys-color-nav-active);
+  --mat-list-list-item-label-text-color: var(--md-sys-color-on-surface-variant);
+  --mat-list-list-item-label-text-font: var(--ait-font-ui);
+  --mat-list-list-item-label-text-size: 14px;
+  --mat-list-list-item-label-text-weight: 500;
+  --mat-list-list-item-label-text-tracking: 0.1px;
+  --mat-list-list-item-leading-icon-color: var(--md-sys-color-on-surface-variant);
+}
+.drawer__inner { display: flex; flex-direction: column; min-height: 100%; box-sizing: border-box; padding: 12px; }
+.drawer__menu { margin: 0 0 4px 4px; color: var(--md-sys-color-on-surface-variant); }
+mat-nav-list { padding: 0; }
+.mat-mdc-list-item { border-radius: 16px; margin-bottom: 0; }
+.mat-mdc-list-item.dt-nav-active {
+  --mat-list-list-item-label-text-color: var(--md-sys-color-on-secondary-container);
+  --mat-list-list-item-leading-icon-color: var(--md-sys-color-on-secondary-container);
+  background: var(--md-sys-color-nav-active);
+  box-shadow: inset 3px 0 0 var(--md-sys-color-primary);
+}
+.drawer__icon { position: relative; overflow: visible; }
+.drawer__icon mat-icon { width: 24px; height: 24px; }
+.drawer__count { font: var(--ait-type-label-medium); letter-spacing: .5px; color: inherit; }
+.drawer__divider { margin: 8px 16px 0; --mat-divider-color: var(--md-sys-color-outline-variant); }
+.drawer__section { padding: 16px 16px 8px; font: var(--ait-type-label-medium); letter-spacing: .5px; color: var(--md-sys-color-on-surface-variant); }
+.drawer__footer {
+  margin: 24px 16px 4px; font: var(--ait-type-body-small); letter-spacing: .4px; color: var(--md-sys-color-on-surface-variant);
+  a { color: inherit; text-decoration: underline; }
+}
+
+// ---- Rail: 80 px on nav-container, menu button on top, 56 × 32 active pill with the 3 px leading bar, labels under icons.
+.rail {
+  flex: none; width: 80px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 0;
+  box-sizing: border-box; background: var(--md-sys-color-nav-container); border-radius: 0 16px 16px 0; overflow-y: auto;
+}
+.rail__menu { color: var(--md-sys-color-on-surface-variant); margin-bottom: 8px; }
+.rail__item {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; padding: 4px 0 8px; border: 0; background: none;
+  text-decoration: none; color: var(--md-sys-color-on-surface-variant); cursor: pointer; border-radius: 16px;
+}
+.rail__pill { position: relative; display: flex; align-items: center; justify-content: center; width: 56px; height: 32px; border-radius: 16px; }
+.rail__item:hover .rail__pill { background: color-mix(in srgb, var(--md-sys-color-primary) 6%, transparent); }
+.rail__item--active { color: var(--md-sys-color-on-secondary-container); }
+.rail__item--active .rail__pill, .rail__item--active:hover .rail__pill { background: var(--md-sys-color-nav-active); box-shadow: inset 3px 0 0 var(--md-sys-color-primary); }
+.rail__label { font: var(--ait-type-label-medium); letter-spacing: .5px; text-align: center; max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rail__version { font-family: var(--ait-font-body); font-size: 10px; line-height: 14px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px; }
+
+// ---- NavigationBar: 80 px, 64 × 32 active pill with a 3 px primary bar on top, labels always visible.
+.bar {
+  flex: none; height: 80px; display: flex; justify-content: space-around; align-items: center; padding: 0 8px;
+  background: var(--md-sys-color-nav-container);
+}
+.bar__item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--md-sys-color-on-surface-variant); }
+.bar__pill { position: relative; display: flex; align-items: center; justify-content: center; width: 64px; height: 32px; border-radius: 16px; }
+.bar__item--active { color: var(--md-sys-color-on-surface); }
+.bar__item--active .bar__pill { background: var(--md-sys-color-nav-active); box-shadow: inset 0 3px 0 var(--md-sys-color-primary); }
+.bar__label { font: var(--ait-type-label-medium); letter-spacing: .5px; }
+.bar__item--active .bar__label { font-family: var(--ait-font-body); font-weight: 600; }

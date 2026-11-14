@@ -1,0 +1,82 @@
+
+      <!-- Listening -->
+      <sc-if value="{{isListen}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; align-items: center; gap: 0; border-bottom: 1px solid #CAC4CF">
+        <sc-for list="{{lTabs}}" as="t" hint-placeholder-count="3"><button type="button" class="tab" aria-selected="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}<sc-if value="{{t.hasN}}" hint-placeholder-val="{{false}}"><span class="n">{{t.n}}</span></sc-if></button></sc-for>
+        <span style="flex: 1"></span>
+        <span class="tile in"><i></i>{{capLabel}}</span>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{lFeedback}}" hint-placeholder-val="{{false}}">
+      <div class="card" style="padding: 0; overflow: hidden">
+        <table style="width: 100%; border-collapse: collapse">
+          <thead><tr><th class="th">Feedback profile</th><th class="th">Status</th><th class="th">Entry points</th><th class="th">Questions</th><th class="th">Sampling</th><th class="th">Routing</th><th class="th"></th></tr></thead>
+          <tbody>
+            <sc-for list="{{fpRows}}" as="p" hint-placeholder-count="5">
+              <tr class="rw" style="{{p.rowStyle}}"><td class="td"><div class="ui" style="font-weight: 600">{{p.name}}</div><div style="font-size: 12px; color: #48454E">Owner: {{p.owner}}</div></td><td class="td"><span class="tile {{p.tile}}"><i></i>{{p.status}}</span></td><td class="td" style="font-size: 12px; color: #48454E">{{p.entries}}</td><td class="td">{{p.nq}}</td><td class="td">{{p.sampling}}</td><td class="td" style="font-size: 12px; color: #48454E">{{p.routing}}</td><td class="td" style="text-align: right"><button type="button" class="chip" onClick="{{p.edit}}">Edit</button></td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+
+      <sc-if value="{{fpEditing}}" hint-placeholder-val="{{true}}">
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start">
+        <div class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 24px">
+          <div class="row" style="justify-content: space-between"><h2 class="h2">{{fp.name}} · feedback profile</h2><button type="button" class="chip" aria-pressed="{{fp.on}}" style="{{fp.onStyle}}" onClick="{{fp.toggle}}"><sc-if value="{{fp.on}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{fp.onLabel}}</button></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Entry points</span><sc-for list="{{fp.entryChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+          <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Questions · {{fp.nq}} of 3</div>
+          <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2">
+            <div class="step" style="align-items: center"><span class="num">{{q.n}}</span><select class="sel sel-s" aria-label="Question type" value="{{q.type}}" onChange="{{q.onType}}"><option value="thumbs">Thumbs</option><option value="scale">Scale 1–5</option><option value="nps">NPS 0–10</option><option value="single">Single choice</option><option value="multi">Multiple choice</option><option value="text">Text</option></select><div class="fld" style="flex: 1; min-height: 40px; padding: 8px 12px"><input type="text" aria-label="Question" value="{{q.text}}" onChange="{{q.onText}}"></div><button type="button" class="ib" aria-label="Remove question" style="width: 32px; height: 32px; margin: 0" onClick="{{q.del}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
+          </sc-for>
+          <sc-if value="{{fp.canAdd}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" style="align-self: flex-start" onClick="{{fp.addQ}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add question</button></sc-if>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Sampling</span><sc-for list="{{fp.samplingChips}}" as="t" hint-placeholder-count="4"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for><span style="font-size: 12px; color: #48454E">after-action prompts only</span></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Routing</span><select class="sel sel-s" aria-label="Routing" value="{{fp.routing}}" onChange="{{fp.onRouting}}"><option value="inbox">Team inbox only</option><option value="jira">Inbox + Jira project</option><option value="teams">Inbox + Teams channel</option></select><span style="font-size: 12px; color: #48454E">Bugs always go to Jira; never to Ideas</span></div>
+          <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">Options</span><sc-for list="{{fp.optChips}}" as="t" hint-placeholder-count="2"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}"><sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{t.label}}</button></sc-for></div>
+          <div class="row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid #CAC4CF; padding-top: 16px"><button type="button" class="btn x" onClick="{{fpClose}}">Close</button><button type="button" class="btn f" onClick="{{fpSave}}">Save profile</button></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div class="ui" style="font-size: 12px; font-weight: 700; color: #48454E">Preview · side sheet in {{fp.name}}</div>
+          <div class="pop" style="position: static; width: 360px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+            <div class="row" style="justify-content: space-between"><span class="ui" style="font-size: 16px; font-weight: 700">Feedback · {{fp.name}}</span><span style="font-size: 12px; color: #48454E">Goes to {{fp.owner}}</span></div>
+            <sc-for list="{{fp.qs}}" as="q" hint-placeholder-count="2"><div><div class="ui" style="font-size: 14px; font-weight: 600; margin-bottom: 6px">{{q.textOr}}</div><span class="tag" style="background: #ECE5F4">{{q.typeLabel}}</span></div></sc-for>
+            <sc-if value="{{fp.noQ}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: #48454E">Add at least one question.</span></sc-if>
+            <sc-if value="{{fp.ctx}}" hint-placeholder-val="{{true}}"><div class="row" style="gap: 6px; font-size: 12px; color: #48454E"><span class="chip chip-on" style="height: 28px; font-size: 12px">Attach context</span>page, run, environment, app version</div></sc-if>
+            <div class="row" style="justify-content: flex-end"><span class="btn f sm">Send</span></div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <div class="ocard" style="display: flex; flex-direction: column; gap: 10px">
+        <div class="row" style="flex-wrap: wrap"><span class="ui" style="font-size: 14px; font-weight: 700">Solicitation policy</span><span style="font-size: 12px; color: #48454E">one cap per user, shared by feedback prompts, micro-surveys and NPS</span></div>
+        <div class="row" style="flex-wrap: wrap"><span style="font-size: 13px; color: #48454E; width: 96px">At most</span><sc-for list="{{capChips}}" as="t" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" aria-disabled="{{isFeatureRole}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for><span style="font-size: 12px; color: #48454E">{{capNote}}</span></div>
+        <div style="font-size: 12px; line-height: 16px; color: #48454E">The Feedback page button and thumbs on AI answers are user-initiated and never count against the cap. Prompts are never shown during a running action and are always dismissible.</div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{lInbox}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+        <sc-for list="{{inFeatChips}}" as="t" hint-placeholder-count="5"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" aria-disabled="{{t.locked}}" onClick="{{t.pick}}">{{t.label}}<span class="n">{{t.n}}</span></button></sc-for>
+        <span style="flex: 1"></span>
+        <sc-for list="{{inStatusChips}}" as="t" hint-placeholder-count="3"><button type="button" class="chip" aria-pressed="{{t.on}}" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+      </div>
+      <sc-for list="{{inbox}}" as="f" hint-placeholder-count="3">
+        <div class="card" style="display: flex; gap: 14px; align-items: flex-start; padding: 16px 20px">
+          <span class="av" style="background: {{f.bg}}">{{f.ini}}</span>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+            <div class="row" style="gap: 8px; flex-wrap: wrap"><b class="ui" style="font-size: 14px">{{f.who}}</b><span class="tag" style="background: #E3DFFF; color: #14085E">{{f.feature}}</span><span class="tag" style="background: #ECE5F4">{{f.source}}</span><sc-if value="{{f.hasScore}}" hint-placeholder-val="{{true}}"><span style="font-size: 12px; color: #48454E">scored {{f.score}}</span></sc-if><span style="font-size: 12px; color: #48454E">{{f.when}}</span><span style="flex: 1"></span><span class="tile {{f.tile}}"><i></i>{{f.status}}</span></div>
+            <p style="margin: 0; font-size: 14px; line-height: 20px">{{f.text}}</p>
+            <div class="row" style="gap: 6px; flex-wrap: wrap"><sc-for list="{{f.ctx}}" as="c" hint-placeholder-count="3"><span class="mono" style="font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #F2EBFA; color: #48454E">{{c}}</span></sc-for></div>
+            <sc-if value="{{f.hasReply}}" hint-placeholder-val="{{false}}"><div style="padding: 8px 12px; border-radius: 8px; background: #F2EBFA; font-size: 13px; line-height: 18px"><b>You replied:</b> {{f.reply}}</div></sc-if>
+            <sc-if value="{{f.replying}}" hint-placeholder-val="{{false}}"><div class="row"><div class="fld" style="flex: 1; min-height: 40px; padding: 8px 12px"><label for="{{f.rid}}">Reply to {{f.who}}</label><input id="{{f.rid}}" type="text" value="{{f.draft}}" onChange="{{f.onDraft}}" placeholder="Arrives in their notifications"></div><button type="button" class="btn f sm" onClick="{{f.send}}">Send</button></div></sc-if>
+            <div class="row" style="gap: 8px; flex-wrap: wrap">
+              <sc-if value="{{f.canAct}}" hint-placeholder-val="{{true}}"><button type="button" class="chip" onClick="{{f.startReply}}">Reply</button><select class="sel sel-s" aria-label="Route" value="" onChange="{{f.onRoute}}"><option value="">Route to…</option><option value="Jira · SWEEP">Jira · SWEEP</option><option value="Jira · PLATFORM">Jira · PLATFORM</option><option value="Support">Support</option></select><button type="button" class="chip" onClick="{{f.toIdea}}">Propose as idea</button></sc-if>
+              <sc-if value="{{f.isIdeaAsk}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: #48454E">Waiting for {{f.who}} to agree to publish it as an idea</span><button type="button" class="lnk" onClick="{{f.simulateYes}}">Simulate consent</button></sc-if>
+              <sc-if value="{{f.isRouted}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: #48454E">{{f.routeNote}}</span></sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{noInbox}}" hint-placeholder-val="{{false}}"><div class="ocard" style="display: flex; align-items: center; gap: 16px; padding: 24px"><span class="tile ok"><i></i>Inbox zero</span><span style="font-size: 14px; color: #48454E">Nothing left with this filter.</span></div></sc-if>
+      </sc-if>

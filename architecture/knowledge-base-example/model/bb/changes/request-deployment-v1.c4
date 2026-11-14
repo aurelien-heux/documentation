@@ -1,0 +1,120 @@
+// Change Request Deployment v1 · work package imp.environments.request-deployment-v1 · plateau target
+// One file per change: the work package, the building blocks it introduces and their relationships.
+// Folded into environments.c4 by the bot when its plateau is promoted to baseline.
+
+model {
+  extend abb.environments {
+    request-deployment-process = business-process 'Request Deployment' {
+      #ready
+      description 'Steps 1.1 to 1.8: select, check Reservations, create the Deployment, open the auto-merge PR, publish, wait for the first Rollout.'
+      metadata {
+        owner 'team-platform'
+        adr 'adr.environments.auto-merge-pr'
+      }
+    }
+    deploy-module-branch = business-service 'Deploy a Module branch' {
+      #ready
+      description 'The exposed use case: given an Environment, a Module and a branch, start a Deployment or refuse it with the reason.'
+      metadata {
+        owner 'team-platform'
+      }
+    }
+    deployment-service = application-service 'Deployment service' {
+      #ready
+      metadata {
+        owner 'team-platform'
+      }
+    }
+    deployment-requested = business-event 'Deployment requested' {
+      #ready
+      metadata {
+        owner 'team-platform'
+        domainRef 'EVT-DEPLOYMENT-REQUESTED'
+      }
+    }
+  }
+
+  extend sbb.environments {
+    deployment-api = application-interface 'Deployment API' {
+      #ready
+      description 'POST /environments/{env}/deployments: 201, 409 with the blocking Reservation, 422 for an ineligible Environment.'
+      metadata {
+        owner 'team-platform'
+        module 'environments/service'
+        contract 'contracts/deployments.openapi.yaml'
+        workItemId 'WI-318'
+      }
+    }
+    deployment-record = data-object 'Deployment record' {
+      #ready
+      metadata {
+        owner 'team-platform'
+        module 'environments/service'
+        workItemId 'WI-318'
+      }
+    }
+    deployment-requested-event = application-event 'DeploymentRequested message' {
+      #ready
+      metadata {
+        owner 'team-platform'
+        module 'environments/service'
+        contract 'contracts/environment-events.asyncapi.yaml'
+        workItemId 'WI-318'
+      }
+    }
+    git-connector = technology-service 'CTX-INT Git connector' {
+      #ready
+      description 'Opens descriptor PRs with auto-merge on behalf of Devtoolbox; holds the credentials (INV-07).'
+      metadata {
+        owner 'team-integration'
+      }
+    }
+  }
+
+  extend imp.environments {
+    request-deployment-v1 = work-package 'Request Deployment v1' {
+      #ready
+      metadata {
+        workItemId 'WI-318'
+        start '2026-10-27'
+        end '2026-11-07'
+        owner 'team-platform'
+        adr 'adr.environments.auto-merge-pr'
+        dependsOn 'imp.environments.reservations-v1'
+      }
+    }
+  }
+
+  abb.environments.request-deployment-process -[realization]-> req.environments.request-deployment
+  abb.environments.deploy-module-branch -[realization]-> req.environments.request-deployment
+  abb.environments.deployment-service -[realization]-> req.environments.request-deployment
+  abb.environments.deployment-requested -[realization]-> req.environments.request-deployment
+  abb.environments.environment-management -[composition]-> abb.environments.request-deployment-process
+  abb.environments.request-deployment-process -[realization]-> abb.environments.deploy-module-branch
+  abb.environments.deployment-service -[serving]-> abb.environments.request-deployment-process
+  abb.environments.request-deployment-process -[access]-> abb.environments.reservation 'reads'
+  abb.environments.request-deployment-process -[access]-> abb.environments.placement 'writes'
+  abb.environments.request-deployment-process -[triggering]-> abb.environments.deployment-requested
+  sbb.environments.environments-module -[realization]-> abb.environments.deployment-service
+  sbb.environments.environments-module -[realization]-> abb.environments.request-deployment-process
+  sbb.environments.deployment-api -[realization]-> abb.environments.deploy-module-branch
+  sbb.environments.deployment-record -[realization]-> abb.environments.placement
+  sbb.environments.deployment-requested-event -[realization]-> abb.environments.deployment-requested
+  sbb.environments.environments-module -[composition]-> sbb.environments.deployment-api
+  sbb.environments.environments-module -[access]-> sbb.environments.deployment-record
+  sbb.environments.environments-module -[flow]-> sbb.environments.deployment-requested-event 'publishes'
+  sbb.environments.git-connector -[serving]-> sbb.environments.environments-module
+  sbb.environments.git-connector -[access]-> sbb.environments.environment-descriptor 'auto-merge PR'
+  imp.environments.request-deployment-v1 -[realization]-> imp.environments.target
+  imp.environments.request-deployment-v1 -[realization]-> sbb.environments.deployment-api
+  imp.environments.request-deployment-v1 -[realization]-> sbb.environments.deployment-record
+  imp.environments.request-deployment-v1 -[realization]-> sbb.environments.deployment-requested-event
+  imp.environments.request-deployment-v1 -[realization]-> sbb.environments.git-connector
+  imp.environments.request-deployment-v1 -[realization]-> sbb.environments.jenkins-descriptor-job
+  imp.environments.request-deployment-v1 -[realization]-> abb.environments.request-deployment-process
+  imp.environments.request-deployment-v1 -[realization]-> abb.environments.deploy-module-branch
+  imp.environments.request-deployment-v1 -[realization]-> abb.environments.deployment-service
+  imp.environments.request-deployment-v1 -[realization]-> abb.environments.deployment-requested
+  imp.environments.request-deployment-v1 -[realization]-> abb.environments.environment-management
+  imp.environments.request-deployment-v1 -[association]-> abb.environments.manual-descriptor-change 'retires'
+}

@@ -1,0 +1,64 @@
+<!-- @dsCard group="Communication" height=660 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"><style>
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+body{margin:0;padding:16px;background:var(--surface-container-lowest);color:var(--on-surface);font-family:var(--font-body);font-size:14px;display:flex;flex-direction:column;gap:12px}
+button,.ui{font-family:var(--font-ui)}button{cursor:pointer}
+.cap{font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.5px;color:var(--on-surface-variant);text-transform:uppercase}
+.panel{max-width:720px;border:1px solid var(--outline-variant);border-radius:var(--radius-md);background:var(--surface-container-lowest);overflow:hidden}
+.hd{width:100%;min-height:48px;box-sizing:border-box;display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;padding:8px 16px 8px 12px;border:0;background:transparent;color:var(--on-surface);font:inherit;text-align:left}.hd:hover{background:color-mix(in srgb,var(--primary) 6%,transparent)}
+.open .hd{border-bottom:1px solid var(--outline-variant)}
+.hd:focus-visible{outline-offset:-3px}.hd svg{color:var(--on-surface-variant);transition:transform .2s}.open .hd svg{transform:rotate(180deg)}
+.t{font-family:var(--font-ui);font-size:14px;font-weight:700}
+.ppl{display:inline-flex;padding-left:4px}.ppl span{width:24px;height:24px;margin-left:-4px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:9px;font-weight:700;box-shadow:0 0 0 2px var(--surface-container-lowest)}
+.act{margin-left:auto;font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--primary)}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tile{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:var(--radius-xs);font-family:var(--font-ui);font-size:12px;font-weight:600;white-space:nowrap}
+.tile i{width:8px;height:8px;border-radius:2px;background:currentColor}
+.ne{background:var(--surface-container-high);color:var(--on-surface)}.in{background:var(--primary-container);color:var(--on-primary-container)}
+.body{padding:0 16px 12px}
+.q{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--outline-variant)}.q:first-child{border-top:0}
+.av{width:32px;height:32px;flex:none;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:12px;font-weight:700;color:var(--on-secondary-container);background:var(--secondary-container)}
+.who{font-family:var(--font-ui);font-size:13px;font-weight:700}.meta{font-size:12px;color:var(--on-surface-variant)}
+p{margin:4px 0 0;font-size:14px;line-height:20px;max-width:72ch}
+.rp{margin-top:10px;padding-left:14px;border-left:2px solid var(--primary-container);display:flex;flex-direction:column;gap:10px}
+.r{display:flex;gap:10px}.r .av{width:24px;height:24px;font-size:10px}.r p{margin-top:2px}
+.lnk{border:0;background:transparent;padding:0;color:var(--primary);font-size:13px;font-weight:600}
+.more{min-height:24px;padding:0;border:0;background:transparent;color:var(--primary);font-family:var(--font-body);font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;align-self:flex-start}
+.morebar{display:flex;align-items:center;gap:8px;padding:10px 0 8px;border-top:1px solid var(--outline-variant)}.morebar .more{font-size:14px}
+.ask{display:flex;gap:12px;align-items:center;padding-top:12px;border-top:1px solid var(--outline-variant)}
+.fld{position:relative;flex:1;min-height:44px;box-sizing:border-box;border:1px solid var(--outline);border-radius:4px;padding:10px 12px;color:var(--on-surface-variant)}
+.fld span{position:absolute;top:-9px;left:10px;padding:0 4px;background:var(--surface-container-lowest);font-size:12px}
+.btn{height:40px;padding:0 20px;border:0;border-radius:var(--radius-lg);background:var(--secondary-container);color:var(--on-secondary-container);font-size:14px;font-weight:600}
+</style></head><body>
+<span class="cap">Collapsed</span>
+<div class="panel">
+  <button class="hd" aria-expanded="false" aria-controls="d-a" aria-label="Discussion · 2 threads, 4 messages, platform team replied, last message 2 days ago"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="t">Discussion</span><span class="ppl" aria-hidden="true"><span style="background:var(--success-container);color:var(--on-success-container)">YD</span><span style="background:var(--warning-container);color:var(--on-warning-container)">SB</span><span style="background:var(--warning-container);color:var(--on-warning-container)">LB</span></span><span class="meta">2 threads · 4 messages</span><span class="tile ne"><i></i>Platform team replied</span><span class="meta">Last message 2 days ago</span><span class="act">Show</span></button>
+</div>
+<span class="cap">Expanded</span>
+<div class="panel open">
+  <button class="hd" aria-expanded="true" aria-controls="d-b" aria-label="Discussion · 7 threads, 18 messages, platform team replied, last message 1 h ago"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="t">Discussion</span><span class="ppl" aria-hidden="true"><span style="background:var(--ai-container);color:var(--on-ai-container)">PS</span><span style="background:var(--ai-container);color:var(--on-ai-container)">MK</span><span style="background:var(--warning-container);color:var(--on-warning-container)">EL</span></span><span class="meta">7 threads · 18 messages</span><span class="tile ne"><i></i>Platform team replied</span><span class="meta">Last message 1 h ago</span><span class="act">Hide</span></button>
+  <div class="body" id="d-b" role="region" aria-label="Discussion">
+    <div class="q"><span class="av" style="background:var(--ai-container);color:var(--on-ai-container)">PS</span><div style="flex:1;min-width:0">
+      <div class="row"><span class="who">Priya Sharma</span><span class="meta">3 h ago</span></div>
+      <p>Can a repository opt out of PR summaries? Some of ours only hold generated code.</p>
+      <div class="rp">
+        <div class="r"><span class="av" style="background:var(--ai-container);color:var(--on-ai-container)">MK</span><div><div class="row"><span class="who">Marta Kowalski</span><span class="tile in"><i></i>Champion</span><span class="meta">2 h ago</span></div><p>Not today as far as I know. You can collapse the summary on each pull request in the meantime.</p></div></div>
+        <div class="r"><span class="av" style="background:var(--ai-container);color:var(--on-ai-container)">PS</span><div><div class="row"><span class="who">Priya Sharma</span><span class="meta">1 h ago</span></div><p>Collapsing works for us until then, thanks.</p></div></div>
+      </div>
+      <div class="row" style="margin-top:8px;gap:12px"><button class="lnk" aria-expanded="false">Reply</button><span class="meta">2 replies</span></div>
+    </div></div>
+    <div class="q"><span class="av" style="background:var(--primary-container);color:var(--on-primary-container)">NR</span><div style="flex:1;min-width:0">
+      <div class="row"><span class="who">Nadia Rahal</span><span class="meta">yesterday</span></div>
+      <p>Is the approval card shown in the VS Code extension too?</p>
+      <div class="rp">
+        <button class="more">Show 1 earlier reply</button>
+        <div class="r"><span class="av" style="background:var(--primary-container);color:var(--on-primary-container)">NR</span><div><div class="row"><span class="who">Nadia Rahal</span><span class="meta">today</span></div><p>Good to know. Is there a date for 4.7?</p></div></div>
+        <div class="r"><span class="av" style="background:var(--warning-container);color:var(--on-warning-container)">SB</span><div><div class="row"><span class="who">Sami Ben Ali</span><span class="tile ne"><i></i>Platform team</span><span class="meta">today</span></div><p>Mid-December; it will be announced here in What’s new.</p></div></div>
+      </div>
+      <div class="row" style="margin-top:8px;gap:12px"><button class="lnk" aria-expanded="false">Reply</button><span class="meta">3 replies</span></div>
+    </div></div>
+    <div class="morebar"><button class="more" aria-controls="d-b">Show 3 more threads</button><span class="meta">2 of 7 threads shown</span></div>
+    <div class="ask"><span class="av" style="background:var(--secondary-container);color:var(--on-secondary-container)">AH</span><div class="fld"><span>New message</span>Ask a question or share how you use this release…</div><button class="btn">Post</button></div>
+  </div>
+</div>
+</body></html>

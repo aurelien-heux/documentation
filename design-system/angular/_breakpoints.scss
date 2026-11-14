@@ -1,0 +1,33 @@
+// AIToolbox — layout and breakpoints (Material 3 window size classes). Generated from mcu/breakpoints.py.
+// @use 'breakpoints' as bp;  then  @include bp.from(expanded) { … }  ·  @include bp.below(large) { … }  ·  @include bp.only(medium) { … }
+// Window classes drive the shell (navigation, header, assistant). Page content follows the page area: @include bp.page-from(720px) { … }
+@use 'sass:list';
+@use 'sass:map';
+
+$breakpoints: (medium: 600px, expanded: 840px, large: 1200px, extra-large: 1600px);
+$order: (compact, medium, expanded, large, extra-large);
+$margins: (compact: 16px, medium: 24px, expanded: 24px, large: 32px, extra-large: 32px);
+$columns: (compact: 4, medium: 8, expanded: 12, large: 12, extra-large: 12);
+$short-height: 480px;   // a phone in landscape: the NavigationBar becomes the rail, dialogs go full screen
+
+@function lower($class) {
+  @if $class == compact { @return 0; }
+  @return map.get($breakpoints, $class);
+}
+@function upper($class) {
+  $i: list.index($order, $class);
+  @if $i == list.length($order) { @return null; }
+  @return map.get($breakpoints, list.nth($order, $i + 1)) - 0.02px;
+}
+@mixin from($class) { @if $class == compact { @content; } @else { @media (min-width: lower($class)) { @content; } } }
+@mixin below($class) { @media (max-width: lower($class) - 0.02px) { @content; } }
+@mixin only($class) {
+  $lo: lower($class); $hi: upper($class);
+  @if $hi == null { @media (min-width: $lo) { @content; } }
+  @else if $lo == 0 { @media (max-width: $hi) { @content; } }
+  @else { @media (min-width: $lo) and (max-width: $hi) { @content; } }
+}
+@mixin short { @media (max-height: $short-height - 0.02px) { @content; } }
+// Page-area queries (the .ait-page container from css/tokens.css).
+@mixin page-from($width) { @container ait-page (min-width: #{$width}) { @content; } }
+@mixin page-below($width) { @container ait-page (max-width: #{$width - 0.02px}) { @content; } }

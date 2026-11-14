@@ -1,0 +1,204 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-14T19:10:00Z"
+  },
+  "title": "AIToolbox prototypes",
+  "launch": {
+    "view": "canvas"
+  },
+  "boards": {
+    "AccessibilityPlan.dc.html": {
+      "expand": "fill",
+      "h": 4600,
+      "is_interactive": true,
+      "title": "Accessibility plan · before and after, 20 fixes (no design-system change; press Play and use the keyboard)",
+      "w": 1600,
+      "x": 0,
+      "y": 10743
+    },
+    "AssistantLive.dc.html": {
+      "expand": "fill",
+      "h": 900,
+      "is_interactive": true,
+      "title": "Assistant panel · live prototype: open, ask, resize, history, tools, settings (press Play)",
+      "w": 1440,
+      "x": 0,
+      "y": 1700
+    },
+    "CommunityLive.dc.html": {
+      "expand": "fill",
+      "h": 1260,
+      "is_interactive": true,
+      "title": "Community + Administration · live: What's new (layout D · Changelog, Discussion panel: threads with replies, Show more), Guides, Ideas (layout E · stack + detail, the same Discussion panel); Administration with the admin sidebar (Core: General first, users and permissions from the directory · Sweep: Connectors · Community: Insights from feedback forms, surveys and tours, and Community › Feedback: profiles edited with the FeedbackProfile editor, inbox, surveys, solicitation policy; a Sweep admin sees Feedback · Sweep only · Section select below 1200 px); Spotlight tours measured at runtime · window width from 360 to 1920 (bottom bar when Compact, modal drawer below Expanded) · view as platform admin, Sweep admin or user (press Play)",
+      "w": 1440,
+      "x": 0,
+      "y": 15944
+    },
+    "FeedbackLive.dc.html": {
+      "h": 4463,
+      "is_interactive": true,
+      "title": "Feedback · live: working marks in context",
+      "w": 1560,
+      "x": 1600,
+      "y": 5780
+    },
+    "HeaderIdeasLive.dc.html": {
+      "h": 2765,
+      "is_interactive": true,
+      "title": "Header · live: page context, assistant writing, notification bell",
+      "w": 1520,
+      "x": 0,
+      "y": 5780
+    },
+    "LoaderLive.dc.html": {
+      "h": 760,
+      "is_interactive": true,
+      "title": "Loaders · live: Constructor brand loader and in-screen indicators",
+      "w": 1440,
+      "x": 1520,
+      "y": 3200
+    },
+    "LogoLive.dc.html": {
+      "h": 1420,
+      "is_interactive": true,
+      "title": "Logo · live: AI-tag intro, once and loop",
+      "w": 1440,
+      "x": 0,
+      "y": 3200
+    },
+    "ProgressMotionLive.dc.html": {
+      "h": 1180,
+      "is_interactive": true,
+      "title": "Progress indicators · live: pen orbit, guide line, Constructor determinate, working dots",
+      "w": 1440,
+      "x": 3040,
+      "y": 3200
+    },
+    "ReleasesChannels.dc.html": {
+      "h": 1260,
+      "title": "Release channels · weekly email and Teams card, one note in every format (proposal)",
+      "w": 1360,
+      "x": 1520,
+      "y": 15944
+    },
+    "StatesLive.dc.html": {
+      "h": 2080,
+      "is_interactive": true,
+      "title": "State marks · live: pending to resolved",
+      "w": 1440,
+      "x": 4560,
+      "y": 3200
+    },
+    "ProductionVision.dc.html": {
+      "title": "AIToolbox production vision · the whole product in one prototype, reviewed for consistency on 2026-11-03: Sweep (runs from a Jira ticket as in the running app, agents pipeline, live console, pull requests with review summaries, re-run from the failed step), Environments (non-production, placements by branch, what runs observed with its source and time, reservations, Deploy and Reserve through the assistant), Docs (Spaces: the Meridian Bank architecture board with Elements · Views · Process, Grid · Diagram, element card and drill-down, the change page and the working document with its drafting thread — chat → working document → PR → gate — agent proposals; AI wiki, operations, new joiner; answers with sources), Catalog (Browse, My skills, item page, publish a skill), Community (What's new, Guides, Ideas), Administration (Core, Sweep, Community) and the assistant pane from the header's search bar · light and dark themes (System · Light · Dark in the prototype bar and in the account menu) · one h1 per screen, skip link, Escape closes every layer and returns focus, 0 axe violations in both themes · view as platform admin, Sweep admin or user · window width 360 to 1920 · press Play · Architecture intake: New request · ask the assistant qualifies a request in conversation in the global pane (one question, a proposal, iterate on kind, class and scope, create, attach or dismiss)",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1320,
+      "is_interactive": true,
+      "expand": "fill"
+    },
+    "Architecture.dc.html": {
+      "title": "Architecture · Meridian Bank, live prototype · the TOGAF architecture space in three areas, without LikeC4: Views by steering level (Enterprise: capability map, capability coverage, capabilities × value streams, roles × processes, technology radar, enterprise roadmap, motivation and value streams as grids · Portfolio: application landscape, application cooperation, application interaction, processes × applications, gap, data ownership, applications × technologies, roadmap, requirement chain · Application: fact sheet, inside and neighbours, interfaces and data), every view with For, Decides and How to read, on every plateau, a Grid · Diagram switch where an SVG exists, crumbs and Back, an element card on click with its relations in the view and a drill-down to the next view; Catalogue = one tree (by portfolio › application › layer, or by ArchiMate layer › type; the header's search field flattens it into the matching elements with their path; no other filter), element pages; Process (Changes with their documents by phase, a change page with the phase strip, the documents and their state — To do · Drafting in chat · Working document · Validated, PR open · Reviewed · Published — the next gate and the parallel-work collisions; a working document page with its sections, drafting in the global assistant, Validate and submit, rebase by section; the delivery line of the metamodel v4 on each change — Requirement › Gap › Tickets › Commits › Version, observed from the ticketing tool, Git and CI, with the tickets and their commits, Sweep or local; Delivered by and Replaced by on element pages, Delivery per gap row, the chain and tickets on requirement pages, the Context for code generation card on application services; How it works with the phase × document × role matrix and Coding assistants: the knowledge-base MCP server, its five tools and how to connect) with changes on the adjusted TOGAF flow (six phases Vision · Baseline · Target · Gap analysis · Plateau · Implementation, four gates G1–G4, a change enters where it applies: new need, evolution, exploration, decision, small tweak, post-delivery), reviews with the full ARB page (ASD of 13 sections written or from the model with coverage, checks, reviewers, conditions, asks, decision by role), ADR log, model checks and the human change process (steps × TOGAF × toolbox × Git, three classes, who does what, parallel changes, Git conventions) · view as change owner, reviewer, board chair or reader · window width 360 to 1920 · press Play · Process › Intake (adopted 2026-11-10): what arrives is qualified before it becomes a change — signals (business request, code first, technology standard, model finding, decision, incident) with a suggested entry, Qualify in the assistant, Open as suggested, Attach, Dismiss, and the Qualified history; Process › Changes as tracks: one row per change with where it comes from, its phases (skipped, done, current), its gates and its TOGAF phase · Process side list in the order of the work: Intake, Changes, Reviews, Decisions, Model checks, How it works (the Agent proposals section is removed, 2026-11-10)",
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 1320,
+      "is_interactive": true,
+      "expand": "fill"
+    }
+  },
+  "order": [
+    "ProductionVision.dc.html",
+    "AssistantLive.dc.html",
+    "LogoLive.dc.html",
+    "LoaderLive.dc.html",
+    "ProgressMotionLive.dc.html",
+    "StatesLive.dc.html",
+    "HeaderIdeasLive.dc.html",
+    "FeedbackLive.dc.html",
+    "AccessibilityPlan.dc.html",
+    "CommunityLive.dc.html",
+    "ReleasesChannels.dc.html",
+    "Architecture.dc.html"
+  ],
+  "notes": {
+    "p1": {
+      "kind": "title1",
+      "maxW": 1440,
+      "text": "Prototypes · the assistant, live (press Play)",
+      "w": 240,
+      "x": 0,
+      "y": 1400
+    },
+    "p2": {
+      "kind": "title1",
+      "maxW": 6000,
+      "text": "Brand motion · logo, loaders, progress, state marks",
+      "w": 240,
+      "x": 0,
+      "y": 2940
+    },
+    "p3": {
+      "kind": "title1",
+      "maxW": 3160,
+      "text": "Application · header and feedback in motion",
+      "w": 240,
+      "x": 0,
+      "y": 5520
+    },
+    "p5": {
+      "kind": "title1",
+      "maxW": 1600,
+      "text": "Accessibility plan · before and after",
+      "w": 240,
+      "x": 0,
+      "y": 10483
+    },
+    "p8": {
+      "kind": "title1",
+      "maxW": 2880,
+      "text": "Adoption · Community and Administration, live prototype (press Play) · release channels",
+      "w": 240,
+      "x": 0,
+      "y": 15643
+    },
+    "pv": {
+      "kind": "title1",
+      "maxW": 1440,
+      "text": "AIToolbox production vision",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "pa": {
+      "kind": "title1",
+      "maxW": 1440,
+      "text": "Architecture · TOGAF views as grids and matrices, catalogue tree, ARB with the full ASD, change process (press Play)",
+      "w": 240,
+      "x": 1520,
+      "y": -300
+    }
+  },
+  "noteOrder": [
+    "pv",
+    "p1",
+    "p2",
+    "p3",
+    "p5",
+    "p8",
+    "pa"
+  ],
+  "attachments": {},
+  "designSystems": [
+    {
+      "artifact": "https://claude.ai/artifact/Vx3WX1dqVqxSQ466jAfKpP",
+      "copiedAt": "2026-11-14T19:10:00Z",
+      "namespace": "devtoolbox",
+      "title": "AIToolbox",
+      "version": "1794678546-f2c8"
+    }
+  ]
+}

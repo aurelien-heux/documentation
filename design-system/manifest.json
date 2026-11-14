@@ -1,0 +1,267 @@
+{
+  "manifestVersion": 3,
+  "name": "DevToolbox",
+  "namespace": "DevToolbox",
+  "files": [
+    "assets/Chatbot/README.md",
+    "assets/Logos/README.md",
+    "components/Button/README.md",
+    "components/Card/README.md",
+    "components/CatalogItem/README.md",
+    "components/Chip/README.md",
+    "components/Dialog/README.md",
+    "components/Discussion/README.md",
+    "components/FeedbackProfile/README.md",
+    "components/GuidedTour/README.md",
+    "components/Loader/README.md",
+    "components/ReleaseItem/README.md",
+    "components/StatusChip/README.md",
+    "components/TextField/README.md",
+    "tokens.css",
+    "components/Subheader/README.md"
+  ],
+  "libraries": [],
+  "components": [
+    {
+      "name": "Button",
+      "group": "Actions",
+      "summary": "Material 3 buttons at 40 px, full-round, label-large."
+    },
+    {
+      "name": "Card",
+      "group": "Containers",
+      "summary": "Three Material 3 card styles, radius-md (12 px), space-4 (16 px) padding, title-medium heading."
+    },
+    {
+      "name": "Chip",
+      "group": "Actions",
+      "summary": "32 px, radius-sm (8 px), label-large at weight 500."
+    },
+    {
+      "name": "Dialog",
+      "group": "Containers",
+      "summary": "Material 3 basic dialog carrying a short form."
+    },
+    {
+      "name": "CatalogItem",
+      "group": "Communication",
+      "summary": "One item of the Catalog (a skill, a tool or an MCP server), minimal: a card with the kind tile, the name, one line and the author; a page with one action (Add to my assistant), what it uses, example requests and the Discussion panel."
+    },
+    {
+      "name": "GuidedTour",
+      "group": "Communication",
+      "summary": "Spotlight (scrim 42 % with a cutout on the measured target, 2 px primary ring) and a step card beside it; targets are data-anchor ids, never coordinates."
+    },
+    {
+      "name": "Discussion",
+      "group": "Communication",
+      "summary": "One expansion panel at the end of a release or an idea: the summary bar is its header (threads, messages, participants, last message); open, threads three at a time with Show more, each an opening message and its replies with role chips, Reply, and a new-message field."
+    },
+    {
+      "name": "ReleaseItem",
+      "group": "Communication",
+      "summary": "What's new entry, layout D · Changelog: meta, title, summary, one table row per change, one action line ending with Useful?, then the Discussion panel."
+    },
+    {
+      "name": "FeedbackProfile",
+      "group": "Communication",
+      "summary": "The feedback-form editor in Community › Feedback (admin only): entry points, up to 3 questions, sampling, routing, options, with a live preview of the side sheet; feature admins see only their own profile through a scoped right."
+    },
+    {
+      "name": "Loader",
+      "group": "Feedback",
+      "summary": "Two kinds of waiting: the brand loader for app-level waits, Material indicators for everything inside a screen."
+    },
+    {
+      "name": "StatusChip",
+      "group": "Feedback",
+      "summary": "Health and log-level colour, kept apart from the brand colours so a green dot means the same thing on every screen."
+    },
+    {
+      "name": "TextField",
+      "group": "Inputs",
+      "summary": "Outlined Material 3 text field, 56 px, radius-xs, floating label on the surface colour behind it."
+    },
+    {
+      "name": "Subheader",
+      "group": "Navigation",
+      "summary": "The first row of a page under another one: back arrow named by where it goes, the page's title, one status, its context in body-small and its actions, in one row. Replaces back buttons on their own row."
+    }
+  ],
+  "assetGroups": [
+    {
+      "name": "Logos",
+      "order": [
+        "logo-horizontal-light.svg",
+        "logo-horizontal-dark.svg",
+        "logo-stacked-light.svg",
+        "logo-stacked-dark.svg",
+        "mark-light.svg",
+        "mark-dark.svg",
+        "wordmark-light.svg",
+        "wordmark-dark.svg",
+        "favicon-light.svg",
+        "favicon-dark.svg",
+        "app-icon-light.svg",
+        "app-icon-dark.svg"
+      ],
+      "files": [
+        {
+          "path": "assets/Logos/logo-horizontal-light.svg",
+          "id": "85c0e05f01222aff50113cd6e073b219"
+        },
+        {
+          "path": "assets/Logos/logo-horizontal-dark.svg",
+          "id": "b3ad1b1127caf7646624350d48d2207f"
+        },
+        {
+          "path": "assets/Logos/logo-stacked-light.svg",
+          "id": "fa1f00ea70bb9cc01e96087f9674ed98"
+        },
+        {
+          "path": "assets/Logos/logo-stacked-dark.svg",
+          "id": "9afe77e630eddd5c1ce57d3b1bd9687c"
+        },
+        {
+          "path": "assets/Logos/mark-light.svg",
+          "id": "69d9b930a4f3f38d6f86493d3dc23dc0"
+        },
+        {
+          "path": "assets/Logos/mark-dark.svg",
+          "id": "1f3ea9e5b64352691cfaca968cd24a0c"
+        },
+        {
+          "path": "assets/Logos/wordmark-light.svg",
+          "id": "630ff0816772aa8c4f3aad73054be6c7"
+        },
+        {
+          "path": "assets/Logos/wordmark-dark.svg",
+          "id": "bed2167986ed5d1031b85851f5af5837"
+        },
+        {
+          "path": "assets/Logos/favicon-light.svg",
+          "id": "7d5b92e336c1360039ed3f0788f8f4a0"
+        },
+        {
+          "path": "assets/Logos/favicon-dark.svg",
+          "id": "5060eafadf42351a7809ad5e47a2717c"
+        },
+        {
+          "path": "assets/Logos/app-icon-light.svg",
+          "id": "5dfbdf4a270460e695a29143686950ad"
+        },
+        {
+          "path": "assets/Logos/app-icon-dark.svg",
+          "id": "76620a86be763a7878145847c2e64382"
+        }
+      ]
+    },
+    {
+      "name": "Chatbot",
+      "tile": "s",
+      "order": [
+        "chatbot-brace-box-light.svg",
+        "chatbot-brace-box-dark.svg"
+      ],
+      "files": [
+        {
+          "path": "assets/Chatbot/chatbot-brace-box-light.svg",
+          "id": "57eba69c7394ee112d4e8a0b4fa5ebf9"
+        },
+        {
+          "path": "assets/Chatbot/chatbot-brace-box-dark.svg",
+          "id": "810867828259e0355c2971146c03e4d1"
+        }
+      ]
+    }
+  ],
+  "storage": {
+    "files": {
+      "assets/Chatbot/chatbot-brace-box-dark.svg": {
+        "store": "blob",
+        "id": "810867828259e0355c2971146c03e4d1",
+        "bytes": 796,
+        "type": "image/svg+xml"
+      },
+      "assets/Chatbot/chatbot-brace-box-light.svg": {
+        "store": "blob",
+        "id": "57eba69c7394ee112d4e8a0b4fa5ebf9",
+        "bytes": 796,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/app-icon-dark.svg": {
+        "store": "blob",
+        "id": "76620a86be763a7878145847c2e64382",
+        "bytes": 662,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/app-icon-light.svg": {
+        "store": "blob",
+        "id": "5dfbdf4a270460e695a29143686950ad",
+        "bytes": 662,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/favicon-dark.svg": {
+        "store": "blob",
+        "id": "5060eafadf42351a7809ad5e47a2717c",
+        "bytes": 406,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/favicon-light.svg": {
+        "store": "blob",
+        "id": "7d5b92e336c1360039ed3f0788f8f4a0",
+        "bytes": 406,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/logo-horizontal-dark.svg": {
+        "store": "blob",
+        "id": "b3ad1b1127caf7646624350d48d2207f",
+        "bytes": 9550,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/logo-horizontal-light.svg": {
+        "store": "blob",
+        "id": "85c0e05f01222aff50113cd6e073b219",
+        "bytes": 9550,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/logo-stacked-dark.svg": {
+        "store": "blob",
+        "id": "9afe77e630eddd5c1ce57d3b1bd9687c",
+        "bytes": 8134,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/logo-stacked-light.svg": {
+        "store": "blob",
+        "id": "fa1f00ea70bb9cc01e96087f9674ed98",
+        "bytes": 8134,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/mark-dark.svg": {
+        "store": "blob",
+        "id": "1f3ea9e5b64352691cfaca968cd24a0c",
+        "bytes": 621,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/mark-light.svg": {
+        "store": "blob",
+        "id": "69d9b930a4f3f38d6f86493d3dc23dc0",
+        "bytes": 621,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/wordmark-dark.svg": {
+        "store": "blob",
+        "id": "bed2167986ed5d1031b85851f5af5837",
+        "bytes": 6513,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/wordmark-light.svg": {
+        "store": "blob",
+        "id": "630ff0816772aa8c4f3aad73054be6c7",
+        "bytes": 6513,
+        "type": "image/svg+xml"
+      }
+    },
+    "blobBytesUsed": 53364
+  }
+}

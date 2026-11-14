@@ -1,0 +1,37 @@
+// @aitoolbox/architecture — theme bridge for the two AIToolbox theme generations.
+//
+// The components read AIToolbox roles as CSS custom properties (--md-sys-color-*, --md-sys-typescale-*-family).
+// - M3 on Angular Material 22 (theme.m3.scss): css/tokens.css already defines them → include nothing, just load archimate.css.
+// - M2 on Angular Material 21 (theme.m2.scss): if a page does not load css/tokens.css, call `atb-architecture-m2-bridge`
+//   with the M2 theme objects so the roles exist. Usage in theme.m2.scss:
+//
+//     @use '@aitoolbox/architecture/styles/theme' as arch;
+//     @include arch.atb-architecture-m2-bridge($dt-light);
+//     html.dark { @include arch.atb-architecture-m2-bridge($dt-dark); }
+//
+// The --ax-* layer tokens themselves are in archimate.css (html.light / html.dark), identical for both generations.
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin atb-architecture-m2-bridge($theme) {
+  $color: map.get($theme, color);
+  $primary: map.get($color, primary);
+  $accent: map.get($color, accent);
+  $warn: map.get($color, warn);
+  $bg: map.get($color, background);
+  $fg: map.get($color, foreground);
+  --md-sys-color-primary: #{mat.m2-get-color-from-palette($primary)};
+  --md-sys-color-on-primary: #{mat.m2-get-color-from-palette($primary, default-contrast)};
+  --md-sys-color-secondary-container: #{mat.m2-get-color-from-palette($accent, lighter)};
+  --md-sys-color-on-secondary-container: #{mat.m2-get-color-from-palette($accent, lighter-contrast)};
+  --md-sys-color-error: #{mat.m2-get-color-from-palette($warn)};
+  --md-sys-color-on-error: #{mat.m2-get-color-from-palette($warn, default-contrast)};
+  --md-sys-color-surface: #{map.get($bg, background)};
+  --md-sys-color-surface-container-lowest: #{map.get($bg, card)};
+  --md-sys-color-surface-container-highest: #{map.get($bg, app-bar)};
+  --md-sys-color-on-surface: #{map.get($fg, text)};
+  --md-sys-color-on-surface-variant: #{map.get($fg, secondary-text)};
+  --md-sys-color-outline-variant: #{map.get($fg, divider)};
+  --md-sys-color-outline: #{map.get($fg, disabled-text)};
+  --md-sys-color-focus-ring: #{mat.m2-get-color-from-palette($primary)};
+}

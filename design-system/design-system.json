@@ -1,0 +1,552 @@
+{
+  "v": 3,
+  "assetGroups": {
+    "Chatbot": {
+      "files": {
+        "chatbot-brace-box-dark.svg": {
+          "blob": "e377cae4b26cf0bcd4f2c203e0ac76d1",
+          "name": "chatbot-brace-box-dark.svg",
+          "size": 569,
+          "type": "image/svg+xml"
+        },
+        "chatbot-brace-box-light.svg": {
+          "blob": "b914021f81284b26b99f46e59529c408",
+          "name": "chatbot-brace-box-light.svg",
+          "size": 587,
+          "type": "image/svg+xml"
+        }
+      },
+      "name": "Chatbot",
+      "order": [
+        "chatbot-brace-box-light.svg",
+        "chatbot-brace-box-dark.svg"
+      ],
+      "tile": "s"
+    },
+    "Logos": {
+      "files": {
+        "app-icon-dark.svg": {
+          "blob": "01a9abce537c9ed2d85e9bf0ec183ffc",
+          "name": "app-icon-dark.svg",
+          "size": 635,
+          "type": "image/svg+xml"
+        },
+        "app-icon-light.svg": {
+          "blob": "8eeb208ae603e0251eaa88d45eb2f2aa",
+          "name": "app-icon-light.svg",
+          "size": 635,
+          "type": "image/svg+xml"
+        },
+        "favicon-dark.svg": {
+          "blob": "8b2ff8722c893cc0b2351c64be8e7470",
+          "name": "favicon-dark.svg",
+          "size": 387,
+          "type": "image/svg+xml"
+        },
+        "favicon-light.svg": {
+          "blob": "7f1419d47c896fdbc9e138a20054d26d",
+          "name": "favicon-light.svg",
+          "size": 387,
+          "type": "image/svg+xml"
+        },
+        "logo-horizontal-dark.svg": {
+          "blob": "c983bc4950e5c2a62ebdf1073cd15f26",
+          "name": "logo-horizontal-dark.svg",
+          "size": 6510,
+          "type": "image/svg+xml"
+        },
+        "logo-horizontal-light.svg": {
+          "blob": "ff51e615e2425a6b107f7483cd936ef6",
+          "name": "logo-horizontal-light.svg",
+          "size": 6618,
+          "type": "image/svg+xml"
+        },
+        "logo-stacked-dark.svg": {
+          "blob": "ccd6ea9a040861b4c5a42a488aef83f5",
+          "name": "logo-stacked-dark.svg",
+          "size": 6069,
+          "type": "image/svg+xml"
+        },
+        "logo-stacked-light.svg": {
+          "blob": "c68eb0a8c5a4f6dede54896a64e01b46",
+          "name": "logo-stacked-light.svg",
+          "size": 6177,
+          "type": "image/svg+xml"
+        },
+        "mark-dark.svg": {
+          "blob": "f6200deeb7612d60eee896d1926786ab",
+          "name": "mark-dark.svg",
+          "size": 1139,
+          "type": "image/svg+xml"
+        },
+        "mark-light.svg": {
+          "blob": "326f353eeaaeb066f9d8c7be0a9ecf39",
+          "name": "mark-light.svg",
+          "size": 1139,
+          "type": "image/svg+xml"
+        },
+        "wordmark-dark.svg": {
+          "blob": "89679cd1fddfe4edb4c2fddb02e870cb",
+          "name": "wordmark-dark.svg",
+          "size": 4954,
+          "type": "image/svg+xml"
+        },
+        "wordmark-light.svg": {
+          "blob": "0f547a887a3b85a030616cfc4ebc316f",
+          "name": "wordmark-light.svg",
+          "size": 5008,
+          "type": "image/svg+xml"
+        },
+        "mark-plain-light.svg": {
+          "blob": "05c0ca2e0bbf395e74dc714e81e343b6",
+          "name": "mark-plain-light.svg",
+          "size": 600,
+          "type": "image/svg+xml"
+        },
+        "mark-plain-dark.svg": {
+          "blob": "265ad5f2ba58a4f1b730589ae0eb946a",
+          "name": "mark-plain-dark.svg",
+          "size": 600,
+          "type": "image/svg+xml"
+        }
+      },
+      "name": "Logos",
+      "order": [
+        "logo-horizontal-light.svg",
+        "logo-horizontal-dark.svg",
+        "logo-stacked-light.svg",
+        "logo-stacked-dark.svg",
+        "mark-light.svg",
+        "mark-dark.svg",
+        "mark-plain-light.svg",
+        "mark-plain-dark.svg",
+        "wordmark-light.svg",
+        "wordmark-dark.svg",
+        "favicon-light.svg",
+        "favicon-dark.svg",
+        "app-icon-light.svg",
+        "app-icon-dark.svg"
+      ]
+    },
+    "States": {
+      "files": {
+        "state-success-badge-light.svg": {
+          "blob": "5276053f9a117acfcead0b2cefaf9fd9",
+          "name": "state-success-badge-light.svg",
+          "size": 991,
+          "type": "image/svg+xml"
+        },
+        "state-success-badge-dark.svg": {
+          "blob": "548e59f23dcbc814ac43d4763c6afe15",
+          "name": "state-success-badge-dark.svg",
+          "size": 991,
+          "type": "image/svg+xml"
+        },
+        "state-success-circle-light.svg": {
+          "blob": "e3ea7c84765a53394dcdd1a415f1c5e7",
+          "name": "state-success-circle-light.svg",
+          "size": 1098,
+          "type": "image/svg+xml"
+        },
+        "state-success-circle-dark.svg": {
+          "blob": "ce1754d144820163c050e57d792442dd",
+          "name": "state-success-circle-dark.svg",
+          "size": 1098,
+          "type": "image/svg+xml"
+        },
+        "state-success-tile-light.svg": {
+          "blob": "ae719afc1eb2ae533b7dd575471fbb28",
+          "name": "state-success-tile-light.svg",
+          "size": 457,
+          "type": "image/svg+xml"
+        },
+        "state-success-tile-dark.svg": {
+          "blob": "92c45e908a68e879cd46651110b9d287",
+          "name": "state-success-tile-dark.svg",
+          "size": 457,
+          "type": "image/svg+xml"
+        },
+        "state-success-tile-tinted-light.svg": {
+          "blob": "020419504a90f2e36ecb6d003977cfe8",
+          "name": "state-success-tile-tinted-light.svg",
+          "size": 457,
+          "type": "image/svg+xml"
+        },
+        "state-success-tile-tinted-dark.svg": {
+          "blob": "a59b6e6b5dc3ddc1185c46de9e2c5cbc",
+          "name": "state-success-tile-tinted-dark.svg",
+          "size": 457,
+          "type": "image/svg+xml"
+        },
+        "state-info-badge-light.svg": {
+          "blob": "97441233763336f531d3f890feecda8b",
+          "name": "state-info-badge-light.svg",
+          "size": 1048,
+          "type": "image/svg+xml"
+        },
+        "state-info-badge-dark.svg": {
+          "blob": "0ea0a9186577ffcad9034562e9d8c8a5",
+          "name": "state-info-badge-dark.svg",
+          "size": 992,
+          "type": "image/svg+xml"
+        },
+        "state-info-circle-light.svg": {
+          "blob": "6c6d3ce75180780ec621c288107e56d8",
+          "name": "state-info-circle-light.svg",
+          "size": 1163,
+          "type": "image/svg+xml"
+        },
+        "state-info-circle-dark.svg": {
+          "blob": "9e8214e3c66f46f1a498a45b1db60f2e",
+          "name": "state-info-circle-dark.svg",
+          "size": 1099,
+          "type": "image/svg+xml"
+        },
+        "state-info-tile-light.svg": {
+          "blob": "e1015080dc1d5bae8d204fb5e00932de",
+          "name": "state-info-tile-light.svg",
+          "size": 492,
+          "type": "image/svg+xml"
+        },
+        "state-info-tile-dark.svg": {
+          "blob": "b1b5747f83f074b2092d346f0b09740b",
+          "name": "state-info-tile-dark.svg",
+          "size": 466,
+          "type": "image/svg+xml"
+        },
+        "state-info-tile-tinted-light.svg": {
+          "blob": "93a8b3ae70f5881e72227e1a3e1dc3f5",
+          "name": "state-info-tile-tinted-light.svg",
+          "size": 466,
+          "type": "image/svg+xml"
+        },
+        "state-info-tile-tinted-dark.svg": {
+          "blob": "1b1450809f54a26d9365c990ddec32dd",
+          "name": "state-info-tile-tinted-dark.svg",
+          "size": 466,
+          "type": "image/svg+xml"
+        },
+        "state-warning-badge-light.svg": {
+          "blob": "f5015a2f4edf047a9c308480470b5a00",
+          "name": "state-warning-badge-light.svg",
+          "size": 1000,
+          "type": "image/svg+xml"
+        },
+        "state-warning-badge-dark.svg": {
+          "blob": "9143b17fcf70baf5f393f33a7e47a6a7",
+          "name": "state-warning-badge-dark.svg",
+          "size": 1000,
+          "type": "image/svg+xml"
+        },
+        "state-warning-circle-light.svg": {
+          "blob": "c1122322ebf6f37b7a67fb3fb9fe4f6b",
+          "name": "state-warning-circle-light.svg",
+          "size": 1107,
+          "type": "image/svg+xml"
+        },
+        "state-warning-circle-dark.svg": {
+          "blob": "874b77c56912cad777b54502b35891c3",
+          "name": "state-warning-circle-dark.svg",
+          "size": 1107,
+          "type": "image/svg+xml"
+        },
+        "state-warning-tile-light.svg": {
+          "blob": "d7ca1dbb367e944e05894df66eab47cd",
+          "name": "state-warning-tile-light.svg",
+          "size": 472,
+          "type": "image/svg+xml"
+        },
+        "state-warning-tile-dark.svg": {
+          "blob": "e6676351c8684ef9a31c83ebcfedf3a4",
+          "name": "state-warning-tile-dark.svg",
+          "size": 472,
+          "type": "image/svg+xml"
+        },
+        "state-warning-tile-tinted-light.svg": {
+          "blob": "5df009d033379a451814526f3a9a0645",
+          "name": "state-warning-tile-tinted-light.svg",
+          "size": 472,
+          "type": "image/svg+xml"
+        },
+        "state-warning-tile-tinted-dark.svg": {
+          "blob": "1fd9b84bf2776dd86b70c2f809e6e426",
+          "name": "state-warning-tile-tinted-dark.svg",
+          "size": 472,
+          "type": "image/svg+xml"
+        },
+        "state-error-badge-light.svg": {
+          "blob": "1c8a96e17a3c2c12f897f039fb8975fe",
+          "name": "state-error-badge-light.svg",
+          "size": 959,
+          "type": "image/svg+xml"
+        },
+        "state-error-badge-dark.svg": {
+          "blob": "a3ac83ee5e6aadd92b9af0a7324a061c",
+          "name": "state-error-badge-dark.svg",
+          "size": 959,
+          "type": "image/svg+xml"
+        },
+        "state-error-circle-light.svg": {
+          "blob": "845889b58cfedecdfd9471711b361dbf",
+          "name": "state-error-circle-light.svg",
+          "size": 1066,
+          "type": "image/svg+xml"
+        },
+        "state-error-circle-dark.svg": {
+          "blob": "4b4bc28996ad7c111dacdb3929b83ba2",
+          "name": "state-error-circle-dark.svg",
+          "size": 1066,
+          "type": "image/svg+xml"
+        },
+        "state-error-tile-light.svg": {
+          "blob": "32dd2dd3c179af309f842921e3f0ccf8",
+          "name": "state-error-tile-light.svg",
+          "size": 437,
+          "type": "image/svg+xml"
+        },
+        "state-error-tile-dark.svg": {
+          "blob": "3cdb43b25c99fa12b19b35ff221a6e22",
+          "name": "state-error-tile-dark.svg",
+          "size": 437,
+          "type": "image/svg+xml"
+        },
+        "state-error-tile-tinted-light.svg": {
+          "blob": "a255e66090d0835f5b9c8eded541b707",
+          "name": "state-error-tile-tinted-light.svg",
+          "size": 437,
+          "type": "image/svg+xml"
+        },
+        "state-error-tile-tinted-dark.svg": {
+          "blob": "00d39807b6f56c5d81060a6cac04598d",
+          "name": "state-error-tile-tinted-dark.svg",
+          "size": 437,
+          "type": "image/svg+xml"
+        },
+        "state-pending-light.svg": {
+          "blob": "bd55bcb474ebef1d36e1687956ff276b",
+          "name": "state-pending-light.svg",
+          "size": 1235,
+          "type": "image/svg+xml"
+        },
+        "state-pending-dark.svg": {
+          "blob": "0ebe0235347ccf50046eed572ed5906c",
+          "name": "state-pending-dark.svg",
+          "size": 1235,
+          "type": "image/svg+xml"
+        }
+      },
+      "name": "States",
+      "order": [
+        "state-success-badge-light.svg",
+        "state-success-badge-dark.svg",
+        "state-success-circle-light.svg",
+        "state-success-circle-dark.svg",
+        "state-success-tile-light.svg",
+        "state-success-tile-dark.svg",
+        "state-success-tile-tinted-light.svg",
+        "state-success-tile-tinted-dark.svg",
+        "state-info-badge-light.svg",
+        "state-info-badge-dark.svg",
+        "state-info-circle-light.svg",
+        "state-info-circle-dark.svg",
+        "state-info-tile-light.svg",
+        "state-info-tile-dark.svg",
+        "state-info-tile-tinted-light.svg",
+        "state-info-tile-tinted-dark.svg",
+        "state-warning-badge-light.svg",
+        "state-warning-badge-dark.svg",
+        "state-warning-circle-light.svg",
+        "state-warning-circle-dark.svg",
+        "state-warning-tile-light.svg",
+        "state-warning-tile-dark.svg",
+        "state-warning-tile-tinted-light.svg",
+        "state-warning-tile-tinted-dark.svg",
+        "state-error-badge-light.svg",
+        "state-error-badge-dark.svg",
+        "state-error-circle-light.svg",
+        "state-error-circle-dark.svg",
+        "state-error-tile-light.svg",
+        "state-error-tile-dark.svg",
+        "state-error-tile-tinted-light.svg",
+        "state-error-tile-tinted-dark.svg",
+        "state-pending-light.svg",
+        "state-pending-dark.svg"
+      ],
+      "tile": "s"
+    },
+    "Features": {
+      "files": {
+        "architecture-light.svg": {
+          "blob": "08287e001571f5faa019bacbb5db27f7",
+          "name": "architecture-light.svg",
+          "size": 805,
+          "type": "image/svg+xml"
+        },
+        "architecture-dark.svg": {
+          "blob": "712cbf1c26b16206157cf4ad617960ae",
+          "name": "architecture-dark.svg",
+          "size": 805,
+          "type": "image/svg+xml"
+        },
+        "architecture-once-light.svg": {
+          "blob": "544b6f0c197cae11d36bbee110585703",
+          "name": "architecture-once-light.svg",
+          "size": 806,
+          "type": "image/svg+xml"
+        },
+        "architecture-once-dark.svg": {
+          "blob": "53beaefc0e3c1ed5338168aab5436d74",
+          "name": "architecture-once-dark.svg",
+          "size": 806,
+          "type": "image/svg+xml"
+        },
+        "architecture-loop-light.svg": {
+          "blob": "dcb1e1bfb7a9360b02efb0c2feb6b1f1",
+          "name": "architecture-loop-light.svg",
+          "size": 824,
+          "type": "image/svg+xml"
+        },
+        "architecture-loop-dark.svg": {
+          "blob": "528d2c8a4a644b2905b385cf73680ec6",
+          "name": "architecture-loop-dark.svg",
+          "size": 824,
+          "type": "image/svg+xml"
+        },
+        "architecture-24-light.png": {
+          "blob": "3e946f8c59e0ee54e4c9e597d0310165",
+          "name": "architecture-24-light.png",
+          "size": 770,
+          "type": "image/png"
+        },
+        "architecture-24-dark.png": {
+          "blob": "f1af68fdfcbd01d1f5a458d9c9c279b7",
+          "name": "architecture-24-dark.png",
+          "size": 769,
+          "type": "image/png"
+        },
+        "architecture-32-light.png": {
+          "blob": "577987987294bbe625b6dc72a229ad5c",
+          "name": "architecture-32-light.png",
+          "size": 823,
+          "type": "image/png"
+        },
+        "architecture-32-dark.png": {
+          "blob": "927372584ed899bf5b692cce077e60f9",
+          "name": "architecture-32-dark.png",
+          "size": 789,
+          "type": "image/png"
+        },
+        "architecture-48-light.png": {
+          "blob": "c3bfb23622ec4d0797996e5ed16ff01b",
+          "name": "architecture-48-light.png",
+          "size": 1527,
+          "type": "image/png"
+        },
+        "architecture-48-dark.png": {
+          "blob": "bd8a505834af91bb27e412581e49a7b7",
+          "name": "architecture-48-dark.png",
+          "size": 1483,
+          "type": "image/png"
+        },
+        "architecture-64-light.png": {
+          "blob": "1e180977579a9b07a7b2d73da9acf7d4",
+          "name": "architecture-64-light.png",
+          "size": 1136,
+          "type": "image/png"
+        },
+        "architecture-64-dark.png": {
+          "blob": "903b2359ed5486c19e62884f1907569f",
+          "name": "architecture-64-dark.png",
+          "size": 1120,
+          "type": "image/png"
+        },
+        "architecture-128-light.png": {
+          "blob": "4444f79862e3cf628ff57678b92a2e25",
+          "name": "architecture-128-light.png",
+          "size": 2275,
+          "type": "image/png"
+        },
+        "architecture-128-dark.png": {
+          "blob": "1c1d9ff41fb974c56ffd8857f47651ae",
+          "name": "architecture-128-dark.png",
+          "size": 2165,
+          "type": "image/png"
+        },
+        "architecture-256-light.png": {
+          "blob": "7475866584ece60dc69475264a30528e",
+          "name": "architecture-256-light.png",
+          "size": 7086,
+          "type": "image/png"
+        },
+        "architecture-256-dark.png": {
+          "blob": "8ed02e17c01c077ac3843c9504a736c2",
+          "name": "architecture-256-dark.png",
+          "size": 6740,
+          "type": "image/png"
+        },
+        "architecture-512-light.png": {
+          "blob": "18c6e121b8a7a65cd0aca3a68574ecad",
+          "name": "architecture-512-light.png",
+          "size": 14923,
+          "type": "image/png"
+        },
+        "architecture-512-dark.png": {
+          "blob": "9413bc87eb94bb2a3774045288eff723",
+          "name": "architecture-512-dark.png",
+          "size": 14479,
+          "type": "image/png"
+        }
+      },
+      "name": "Features",
+      "order": [
+        "architecture-light.svg",
+        "architecture-dark.svg",
+        "architecture-once-light.svg",
+        "architecture-once-dark.svg",
+        "architecture-loop-light.svg",
+        "architecture-loop-dark.svg",
+        "architecture-24-light.png",
+        "architecture-24-dark.png",
+        "architecture-32-light.png",
+        "architecture-32-dark.png",
+        "architecture-48-light.png",
+        "architecture-48-dark.png",
+        "architecture-64-light.png",
+        "architecture-64-dark.png",
+        "architecture-128-light.png",
+        "architecture-128-dark.png",
+        "architecture-256-light.png",
+        "architecture-256-dark.png",
+        "architecture-512-light.png",
+        "architecture-512-dark.png"
+      ],
+      "tile": "s"
+    }
+  },
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-10-07T16:08:48Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": []
+  },
+  "groups": [
+    "Logos",
+    "States",
+    "Chatbot",
+    "Features"
+  ],
+  "lastChange": {
+    "by": "Aurélien Heux",
+    "at": "2026-11-14T20:30:00Z",
+    "via": "Claude",
+    "note": "Tokens 5.0.1: on-tertiary-container is the Sweep purple #39235F in both themes, so the Run button (lime) keeps a Sweep purple label and play icon (10.4 : 1). Discussion: the expansion panel is white (surface-container-lowest) with no tint, no primary border and no shadow when open; the chevron is on-surface-variant; avatars use container pairs so initials read in dark. Tokens 5.0 (colour review, option C): palettes from the three Sweep colours, dark lavender primary kept; run*, nav-active, focus-ring, ai-strong, surface-variant removed (aliases until 5.1)."
+  },
+  "layout": "files",
+  "libraries": [],
+  "namespace": null,
+  "sections": {},
+  "title": "AIToolbox"
+}

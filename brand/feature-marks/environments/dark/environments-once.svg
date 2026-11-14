@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fm-env run" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Environments" style="overflow:visible"><style>@keyframes env0run{0%{stroke-dashoffset:1}10%{stroke-dashoffset:1}70%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+.fm-env.run .ev-p{stroke-dasharray:1;animation:env0run 1.8s cubic-bezier(.4,0,.2,1) 1 both}
+@keyframes env1run{0%{transform:scale(0)}14%{transform:scale(1.15)}22%{transform:scale(1)}100%{transform:scale(1)}}
+.fm-env.run .ev-n0{transform-box:fill-box;transform-origin:center;animation:env1run 1.8s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes env2run{0%{transform:scale(0)}34%{transform:scale(0)}46%{transform:scale(1.15)}54%{transform:scale(1)}100%{transform:scale(1)}}
+.fm-env.run .ev-n1{transform-box:fill-box;transform-origin:center;animation:env2run 1.8s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes env3run{0%{transform:scale(0)}62%{transform:scale(0)}76%{transform:scale(1.18)}84%{transform:scale(1)}100%{transform:scale(1)}}
+.fm-env.run .ev-n2{transform-box:fill-box;transform-origin:center;animation:env3run 1.8s cubic-bezier(.2,0,0,1) 1 both}
+@keyframes env4run{0%{stroke-dashoffset:1}80%{stroke-dashoffset:1}100%{stroke-dashoffset:0}}
+.fm-env.run .ev-c{stroke-dasharray:1;animation:env4run 1.8s cubic-bezier(.2,0,0,1) 1 both}
+@media (prefers-reduced-motion: reduce){.fm-env.run *{animation:none!important}}</style><defs></defs><g transform="translate(-0.2 0.2)"><path class="ev-p" d="M12 50L32 32L52 14" pathLength="1" stroke="#A6A2F8" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/><circle class="ev-n0" cx="12" cy="50" r="7" fill="#14121E" stroke="#A6A2F8" stroke-width="5"/><circle class="ev-n1" cx="32" cy="32" r="7.5" fill="#14121E" stroke="#80D5D4" stroke-width="5"/><circle class="ev-t" cx="12" cy="50" r="3" fill="#00F29E" opacity="0"/><circle class="ev-n2" cx="52" cy="14" r="10" fill="#00F29E"/><path class="ev-c" d="M47.5 14.2l3 3 6-6" pathLength="1" fill="none" stroke="#14121E" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g></svg>

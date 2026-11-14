@@ -1,0 +1,42 @@
+<!-- @dsCard height=288 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<style>
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}:is(input,select,textarea):focus-visible{outline:none;border-color:var(--primary)!important;box-shadow:inset 0 0 0 1px var(--primary)}[role=tab]:focus-visible{outline-offset:-3px}
+
+body{margin:0;background:var(--surface);color:var(--on-surface);font-family:var(--font-body)}
+.cover{position:relative;width:960px;height:288px;overflow:hidden}
+.cover svg{position:absolute;inset:0}
+.brand{fill:var(--primary)}.run{fill:var(--tertiary)}.ai{fill:var(--ai)}.tint{fill:var(--primary-container)}
+.dot{fill:var(--primary-container)}
+.slab{rx:var(--radius-lg)}.tile{rx:var(--radius-md)}
+.name{position:absolute;left:48px;bottom:44px;width:440px;font-family:var(--font-ui);font-weight:500;font-size:72px;line-height:.92;letter-spacing:-.02em;color:var(--on-surface)}
+.tag{position:absolute;left:50px;bottom:22px;font-size:13px;color:var(--on-surface-variant)}
+</style></head>
+<body>
+<div class="cover">
+<!-- Derivation
+blocks: primary slab 200×288 (space-12×… bleeding top/bottom, radius-lg) · tertiary tile 120×120 (radius-md) · ai band 220×120 bleeding right (radius-lg) · primary-container tile 80×120 bleeding right (radius-md)
+arrangement: one tall deep-violet slab with satellites to its right — the way the UI composes: violet chrome, neon green and teal as the two signals beside it
+pattern: "precise, technical, mono, 4px grid → a dot grid at one spacing step": dots at space-8 (32px) pitch, primary-container on the violet slab — the log/terminal grid the product lives in
+scales: space-8 pitch, space-4 inset, radius-lg and radius-md corners
+-->
+<svg viewBox="0 0 960 288" width="960" height="288" aria-hidden="true">
+  <rect class="brand slab" x="520" y="-16" width="200" height="320"/>
+  <g class="dot">
+    <circle cx="552" cy="40" r="2.5"/><circle cx="584" cy="40" r="2.5"/><circle cx="616" cy="40" r="2.5"/><circle cx="648" cy="40" r="2.5"/><circle cx="680" cy="40" r="2.5"/>
+    <circle cx="552" cy="72" r="2.5"/><circle cx="584" cy="72" r="2.5"/><circle cx="616" cy="72" r="2.5"/><circle cx="648" cy="72" r="2.5"/><circle cx="680" cy="72" r="2.5"/>
+    <circle cx="552" cy="104" r="2.5"/><circle cx="584" cy="104" r="2.5"/><circle cx="616" cy="104" r="2.5"/><circle cx="648" cy="104" r="2.5"/><circle cx="680" cy="104" r="2.5"/>
+    <circle cx="552" cy="136" r="2.5"/><circle cx="584" cy="136" r="2.5"/><circle cx="616" cy="136" r="2.5"/><circle cx="648" cy="136" r="2.5"/><circle cx="680" cy="136" r="2.5"/>
+    <circle cx="552" cy="168" r="2.5"/><circle cx="584" cy="168" r="2.5"/><circle cx="616" cy="168" r="2.5"/><circle cx="648" cy="168" r="2.5"/><circle cx="680" cy="168" r="2.5"/>
+    <circle cx="552" cy="200" r="2.5"/><circle cx="584" cy="200" r="2.5"/><circle cx="616" cy="200" r="2.5"/><circle cx="648" cy="200" r="2.5"/><circle cx="680" cy="200" r="2.5"/>
+    <circle cx="552" cy="232" r="2.5"/><circle cx="584" cy="232" r="2.5"/><circle cx="616" cy="232" r="2.5"/><circle cx="648" cy="232" r="2.5"/><circle cx="680" cy="232" r="2.5"/>
+    <circle cx="552" cy="264" r="2.5"/><circle cx="584" cy="264" r="2.5"/><circle cx="616" cy="264" r="2.5"/><circle cx="648" cy="264" r="2.5"/><circle cx="680" cy="264" r="2.5"/>
+  </g>
+  <rect class="run tile" x="736" y="32" width="120" height="120"/>
+  <rect class="tint tile" x="872" y="32" width="120" height="120"/>
+  <rect class="ai slab" x="736" y="168" width="260" height="140"/>
+</svg>
+<div class="name">AI<span style="color:var(--primary)">Toolbox</span></div>
+<div class="tag">Calm chrome, loud signals. Material 3 for IT teams.</div>
+</div>
+</body></html>

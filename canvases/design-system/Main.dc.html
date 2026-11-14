@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AIToolbox color roles</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0;font-family:Manrope,"Segoe UI",system-ui,sans-serif}
+a{color:#14085E}a:hover{color:#14085E}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1560px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column; gap: 28px; padding: 56px 64px">
+
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 32px">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #48454E">Material Design 3 · Color · tokens 5.0 · Sweep palette</div>
+      <h1 style="margin: 0; font-size: 45px; line-height: 52px; font-weight: 700; letter-spacing: -0.01em">Color roles</h1>
+      <p style="margin: 0; max-width: 740px; font-size: 16px; line-height: 24px; color: #48454E">Tokens 5.0 · the Sweep palette: the three Sweep colours seed the scheme. The Sweep purple #39235F is the light primary (tone 20, hue 303; 12.7:1 on the page); the dark primary family stays on the lavender #C4C0FF. The pale purple #DED7EB seeds the secondary and is the light secondary-container (tonal buttons, chips, the active navigation pill). The lime #DCEAB4 seeds the tertiary: tertiary-container is the Run button, lime in both themes with a Sweep purple label; tertiary (olive in light, pale lime in dark) marks running and deploy states. One tone rule: light roles at tone 30, dark roles at 80, containers 90 / 30, text on containers 10 / 90. Night neutrals from #0D0B14 (hue 296): near-neutral page and cards in light, light-purple containers, the navigation frame on the violet band <span style="font-family: 'JetBrains Mono', monospace">nav-container</span> #EDE4FF. Extended: <span style="font-family: 'JetBrains Mono', monospace">ai</span> (deep teal in light, light teal in dark), <span style="font-family: 'JetBrains Mono', monospace">success</span>, <span style="font-family: 'JetBrains Mono', monospace">warning</span>. The brand group <span style="font-family: 'JetBrains Mono', monospace">logo-*</span> (night box, neon cursor, teal AI badge) is for the logo only. Shape: 16 px is the ceiling on every rectangle, full is for circles.</p>
+    </div>
+    <div style="display: flex; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 8px; border: 1px solid #CAC3DC; border-radius: 8px; background: #FFFFFF">
+        <div style="width: 28px; height: 28px; border-radius: 6px; background: #39235F"></div>
+        <div style="display: flex; flex-direction: column"><span style="font-size: 12px; color: #48454E">Primary (light)</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500">#39235F · h303</span></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 8px; border: 1px solid #CAC3DC; border-radius: 8px; background: #FFFFFF">
+        <div style="width: 28px; height: 28px; border-radius: 6px; background: #DED7EB"></div>
+        <div style="display: flex; flex-direction: column"><span style="font-size: 12px; color: #48454E">Secondary seed</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500">#DED7EB · h296</span></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 8px; border: 1px solid #CAC3DC; border-radius: 8px; background: #FFFFFF">
+        <div style="width: 28px; height: 28px; border-radius: 6px; background: #DCEAB4"></div>
+        <div style="display: flex; flex-direction: column"><span style="font-size: 12px; color: #48454E">Tertiary seed</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500">#DCEAB4 · h125</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px">
+
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span style="font-size: 16px; font-weight: 700">Light scheme</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #48454E">prefers-color-scheme: light</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">
+        <sc-for list="{{lightAccent}}" as="c" hint-placeholder-count="16">
+          <div style="height: 72px; border-radius: 4px; padding: 8px 10px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background: {{c.bg}}; color: {{c.fg}}">
+            <span style="font-size: 12px; font-weight: 600; line-height: 16px">{{c.name}}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px">{{c.bg}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin-top: 8px">
+        <sc-for list="{{lightSurfaces}}" as="c" hint-placeholder-count="7">
+          <div style="height: 88px; border-radius: 4px; padding: 8px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; outline: 1px solid #CAC3DC; outline-offset: -1px; background: {{c.bg}}; color: {{c.fg}}">
+            <span style="font-size: 11px; font-weight: 600; line-height: 14px">{{c.name}}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px">{{c.bg}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">
+        <sc-for list="{{lightMisc}}" as="c" hint-placeholder-count="8">
+          <div style="height: 56px; border-radius: 4px; padding: 8px 10px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; outline: 1px solid #CAC3DC; outline-offset: -1px; background: {{c.bg}}; color: {{c.fg}}">
+            <span style="font-size: 11px; font-weight: 600; line-height: 14px">{{c.name}}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px">{{c.bg}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin-top: 8px">
+        <sc-for list="{{lightExt}}" as="c" hint-placeholder-count="12">
+          <div style="height: 56px; border-radius: 4px; padding: 8px 10px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background: {{c.bg}}; color: {{c.fg}}">
+            <span style="font-size: 11px; font-weight: 600; line-height: 14px">{{c.name}}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px">{{c.bg}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px; background: #14121E; color: #ECE5F8; padding: 20px; border-radius: 16px; margin: -20px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span style="font-size: 16px; font-weight: 700">Dark scheme</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #CAC3DC">prefers-color-scheme: dark</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">
+        <sc-for list="{{darkAccent}}" as="c" hint-placeholder-count="16">
+          <div style="height: 72px; border-radius: 4px; padding: 8px 10px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background: {{c.bg}}; color: {{c.fg}}">
+            <span style="font-size: 12px; font-weight: 600; line-height: 16px">{{c.name}}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px">{{c.bg}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin-top: 8px">
+        <sc-for list="{{darkSurfaces}}" as="c" hint-placeholder-count="7">
+          <div style="height: 88px; border-radius: 4px; padding: 8px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; outline: 1px solid #494458; outline-offset: -1px; background: {{c.bg}}; color: {{c.fg}}">
+            <span style="font-size: 11px; font-weight: 600; line-height: 14px">{{c.name}}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px">{{c.bg}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">
+        <sc-for list="{{darkMisc}}" as="c" hint-placeholder-count="8">
+          <div style="height: 56px; border-radius: 4px; padding: 8px 10px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; outline: 1px solid #494458; outline-offset: -1px; background: {{c.bg}}; color: {{c.fg}}">
+            <span style="font-size: 11px; font-weight: 600; line-height: 14px">{{c.name}}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px">{{c.bg}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin-top: 8px">
+        <sc-for list="{{darkExt}}" as="c" hint-placeholder-count="12">
+          <div style="height: 56px; border-radius: 4px; padding: 8px 10px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background: {{c.bg}}; color: {{c.fg}}">
+            <span style="font-size: 11px; font-weight: 600; line-height: 14px">{{c.name}}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px">{{c.bg}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 12px">
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 12px; background: #F8F1FF">
+      <span style="font-size: 13px; font-weight: 700">ai · AI-powered features</span>
+      <span style="font-size: 13px; line-height: 18px; color: #48454E">AI marks, “explain” and “generate” actions (deep teal #004F50 in light, light teal in dark), suggestion cards and AI chips on ai-container. Never used for chrome, navigation or non-AI buttons, so teal always means “a model did this”.</span>
+      <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px"><span style="font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; background: #9CF1F0; color: #002020">AI suggestion</span><button type="button" style="height: 32px; padding: 0 14px; border: 0; border-radius: 16px; font-size: 12px; font-weight: 600; background: #004F50; color: #FFFFFF">Explain error</button></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 12px; background: #F8F1FF">
+      <span style="font-size: 13px; font-weight: 700">success · warning · error</span>
+      <span style="font-size: 13px; line-height: 18px; color: #48454E">Health chips, log levels, badges and inline validation use only these three (plus outline for “unknown”). They are never tinted by the brand, and never stand alone: the three share one lightness, so each always comes with a glyph and a word.</span>
+      <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px"><span style="font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 4px; background: #ACF4A2; color: #002203">healthy</span><span style="font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 4px; background: #FFDEA0; color: #261900">degraded</span><span style="font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 4px; background: #FFDAD6; color: #410002">down</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #1B5F1F">INFO</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6A4E00">WARN</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #93000A">ERR</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 12px; background: #F8F1FF">
+      <span style="font-size: 13px; font-weight: 700">tertiary · the Sweep lime</span>
+      <span style="font-size: 13px; line-height: 18px; color: #48454E">tertiary (olive #404B23 in light, 8.9:1; pale lime in dark) is a signal, never a fill: the dots of a running command and deploy states. tertiary-container is the Sweep lime #DCEAB4 in both themes: the one Run button per screen, a tonal button with a Sweep purple #39235F label and play icon (10.4:1), and the “Deploying…” chips.</span>
+      <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px"><button type="button" style="height: 32px; padding: 0 14px; border: 0; border-radius: 16px; font-size: 12px; font-weight: 600; background: #DCEAB4; color: #39235F; display: inline-flex; align-items: center; gap: 6px"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z" fill="#39235F"></path></svg>Run pipeline</button><span style="font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; background: #DCEAB4; color: #39235F">Deploying…</span></div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px">
+    <div style="display: flex; align-items: baseline; gap: 12px">
+      <span style="font-size: 16px; font-weight: 700">Tonal palettes</span>
+      <span style="font-size: 13px; color: #48454E">Tones 0 → 100. Light: primary = the Sweep purple #39235F, secondary-container = #DED7EB, tertiary-container = #DCEAB4, other roles 30, containers 90. Dark: roles 80, containers 30, surfaces 4–22.</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <sc-for list="{{palettes}}" as="p" hint-placeholder-count="9">
+        <div style="display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 12px; align-items: center">
+          <span style="font-size: 13px; font-weight: 600">{{p.name}}</span>
+          <div style="display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 2px">
+            <sc-for list="{{p.tones}}" as="t" hint-placeholder-count="13">
+              <div style="height: 30px; border-radius: 3px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px; font-family: 'JetBrains Mono', monospace; font-size: 10px; outline: 1px solid rgba(0,0,0,0.06); outline-offset: -1px; background: {{t.hex}}; color: {{t.fg}}">{{t.tone}}</div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const L = {"primary": "#39235F", "onPrimary": "#FFFFFF", "primaryContainer": "#E3DFFF", "onPrimaryContainer": "#14085E", "secondary": "#484454", "onSecondary": "#FFFFFF", "secondaryContainer": "#DED7EB", "onSecondaryContainer": "#1D1A28", "tertiary": "#404B23", "onTertiary": "#FFFFFF", "tertiaryContainer": "#DCEAB4", "onTertiaryContainer": "#39235F", "error": "#93000A", "onError": "#FFFFFF", "errorContainer": "#FFDAD6", "onErrorContainer": "#410002", "surface": "#FDF8FD", "onSurface": "#1C1B1E", "onSurfaceVariant": "#48454E", "surfaceDim": "#DDD9DD", "surfaceBright": "#FDF8FD", "navContainer": "#EDE4FF", "surfaceContainerLowest": "#FFFFFF", "surfaceContainerLow": "#FAF4FF", "surfaceContainer": "#F8F1FF", "surfaceContainerHigh": "#F2EBFA", "surfaceContainerHighest": "#ECE5F4", "outline": "#79757F", "outlineVariant": "#CAC4CF", "inverseSurface": "#313033", "inverseOnSurface": "#F4EFF4", "inversePrimary": "#C4C0FF", "scrim": "#000000", "shadow": "#000000", "ai": "#004F50", "onAi": "#FFFFFF", "aiContainer": "#9CF1F0", "onAiContainer": "#002020", "success": "#0B5314", "onSuccess": "#FFFFFF", "successContainer": "#ACF4A2", "onSuccessContainer": "#002203", "warning": "#5C4300", "onWarning": "#FFFFFF", "warningContainer": "#FFDEA0", "onWarningContainer": "#261900", "logoBox": "#0D0B14", "onLogoBox": "#FFFFFF", "logoCursor": "#00F29E", "logoAi": "#80D5D4", "onLogoAi": "#003737"};
+    const D = {"primary": "#C4C0FF", "onPrimary": "#2A2473", "primaryContainer": "#413C8A", "onPrimaryContainer": "#E3DFFF", "secondary": "#CAC3D7", "onSecondary": "#322E3D", "secondaryContainer": "#484454", "onSecondaryContainer": "#E6DFF3", "tertiary": "#BFCC99", "onTertiary": "#2A340F", "tertiaryContainer": "#DCEAB4", "onTertiaryContainer": "#39235F", "error": "#FFB4AB", "onError": "#690005", "errorContainer": "#93000A", "onErrorContainer": "#FFDAD6", "surface": "#14121E", "onSurface": "#ECE5F8", "onSurfaceVariant": "#CAC3DC", "surfaceDim": "#14121E", "surfaceBright": "#484553", "navContainer": "#1D1A27", "surfaceContainerLowest": "#0F0C19", "surfaceContainerLow": "#1D1A27", "surfaceContainer": "#23202D", "surfaceContainerHigh": "#2B2836", "surfaceContainerHighest": "#363341", "outline": "#948DA5", "outlineVariant": "#494458", "inverseSurface": "#E6DFF2", "inverseOnSurface": "#322E3C", "inversePrimary": "#413C8A", "scrim": "#000000", "shadow": "#000000", "ai": "#80D5D4", "onAi": "#003737", "aiContainer": "#004F50", "onAiContainer": "#9CF1F0", "success": "#91D888", "onSuccess": "#003908", "successContainer": "#0B5314", "onSuccessContainer": "#ACF4A2", "warning": "#FCBC00", "onWarning": "#402D00", "warningContainer": "#5C4300", "onWarningContainer": "#FFDEA0", "logoBox": "#C4C0FF", "onLogoBox": "#0D0B14", "logoCursor": "#006C44", "logoAi": "#80D5D4", "onLogoAi": "#003737"};
+    const accentPairs = [['primary','onPrimary'],['onPrimary','primary'],['primaryContainer','onPrimaryContainer'],['onPrimaryContainer','primaryContainer'],
+      ['secondary','onSecondary'],['onSecondary','secondary'],['secondaryContainer','onSecondaryContainer'],['onSecondaryContainer','secondaryContainer'],
+      ['tertiary','onTertiary'],['onTertiary','tertiary'],['onTertiaryContainer','tertiaryContainer'],
+      ['error','onError'],['onError','error'],['errorContainer','onErrorContainer'],['onErrorContainer','errorContainer']];
+    const surfaces = ['surfaceDim','surface','surfaceBright','surfaceContainerLowest','surfaceContainerLow','surfaceContainer','surfaceContainerHigh'];
+    const misc = [['onSurface','surface'],['onSurfaceVariant','surface'],['outline','surface'],['outlineVariant','onSurface'],['inverseSurface','inverseOnSurface'],['inverseOnSurface','inverseSurface'],['inversePrimary','onPrimaryContainer'],['surfaceContainerHighest','onSurface']];
+    const ext = [['ai','onAi'],['aiContainer','onAiContainer'],['success','onPrimary'],['successContainer','onSuccessContainer'],['warning','onPrimary'],['warningContainer','onWarningContainer'],['error','onError'],['errorContainer','onErrorContainer'],['navContainer','onSurface'],['logoBox','onLogoBox'],['logoCursor','logoBox'],['logoAi','onLogoAi']];
+    const extD = [['ai','onAi'],['aiContainer','onAiContainer'],['success','onSecondary'],['successContainer','onSuccessContainer'],['warning','onSecondary'],['warningContainer','onWarningContainer'],['error','onError'],['errorContainer','onErrorContainer'],['navContainer','onSurface'],['logoBox','onLogoBox'],['logoCursor','logoBox'],['logoAi','onLogoAi']];
+    const label = k => k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase()).replace('Ai','AI').replace('Logo Ai','Logo AI').replace('On Logo Ai','On logo AI');
+    const mk = (S, pairs) => pairs.map(([b,f]) => ({name: label(b), bg: S[b], fg: S[f]}));
+    const mkSurf = S => surfaces.map(b => ({name: label(b), bg: S[b], fg: S.onSurface}));
+    const tones = [0,10,20,30,40,50,60,70,80,90,95,99,100];
+    const raw = {
+      Primary: '#000000 #14085E #2A2473 #413C8A #5955A4 #726EBF #8C87DB #A6A2F8 #C4C0FF #E3DFFF #F3EEFF #FFFBFF #FFFFFF',
+      'Secondary (Sweep pale purple)': '#000000 #1D1A28 #322E3D #484454 #605C6D #797486 #938EA0 #AEA8BB #CAC3D7 #E6DFF3 #F5EEFF #FFFBFF #FFFFFF',
+      'Tertiary (Sweep lime)': '#000000 #39235F #2A340F #404B23 #576339 #707C4F #899667 #A3B17F #BFCC99 #DBE9B3 #E9F7C0 #FAFFE3 #FFFFFF',
+      Neutral: '#000000 #1D1A27 #322E3C #484553 #605C6B #797585 #938E9F #AEA8BA #CAC4D5 #ECE5F4 #F5EEFF #FFFBFF #FFFFFF',
+      'Neutral variant': '#000000 #1D192B #322E41 #494458 #615B71 #7A748A #948DA5 #AFA8C0 #CAC3DC #E7DFF8 #F5EEFF #FFFBFF #FFFFFF',
+      Error: '#000000 #410002 #690005 #93000A #BA1A1A #DE3730 #FF5449 #FF897D #FFB4AB #FFDAD6 #FFEDEA #FFFBFF #FFFFFF',
+      'AI (light teal)': '#000000 #002020 #003737 #004F50 #006A6A #278383 #479E9D #64B9B8 #80D5D4 #9CF1F0 #ADFFFE #F1FFFE #FFFFFF',
+      Success: '#000000 #002203 #003908 #0B5314 #296B2A #438540 #5CA057 #76BB6F #91D888 #ACF4A2 #C9FFBE #F6FFEF #FFFFFF',
+      Warning: '#000000 #261900 #402D00 #5C4300 #795900 #987100 #B88900 #DAA200 #FCBC00 #FFDEA0 #FFEFD5 #FFFBFF #FFFFFF'
+    };
+    const palettes = Object.entries(raw).map(([name, s]) => ({name, tones: s.split(' ').map((hex, i) => ({hex, tone: tones[i], fg: tones[i] >= 60 ? '#1D1A27' : '#FFFFFF'}))}));
+    return {
+      lightAccent: mk(L, accentPairs), lightSurfaces: mkSurf(L), lightMisc: mk(L, misc), lightExt: mk(L, ext),
+      darkAccent: mk(D, accentPairs), darkSurfaces: mkSurf(D), darkMisc: mk(D, misc), darkExt: mk(D, extD),
+      palettes
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/aitoolbox-ui",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  },
+  "assets": [
+    { "input": "styles", "glob": "**/*", "output": "styles" },
+    { "input": "fonts", "glob": "**/*", "output": "fonts" },
+    { "input": "assets", "glob": "**/*", "output": "assets" },
+    { "input": "tokens", "glob": "**/*", "output": "tokens" },
+    "CHANGELOG.md"
+  ]
+}

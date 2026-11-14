@@ -1,0 +1,113 @@
+// Change Reservations v1 · work package imp.environments.reservations-v1 · plateau transition-1
+// One file per change: the work package, the building blocks it introduces and their relationships.
+// Folded into environments.c4 by the bot when its plateau is promoted to baseline.
+
+model {
+  extend abb.environments {
+    environment-holder = business-role 'Environment holder' {
+      #ready
+      description 'The user or team that holds an active Reservation.'
+      metadata {
+        owner 'team-platform'
+      }
+    }
+    reserve-environment-process = business-process 'Reserve Environment' {
+      #done
+      metadata {
+        owner 'team-platform'
+      }
+    }
+    reserve-service = business-service 'Reserve an Environment' {
+      #done
+      metadata {
+        owner 'team-platform'
+      }
+    }
+    reservation = business-object 'Reservation' {
+      #done
+      description 'A time-boxed, enforced lock on an Environment, an Application on it, or one Module on it.'
+      metadata {
+        owner 'team-platform'
+      }
+    }
+  }
+
+  extend sbb.environments {
+    environments-module = application-component 'environments Module' {
+      #ready
+      description 'Spring Modulith module of devtoolbox-backend for CTX-ENV: Reservations (T1), then Deployments (target).'
+      metadata {
+        owner 'team-platform'
+        module 'environments/service'
+        workItemId 'WI-318'
+        adr 'adr.environments.auto-merge-pr'
+      }
+    }
+    reservation-api = application-interface 'Reservation API' {
+      #draft
+      metadata {
+        owner 'team-platform'
+        module 'environments/service'
+        contract 'contracts/reservations.openapi.yaml'
+        workItemId 'WI-301'
+      }
+    }
+    reservation-record = data-object 'Reservation record' {
+      #done
+      metadata {
+        owner 'team-platform'
+        module 'environments/service'
+        workItemId 'WI-301'
+      }
+    }
+    environments-db = system-software 'PostgreSQL · environments schema' {
+      #done
+      metadata {
+        owner 'team-platform'
+      }
+    }
+  }
+
+  extend imp.environments {
+    reservations-v1 = work-package 'Reservations v1' {
+      #done
+      metadata {
+        workItemId 'WI-301'
+        start '2026-09-15'
+        end '2026-10-17'
+        owner 'team-platform'
+      }
+    }
+    reservations-live = implementation-event 'Reservations live' {
+      metadata {
+        date '2026-10-20'
+      }
+    }
+  }
+
+  abb.environments.reserve-environment-process -[realization]-> req.environments.reserve-environment
+  abb.environments.reserve-service -[realization]-> req.environments.reserve-environment
+  abb.environments.reservation -[realization]-> req.environments.reserve-environment
+  abb.environments.environment-holder -[realization]-> req.environments.reserve-environment
+  abb.environments.environment-management -[composition]-> abb.environments.reserve-environment-process
+  abb.environments.reserve-environment-process -[realization]-> abb.environments.reserve-service
+  abb.environments.environment-holder -[assignment]-> abb.environments.reserve-environment-process
+  abb.environments.reserve-environment-process -[access]-> abb.environments.reservation 'writes'
+  sbb.environments.environments-module -[realization]-> abb.environments.reserve-environment-process
+  sbb.environments.reservation-api -[realization]-> abb.environments.reserve-service
+  sbb.environments.reservation-record -[realization]-> abb.environments.reservation
+  sbb.environments.environments-module -[composition]-> sbb.environments.reservation-api
+  sbb.environments.environments-module -[access]-> sbb.environments.reservation-record
+  sbb.environments.environments-db -[serving]-> sbb.environments.environments-module
+  sbb.environments.event-bus -[serving]-> sbb.environments.environments-module
+  imp.environments.reservations-v1 -[realization]-> imp.environments.transition-1
+  imp.environments.reservations-v1 -[triggering]-> imp.environments.reservations-live
+  imp.environments.reservations-v1 -[realization]-> sbb.environments.environments-module
+  imp.environments.reservations-v1 -[realization]-> sbb.environments.reservation-api
+  imp.environments.reservations-v1 -[realization]-> sbb.environments.reservation-record
+  imp.environments.reservations-v1 -[realization]-> sbb.environments.environments-db
+  imp.environments.reservations-v1 -[realization]-> abb.environments.reservation
+  imp.environments.reservations-v1 -[realization]-> abb.environments.reserve-environment-process
+  imp.environments.reservations-v1 -[realization]-> abb.environments.reserve-service
+  imp.environments.reservations-v1 -[realization]-> abb.environments.environment-holder
+}

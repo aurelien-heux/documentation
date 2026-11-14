@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Switch component</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0;font-family:Manrope,"Segoe UI",system-ui,sans-serif}
+button{font-family:inherit;cursor:pointer}
+.k{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#48454E}
+.pnl{display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:16px;background:#FAF4FF;min-width:0}
+.pt{font-size:14px;font-weight:700}
+.mt{font-size:13px;line-height:19px;color:#48454E}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
+/* ---- Switch, standard: 52 x 32, thumb 16 off / 24 on with a check ---- */
+.swt{position:relative;flex:none;display:inline-flex;align-items:center;width:52px;height:32px;box-sizing:border-box;border-radius:999px;background:#E6E0EC;border:2px solid #79757F;transition:background .15s,border-color .15s}
+.swt-th{position:absolute;left:6px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:999px;background:#79757F;display:inline-flex;align-items:center;justify-content:center;color:#39235F;transition:left .15s,width .15s,height .15s,margin .15s,background .15s}
+.swt-th svg{opacity:0;transition:opacity .15s}
+[aria-checked="true"] > .swt,[aria-checked="true"] .swt{background:#39235F;border-color:#39235F}
+[aria-checked="true"] .swt .swt-th{left:22px;width:24px;height:24px;margin-top:-12px;background:#FFFFFF}
+[aria-checked="true"] .swt .swt-th svg{opacity:1}
+/* ---- Switch, compact (dense lists, menus): 36 x 20, thumb 10 off / 14 on, no icon ---- */
+.tgl{position:relative;flex:none;width:36px;height:20px;border-radius:10px;background:#E6E0EC;border:2px solid #79757F;box-sizing:border-box;transition:background .15s,border-color .15s}
+.tgl-t{position:absolute;top:50%;left:3px;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:#79757F;transition:left .15s,width .15s,height .15s,margin .15s,background .15s}
+[aria-checked="true"] .tgl{background:#39235F;border-color:#39235F}
+[aria-checked="true"] .tgl .tgl-t{left:18px;width:14px;height:14px;margin-top:-7px;background:#FFFFFF}
+/* ---- the row: the whole row is the button ---- */
+.sw-row{display:flex;width:100%;align-items:center;gap:12px;min-height:48px;padding:6px 12px;box-sizing:border-box;border:0;border-radius:12px;background:transparent;color:#1C1B1E;font-size:14px;text-align:left}
+.sw-row.dense{min-height:44px;font-size:13px;border-radius:0}
+.sw-row:hover,.sw-row.is-hover{background:rgba(57, 35, 95,.08)}
+.sw-row:hover .swt-th,.sw-row.is-hover .swt-th,.sw-row:hover .tgl-t,.sw-row.is-hover .tgl-t{background:#49454F}
+.sw-row[aria-checked="true"]:hover .swt-th,.sw-row[aria-checked="true"].is-hover .swt-th,.sw-row[aria-checked="true"]:hover .tgl-t,.sw-row[aria-checked="true"].is-hover .tgl-t{background:#ECE5F4}
+.sw-row:focus-visible,.sw-row.is-focus{outline:2px solid #39235F;outline-offset:-2px}
+.sw-row:disabled,.sw-row.is-dis{cursor:default;background:transparent;color:rgba(28,27,30,.38)}
+.sw-row:disabled .swt,.sw-row.is-dis .swt,.sw-row:disabled .tgl,.sw-row.is-dis .tgl{opacity:.38}
+.sw-lbl{flex:1;min-width:0}
+.sw-lbl small{display:block;font-size:12px;color:#48454E;margin-top:1px}
+.sw-row:disabled .sw-lbl small,.sw-row.is-dis .sw-lbl small{color:inherit}
+.grid-st{display:grid;grid-template-columns:110px repeat(4,minmax(0,1fr));gap:8px 12px;align-items:center}
+.grid-st .h{font-size:12px;font-weight:600;color:#48454E}
+.cell{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:12px}
+.cell.is-hover{background:rgba(57, 35, 95,.08)}
+.cell.is-focus{outline:2px solid #39235F;outline-offset:-2px}
+.cell.is-dis .swt,.cell.is-dis .tgl{opacity:.38}
+.cell.is-hover .swt-th,.cell.is-hover .tgl-t{background:#49454F}
+.cell.is-hover[aria-checked="true"] .swt-th,.cell.is-hover[aria-checked="true"] .tgl-t{background:#ECE5F4}
+table.tk{border-collapse:collapse;width:100%;font-size:12px}
+table.tk td,table.tk th{padding:6px 8px;border-bottom:1px solid #E6E0EC;text-align:left;vertical-align:middle}
+table.tk th{font-weight:600;color:#48454E}
+.sw8{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:6px;border:1px solid rgba(0,0,0,.12)}
+.menu{background:#F2EBFA;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15);padding:6px 0}
+.menu-h{font-size:12px;font-weight:700;color:#48454E;padding:8px 12px 2px}
+pre.code{margin:0;padding:12px 14px;border-radius:12px;background:#1C1B1E;color:#E6E0EC;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:17px;white-space:pre-wrap;overflow:hidden}
+ul.rules{margin:0;padding-left:18px;font-size:13px;line-height:19px;color:#1C1B1E;display:flex;flex-direction:column;gap:6px}
+ul.rules b{font-weight:700}
+@media (prefers-reduced-motion: reduce){.swt,.swt-th,.swt-th svg,.tgl,.tgl-t{transition:none}}
+.do{color:#0B6B3A;font-weight:700}.dont{color:#93000A;font-weight:700}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1320px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column; gap: 24px; padding: 56px 64px">
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <div class="k">Material Design 3 · Components · Selection</div>
+    <h1 style="margin: 0; font-size: 45px; line-height: 52px; font-weight: 700; letter-spacing: -0.01em">Switch</h1>
+    <p style="margin: 0; max-width: 900px; font-size: 16px; line-height: 24px; color: #48454E">Turns one thing on or off, and the change takes effect at once. Two sizes in the same roles: <b>Standard</b> for settings pages and forms, <b>Compact</b> for dense lists and menus (the assistant's Tools · Skills · MCP servers menu). The whole row is the control; the switch is its state.</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px">
+
+    <div class="pnl">
+      <span class="pt">Sizes and states</span>
+      <div class="grid-st">
+        <span></span><span class="h">Enabled</span><span class="h">Hover</span><span class="h">Focus</span><span class="h">Disabled</span>
+
+        <span class="mt"><b style="color:#1C1B1E">Standard</b> · on</span>
+        <span class="cell" aria-checked="true"><span class="swt"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span></span></span>
+        <span class="cell is-hover" aria-checked="true"><span class="swt"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span></span></span>
+        <span class="cell is-focus" aria-checked="true"><span class="swt"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span></span></span>
+        <span class="cell is-dis" aria-checked="true"><span class="swt"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span></span></span>
+
+        <span class="mt"><b style="color:#1C1B1E">Standard</b> · off</span>
+        <span class="cell" aria-checked="false"><span class="swt"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span></span></span>
+        <span class="cell is-hover" aria-checked="false"><span class="swt"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span></span></span>
+        <span class="cell is-focus" aria-checked="false"><span class="swt"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span></span></span>
+        <span class="cell is-dis" aria-checked="false"><span class="swt"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span></span></span>
+
+        <span class="mt"><b style="color:#1C1B1E">Compact</b> · on</span>
+        <span class="cell" aria-checked="true"><span class="tgl"><span class="tgl-t"></span></span></span>
+        <span class="cell is-hover" aria-checked="true"><span class="tgl"><span class="tgl-t"></span></span></span>
+        <span class="cell is-focus" aria-checked="true"><span class="tgl"><span class="tgl-t"></span></span></span>
+        <span class="cell is-dis" aria-checked="true"><span class="tgl"><span class="tgl-t"></span></span></span>
+
+        <span class="mt"><b style="color:#1C1B1E">Compact</b> · off</span>
+        <span class="cell" aria-checked="false"><span class="tgl"><span class="tgl-t"></span></span></span>
+        <span class="cell is-hover" aria-checked="false"><span class="tgl"><span class="tgl-t"></span></span></span>
+        <span class="cell is-focus" aria-checked="false"><span class="tgl"><span class="tgl-t"></span></span></span>
+        <span class="cell is-dis" aria-checked="false"><span class="tgl"><span class="tgl-t"></span></span></span>
+      </div>
+      <table class="tk">
+        <tr><th></th><th>Standard</th><th>Compact</th></tr>
+        <tr><td>Track</td><td class="mono">52 × 32, outline 2</td><td class="mono">36 × 20, outline 2</td></tr>
+        <tr><td>Thumb off → on</td><td class="mono">16 → 24, check 14</td><td class="mono">10 → 14, no icon</td></tr>
+        <tr><td>Row</td><td class="mono">min 48 high, corner 12</td><td class="mono">min 44 high, square in a menu</td></tr>
+        <tr><td>Motion</td><td class="mono" colspan="2">thumb position, size and colour 150 ms; no motion when prefers-reduced-motion</td></tr>
+      </table>
+      <table class="tk">
+        <tr><th>Part</th><th>On</th><th>Off</th></tr>
+        <tr><td>Track</td><td><span class="sw8" style="background:#39235F"></span>primary #39235F</td><td><span class="sw8" style="background:#E6E0EC"></span>surface-container-highest #E6E0EC, outline #79757F</td></tr>
+        <tr><td>Thumb</td><td><span class="sw8" style="background:#FFFFFF"></span>on-primary #FFFFFF, check primary</td><td><span class="sw8" style="background:#79757F"></span>outline #79757F</td></tr>
+        <tr><td>Thumb on hover</td><td><span class="sw8" style="background:#ECE5F4"></span>primary-container tint #ECE5F4</td><td><span class="sw8" style="background:#49454F"></span>on-surface-variant #49454F</td></tr>
+        <tr><td>Row hover · focus</td><td colspan="2">state layer primary 8 % · focus ring 2 px primary, inset</td></tr>
+        <tr><td>Disabled</td><td colspan="2">switch and label at 38 % opacity; the state stays readable</td></tr>
+      </table>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 24px; min-width: 0">
+      <div class="pnl">
+        <span class="pt">Live · Standard, settings list</span>
+        <div style="display: flex; flex-direction: column">
+          <button type="button" class="sw-row" role="switch" aria-checked="{{autoDeploy}}" onClick="{{toggleAutoDeploy}}"><span class="sw-lbl">Auto-deploy on merge<small>Deploys main to staging-eu after the checks pass</small></span><span class="swt" aria-hidden="true"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></span></button>
+          <button type="button" class="sw-row" role="switch" aria-checked="{{notify}}" onClick="{{toggleNotify}}"><span class="sw-lbl">Notify on failure only<small>Otherwise every run sends a notification</small></span><span class="swt" aria-hidden="true"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></span></button>
+          <button type="button" class="sw-row" role="switch" aria-checked="true" disabled><span class="sw-lbl">Audit log<small>Required by the platform policy</small></span><span class="swt" aria-hidden="true"><span class="swt-th"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></span></button>
+        </div>
+      </div>
+
+      <div class="pnl">
+        <span class="pt">Live · Compact, assistant menu</span>
+        <div class="menu" role="group" aria-label="Tools and skills">
+          <div class="menu-h">Tools · {{toolCount}} on</div>
+          <button type="button" class="sw-row dense" role="switch" aria-checked="{{t1}}" onClick="{{toggleT1}}"><span class="sw-lbl">Search runs<small>Sweep · reads</small></span><span class="tgl" aria-hidden="true"><span class="tgl-t"></span></span></button>
+          <button type="button" class="sw-row dense" role="switch" aria-checked="{{t2}}" onClick="{{toggleT2}}"><span class="sw-lbl">Read run logs<small>Sweep · reads</small></span><span class="tgl" aria-hidden="true"><span class="tgl-t"></span></span></button>
+          <button type="button" class="sw-row dense" role="switch" aria-checked="{{t3}}" onClick="{{toggleT3}}"><span class="sw-lbl">Deploy environment<small>Environments team · asks first</small></span><span class="tgl" aria-hidden="true"><span class="tgl-t"></span></span></button>
+          <div class="menu-h">Skills</div>
+          <button type="button" class="sw-row dense" role="switch" aria-checked="{{s1}}" onClick="{{toggleS1}}"><span class="sw-lbl">Docs<small>Built-in</small></span><span class="tgl" aria-hidden="true"><span class="tgl-t"></span></span></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div class="pnl">
+      <span class="pt">Switch or checkbox</span>
+      <ul class="rules">
+        <li><span class="do">Switch</span> when the change applies at once, with no Save: a tool on or off, auto-deploy, notifications.</li>
+        <li><span class="do">Checkbox</span> when the choice is confirmed later by a button, or picks several items: form fields, filters, rows to act on.</li>
+        <li><span class="dont">Never</span> a checkbox in the assistant's tools menu, a settings list or a profile on/off (Feedback admin).</li>
+        <li>A switch that needs a confirmation (it deploys, deletes, costs) asks in a dialog and only flips after Confirm.</li>
+      </ul>
+    </div>
+    <div class="pnl">
+      <span class="pt">Writing and layout</span>
+      <ul class="rules">
+        <li>Label on the left, switch on the right, aligned on the row's end; the whole row is the hit target.</li>
+        <li>The label names the thing that is on, not the action: "Auto-deploy on merge", not "Enable auto-deploy".</li>
+        <li>No "On" / "Off" text beside the switch; a summary may count them ("Tools · 3 on").</li>
+        <li>One line of supporting text at most, in body-small, under the label.</li>
+        <li>Standard in pages and dialogs; Compact only in menus, panes and tables where rows are 44 px.</li>
+      </ul>
+    </div>
+    <div class="pnl">
+      <span class="pt">Accessibility and markup</span>
+      <pre class="code">&lt;button type="button" class="sw-row" role="switch"
+        aria-checked="true" onClick="…"&gt;
+  &lt;span class="sw-lbl"&gt;Search runs
+    &lt;small&gt;Sweep · reads&lt;/small&gt;&lt;/span&gt;
+  &lt;span class="tgl" aria-hidden="true"&gt;
+    &lt;span class="tgl-t"&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;/button&gt;</pre>
+      <ul class="rules">
+        <li>Space and Enter toggle; the screen reader says "switch, on". The visual switch is <span class="mono">aria-hidden</span>.</li>
+        <li>Target at least 44 × 44 (the row). Contrast against the surface: track on 10.7 : 1, outline off 4.3 : 1 (3 : 1 is the floor for controls).</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1320}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { autoDeploy: true, notify: false, t1: true, t2: false, t3: true, s1: true };
+  }
+  flip(k) { const self = this; return function () { const o = {}; o[k] = !self.state[k]; self.setState(o); }; }
+  renderVals() {
+    const s = this.state;
+    return {
+      autoDeploy: s.autoDeploy, notify: s.notify, t1: s.t1, t2: s.t2, t3: s.t3, s1: s.s1,
+      toolCount: [s.t1, s.t2, s.t3].filter(Boolean).length,
+      toggleAutoDeploy: this.flip('autoDeploy'), toggleNotify: this.flip('notify'),
+      toggleT1: this.flip('t1'), toggleT2: this.flip('t2'), toggleT3: this.flip('t3'), toggleS1: this.flip('s1')
+    };
+  }
+}
+</script>
+</body>
+</html>

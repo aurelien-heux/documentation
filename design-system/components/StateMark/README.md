@@ -1,0 +1,10 @@
+# StateMark
+
+The feedback icon of the system: the logo's construction with the state in the badge instead of "AI". The toolbox never changes (the night `logo-box` with its `>_`, lavender on dark); the corner badge takes the state role and a symbol — ✓ `success`, i `primary` (info), ! `warning`, ✕ `error`. One construction, dressed for its container by size:
+
+- **A · Alone, on a surface · 24–40 px** — snackbars (24, on the inverse surface use the dark file), popin and dialog headers (32), inline alerts (24), page banners (28). Files `state-<state>-badge-<theme>.svg`.
+- **B · In a circle · 56–96 px** — page and panel empty states, table-, panel- or popin-level errors, with title, cause and a Retry. Disc in the state role (dark on light, light on dark), toolbox reversed into `on-<state>`, badge in the state container. Files `state-<state>-circle-<theme>.svg`.
+- **C · Tile glyph · 18–20 px** — status chips, table cells, dropdown options, menu items: the `>` and the reply on a rounded tile (the favicon rule), because the badge does not survive that small. Filled (`state-<state>-tile-*`) in cells and rows; tinted (`-tile-tinted-*`) inside a chip or alert that already carries the container colour.
+- **Pending** — loading is not a state: the same slot shows the pen-orbit ring around the plain mark (`state-pending-<theme>.svg`, 56–96 px; the 20/24 px pen orbit from Loader in small slots). When the request resolves the ring stops and the circle takes the state in place — warning after a timeout ("Still loading…"), error with Retry on failure. No layout shift.
+- Never below 18 px (use an 8 px dot), never recoloured outside the four roles, never as the app logo, never animated on appearance.
+- **Angular Material:** inline SVG (`assets/States`), not `mat-icon`. In `mat-chip` it goes in `matChipAvatar` (tile, 18 px); in `MatSnackBar` as the leading element of a custom component (badge, 24 px); in `mat-table` cells as the first element of the status column (tile, 20 px). Full map and theme files: `angular-material.md`.
