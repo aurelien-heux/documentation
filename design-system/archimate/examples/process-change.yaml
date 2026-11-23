@@ -1,0 +1,9 @@
+# views/change-the-model-diff.yaml: target compared with the baseline of PRC-04
+id: VIEW-09
+kind: process-change
+process: PRC-04
+baseline: model@a41c9e2          # the merged model the target is compared with
+target: branch change/agent-drafts
+renderer: plantuml
+# marks are computed from the two versions, never typed:
+#   added · changed · moved · removed (unchanged steps carry no mark)

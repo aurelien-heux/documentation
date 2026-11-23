@@ -1,0 +1,4 @@
+# docs/detailed-design/knowledge-base-schema.md (PostgreSQL)
+kind: er
+renderer: mermaid
+refines: [DOB-04, DOB-06]

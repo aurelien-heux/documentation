@@ -1,0 +1,10 @@
+# docs/detailed-design/agent-drafts-a-change.md
+kind: sequence
+renderer: mermaid
+participants:                 # performer decides the look: person · agent · component · external
+  - {id: ROL-02, as: Architect, kind: person}
+  - {id: APC-01, as: Chat, kind: component}
+  - {id: APC-07, as: Architecture agent, kind: agent}
+  - {id: APC-02, as: Knowledge base, kind: component}
+  - {as: Git hosting, kind: external}
+  - {as: Jenkins, kind: external}

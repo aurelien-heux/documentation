@@ -1,0 +1,50 @@
+@startuml
+!include aitoolbox.puml
+hide circle
+skinparam linetype ortho
+title Knowledge base, tables
+entity "model_element" as me {
+  *id : varchar(7) <<PK>>
+  --
+  *type : varchar
+  *name : text
+  *status : varchar
+  agent : boolean
+}
+entity "relation" as rel {
+  *id : uuid <<PK>>
+  --
+  *type : varchar
+  *from_id : varchar(7) <<FK>>
+  *to_id : varchar(7) <<FK>>
+}
+entity "view" as v {
+  *id : varchar(8) <<PK>>
+  --
+  *kind : varchar
+  *renderer : varchar
+}
+entity "view_element" as ve {
+  *view_id : varchar(8) <<FK>>
+  *element_id : varchar(7) <<FK>>
+}
+entity "agent_output" as ao {
+  *id : uuid <<PK>>
+  --
+  *status : varchar
+  branch : text
+}
+entity "review" as rv {
+  *id : uuid <<PK>>
+  --
+  *output_id : uuid <<FK>>
+  *reviewer : text
+  *decision : varchar
+  decided_at : timestamptz
+}
+me ||--o{ rel : from
+me ||--o{ rel : to
+v ||--o{ ve
+me ||--o{ ve
+ao ||--o{ rv
+@enduml

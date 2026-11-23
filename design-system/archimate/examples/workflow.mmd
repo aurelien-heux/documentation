@@ -1,0 +1,26 @@
+flowchart TB
+  s0@{ shape: sm-circ, label: " " }
+  e1@{ shape: rounded, label: "<small>Requester · event</small><br>Change requested" }
+  s1@{ shape: rounded, label: "<small>Requester</small><br>Describe the change in chat" }
+  s2@{ shape: rounded, label: "<small>✦ Architecture agent</small><br>Draft or fix the model update" }
+  s4@{ shape: rounded, label: "<small>Jenkins · system</small><br>Validate schema and references" }
+  d1@{ shape: diam, label: "Checks pass?" }
+  s5@{ shape: rounded, label: "<small>Lead architect · review gate</small><br>Review the pull request" }
+  o1@{ shape: div-rect, label: "Pull request" }
+  d2@{ shape: diam, label: "Approved?" }
+  s6@{ shape: rounded, label: "<small>Jenkins · system</small><br>Merge and publish" }
+  e2@{ shape: rounded, label: "<small>Jenkins · event</small><br>Model updated" }
+  s9@{ shape: fr-circ, label: " " }
+  s0 --> e1 --> s1 --> s2 --> s4 --> d1
+  d1 -->|no| s2
+  d1 -->|yes| s5 --> d2
+  s5 -.- o1
+  d2 -->|changes requested| s2
+  d2 -->|approved| s6 --> e2 --> s9
+  class e1,e2 event
+  class s1 human
+  class s2 agent
+  class s4,s6 system
+  class s5 gate
+  class d1,d2 decision
+  class o1 business

@@ -1,0 +1,43 @@
+flowchart TB
+  subgraph L_motivation["Motivation"]
+    direction LR
+    GOL01@{ shape: notch-rect, label: "Productivity and developer experience" }
+    REQ05@{ shape: notch-rect, label: "Reviewed knowledge in one repository" }
+  end
+  subgraph L_strategy["Strategy"]
+    direction LR
+    CAP03@{ shape: rounded, label: "Architecture management" }
+  end
+  subgraph L_business["Business"]
+    direction LR
+    ROL02@{ shape: rect, label: "Lead architect" }
+    EVT02@{ shape: rounded, label: "Change requested" }
+    PRC04@{ shape: rounded, label: "Change the architecture model" }
+    BOB03@{ shape: div-rect, label: "Architecture change" }
+  end
+  subgraph L_application["Application"]
+    direction LR
+    APC07@{ shape: rect, label: "Architecture agent<br><small>✦ agent</small>" }
+    APC02@{ shape: rect, label: "Knowledge base" }
+    APS05@{ shape: rounded, label: "Model validation" }
+    DOB04@{ shape: div-rect, label: "Architecture model" }
+  end
+  REQ05 -.->|realization| GOL01
+  CAP03 -.->|realization| REQ05
+  PRC04 -.->|realization| CAP03
+  ROL02 -->|assignment| PRC04
+  EVT02 ==>|triggering| PRC04
+  PRC04 -.->|access| BOB03
+  APC07 -->|serving: drafts the update| PRC04
+  APS05 -->|serving| PRC04
+  APC02 -.->|realization| APS05
+  DOB04 -.->|realization| BOB03
+  APC07 -.->|access: writes| DOB04
+  class GOL01,REQ05 motivation
+  class L_motivation layer
+  class CAP03 strategy
+  class L_strategy layer
+  class ROL02,EVT02,PRC04,BOB03 business
+  class L_business layer
+  class APC07,APC02,APS05,DOB04 application
+  class L_application layer

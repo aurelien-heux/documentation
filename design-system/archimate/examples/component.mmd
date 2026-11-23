@@ -1,0 +1,25 @@
+flowchart LR
+  C["Chat"]
+  A["Architecture agent<br><small>✦ agent</small>"]
+  K["Knowledge base"]
+  V["Model validator"]
+  W["View generator"]
+  G["Git hosting"]
+  J["Jenkins"]
+  IA@{ shape: circle, label: "Agent API" }
+  IS@{ shape: circle, label: "Search API" }
+  IM@{ shape: circle, label: "Model API" }
+  IG@{ shape: circle, label: "Git REST" }
+  A --- IA
+  K --- IS
+  K --- IM
+  G --- IG
+  C -.->|uses| IA
+  A -.->|uses| IS
+  A -.->|uses| IG
+  V -.->|uses| IM
+  W -.->|uses| IM
+  J -->|runs on each pull request| V
+  class C,A,K,V,W application
+  class G,J external
+  class IA,IS,IM,IG human

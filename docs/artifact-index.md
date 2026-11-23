@@ -26,7 +26,7 @@ Snapshot taken 2026-11-13, updated 2026-11-14. On 2026-11-14 the design canvas w
 | AIToolbox Architecture | Page | 2026-11-03 | https://claude.ai/artifact/2Su7sBCivJmNmhqcRvwZuY |
 | Wide Views Demo (five ways to render a wide TOGAF landscape in LikeC4) | Page | 2026-11-02 | https://claude.ai/artifact/Ptt8tNYbq5YmjJRMmeGoAN |
 | Architecture Change Process | Page | 2026-10-30 | https://claude.ai/artifact/C9SYM7JJV1K7dddFNPPTdL |
-| ArchiMate Notation | Page | 2026-10-23 | https://claude.ai/artifact/6DX22osF1Dgk3o9A6Qh5Yx |
+| ArchiMate Notation (Notation 2.0: PlantUML + Mermaid themes, 8 diagram kinds, 24 components; source `design-system/archimate/`, page `architecture/pages/archimate-notation.html`) | Page | 2026-11-23 | https://claude.ai/artifact/6DX22osF1Dgk3o9A6Qh5Yx |
 | Architecture Jira 3-Tier | Page | 2026-10-15 | https://claude.ai/artifact/V5gHAw1yiGtrSbCyopfFvB |
 | Exposing Markdown docs in an Angular app: options compared | Doc | 2026-11-05 | https://claude.ai/artifact/NUwSAFjPHHwcpWYQ5j8PCp |
 

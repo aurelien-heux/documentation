@@ -1,0 +1,16 @@
+# views/change-the-model.yaml: the steps of PRC-04, in order, with who does them
+id: VIEW-08
+kind: workflow
+process: PRC-04
+renderer: plantuml
+lanes: [ROL-01 Requester, APC-07 Architecture agent, APC-09 Jenkins, ROL-02 Lead architect]
+steps:
+  - {event: EVT-02, name: Change requested, lane: ROL-01}
+  - {name: Describe the change in chat, lane: ROL-01}
+  - {name: Draft the model update, lane: APC-07, by: agent}
+  - {name: Validate schema and references, lane: APC-09, by: system,
+     until: {question: Checks pass?, no: Fix the findings}}
+  - {name: Review the pull request, lane: ROL-02, gate: true, reads: Pull request,
+     decision: {question: Approved?, no: {go: Draft the model update, label: changes requested}}}
+  - {name: Merge and publish, lane: APC-09, by: system}
+  - {event: EVT-03, name: Model updated, lane: APC-09}

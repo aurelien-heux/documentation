@@ -1,0 +1,31 @@
+# model/*.yaml (excerpt)
+- {id: GOL-01, type: goal, name: Productivity and developer experience}
+- {id: REQ-05, type: requirement, name: Reviewed knowledge in one repository}
+- {id: CAP-03, type: capability, name: Architecture management}
+- {id: ROL-02, type: role, name: Lead architect}
+- {id: EVT-02, type: event, name: Change requested}
+- {id: PRC-04, type: process, name: Change the architecture model}
+- {id: BOB-03, type: business-object, name: Architecture change}
+- {id: APC-07, type: application-component, name: Architecture agent, agent: true}
+- {id: APC-02, type: application-component, name: Knowledge base}
+- {id: APS-05, type: application-service, name: Model validation}
+- {id: DOB-04, type: data-object, name: Architecture model}
+
+# views/architecture-change.yaml
+id: VIEW-07
+kind: layered
+title: Changing the architecture model
+renderer: plantuml            # plantuml | mermaid
+elements: [GOL-01, REQ-05, CAP-03, ROL-02, EVT-02, PRC-04, BOB-03, APC-07, APC-02, APS-05, DOB-04]
+relations:
+  - {type: realization, from: REQ-05, to: GOL-01}
+  - {type: realization, from: CAP-03, to: REQ-05}
+  - {type: realization, from: PRC-04, to: CAP-03}
+  - {type: assignment, from: ROL-02, to: PRC-04}
+  - {type: triggering, from: EVT-02, to: PRC-04}
+  - {type: access, from: PRC-04, to: BOB-03}
+  - {type: serving, from: APC-07, to: PRC-04, label: drafts the update}
+  - {type: serving, from: APS-05, to: PRC-04}
+  - {type: realization, from: APC-02, to: APS-05}
+  - {type: realization, from: DOB-04, to: BOB-03}
+  - {type: access, from: APC-07, to: DOB-04, label: writes}

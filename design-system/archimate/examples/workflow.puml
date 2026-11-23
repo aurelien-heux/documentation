@@ -1,0 +1,23 @@
+@startuml
+!include aitoolbox.puml
+title Change the architecture model (PRC-04)
+|Requester|
+start
+AX_Event("Change requested")
+AX_Step("Describe the change in chat")
+|Architecture agent|
+repeat
+  repeat
+    AX_Step("Draft or fix the model update", "agent")
+    |Jenkins|
+    AX_Step("Validate schema and references", "system")
+  repeat while (Checks pass?) is (no) not (yes)
+  |Lead architect|
+  AX_Gate("Review the pull request")
+  note right: Pull request
+repeat while (Approved?) is (changes requested) not (approved)
+|Jenkins|
+AX_Step("Merge and publish", "system")
+AX_Event("Model updated")
+stop
+@enduml

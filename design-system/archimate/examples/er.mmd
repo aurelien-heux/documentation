@@ -1,0 +1,39 @@
+erDiagram
+  model_element ||--o{ relation : "from / to"
+  view ||--o{ view_element : shows
+  model_element ||--o{ view_element : "is shown in"
+  agent_output ||--o{ review : "is reviewed by"
+  model_element {
+    varchar id PK
+    varchar type
+    text name
+    varchar status
+    boolean agent
+  }
+  relation {
+    uuid id PK
+    varchar type
+    varchar from_id FK
+    varchar to_id FK
+  }
+  view {
+    varchar id PK
+    varchar kind
+    varchar renderer
+  }
+  view_element {
+    varchar view_id FK
+    varchar element_id FK
+  }
+  agent_output {
+    uuid id PK
+    varchar status
+    text branch
+  }
+  review {
+    uuid id PK
+    uuid output_id FK
+    text reviewer
+    varchar decision
+    timestamptz decided_at
+  }
