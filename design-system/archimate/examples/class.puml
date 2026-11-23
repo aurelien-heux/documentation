@@ -1,0 +1,46 @@
+@startuml
+!include aitoolbox.puml
+hide circle
+title Knowledge base, domain model
+class ModelElement <<aggregate root>> $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK;line.bold {
+  id : ElementId
+  type : ElementType
+  name : String
+  status : Status
+  agent : Boolean
+}
+class Relation <<entity>> {
+  type : RelationType
+}
+class ElementId <<value object>> $AX_HIGHEST;line:$AX_OUTLINE_NH {
+  value : String
+  {method} pattern ^[A-Z]{3}-[0-9]{2,3}$
+}
+class View <<entity>> {
+  id : String
+  kind : ViewKind
+  renderer : Renderer
+}
+class AgentOutput <<aggregate root>> $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK;line.bold {
+  id : String
+  status : OutputStatus
+  branch : String
+}
+class Review <<entity>> {
+  reviewer : Person
+  decision : Decision
+  decidedAt : Instant
+}
+enum Status $AX_HIGHEST;line:$AX_OUTLINE_NH {
+  draft
+  validated
+  retired
+}
+ModelElement "1" *-- "0..*" Relation : from
+Relation "0..*" --> "1" ModelElement : to
+ModelElement --> ElementId
+ModelElement ..> Status
+View "0..*" o-- "1..*" ModelElement : shows
+AgentOutput "1" *-- "0..*" Review
+AgentOutput ..> ModelElement : proposes
+@enduml

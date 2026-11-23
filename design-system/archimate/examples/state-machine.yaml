@@ -1,0 +1,23 @@
+# model/data/data-objects.yaml: the life cycle is part of the object
+- id: DOB-06
+  type: data-object
+  name: Agent output
+  lifecycle:
+    initial: drafted
+    states: [drafted, in-review, changes-requested, approved, rejected, published, retired]
+    transitions:
+      - {from: drafted, to: drafted, on: checks fail, by: agent, do: fix findings}
+      - {from: drafted, to: in-review, on: submitted, when: checks pass}
+      - {from: in-review, to: changes-requested, on: changes requested, by: reviewer}
+      - {from: changes-requested, to: drafted, on: revised, by: agent}
+      - {from: in-review, to: approved, on: approved, by: reviewer}
+      - {from: in-review, to: rejected, on: rejected, by: reviewer}
+      - {from: approved, to: published, on: merged, do: write to the knowledge base}
+      - {from: published, to: retired, on: superseded}
+    final: [rejected, retired]
+# views/agent-output-life-cycle.yaml
+id: VIEW-10
+kind: state-machine
+object: DOB-06
+current: in-review           # optional: an instance's state, drawn as the current state
+renderer: mermaid

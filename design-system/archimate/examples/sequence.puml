@@ -1,0 +1,28 @@
+@startuml
+!include aitoolbox.puml
+hide stereotype
+title The agent drafts a model change
+actor "Architect" as U
+participant "Chat" as C
+participant "✦ Architecture agent" as A <<agent>>
+participant "Knowledge base" as K
+participant "Git hosting" as G <<external>>
+participant "Jenkins" as J <<external>>
+U -> C : Add a review step to PRC-04
+C -> A : draft(change)
+A -> K : search(PRC-04, related)
+K --> A : elements, views
+A -> G : branch, commit YAML, open pull request
+G -> J : pull request opened
+J -> J : schema and reference checks
+J --> G : checks passed
+A --> C : pull request #142 ready for review
+C --> U : review link
+alt approved
+  U -> G : approve and merge
+  G -> K : publish model @ sha
+else changes requested
+  U -> G : request changes
+  G -> A : review comments
+end
+@enduml

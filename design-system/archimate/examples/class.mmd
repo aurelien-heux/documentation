@@ -1,0 +1,56 @@
+classDiagram
+  direction LR
+  class ModelElement {
+    <<aggregate root>>
+    id : ElementId
+    type : ElementType
+    name : String
+    status : Status
+    agent : Boolean
+  }
+  class Relation {
+    <<entity>>
+    type : RelationType
+  }
+  class ElementId {
+    <<value object>>
+    value : String
+  }
+  class View {
+    <<entity>>
+    id : String
+    kind : ViewKind
+    renderer : Renderer
+  }
+  class AgentOutput {
+    <<aggregate root>>
+    id : String
+    status : OutputStatus
+    branch : String
+  }
+  class Review {
+    <<entity>>
+    reviewer : Person
+    decision : Decision
+    decidedAt : Instant
+  }
+  class Status {
+    <<enumeration>>
+    draft
+    validated
+    retired
+  }
+  ModelElement "1" *-- "0..*" Relation : from
+  Relation "0..*" --> "1" ModelElement : to
+  ModelElement --> ElementId
+  ModelElement ..> Status
+  View "0..*" o-- "1..*" ModelElement : shows
+  AgentOutput "1" *-- "0..*" Review
+  AgentOutput ..> ModelElement : proposes
+  class ModelElement:::root
+  class AgentOutput:::root
+  class Relation:::entity
+  class View:::entity
+  class Review:::entity
+  class ElementId:::valueobject
+  class Status:::valueobject

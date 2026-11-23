@@ -1,0 +1,25 @@
+@startuml
+!include aitoolbox.puml
+title PRC-04, target compared with the baseline
+|Requester|
+start
+AX_Event("Change requested")
+AX_Step("Describe the change in chat", "human", "changed")
+|Architecture agent|
+AX_Step("Draft the model update", "agent", "added")
+|Lead architect|
+AX_Step("Update the diagram by hand", "human", "removed")
+|Jenkins|
+AX_Step("Validate schema and references", "system", "added")
+|Lead architect|
+AX_Gate("Review the pull request")
+|Jenkins|
+AX_Step("Notify the requester", "system", "moved")
+AX_Step("Merge and publish", "system", "added")
+AX_Event("Model updated")
+stop
+legend right
+  + added   Δ changed   ↕ moved   − removed
+  Steps without a mark are unchanged.
+endlegend
+@enduml

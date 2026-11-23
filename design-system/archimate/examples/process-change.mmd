@@ -1,0 +1,19 @@
+flowchart TB
+  s0@{ shape: sm-circ, label: " " }
+  e1@{ shape: rounded, label: "<small>Requester · event</small><br>Change requested" }
+  s1@{ shape: rounded, label: "<small>Requester</small><br>Δ Describe the change in chat" }
+  s2@{ shape: rounded, label: "<small>✦ Architecture agent</small><br>+ Draft the model update" }
+  s3@{ shape: rounded, label: "<small>Lead architect</small><br>− <s>Update the diagram by hand</s>" }
+  s4@{ shape: rounded, label: "<small>Jenkins · system</small><br>+ Validate schema and references" }
+  s5@{ shape: rounded, label: "<small>Lead architect · review gate</small><br>Review the pull request" }
+  s6@{ shape: rounded, label: "<small>Jenkins · system</small><br>↕ Notify the requester" }
+  s7@{ shape: rounded, label: "<small>Jenkins · system</small><br>+ Merge and publish" }
+  e2@{ shape: rounded, label: "<small>Jenkins · event</small><br>Model updated" }
+  s9@{ shape: fr-circ, label: " " }
+  s0 --> e1 --> s1 --> s2 -.-> s3 -.-> s4 --> s5 --> s6 --> s7 --> e2 --> s9
+  class e1,e2 event
+  class s1 changed
+  class s2,s4,s7 added
+  class s3 removed
+  class s6 moved
+  class s5 gate

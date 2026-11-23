@@ -1,0 +1,24 @@
+@startuml
+!include aitoolbox.puml
+hide stereotype
+hide empty description
+title Agent output (DOB-06), life cycle
+[*] --> Drafted : ✦ agent drafts
+state "Drafted" as Drafted
+state "In review" as InReview <<current>>
+state "Changes requested" as Changes
+state "Approved" as Approved
+state "Rejected" as Rejected
+state "Published" as Published
+state "Retired" as Retired
+Drafted --> Drafted : ✦ fix\n[checks fail]
+Drafted --> InReview : submitted\n[checks pass]
+InReview --> Changes : reviewer requests changes
+Changes --> Drafted : ✦ agent revises
+InReview --> Approved : reviewer approves
+InReview --> Rejected : reviewer rejects
+Approved --> Published : merged\n/ write to the knowledge base
+Published --> Retired : superseded
+Rejected --> [*]
+Retired --> [*]
+@enduml

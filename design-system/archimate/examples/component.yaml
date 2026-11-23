@@ -1,0 +1,10 @@
+# views/knowledge-base-components.yaml
+id: VIEW-11
+kind: component
+renderer: plantuml
+components: [APC-01, APC-07, APC-02, APC-08, APC-10]
+interfaces:                                  # provided by → used by
+  - {id: API-02, name: Agent API, by: APC-07, used: [APC-01]}
+  - {id: API-03, name: Search API, by: APC-02, used: [APC-07]}
+  - {id: API-04, name: Model API, by: APC-02, used: [APC-08, APC-10]}
+external: [Git hosting, Jenkins]

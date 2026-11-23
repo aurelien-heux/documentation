@@ -1,0 +1,37 @@
+@startuml
+!include aitoolbox.puml
+hide stereotype
+title Changing the architecture model
+
+AX_Layer(L_motivation, "Motivation")
+  AX_Goal(GOL01, "Productivity and developer experience")
+  AX_Requirement(REQ05, "Reviewed knowledge in one repository")
+AX_End()
+AX_Layer(L_strategy, "Strategy")
+  AX_Capability(CAP03, "Architecture management")
+AX_End()
+AX_Layer(L_business, "Business")
+  AX_BusinessRole(ROL02, "Lead architect")
+  AX_BusinessEvent(EVT02, "Change requested")
+  AX_BusinessProcess(PRC04, "Change the architecture model")
+  AX_BusinessObject(BOB03, "Architecture change")
+AX_End()
+AX_Layer(L_application, "Application")
+  AX_Agent(APC07, "Architecture agent")
+  AX_ApplicationComponent(APC02, "Knowledge base")
+  AX_ApplicationService(APS05, "Model validation")
+  AX_DataObject(DOB04, "Architecture model")
+AX_End()
+
+AX_RelRealization(REQ05, GOL01)
+AX_RelRealization(CAP03, REQ05, "", "up")
+AX_RelRealization(PRC04, CAP03, "", "up")
+AX_RelAssignment(ROL02, PRC04)
+AX_RelTriggering(EVT02, PRC04)
+AX_RelAccess(PRC04, BOB03)
+AX_RelServing(APC07, PRC04, "drafts the update", "up")
+AX_RelServing(APS05, PRC04, "", "up")
+AX_RelRealization(APC02, APS05)
+AX_RelRealization(DOB04, BOB03, "", "up")
+AX_RelAccess(APC07, DOB04, "writes")
+@enduml

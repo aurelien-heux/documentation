@@ -1,0 +1,620 @@
+' aitoolbox.puml: AIToolbox notation theme for PlantUML (Notation 2.0 · tokens 5.0.1 · PlantUML 1.2026.8 · Mermaid 11.16).
+' Generated from the design system: do not edit, change the design system and regenerate.
+' Dark theme: !$AX_THEME = "dark" before the include. Default: light.
+' Elements: AX_<Type>(alias, "label"), e.g. AX_BusinessProcess(PRC04, "Change the model"). Agents: AX_Agent.
+' Relationships: AX_Rel<Type>(from, to, "label", dir) with dir up | down | left | right (optional). Workflow steps: AX_Step("label", by, change).
+' Layout: Smetana, built into PlantUML: no Graphviz install, and the in-browser engine needs no WebAssembly.
+!pragma layout smetana
+!if %not(%variable_exists("$AX_THEME"))
+!$AX_THEME = "light"
+!endif
+!if ($AX_THEME == "dark")
+  !$AX_TEXT = "#ECE5F8"
+  !$AX_MUTED = "#CAC3DC"
+  !$AX_LINE = "#CAC3DC"
+  !$AX_OUTLINE = "#948DA5"
+  !$AX_OUTLINE_VARIANT = "#494458"
+  !$AX_CANVAS = "#14121E"
+  !$AX_LANE = "#1D1A27"
+  !$AX_NOTE = "#2B2836"
+  !$AX_HIGHEST = "#363341"
+  !$AX_LOWEST = "#0F0C19"
+  !$AX_PRIMARY = "#C4C0FF"
+  !$AX_PRIMARY_CONTAINER = "#413C8A"
+  !$AX_ON_PRIMARY_CONTAINER = "#E3DFFF"
+  !$AX_AI = "#80D5D4"
+  !$AX_AI_CONTAINER = "#004F50"
+  !$AX_ON_AI_CONTAINER = "#9CF1F0"
+  !$AX_SUCCESS = "#91D888"
+  !$AX_SUCCESS_CONTAINER = "#0B5314"
+  !$AX_ON_SUCCESS_CONTAINER = "#ACF4A2"
+  !$AX_WARNING = "#FCBC00"
+  !$AX_WARNING_CONTAINER = "#5C4300"
+  !$AX_ON_WARNING_CONTAINER = "#FFDEA0"
+  !$AX_ERROR = "#FFB4AB"
+  !$AX_ERROR_CONTAINER = "#93000A"
+  !$AX_ON_ERROR_CONTAINER = "#FFDAD6"
+  !$AX_OUTLINE_NH = "948DA5"
+  !$AX_OUTLINE_VARIANT_NH = "494458"
+  !$AX_PRIMARY_NH = "C4C0FF"
+  !$AX_AI_NH = "80D5D4"
+  !$AX_STRATEGY_FILL = "#3F2E12"
+  !$AX_STRATEGY_INK = "F0CB8E"
+  !$AX_STRATEGY_INKC = "#F0CB8E"
+  !$AX_BUSINESS_FILL = "#3D3500"
+  !$AX_BUSINESS_INK = "F2DC6E"
+  !$AX_BUSINESS_INKC = "#F2DC6E"
+  !$AX_APPLICATION_FILL = "#0C3646"
+  !$AX_APPLICATION_INK = "90D2EC"
+  !$AX_APPLICATION_INKC = "#90D2EC"
+  !$AX_TECHNOLOGY_FILL = "#1E3A15"
+  !$AX_TECHNOLOGY_INK = "A8D795"
+  !$AX_TECHNOLOGY_INKC = "#A8D795"
+  !$AX_PHYSICAL_FILL = "#163B23"
+  !$AX_PHYSICAL_INK = "96D2A8"
+  !$AX_PHYSICAL_INKC = "#96D2A8"
+  !$AX_MOTIVATION_FILL = "#3A2150"
+  !$AX_MOTIVATION_INK = "D6B4EE"
+  !$AX_MOTIVATION_INKC = "#D6B4EE"
+  !$AX_IMPLEMENTATION_FILL = "#4A1E37"
+  !$AX_IMPLEMENTATION_INK = "EFB3D4"
+  !$AX_IMPLEMENTATION_INKC = "#EFB3D4"
+  !$AX_OTHER_FILL = "#4A2D10"
+  !$AX_OTHER_INK = "F2BE84"
+  !$AX_OTHER_INKC = "#F2BE84"
+sprite $axg_resource <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5,7 L 16,7 A 2.5,2.5 0 0,1 18.5,9.5 L 18.5,14.5 A 2.5,2.5 0 0,1 16,17 L 5,17 A 2.5,2.5 0 0,1 2.5,14.5 L 2.5,9.5 A 2.5,2.5 0 0,1 5,7 L 5,7" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 18.5,10 l 2.5,0 l 0,4 l -2.5,0 M 7,9.5 l 0,5 M 10.5,9.5 l 0,5 M 14,9.5 l 0,5" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_capability <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,15 L 8.5,15 L 8.5,20 L 3.5,20 L 3.5,15" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 8.5,15 L 13.5,15 L 13.5,20 L 8.5,20 L 8.5,15" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,15 L 18.5,15 L 18.5,20 L 13.5,20 L 13.5,15" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 8.5,10 L 13.5,10 L 13.5,15 L 8.5,15 L 8.5,10" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,10 L 18.5,10 L 18.5,15 L 13.5,15 L 13.5,10" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,5 L 18.5,5 L 18.5,10 L 13.5,10 L 13.5,5" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_value_stream <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 2.5,6.5 l 13.5,0 l 5.5,5.5 l -5.5,5.5 L 2.5,17.5 l 5,-5.5 L 2.5,6.5" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_course_of_action <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 21,8.5 A 5.5,5.5 0 0,1 15.5,14 A 5.5,5.5 0 0,1 10,8.5 A 5.5,5.5 0 0,1 15.5,3 A 5.5,5.5 0 0,1 21,8.5 L 21,8.5" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 17.3,8.5 A 1.8,1.8 0 0,1 15.5,10.3 A 1.8,1.8 0 0,1 13.7,8.5 A 1.8,1.8 0 0,1 15.5,6.7 A 1.8,1.8 0 0,1 17.3,8.5 L 17.3,8.5" fill="#F0CB8E" stroke="none"/><path d="M 3,21 c 1.5,-5.5 5,-9 10,-10.5" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 10,8.8 l 3,1.7 l -1.8,3" fill="none" stroke="#F0CB8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_actor <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 14.8,5.5 A 2.8,2.8 0 0,1 12,8.3 A 2.8,2.8 0 0,1 9.2,5.5 A 2.8,2.8 0 0,1 12,2.7 A 2.8,2.8 0 0,1 14.8,5.5 L 14.8,5.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 12,8.3 l 0,7.2 M 5.5,11.2 l 13,0 M 12,15.5 L 7.5,21.5 M 12,15.5 l 4.5,6" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_role <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,6.5 l 9.5,0 a 3,5.5 0 0,1 0,11 L 8,17.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 11,12 A 3,5.5 0 0,1 8,17.5 A 3,5.5 0 0,1 5,12 A 3,5.5 0 0,1 8,6.5 A 3,5.5 0 0,1 11,12 L 11,12" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_collaboration <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 14.5,12 A 5.5,5.5 0 0,1 9,17.5 A 5.5,5.5 0 0,1 3.5,12 A 5.5,5.5 0 0,1 9,6.5 A 5.5,5.5 0 0,1 14.5,12 L 14.5,12" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 20.5,12 A 5.5,5.5 0 0,1 15,17.5 A 5.5,5.5 0 0,1 9.5,12 A 5.5,5.5 0 0,1 15,6.5 A 5.5,5.5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_interface <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20.5,12 A 5,5 0 0,1 15.5,17 A 5,5 0 0,1 10.5,12 A 5,5 0 0,1 15.5,7 A 5,5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,12 l 8,0" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_process <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 2.5,9.5 l 11.5,0 L 14,5.5 l 7.5,6.5 l -7.5,6.5 l 0,-4 L 2.5,14.5 L 2.5,9.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_function <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,21 L 5.5,8.5 L 12,3 l 6.5,5.5 L 18.5,21 L 12,16 L 5.5,21" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_interaction <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 10.5,5.5 a 6.5,6.5 0 0,0 0,13 L 10.5,5.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,5.5 a 6.5,6.5 0 0,1 0,13 L 13.5,5.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_event <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,6.5 l 12.5,0 a 5.5,5.5 0 0,1 0,11 L 3,17.5 l 3.5,-5.5 L 3,6.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_service <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,7.5 L 17,7.5 A 4.5,4.5 0 0,1 21.5,12 L 21.5,12 A 4.5,4.5 0 0,1 17,16.5 L 7,16.5 A 4.5,4.5 0 0,1 2.5,12 L 2.5,12 A 4.5,4.5 0 0,1 7,7.5 L 7,7.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_object <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 L 20.5,5.5 L 20.5,18.5 L 3.5,18.5 L 3.5,5.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 17,0" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_contract <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 L 20.5,5.5 L 20.5,18.5 L 3.5,18.5 L 3.5,5.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 17,0 M 3.5,14 l 17,0" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_representation <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 l 17,0 l 0,11 c -2.8,-1.8 -5.7,1.8 -8.5,0 s -5.7,-1.8 -8.5,0 L 3.5,5.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 17,0" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_product <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 L 20.5,5.5 L 20.5,18.5 L 3.5,18.5 L 3.5,5.5" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 8,0 l 0,-4" fill="none" stroke="#F2DC6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_component <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7.5,4.5 L 20.5,4.5 L 20.5,19.5 L 7.5,19.5 L 7.5,4.5" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 4,7.5 L 11,7.5 L 11,10.5 L 4,10.5 L 4,7.5" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 4,13.5 L 11,13.5 L 11,16.5 L 4,16.5 L 4,13.5" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_collaboration <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 14.5,12 A 5.5,5.5 0 0,1 9,17.5 A 5.5,5.5 0 0,1 3.5,12 A 5.5,5.5 0 0,1 9,6.5 A 5.5,5.5 0 0,1 14.5,12 L 14.5,12" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 20.5,12 A 5.5,5.5 0 0,1 15,17.5 A 5.5,5.5 0 0,1 9.5,12 A 5.5,5.5 0 0,1 15,6.5 A 5.5,5.5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_interface <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20.5,12 A 5,5 0 0,1 15.5,17 A 5,5 0 0,1 10.5,12 A 5,5 0 0,1 15.5,7 A 5,5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,12 l 8,0" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_function <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,21 L 5.5,8.5 L 12,3 l 6.5,5.5 L 18.5,21 L 12,16 L 5.5,21" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_interaction <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 10.5,5.5 a 6.5,6.5 0 0,0 0,13 L 10.5,5.5" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,5.5 a 6.5,6.5 0 0,1 0,13 L 13.5,5.5" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_process <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 2.5,9.5 l 11.5,0 L 14,5.5 l 7.5,6.5 l -7.5,6.5 l 0,-4 L 2.5,14.5 L 2.5,9.5" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_event <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,6.5 l 12.5,0 a 5.5,5.5 0 0,1 0,11 L 3,17.5 l 3.5,-5.5 L 3,6.5" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_service <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,7.5 L 17,7.5 A 4.5,4.5 0 0,1 21.5,12 L 21.5,12 A 4.5,4.5 0 0,1 17,16.5 L 7,16.5 A 4.5,4.5 0 0,1 2.5,12 L 2.5,12 A 4.5,4.5 0 0,1 7,7.5 L 7,7.5" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_data_object <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 L 20.5,5.5 L 20.5,18.5 L 3.5,18.5 L 3.5,5.5" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 17,0" fill="none" stroke="#90D2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_node <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,8.5 l 12.5,0 l 0,12 L 3.5,20.5 L 3.5,8.5" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,8.5 L 7.5,4.5 l 13,0 l 0,12 l -4.5,4 M 16,8.5 l 4.5,-4" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_device <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,4 L 18.5,4 A 1,1 0 0,1 19.5,5 L 19.5,14 A 1,1 0 0,1 18.5,15 L 5.5,15 A 1,1 0 0,1 4.5,14 L 4.5,5 A 1,1 0 0,1 5.5,4 L 5.5,4" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,20 l 19,0 l -2.5,-5 L 5,15 L 2.5,20" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_system_software <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20,10.5 A 6.5,6.5 0 0,1 13.5,17 A 6.5,6.5 0 0,1 7,10.5 A 6.5,6.5 0 0,1 13.5,4 A 6.5,6.5 0 0,1 20,10.5 L 20,10.5" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 7.6,7.8 a 6.5,6.5 0 1,0 8.6,8.6" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_collaboration <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 14.5,12 A 5.5,5.5 0 0,1 9,17.5 A 5.5,5.5 0 0,1 3.5,12 A 5.5,5.5 0 0,1 9,6.5 A 5.5,5.5 0 0,1 14.5,12 L 14.5,12" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 20.5,12 A 5.5,5.5 0 0,1 15,17.5 A 5.5,5.5 0 0,1 9.5,12 A 5.5,5.5 0 0,1 15,6.5 A 5.5,5.5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_interface <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20.5,12 A 5,5 0 0,1 15.5,17 A 5,5 0 0,1 10.5,12 A 5,5 0 0,1 15.5,7 A 5,5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,12 l 8,0" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_path <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,12 l 8,0" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.6 2.2"/><path d="M 6.5,8 L 2.5,12 l 4,4 M 17.5,8 l 4,4 l -4,4" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_communication_network <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,17 L 10,7 l 10.5,0 l -3,10 L 7,17" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 8.6,17 A 1.6,1.6 0 0,1 7,18.6 A 1.6,1.6 0 0,1 5.4,17 A 1.6,1.6 0 0,1 7,15.4 A 1.6,1.6 0 0,1 8.6,17 L 8.6,17" fill="#A8D795" stroke="none"/><path d="M 11.6,7 A 1.6,1.6 0 0,1 10,8.6 A 1.6,1.6 0 0,1 8.4,7 A 1.6,1.6 0 0,1 10,5.4 A 1.6,1.6 0 0,1 11.6,7 L 11.6,7" fill="#A8D795" stroke="none"/><path d="M 22.1,7 A 1.6,1.6 0 0,1 20.5,8.6 A 1.6,1.6 0 0,1 18.9,7 A 1.6,1.6 0 0,1 20.5,5.4 A 1.6,1.6 0 0,1 22.1,7 L 22.1,7" fill="#A8D795" stroke="none"/><path d="M 19.1,17 A 1.6,1.6 0 0,1 17.5,18.6 A 1.6,1.6 0 0,1 15.9,17 A 1.6,1.6 0 0,1 17.5,15.4 A 1.6,1.6 0 0,1 19.1,17 L 19.1,17" fill="#A8D795" stroke="none"/></svg>
+sprite $axg_technology_function <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,21 L 5.5,8.5 L 12,3 l 6.5,5.5 L 18.5,21 L 12,16 L 5.5,21" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_process <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 2.5,9.5 l 11.5,0 L 14,5.5 l 7.5,6.5 l -7.5,6.5 l 0,-4 L 2.5,14.5 L 2.5,9.5" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_interaction <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 10.5,5.5 a 6.5,6.5 0 0,0 0,13 L 10.5,5.5" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,5.5 a 6.5,6.5 0 0,1 0,13 L 13.5,5.5" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_event <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,6.5 l 12.5,0 a 5.5,5.5 0 0,1 0,11 L 3,17.5 l 3.5,-5.5 L 3,6.5" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_service <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,7.5 L 17,7.5 A 4.5,4.5 0 0,1 21.5,12 L 21.5,12 A 4.5,4.5 0 0,1 17,16.5 L 7,16.5 A 4.5,4.5 0 0,1 2.5,12 L 2.5,12 A 4.5,4.5 0 0,1 7,7.5 L 7,7.5" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_artifact <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,2.5 l 9,0 l 4,4 l 0,15 l -13,0 L 5.5,2.5" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 14.5,2.5 l 0,4 l 4,0" fill="none" stroke="#A8D795" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_equipment <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 13.5,14 A 4,4 0 0,1 9.5,18 A 4,4 0 0,1 5.5,14 A 4,4 0 0,1 9.5,10 A 4,4 0 0,1 13.5,14 L 13.5,14" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 10.7,14 A 1.2,1.2 0 0,1 9.5,15.2 A 1.2,1.2 0 0,1 8.3,14 A 1.2,1.2 0 0,1 9.5,12.8 A 1.2,1.2 0 0,1 10.7,14 L 10.7,14" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 9.5,8.5 l 0,1.5 M 9.5,18 l 0,1.5 M 4,14 l 1.5,0 M 13.5,14 L 15,14" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 19.6,7 A 2.6,2.6 0 0,1 17,9.6 A 2.6,2.6 0 0,1 14.4,7 A 2.6,2.6 0 0,1 17,4.4 A 2.6,2.6 0 0,1 19.6,7 L 19.6,7" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 17,3 l 0,1.4 M 17,9.6 L 17,11 M 13,7 l 1.4,0 M 19.6,7 L 21,7" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_facility <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,20.5 L 3,10 l 5,3 l 0,-3 l 5,3 L 13,4.5 l 4,0 l 0,16 L 3,20.5" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_distribution_network <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,9.5 l 15,0 M 6,14.5 l 15,0" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 15,6.5 l 3,3 l -3,3 M 9,11.5 l -3,3 l 3,3" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_material <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,4 l 8,0 l 4,8 l -4,8 L 8,20 l -4,-8 L 8,4" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 9.5,7.5 l 5,0 M 9.5,16.5 l 5,0" fill="none" stroke="#96D2A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_stakeholder <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,6.5 l 9.5,0 a 3,5.5 0 0,1 0,11 L 8,17.5" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 11,12 A 3,5.5 0 0,1 8,17.5 A 3,5.5 0 0,1 5,12 A 3,5.5 0 0,1 8,6.5 A 3,5.5 0 0,1 11,12 L 11,12" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_driver <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20,12 A 8,8 0 0,1 12,20 A 8,8 0 0,1 4,12 A 8,8 0 0,1 12,4 A 8,8 0 0,1 20,12 L 20,12" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 14,12 A 2,2 0 0,1 12,14 A 2,2 0 0,1 10,12 A 2,2 0 0,1 12,10 A 2,2 0 0,1 14,12 L 14,12" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 12,4 l 0,6 M 12,14 l 0,6 M 4,12 l 6,0 M 14,12 l 6,0 M 6.3,6.3 l 4.3,4.3 M 13.4,13.4 l 4.3,4.3 M 17.7,6.3 l -4.3,4.3 M 10.6,13.4 l -4.3,4.3" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_assessment <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 16,10 A 6,6 0 0,1 10,16 A 6,6 0 0,1 4,10 A 6,6 0 0,1 10,4 A 6,6 0 0,1 16,10 L 16,10" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 14.5,14.5 L 21,21" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_goal <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20.5,12 A 8.5,8.5 0 0,1 12,20.5 A 8.5,8.5 0 0,1 3.5,12 A 8.5,8.5 0 0,1 12,3.5 A 8.5,8.5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 17,12 A 5,5 0 0,1 12,17 A 5,5 0 0,1 7,12 A 5,5 0 0,1 12,7 A 5,5 0 0,1 17,12 L 17,12" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.8,12 A 1.8,1.8 0 0,1 12,13.8 A 1.8,1.8 0 0,1 10.2,12 A 1.8,1.8 0 0,1 12,10.2 A 1.8,1.8 0 0,1 13.8,12 L 13.8,12" fill="#D6B4EE" stroke="none"/></svg>
+sprite $axg_outcome <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 18.5,13 A 7.5,7.5 0 0,1 11,20.5 A 7.5,7.5 0 0,1 3.5,13 A 7.5,7.5 0 0,1 11,5.5 A 7.5,7.5 0 0,1 18.5,13 L 18.5,13" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 15,13 A 4,4 0 0,1 11,17 A 4,4 0 0,1 7,13 A 4,4 0 0,1 11,9 A 4,4 0 0,1 15,13 L 15,13" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 12.5,13 A 1.5,1.5 0 0,1 11,14.5 A 1.5,1.5 0 0,1 9.5,13 A 1.5,1.5 0 0,1 11,11.5 A 1.5,1.5 0 0,1 12.5,13 L 12.5,13" fill="#D6B4EE" stroke="none"/><path d="M 11,13 L 20.5,3.5 M 16.5,3.5 l 4,0 l 0,4" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_principle <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5,3.5 L 19,3.5 L 19,20.5 L 5,20.5 L 5,3.5" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 12,7.5 l 0,7" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.1,17.3 A 1.1,1.1 0 0,1 12,18.4 A 1.1,1.1 0 0,1 10.9,17.3 A 1.1,1.1 0 0,1 12,16.2 A 1.1,1.1 0 0,1 13.1,17.3 L 13.1,17.3" fill="#D6B4EE" stroke="none"/></svg>
+sprite $axg_requirement <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7.5,6 l 14,0 l -5,12 l -14,0 L 7.5,6" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_constraint <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7.5,6 l 14,0 l -5,12 l -14,0 L 7.5,6" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 11,6 L 6,18" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_meaning <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,18 a 4,4 0 0,1 -0.7,-7.9 A 5.5,5.5 0 0,1 16.8,8.6 A 4.70106,4.70106 0 0,1 17,18 L 7,18" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_value <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 21.5,12 A 9.5,5.5 0 0,1 12,17.5 A 9.5,5.5 0 0,1 2.5,12 A 9.5,5.5 0 0,1 12,6.5 A 9.5,5.5 0 0,1 21.5,12 L 21.5,12" fill="none" stroke="#D6B4EE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_work_package <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 18.2,9 A 7,7 0 1,0 19,14.5" fill="none" stroke="#EFB3D4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 19.5,4.5 l 0,5 l -5,0" fill="none" stroke="#EFB3D4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_deliverable <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,4.5 l 17,0 l 0,12 c -2.8,-1.8 -5.7,1.8 -8.5,0 s -5.7,-1.8 -8.5,0 L 3.5,4.5" fill="none" stroke="#EFB3D4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_implementation_event <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,6.5 l 12.5,0 a 5.5,5.5 0 0,1 0,11 L 3,17.5 l 3.5,-5.5 L 3,6.5" fill="none" stroke="#EFB3D4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_plateau <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,6.5 l 13.5,0 M 5.2,12 l 13.5,0 M 2.5,17.5 L 16,17.5" fill="none" stroke="#EFB3D4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_gap <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 18.5,12 A 6.5,6.5 0 0,1 12,18.5 A 6.5,6.5 0 0,1 5.5,12 A 6.5,6.5 0 0,1 12,5.5 A 6.5,6.5 0 0,1 18.5,12 L 18.5,12" fill="none" stroke="#EFB3D4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,10 l 19,0 M 2.5,14 l 19,0" fill="none" stroke="#EFB3D4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_location <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 12,21.5 s -6.5,-6.2 -6.5,-11.5 a 6.5,6.5 0 0,1 13,0 c 0,5.3 -6.5,11.5 -6.5,11.5 L 12,21.5" fill="none" stroke="#F2BE84" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 14.3,10 A 2.3,2.3 0 0,1 12,12.3 A 2.3,2.3 0 0,1 9.7,10 A 2.3,2.3 0 0,1 12,7.7 A 2.3,2.3 0 0,1 14.3,10 L 14.3,10" fill="none" stroke="#F2BE84" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+!else
+  !$AX_TEXT = "#1C1B1E"
+  !$AX_MUTED = "#48454E"
+  !$AX_LINE = "#48454E"
+  !$AX_OUTLINE = "#79757F"
+  !$AX_OUTLINE_VARIANT = "#CAC4CF"
+  !$AX_CANVAS = "#FFFFFF"
+  !$AX_LANE = "#FAF4FF"
+  !$AX_NOTE = "#F2EBFA"
+  !$AX_HIGHEST = "#ECE5F4"
+  !$AX_LOWEST = "#FFFFFF"
+  !$AX_PRIMARY = "#39235F"
+  !$AX_PRIMARY_CONTAINER = "#E3DFFF"
+  !$AX_ON_PRIMARY_CONTAINER = "#14085E"
+  !$AX_AI = "#004F50"
+  !$AX_AI_CONTAINER = "#9CF1F0"
+  !$AX_ON_AI_CONTAINER = "#002020"
+  !$AX_SUCCESS = "#0B5314"
+  !$AX_SUCCESS_CONTAINER = "#ACF4A2"
+  !$AX_ON_SUCCESS_CONTAINER = "#002203"
+  !$AX_WARNING = "#5C4300"
+  !$AX_WARNING_CONTAINER = "#FFDEA0"
+  !$AX_ON_WARNING_CONTAINER = "#261900"
+  !$AX_ERROR = "#93000A"
+  !$AX_ERROR_CONTAINER = "#FFDAD6"
+  !$AX_ON_ERROR_CONTAINER = "#410002"
+  !$AX_OUTLINE_NH = "79757F"
+  !$AX_OUTLINE_VARIANT_NH = "CAC4CF"
+  !$AX_PRIMARY_NH = "39235F"
+  !$AX_AI_NH = "004F50"
+  !$AX_STRATEGY_FILL = "#F8E5C4"
+  !$AX_STRATEGY_INK = "6E4A0E"
+  !$AX_STRATEGY_INKC = "#6E4A0E"
+  !$AX_BUSINESS_FILL = "#FFF2B3"
+  !$AX_BUSINESS_INK = "5E5000"
+  !$AX_BUSINESS_INKC = "#5E5000"
+  !$AX_APPLICATION_FILL = "#CFEDFA"
+  !$AX_APPLICATION_INK = "0A5570"
+  !$AX_APPLICATION_INKC = "#0A5570"
+  !$AX_TECHNOLOGY_FILL = "#D5EDC7"
+  !$AX_TECHNOLOGY_INK = "2C5A1C"
+  !$AX_TECHNOLOGY_INKC = "#2C5A1C"
+  !$AX_PHYSICAL_FILL = "#CBE7D4"
+  !$AX_PHYSICAL_INK = "1C5631"
+  !$AX_PHYSICAL_INKC = "#1C5631"
+  !$AX_MOTIVATION_FILL = "#ECDDF6"
+  !$AX_MOTIVATION_INK = "5A2C80"
+  !$AX_MOTIVATION_INKC = "#5A2C80"
+  !$AX_IMPLEMENTATION_FILL = "#F6DCEB"
+  !$AX_IMPLEMENTATION_INK = "7A2457"
+  !$AX_IMPLEMENTATION_INKC = "#7A2457"
+  !$AX_OTHER_FILL = "#FBE3C8"
+  !$AX_OTHER_INK = "7A4000"
+  !$AX_OTHER_INKC = "#7A4000"
+sprite $axg_resource <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5,7 L 16,7 A 2.5,2.5 0 0,1 18.5,9.5 L 18.5,14.5 A 2.5,2.5 0 0,1 16,17 L 5,17 A 2.5,2.5 0 0,1 2.5,14.5 L 2.5,9.5 A 2.5,2.5 0 0,1 5,7 L 5,7" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 18.5,10 l 2.5,0 l 0,4 l -2.5,0 M 7,9.5 l 0,5 M 10.5,9.5 l 0,5 M 14,9.5 l 0,5" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_capability <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,15 L 8.5,15 L 8.5,20 L 3.5,20 L 3.5,15" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 8.5,15 L 13.5,15 L 13.5,20 L 8.5,20 L 8.5,15" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,15 L 18.5,15 L 18.5,20 L 13.5,20 L 13.5,15" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 8.5,10 L 13.5,10 L 13.5,15 L 8.5,15 L 8.5,10" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,10 L 18.5,10 L 18.5,15 L 13.5,15 L 13.5,10" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,5 L 18.5,5 L 18.5,10 L 13.5,10 L 13.5,5" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_value_stream <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 2.5,6.5 l 13.5,0 l 5.5,5.5 l -5.5,5.5 L 2.5,17.5 l 5,-5.5 L 2.5,6.5" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_course_of_action <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 21,8.5 A 5.5,5.5 0 0,1 15.5,14 A 5.5,5.5 0 0,1 10,8.5 A 5.5,5.5 0 0,1 15.5,3 A 5.5,5.5 0 0,1 21,8.5 L 21,8.5" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 17.3,8.5 A 1.8,1.8 0 0,1 15.5,10.3 A 1.8,1.8 0 0,1 13.7,8.5 A 1.8,1.8 0 0,1 15.5,6.7 A 1.8,1.8 0 0,1 17.3,8.5 L 17.3,8.5" fill="#6E4A0E" stroke="none"/><path d="M 3,21 c 1.5,-5.5 5,-9 10,-10.5" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 10,8.8 l 3,1.7 l -1.8,3" fill="none" stroke="#6E4A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_actor <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 14.8,5.5 A 2.8,2.8 0 0,1 12,8.3 A 2.8,2.8 0 0,1 9.2,5.5 A 2.8,2.8 0 0,1 12,2.7 A 2.8,2.8 0 0,1 14.8,5.5 L 14.8,5.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 12,8.3 l 0,7.2 M 5.5,11.2 l 13,0 M 12,15.5 L 7.5,21.5 M 12,15.5 l 4.5,6" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_role <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,6.5 l 9.5,0 a 3,5.5 0 0,1 0,11 L 8,17.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 11,12 A 3,5.5 0 0,1 8,17.5 A 3,5.5 0 0,1 5,12 A 3,5.5 0 0,1 8,6.5 A 3,5.5 0 0,1 11,12 L 11,12" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_collaboration <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 14.5,12 A 5.5,5.5 0 0,1 9,17.5 A 5.5,5.5 0 0,1 3.5,12 A 5.5,5.5 0 0,1 9,6.5 A 5.5,5.5 0 0,1 14.5,12 L 14.5,12" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 20.5,12 A 5.5,5.5 0 0,1 15,17.5 A 5.5,5.5 0 0,1 9.5,12 A 5.5,5.5 0 0,1 15,6.5 A 5.5,5.5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_interface <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20.5,12 A 5,5 0 0,1 15.5,17 A 5,5 0 0,1 10.5,12 A 5,5 0 0,1 15.5,7 A 5,5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,12 l 8,0" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_process <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 2.5,9.5 l 11.5,0 L 14,5.5 l 7.5,6.5 l -7.5,6.5 l 0,-4 L 2.5,14.5 L 2.5,9.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_function <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,21 L 5.5,8.5 L 12,3 l 6.5,5.5 L 18.5,21 L 12,16 L 5.5,21" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_interaction <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 10.5,5.5 a 6.5,6.5 0 0,0 0,13 L 10.5,5.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,5.5 a 6.5,6.5 0 0,1 0,13 L 13.5,5.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_event <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,6.5 l 12.5,0 a 5.5,5.5 0 0,1 0,11 L 3,17.5 l 3.5,-5.5 L 3,6.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_service <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,7.5 L 17,7.5 A 4.5,4.5 0 0,1 21.5,12 L 21.5,12 A 4.5,4.5 0 0,1 17,16.5 L 7,16.5 A 4.5,4.5 0 0,1 2.5,12 L 2.5,12 A 4.5,4.5 0 0,1 7,7.5 L 7,7.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_business_object <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 L 20.5,5.5 L 20.5,18.5 L 3.5,18.5 L 3.5,5.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 17,0" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_contract <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 L 20.5,5.5 L 20.5,18.5 L 3.5,18.5 L 3.5,5.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 17,0 M 3.5,14 l 17,0" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_representation <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 l 17,0 l 0,11 c -2.8,-1.8 -5.7,1.8 -8.5,0 s -5.7,-1.8 -8.5,0 L 3.5,5.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 17,0" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_product <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 L 20.5,5.5 L 20.5,18.5 L 3.5,18.5 L 3.5,5.5" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 8,0 l 0,-4" fill="none" stroke="#5E5000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_component <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7.5,4.5 L 20.5,4.5 L 20.5,19.5 L 7.5,19.5 L 7.5,4.5" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 4,7.5 L 11,7.5 L 11,10.5 L 4,10.5 L 4,7.5" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 4,13.5 L 11,13.5 L 11,16.5 L 4,16.5 L 4,13.5" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_collaboration <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 14.5,12 A 5.5,5.5 0 0,1 9,17.5 A 5.5,5.5 0 0,1 3.5,12 A 5.5,5.5 0 0,1 9,6.5 A 5.5,5.5 0 0,1 14.5,12 L 14.5,12" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 20.5,12 A 5.5,5.5 0 0,1 15,17.5 A 5.5,5.5 0 0,1 9.5,12 A 5.5,5.5 0 0,1 15,6.5 A 5.5,5.5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_interface <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20.5,12 A 5,5 0 0,1 15.5,17 A 5,5 0 0,1 10.5,12 A 5,5 0 0,1 15.5,7 A 5,5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,12 l 8,0" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_function <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,21 L 5.5,8.5 L 12,3 l 6.5,5.5 L 18.5,21 L 12,16 L 5.5,21" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_interaction <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 10.5,5.5 a 6.5,6.5 0 0,0 0,13 L 10.5,5.5" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,5.5 a 6.5,6.5 0 0,1 0,13 L 13.5,5.5" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_process <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 2.5,9.5 l 11.5,0 L 14,5.5 l 7.5,6.5 l -7.5,6.5 l 0,-4 L 2.5,14.5 L 2.5,9.5" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_event <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,6.5 l 12.5,0 a 5.5,5.5 0 0,1 0,11 L 3,17.5 l 3.5,-5.5 L 3,6.5" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_application_service <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,7.5 L 17,7.5 A 4.5,4.5 0 0,1 21.5,12 L 21.5,12 A 4.5,4.5 0 0,1 17,16.5 L 7,16.5 A 4.5,4.5 0 0,1 2.5,12 L 2.5,12 A 4.5,4.5 0 0,1 7,7.5 L 7,7.5" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_data_object <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,5.5 L 20.5,5.5 L 20.5,18.5 L 3.5,18.5 L 3.5,5.5" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,9.5 l 17,0" fill="none" stroke="#0A5570" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_node <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,8.5 l 12.5,0 l 0,12 L 3.5,20.5 L 3.5,8.5" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 3.5,8.5 L 7.5,4.5 l 13,0 l 0,12 l -4.5,4 M 16,8.5 l 4.5,-4" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_device <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,4 L 18.5,4 A 1,1 0 0,1 19.5,5 L 19.5,14 A 1,1 0 0,1 18.5,15 L 5.5,15 A 1,1 0 0,1 4.5,14 L 4.5,5 A 1,1 0 0,1 5.5,4 L 5.5,4" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,20 l 19,0 l -2.5,-5 L 5,15 L 2.5,20" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_system_software <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20,10.5 A 6.5,6.5 0 0,1 13.5,17 A 6.5,6.5 0 0,1 7,10.5 A 6.5,6.5 0 0,1 13.5,4 A 6.5,6.5 0 0,1 20,10.5 L 20,10.5" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 7.6,7.8 a 6.5,6.5 0 1,0 8.6,8.6" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_collaboration <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 14.5,12 A 5.5,5.5 0 0,1 9,17.5 A 5.5,5.5 0 0,1 3.5,12 A 5.5,5.5 0 0,1 9,6.5 A 5.5,5.5 0 0,1 14.5,12 L 14.5,12" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 20.5,12 A 5.5,5.5 0 0,1 15,17.5 A 5.5,5.5 0 0,1 9.5,12 A 5.5,5.5 0 0,1 15,6.5 A 5.5,5.5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_interface <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20.5,12 A 5,5 0 0,1 15.5,17 A 5,5 0 0,1 10.5,12 A 5,5 0 0,1 15.5,7 A 5,5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,12 l 8,0" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_path <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,12 l 8,0" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.6 2.2"/><path d="M 6.5,8 L 2.5,12 l 4,4 M 17.5,8 l 4,4 l -4,4" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_communication_network <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,17 L 10,7 l 10.5,0 l -3,10 L 7,17" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 8.6,17 A 1.6,1.6 0 0,1 7,18.6 A 1.6,1.6 0 0,1 5.4,17 A 1.6,1.6 0 0,1 7,15.4 A 1.6,1.6 0 0,1 8.6,17 L 8.6,17" fill="#2C5A1C" stroke="none"/><path d="M 11.6,7 A 1.6,1.6 0 0,1 10,8.6 A 1.6,1.6 0 0,1 8.4,7 A 1.6,1.6 0 0,1 10,5.4 A 1.6,1.6 0 0,1 11.6,7 L 11.6,7" fill="#2C5A1C" stroke="none"/><path d="M 22.1,7 A 1.6,1.6 0 0,1 20.5,8.6 A 1.6,1.6 0 0,1 18.9,7 A 1.6,1.6 0 0,1 20.5,5.4 A 1.6,1.6 0 0,1 22.1,7 L 22.1,7" fill="#2C5A1C" stroke="none"/><path d="M 19.1,17 A 1.6,1.6 0 0,1 17.5,18.6 A 1.6,1.6 0 0,1 15.9,17 A 1.6,1.6 0 0,1 17.5,15.4 A 1.6,1.6 0 0,1 19.1,17 L 19.1,17" fill="#2C5A1C" stroke="none"/></svg>
+sprite $axg_technology_function <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,21 L 5.5,8.5 L 12,3 l 6.5,5.5 L 18.5,21 L 12,16 L 5.5,21" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_process <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 2.5,9.5 l 11.5,0 L 14,5.5 l 7.5,6.5 l -7.5,6.5 l 0,-4 L 2.5,14.5 L 2.5,9.5" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_interaction <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 10.5,5.5 a 6.5,6.5 0 0,0 0,13 L 10.5,5.5" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.5,5.5 a 6.5,6.5 0 0,1 0,13 L 13.5,5.5" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_event <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,6.5 l 12.5,0 a 5.5,5.5 0 0,1 0,11 L 3,17.5 l 3.5,-5.5 L 3,6.5" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_technology_service <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,7.5 L 17,7.5 A 4.5,4.5 0 0,1 21.5,12 L 21.5,12 A 4.5,4.5 0 0,1 17,16.5 L 7,16.5 A 4.5,4.5 0 0,1 2.5,12 L 2.5,12 A 4.5,4.5 0 0,1 7,7.5 L 7,7.5" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_artifact <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5.5,2.5 l 9,0 l 4,4 l 0,15 l -13,0 L 5.5,2.5" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 14.5,2.5 l 0,4 l 4,0" fill="none" stroke="#2C5A1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_equipment <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 13.5,14 A 4,4 0 0,1 9.5,18 A 4,4 0 0,1 5.5,14 A 4,4 0 0,1 9.5,10 A 4,4 0 0,1 13.5,14 L 13.5,14" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 10.7,14 A 1.2,1.2 0 0,1 9.5,15.2 A 1.2,1.2 0 0,1 8.3,14 A 1.2,1.2 0 0,1 9.5,12.8 A 1.2,1.2 0 0,1 10.7,14 L 10.7,14" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 9.5,8.5 l 0,1.5 M 9.5,18 l 0,1.5 M 4,14 l 1.5,0 M 13.5,14 L 15,14" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 19.6,7 A 2.6,2.6 0 0,1 17,9.6 A 2.6,2.6 0 0,1 14.4,7 A 2.6,2.6 0 0,1 17,4.4 A 2.6,2.6 0 0,1 19.6,7 L 19.6,7" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 17,3 l 0,1.4 M 17,9.6 L 17,11 M 13,7 l 1.4,0 M 19.6,7 L 21,7" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_facility <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,20.5 L 3,10 l 5,3 l 0,-3 l 5,3 L 13,4.5 l 4,0 l 0,16 L 3,20.5" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_distribution_network <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,9.5 l 15,0 M 6,14.5 l 15,0" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 15,6.5 l 3,3 l -3,3 M 9,11.5 l -3,3 l 3,3" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_material <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,4 l 8,0 l 4,8 l -4,8 L 8,20 l -4,-8 L 8,4" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 9.5,7.5 l 5,0 M 9.5,16.5 l 5,0" fill="none" stroke="#1C5631" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_stakeholder <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,6.5 l 9.5,0 a 3,5.5 0 0,1 0,11 L 8,17.5" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 11,12 A 3,5.5 0 0,1 8,17.5 A 3,5.5 0 0,1 5,12 A 3,5.5 0 0,1 8,6.5 A 3,5.5 0 0,1 11,12 L 11,12" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_driver <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20,12 A 8,8 0 0,1 12,20 A 8,8 0 0,1 4,12 A 8,8 0 0,1 12,4 A 8,8 0 0,1 20,12 L 20,12" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 14,12 A 2,2 0 0,1 12,14 A 2,2 0 0,1 10,12 A 2,2 0 0,1 12,10 A 2,2 0 0,1 14,12 L 14,12" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 12,4 l 0,6 M 12,14 l 0,6 M 4,12 l 6,0 M 14,12 l 6,0 M 6.3,6.3 l 4.3,4.3 M 13.4,13.4 l 4.3,4.3 M 17.7,6.3 l -4.3,4.3 M 10.6,13.4 l -4.3,4.3" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_assessment <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 16,10 A 6,6 0 0,1 10,16 A 6,6 0 0,1 4,10 A 6,6 0 0,1 10,4 A 6,6 0 0,1 16,10 L 16,10" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 14.5,14.5 L 21,21" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_goal <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 20.5,12 A 8.5,8.5 0 0,1 12,20.5 A 8.5,8.5 0 0,1 3.5,12 A 8.5,8.5 0 0,1 12,3.5 A 8.5,8.5 0 0,1 20.5,12 L 20.5,12" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 17,12 A 5,5 0 0,1 12,17 A 5,5 0 0,1 7,12 A 5,5 0 0,1 12,7 A 5,5 0 0,1 17,12 L 17,12" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.8,12 A 1.8,1.8 0 0,1 12,13.8 A 1.8,1.8 0 0,1 10.2,12 A 1.8,1.8 0 0,1 12,10.2 A 1.8,1.8 0 0,1 13.8,12 L 13.8,12" fill="#5A2C80" stroke="none"/></svg>
+sprite $axg_outcome <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 18.5,13 A 7.5,7.5 0 0,1 11,20.5 A 7.5,7.5 0 0,1 3.5,13 A 7.5,7.5 0 0,1 11,5.5 A 7.5,7.5 0 0,1 18.5,13 L 18.5,13" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 15,13 A 4,4 0 0,1 11,17 A 4,4 0 0,1 7,13 A 4,4 0 0,1 11,9 A 4,4 0 0,1 15,13 L 15,13" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 12.5,13 A 1.5,1.5 0 0,1 11,14.5 A 1.5,1.5 0 0,1 9.5,13 A 1.5,1.5 0 0,1 11,11.5 A 1.5,1.5 0 0,1 12.5,13 L 12.5,13" fill="#5A2C80" stroke="none"/><path d="M 11,13 L 20.5,3.5 M 16.5,3.5 l 4,0 l 0,4" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_principle <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 5,3.5 L 19,3.5 L 19,20.5 L 5,20.5 L 5,3.5" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 12,7.5 l 0,7" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 13.1,17.3 A 1.1,1.1 0 0,1 12,18.4 A 1.1,1.1 0 0,1 10.9,17.3 A 1.1,1.1 0 0,1 12,16.2 A 1.1,1.1 0 0,1 13.1,17.3 L 13.1,17.3" fill="#5A2C80" stroke="none"/></svg>
+sprite $axg_requirement <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7.5,6 l 14,0 l -5,12 l -14,0 L 7.5,6" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_constraint <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7.5,6 l 14,0 l -5,12 l -14,0 L 7.5,6" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 11,6 L 6,18" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_meaning <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 7,18 a 4,4 0 0,1 -0.7,-7.9 A 5.5,5.5 0 0,1 16.8,8.6 A 4.70106,4.70106 0 0,1 17,18 L 7,18" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_value <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 21.5,12 A 9.5,5.5 0 0,1 12,17.5 A 9.5,5.5 0 0,1 2.5,12 A 9.5,5.5 0 0,1 12,6.5 A 9.5,5.5 0 0,1 21.5,12 L 21.5,12" fill="none" stroke="#5A2C80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_work_package <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 18.2,9 A 7,7 0 1,0 19,14.5" fill="none" stroke="#7A2457" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 19.5,4.5 l 0,5 l -5,0" fill="none" stroke="#7A2457" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_deliverable <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3.5,4.5 l 17,0 l 0,12 c -2.8,-1.8 -5.7,1.8 -8.5,0 s -5.7,-1.8 -8.5,0 L 3.5,4.5" fill="none" stroke="#7A2457" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_implementation_event <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 3,6.5 l 12.5,0 a 5.5,5.5 0 0,1 0,11 L 3,17.5 l 3.5,-5.5 L 3,6.5" fill="none" stroke="#7A2457" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_plateau <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 8,6.5 l 13.5,0 M 5.2,12 l 13.5,0 M 2.5,17.5 L 16,17.5" fill="none" stroke="#7A2457" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_gap <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 18.5,12 A 6.5,6.5 0 0,1 12,18.5 A 6.5,6.5 0 0,1 5.5,12 A 6.5,6.5 0 0,1 12,5.5 A 6.5,6.5 0 0,1 18.5,12 L 18.5,12" fill="none" stroke="#7A2457" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 2.5,10 l 19,0 M 2.5,14 l 19,0" fill="none" stroke="#7A2457" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+sprite $axg_location <svg viewBox="0 0 24 24" width="18" height="18"><path d="M 12,21.5 s -6.5,-6.2 -6.5,-11.5 a 6.5,6.5 0 0,1 13,0 c 0,5.3 -6.5,11.5 -6.5,11.5 L 12,21.5" fill="none" stroke="#7A4000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M 14.3,10 A 2.3,2.3 0 0,1 12,12.3 A 2.3,2.3 0 0,1 9.7,10 A 2.3,2.3 0 0,1 12,7.7 A 2.3,2.3 0 0,1 14.3,10 L 14.3,10" fill="none" stroke="#7A4000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+!endif
+
+<style>
+root { FontName "Open Sans"; FontSize 13; FontColor $AX_TEXT; LineColor $AX_LINE; BackgroundColor $AX_CANVAS; HyperlinkColor $AX_PRIMARY }
+document { BackgroundColor $AX_CANVAS }
+title { FontSize 15; FontStyle bold; FontColor $AX_TEXT; LineThickness 0; BackgroundColor transparent; Margin 4 }
+caption { FontSize 11; FontColor $AX_MUTED }
+legend { BackgroundColor $AX_NOTE; LineColor $AX_OUTLINE_VARIANT; FontSize 11; FontColor $AX_TEXT }
+note { BackgroundColor $AX_NOTE; LineColor $AX_OUTLINE_VARIANT; FontSize 12; FontColor $AX_TEXT }
+arrow { LineColor $AX_LINE; FontColor $AX_MUTED; FontSize 11; LineThickness 1.2 }
+archimate { LineThickness 1; FontSize 13; Padding 6 }
+.ax-rounded { RoundCorner 24 }
+.ax-ellipse { RoundCorner 60 }
+rectangle { LineColor $AX_OUTLINE_VARIANT; BackgroundColor transparent; FontColor $AX_MUTED; FontSize 12 }
+.grouping { LineStyle 6-4; LineColor $AX_OTHER_INKC; BackgroundColor transparent; FontColor $AX_TEXT }
+.layer { LineStyle 0; LineColor $AX_OUTLINE_VARIANT; BackgroundColor transparent; FontColor $AX_MUTED; FontStyle bold; FontSize 11 }
+circle { BackgroundColor $AX_TEXT; LineColor $AX_TEXT }
+.or { BackgroundColor $AX_CANVAS }
+activityDiagram {
+  activity { BackgroundColor $AX_LOWEST; LineColor $AX_OUTLINE; FontColor $AX_TEXT; RoundCorner 16; FontSize 13; Padding 6 }
+  diamond { BackgroundColor $AX_LOWEST; LineColor $AX_OUTLINE; FontColor $AX_TEXT; FontSize 12 }
+  swimlane { TitleFontSize 13; TitleFontStyle bold; TitleFontColor $AX_TEXT; LineColor $AX_OUTLINE_VARIANT }
+  partition { LineColor $AX_OUTLINE_VARIANT; FontColor $AX_MUTED }
+  circle { BackgroundColor $AX_TEXT; LineColor $AX_TEXT }
+  arrow { LineColor $AX_LINE; FontColor $AX_MUTED; FontSize 11 }
+}
+stateDiagram {
+  state { BackgroundColor $AX_LOWEST; LineColor $AX_OUTLINE; FontColor $AX_TEXT; RoundCorner 16; FontSize 13 }
+  arrow { LineColor $AX_LINE; FontColor $AX_MUTED; FontSize 11 }
+}
+classDiagram {
+  class { BackgroundColor $AX_APPLICATION_FILL; LineColor $AX_APPLICATION_INKC; FontColor $AX_TEXT; FontSize 12; RoundCorner 0 }
+  arrow { LineColor $AX_LINE; FontColor $AX_MUTED; FontSize 11 }
+}
+sequenceDiagram {
+  participant { BackgroundColor $AX_APPLICATION_FILL; LineColor $AX_APPLICATION_INKC; FontColor $AX_TEXT; FontSize 13 }
+  actor { BackgroundColor $AX_LOWEST; LineColor $AX_OUTLINE; FontColor $AX_TEXT }
+  lifeLine { LineColor $AX_OUTLINE_VARIANT; BackgroundColor $AX_HIGHEST }
+  group { LineColor $AX_OUTLINE; FontColor $AX_TEXT; BackgroundColor transparent }
+  groupHeader { FontColor $AX_TEXT; LineColor $AX_OUTLINE }
+  arrow { LineColor $AX_LINE; FontColor $AX_TEXT; FontSize 12 }
+  reference { LineColor $AX_OUTLINE; BackgroundColor $AX_NOTE }
+}
+componentDiagram {
+  component { BackgroundColor $AX_APPLICATION_FILL; LineColor $AX_APPLICATION_INKC; FontColor $AX_TEXT; FontSize 13; LineThickness 1 }
+  interface { BackgroundColor $AX_LOWEST; LineColor $AX_APPLICATION_INKC; FontColor $AX_TEXT; FontSize 12; LineThickness 1.5 }
+}
+' who performs a step
+.agent { BackgroundColor $AX_AI_CONTAINER; LineColor $AX_AI; FontColor $AX_ON_AI_CONTAINER }
+.system { BackgroundColor $AX_HIGHEST; LineColor $AX_OUTLINE_VARIANT; FontColor $AX_TEXT }
+.external { BackgroundColor $AX_HIGHEST; LineColor $AX_OUTLINE; FontColor $AX_TEXT; LineThickness 1 }
+.gate { BackgroundColor $AX_PRIMARY_CONTAINER; LineColor $AX_PRIMARY; LineThickness 2; FontColor $AX_ON_PRIMARY_CONTAINER }
+.event { BackgroundColor $AX_BUSINESS_FILL; LineColor $AX_BUSINESS_INKC; FontColor $AX_TEXT }
+' change marks
+.added { BackgroundColor $AX_SUCCESS_CONTAINER; LineColor $AX_SUCCESS; FontColor $AX_ON_SUCCESS_CONTAINER }
+.changed { BackgroundColor $AX_WARNING_CONTAINER; LineColor $AX_WARNING; FontColor $AX_ON_WARNING_CONTAINER }
+.moved { BackgroundColor $AX_PRIMARY_CONTAINER; LineColor $AX_PRIMARY; FontColor $AX_ON_PRIMARY_CONTAINER; LineStyle 2-2 }
+.removed { BackgroundColor $AX_ERROR_CONTAINER; LineColor $AX_ERROR; FontColor $AX_ON_ERROR_CONTAINER; LineStyle 5-4 }
+' state machine: the state an instance is in now
+.current { BackgroundColor $AX_PRIMARY_CONTAINER; LineColor $AX_PRIMARY; LineThickness 2; FontColor $AX_ON_PRIMARY_CONTAINER }
+' detailed design
+.root { LineThickness 2 }
+.valueobject { BackgroundColor $AX_HIGHEST; LineColor $AX_OUTLINE }
+.enumeration { BackgroundColor $AX_HIGHEST; LineColor $AX_OUTLINE }
+</style>
+skinparam shadowing false
+skinparam ArrowFontName "Open Sans"
+skinparam defaultTextAlignment center
+
+!procedure AX_Resource($alias, $label)
+archimate $AX_STRATEGY_FILL;line:$AX_STRATEGY_INK "<$axg_resource>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Capability($alias, $label)
+archimate $AX_STRATEGY_FILL;line:$AX_STRATEGY_INK "<$axg_capability>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_ValueStream($alias, $label)
+archimate $AX_STRATEGY_FILL;line:$AX_STRATEGY_INK "<$axg_value_stream>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_CourseOfAction($alias, $label)
+archimate $AX_STRATEGY_FILL;line:$AX_STRATEGY_INK "<$axg_course_of_action>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_BusinessActor($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_actor>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_BusinessRole($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_role>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_BusinessCollaboration($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_collaboration>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_BusinessInterface($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_interface>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_BusinessProcess($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_process>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_BusinessFunction($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_function>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_BusinessInteraction($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_interaction>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_BusinessEvent($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_event>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_BusinessService($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_service>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_BusinessObject($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_business_object>\n$label" as $alias <<ax-object>>
+!endprocedure
+!procedure AX_Contract($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_contract>\n$label" as $alias <<ax-contract>>
+!endprocedure
+!procedure AX_Representation($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_representation>\n$label" as $alias <<ax-wave>>
+!endprocedure
+!procedure AX_Product($alias, $label)
+archimate $AX_BUSINESS_FILL;line:$AX_BUSINESS_INK "<$axg_product>\n$label" as $alias <<ax-product>>
+!endprocedure
+!procedure AX_ApplicationComponent($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_application_component>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_ApplicationCollaboration($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_application_collaboration>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_ApplicationInterface($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_application_interface>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_ApplicationFunction($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_application_function>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_ApplicationInteraction($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_application_interaction>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_ApplicationProcess($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_application_process>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_ApplicationEvent($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_application_event>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_ApplicationService($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_application_service>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_DataObject($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_data_object>\n$label" as $alias <<ax-object>>
+!endprocedure
+!procedure AX_Node($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_node>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Device($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_device>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_SystemSoftware($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_system_software>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_TechnologyCollaboration($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_technology_collaboration>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_TechnologyInterface($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_technology_interface>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Path($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_path>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_CommunicationNetwork($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_communication_network>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_TechnologyFunction($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_technology_function>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_TechnologyProcess($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_technology_process>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_TechnologyInteraction($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_technology_interaction>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_TechnologyEvent($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_technology_event>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_TechnologyService($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_technology_service>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_Artifact($alias, $label)
+archimate $AX_TECHNOLOGY_FILL;line:$AX_TECHNOLOGY_INK "<$axg_artifact>\n$label" as $alias <<ax-artifact>>
+!endprocedure
+!procedure AX_Equipment($alias, $label)
+archimate $AX_PHYSICAL_FILL;line:$AX_PHYSICAL_INK "<$axg_equipment>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Facility($alias, $label)
+archimate $AX_PHYSICAL_FILL;line:$AX_PHYSICAL_INK "<$axg_facility>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_DistributionNetwork($alias, $label)
+archimate $AX_PHYSICAL_FILL;line:$AX_PHYSICAL_INK "<$axg_distribution_network>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Material($alias, $label)
+archimate $AX_PHYSICAL_FILL;line:$AX_PHYSICAL_INK "<$axg_material>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Stakeholder($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_stakeholder>\n$label" as $alias <<ax-chamfer>>
+!endprocedure
+!procedure AX_Driver($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_driver>\n$label" as $alias <<ax-chamfer>>
+!endprocedure
+!procedure AX_Assessment($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_assessment>\n$label" as $alias <<ax-chamfer>>
+!endprocedure
+!procedure AX_Goal($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_goal>\n$label" as $alias <<ax-chamfer>>
+!endprocedure
+!procedure AX_Outcome($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_outcome>\n$label" as $alias <<ax-chamfer>>
+!endprocedure
+!procedure AX_Principle($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_principle>\n$label" as $alias <<ax-chamfer>>
+!endprocedure
+!procedure AX_Requirement($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_requirement>\n$label" as $alias <<ax-chamfer>>
+!endprocedure
+!procedure AX_Constraint($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_constraint>\n$label" as $alias <<ax-chamfer>>
+!endprocedure
+!procedure AX_Meaning($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_meaning>\n$label" as $alias <<ax-chamfer>>
+!endprocedure
+!procedure AX_Value($alias, $label)
+archimate $AX_MOTIVATION_FILL;line:$AX_MOTIVATION_INK "<$axg_value>\n$label" as $alias <<ax-ellipse>>
+!endprocedure
+!procedure AX_WorkPackage($alias, $label)
+archimate $AX_IMPLEMENTATION_FILL;line:$AX_IMPLEMENTATION_INK "<$axg_work_package>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_Deliverable($alias, $label)
+archimate $AX_IMPLEMENTATION_FILL;line:$AX_IMPLEMENTATION_INK "<$axg_deliverable>\n$label" as $alias <<ax-wave>>
+!endprocedure
+!procedure AX_ImplementationEvent($alias, $label)
+archimate $AX_IMPLEMENTATION_FILL;line:$AX_IMPLEMENTATION_INK "<$axg_implementation_event>\n$label" as $alias <<ax-rounded>>
+!endprocedure
+!procedure AX_Plateau($alias, $label)
+archimate $AX_IMPLEMENTATION_FILL;line:$AX_IMPLEMENTATION_INK "<$axg_plateau>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Gap($alias, $label)
+archimate $AX_IMPLEMENTATION_FILL;line:$AX_IMPLEMENTATION_INK "<$axg_gap>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Location($alias, $label)
+archimate $AX_OTHER_FILL;line:$AX_OTHER_INK "<$axg_location>\n$label" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Agent($alias, $label)
+archimate $AX_APPLICATION_FILL;line:$AX_APPLICATION_INK "<$axg_application_component>\n$label\n<size:10>✦ agent</size>" as $alias <<ax-rect>>
+!endprocedure
+!procedure AX_Junction($alias, $kind="and")
+!if ($kind == "or")
+circle " " as $alias <<or>>
+!else
+circle " " as $alias
+!endif
+!endprocedure
+!procedure AX_Group($alias, $label)
+rectangle "$label" as $alias <<grouping>> {
+!endprocedure
+!procedure AX_Layer($alias, $label)
+rectangle "$label" as $alias <<layer>> {
+!endprocedure
+!procedure AX_End()
+}
+!endprocedure
+
+!procedure AX_RelComposition($from, $to, $label="", $dir="")
+!if ($label == "")
+$from *-$dir- $to
+!else
+$from *-$dir- $to : $label
+!endif
+!endprocedure
+!procedure AX_RelAggregation($from, $to, $label="", $dir="")
+!if ($label == "")
+$from o-$dir- $to
+!else
+$from o-$dir- $to : $label
+!endif
+!endprocedure
+!procedure AX_RelAssignment($from, $to, $label="", $dir="")
+!if ($label == "")
+$from @-$dir-> $to
+!else
+$from @-$dir-> $to : $label
+!endif
+!endprocedure
+!procedure AX_RelRealization($from, $to, $label="", $dir="")
+!if ($label == "")
+$from .$dir.|> $to
+!else
+$from .$dir.|> $to : $label
+!endif
+!endprocedure
+!procedure AX_RelServing($from, $to, $label="", $dir="")
+!if ($label == "")
+$from -$dir-> $to
+!else
+$from -$dir-> $to : $label
+!endif
+!endprocedure
+!procedure AX_RelAccess($from, $to, $label="", $dir="")
+!if ($label == "")
+$from -[dotted]$dir-> $to
+!else
+$from -[dotted]$dir-> $to : $label
+!endif
+!endprocedure
+!procedure AX_RelInfluence($from, $to, $label="", $dir="")
+!if ($label == "")
+$from -[dashed]$dir-> $to
+!else
+$from -[dashed]$dir-> $to : $label
+!endif
+!endprocedure
+!procedure AX_RelTriggering($from, $to, $label="", $dir="")
+!if ($label == "")
+$from -$dir->> $to
+!else
+$from -$dir->> $to : $label
+!endif
+!endprocedure
+!procedure AX_RelFlow($from, $to, $label="", $dir="")
+!if ($label == "")
+$from -[dashed]$dir->> $to
+!else
+$from -[dashed]$dir->> $to : $label
+!endif
+!endprocedure
+!procedure AX_RelSpecialization($from, $to, $label="", $dir="")
+!if ($label == "")
+$from -$dir-|> $to
+!else
+$from -$dir-|> $to : $label
+!endif
+!endprocedure
+!procedure AX_RelAssociation($from, $to, $label="", $dir="")
+!if ($label == "")
+$from -$dir- $to
+!else
+$from -$dir- $to : $label
+!endif
+!endprocedure
+
+' Workflow step. by: human (default) | agent | system | gate | event. change: added | changed | moved | removed
+!procedure AX_Step($label, $by="human", $change="")
+!$mark = ""
+!if ($by == "agent")
+!$mark = "<size:10>✦ agent</size>\n"
+!elseif ($by == "system")
+!$mark = "<size:10>system</size>\n"
+!elseif ($by == "gate")
+!$mark = "<size:10>review gate</size>\n"
+!elseif ($by == "event")
+!$mark = "<size:10>event</size>\n"
+!endif
+!$cls = $by
+!if ($change == "added")
+!$text = "+ " + $label
+!$cls = "added"
+!elseif ($change == "changed")
+!$text = "Δ " + $label
+!$cls = "changed"
+!elseif ($change == "moved")
+!$text = "↕ " + $label
+!$cls = "moved"
+!elseif ($change == "removed")
+!$text = "− <s>" + $label + "</s>"
+!$cls = "removed"
+!else
+!$text = $label
+!endif
+!if ($cls == "human")
+:$mark$text;
+!else
+:$mark$text; <<$cls>>
+!endif
+!endprocedure
+!procedure AX_Gate($label, $change="")
+AX_Step($label, "gate", $change)
+!endprocedure
+!procedure AX_Event($label, $change="")
+AX_Step($label, "event", $change)
+!endprocedure

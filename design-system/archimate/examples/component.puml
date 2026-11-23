@@ -1,0 +1,26 @@
+@startuml
+!include aitoolbox.puml
+title Knowledge base, components
+component "Chat" as C
+component "Architecture agent\n<size:10>✦ agent</size>" as A
+component "Knowledge base" as K
+component "Model validator" as V
+component "View generator" as W
+component "Git hosting" as G <<external>>
+component "Jenkins" as J <<external>>
+interface "Agent API" as IA
+interface "Search API" as IS
+interface "Model API" as IM
+interface "Git REST" as IG
+hide stereotype
+A -up- IA
+K -up- IS
+K -- IM
+G -- IG
+C ..> IA : uses
+A ..> IS : uses
+A ..> IG : uses
+V ..> IM : uses
+W ..> IM : uses
+J --> V : runs on each pull request
+@enduml

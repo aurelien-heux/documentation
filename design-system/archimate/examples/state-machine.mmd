@@ -1,0 +1,15 @@
+stateDiagram-v2
+  [*] --> Drafted : ✦ agent drafts
+  Drafted --> Drafted : ✦ fix [checks fail]
+  Drafted --> InReview : submitted [checks pass]
+  InReview --> Changes : reviewer requests changes
+  Changes --> Drafted : ✦ agent revises
+  InReview --> Approved : reviewer approves
+  InReview --> Rejected : reviewer rejects
+  Approved --> Published : merged / write to the knowledge base
+  Published --> Retired : superseded
+  Rejected --> [*]
+  Retired --> [*]
+  InReview : In review
+  Changes : Changes requested
+  class InReview current

@@ -1,0 +1,5 @@
+# docs/detailed-design/knowledge-base.md: written with the code, rendered by the same theme
+# (detailed design is not generated from the model: it refines DOB-04 and DOB-06)
+kind: class
+renderer: mermaid
+refines: [DOB-04, DOB-06]
