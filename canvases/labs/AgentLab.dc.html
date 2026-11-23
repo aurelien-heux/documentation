@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agent follow lab</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E}
+button{cursor:pointer;font:inherit}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+.ui{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif}
+.chip{height:32px;padding:0 12px;border-radius:8px;border:1px solid #79757F;background:transparent;color:#1C1B1E;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.chip:hover{background:rgba(57,35,95,.06)}
+.chip-on{background:#DED7EB;border-color:#DED7EB;color:#1D1A28}
+.chip-on:hover{background:#D3CBE3}
+.btn{height:40px;padding:0 20px;border:0;border-radius:16px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;text-decoration:none}
+.btn-s{height:32px;padding:0 14px;font-size:13px;border-radius:12px}
+.f{background:#39235F;color:#FFFFFF}.f:hover{background:#4A3470}
+.t{background:#DED7EB;color:#1D1A28}.t:hover{background:#D3CBE3}
+.o{background:transparent;border:1px solid #79757F;color:#39235F}.o:hover{background:rgba(57,35,95,.06)}
+.x{background:transparent;color:#39235F;padding:0 10px}.x:hover{background:rgba(57,35,95,.06)}
+.run{background:#DCEAB4;color:#39235F}.run:hover{background:#D2E0A9}
+.labbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #CAC4CF}
+.simlab{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;color:#48454E;letter-spacing:.3px}
+.sep{width:1px;height:24px;background:#CAC4CF;margin:0 6px}
+.labnote{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;padding:12px 16px;border-radius:12px;background:#FFFFFF;border:1px solid #CAC4CF;font-size:13.5px;line-height:20px}
+.labnote b{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:15px;display:block;margin-bottom:2px}
+.labnote ul{margin:4px 0 0;padding-left:18px}
+.labnote .meta{color:#48454E}
+.st{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px 0 4px;border-radius:4px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;white-space:nowrap}
+.st .g{width:18px;height:18px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+.st-q{background:#ECE5F4;color:#1C1B1E}.st-q .g{background:#48454E;color:#ECE5F4}
+.st-run{background:#9CF1F0;color:#002020}.st-run .g{background:#004F50;color:#9CF1F0}
+.st-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.st-wait .g{background:#39235F;color:#E3DFFF}
+.st-done{background:#ACF4A2;color:#002203}.st-done .g{background:#0B5314;color:#ACF4A2}
+.st-chg{background:#FFDEA0;color:#261900}.st-chg .g{background:#5F4100;color:#FFDEA0}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:4px;height:4px;border-radius:2px;background:#004F50;animation:dp 1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dp{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.dots i{animation:none;opacity:.8}}
+.ai{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border-radius:4px;background:#9CF1F0;color:#002020;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:11px;font-weight:700;white-space:nowrap}
+.mk{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:3px;font-weight:700;font-size:12px;flex:none}
+.mk-added{background:#0B5314;color:#ACF4A2}.mk-changed{background:#5F4100;color:#FFDEA0}.mk-ok{background:#0B5314;color:#ACF4A2}.mk-warn{background:#5F4100;color:#FFDEA0}.mk-info{background:#48454E;color:#ECE5F4}
+.app{display:flex;flex-direction:column;background:#FDF8FD;border-radius:12px;overflow:hidden;border:1px solid #CAC4CF;min-height:880px}
+.hdr{display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:64px;padding:8px 16px 8px 20px;background:#EDE4FF;box-sizing:border-box}
+.search{flex:1 1 260px;max-width:440px;height:44px;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:0 14px;border-radius:16px;background:#FFFFFF;color:#48454E;font-size:14px}
+.ind{height:36px;padding:0 12px;border-radius:12px;border:0;display:inline-flex;align-items:center;gap:8px;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:700}
+.ind-run{background:#9CF1F0;color:#002020}.ind-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.ind-idle{background:transparent;color:#48454E}
+.av{width:32px;height:32px;border-radius:999px;background:#DED7EB;color:#1D1A28;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.body{display:flex;flex-wrap:wrap;flex:1;min-height:0;align-items:stretch}
+.rail{flex:0 0 80px;display:flex;flex-direction:column;align-items:center;gap:12px;padding:12px 0;background:#EDE4FF}
+.rail a{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:#1C1B1E;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:600}
+.rail .pill{width:56px;height:32px;border-radius:16px;display:flex;align-items:center;justify-content:center}
+.rail .on .pill{background:#DED7EB}
+.main{flex:999 1 560px;min-width:0;padding:20px 24px 28px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box}
+.panel{flex:1 1 340px;max-width:420px;min-width:300px;background:#F8F1FF;border-left:1px solid #CAC4CF;display:flex;flex-direction:column;box-sizing:border-box}
+.ph{display:flex;align-items:center;gap:8px;padding:12px 12px 12px 16px;border-bottom:1px solid #CAC4CF}
+.msgs{flex:1;display:flex;flex-direction:column;gap:12px;padding:14px 14px 8px;overflow:auto;max-height:720px}
+.mu{align-self:flex-end;max-width:85%;background:#DED7EB;color:#1D1A28;border-radius:16px 16px 4px 16px;padding:8px 12px;font-size:14px;line-height:20px}
+.ma{font-size:14px;line-height:20px}
+.mcard{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.mcard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.mrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;line-height:19px}
+.composer{margin:8px 12px 12px;display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1px solid #79757F;border-radius:16px;padding:6px 6px 6px 14px}
+.composer input{flex:1;border:0;outline:0;font:400 14px 'Open Sans',system-ui,sans-serif;background:transparent;color:#1C1B1E;min-width:0}
+.strip{margin:10px 12px 0;padding:10px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #CAC4CF;display:flex;flex-direction:column;gap:6px}
+.subhdr{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid #CAC4CF}
+.sh-t{margin:0;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:20px;line-height:28px;font-weight:700}
+.sh-c{font-size:13px;color:#48454E}
+.id{font-weight:600;font-size:12px;color:#48454E;background:#ECE5F4;border-radius:4px;padding:2px 6px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #CAC4CF;overflow-x:auto}
+.tab{height:44px;padding:0 14px;border:0;background:transparent;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:14px;font-weight:600;color:#48454E;border-bottom:3px solid transparent;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tab:hover{background:rgba(57,35,95,.06)}
+.tab-on{color:#39235F;border-bottom-color:#39235F}
+.n{font-size:11px;padding:1px 6px;border-radius:6px;background:#F2EBFA;color:#48454E}
+.track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.scard{text-align:left;background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;color:#1C1B1E;min-width:0}
+.scard:hover{background:#FAF6FF}
+.scard-sel{border-color:#39235F;box-shadow:inset 0 0 0 1px #39235F}
+.scard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.sn{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:12px;font-weight:700;color:#48454E;letter-spacing:.3px;text-transform:uppercase}
+.sa{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:15px;font-weight:700}
+.adm{font-size:12px;color:#48454E;line-height:16px}
+.bar{height:4px;border-radius:2px;background:#ECE5F4;overflow:hidden}
+.bar i{display:block;height:4px;background:#004F50}
+.bar-done i{background:#0B5314}
+.detail{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px}
+.box{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.h3{margin:0;font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif;font-size:16px;font-weight:700}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.steps li{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:19px}
+.sm{width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;box-sizing:border-box}
+.sm-done{background:#0B5314;color:#ACF4A2}.sm-now{background:#9CF1F0;color:#002020;border:2px solid #004F50}.sm-todo{border:1.5px solid #79757F;color:#48454E}
+.steps .todo{color:#48454E}
+.orow{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:19px}
+.orow small{display:block;color:#48454E;font-size:12px}
+.gate{border-radius:12px;padding:12px;background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F;display:flex;flex-direction:column;gap:8px}
+.gate b{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:18px;max-height:220px;overflow:auto}
+.log time{font-weight:600;color:#48454E;margin-right:8px;font-variant-numeric:tabular-nums}
+.empty{color:#48454E;font-size:13.5px;margin:0}
+.ov{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;font-size:14px;margin:0}
+.ov dt{color:#48454E}.ov dd{margin:0}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width: 1100px){.track{grid-template-columns:repeat(2,minmax(0,1fr))}.detail{grid-template-columns:minmax(0,1fr)}.labnote{grid-template-columns:minmax(0,1fr)}.panel{max-width:none;border-left:0;border-top:1px solid #CAC4CF}}
+@media (max-width: 600px){.track{grid-template-columns:minmax(0,1fr)}.rail{display:none}.main{padding:16px}}
+</style>
+</helmet>
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 12px; background: #ECE5F4; min-height: 100vh; box-sizing: border-box">
+  <div class="labbar" role="group" aria-label="Lab controls">
+    <span class="simlab">WHERE DO WE FOLLOW THE AGENTS · C DECIDED 2026-11-23</span>
+    <sc-for list="{{opts}}" as="o" hint-placeholder-count="3"><button type="button" class="chip {{o.cls}}" aria-pressed="{{o.on}}" onClick="{{o.pick}}">{{o.label}}</button></sc-for>
+    <span class="sep"></span>
+    <span class="simlab">RUN</span>
+    <button type="button" class="btn btn-s run" onClick="{{togglePlay}}" aria-pressed="{{playing}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"/></svg>{{playLabel}}</button>
+    <button type="button" class="btn btn-s o" onClick="{{step}}">Step</button>
+    <button type="button" class="btn btn-s x" onClick="{{reset}}">Reset</button>
+    <span style="font-size: 13px; color: #48454E">{{clockLine}}</span>
+  </div>
+  <div class="labnote">
+    <div><b>{{optTitle}}</b><span>{{optText}}</span><ul><sc-for list="{{optPoints}}" as="p" hint-placeholder-count="3"><li>{{p}}</li></sc-for></ul></div>
+    <div class="meta"><b style="color: #1C1B1E">How to use</b>Press Play. Four agents work on change CHG-14, one per TOGAF step: analysis, draft, review, implementation. You are Léa Martin, lead architect: confirm the scope after the analysis, then approve or request changes after the review (PRI-01: every agent output passes a person). Switch A, B, C at any time: the run goes on, only where you follow it changes.</div>
+  </div>
+
+  <div class="app">
+    <header class="hdr">
+      <div style="display: flex; align-items: center; gap: 12px; flex: 1 1 320px; min-width: 0">
+        <svg width="32" height="28" viewBox="0 0 74 64" aria-hidden="true"><rect x="4" y="22" width="56" height="36" rx="10" fill="#0D0B14"/><path d="M21 23v-6a6 6 0 0 1 6-6h10a6 6 0 0 1 6 6v6" fill="none" stroke="#0D0B14" stroke-width="6" stroke-linecap="round"/><path d="M17.5 33l8 7-8 7" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M33.5 47h13" fill="none" stroke="#00F29E" stroke-width="5.5" stroke-linecap="round"/><rect x="39.5" y="5.5" width="31" height="19" rx="5" fill="#80D5D4"/><text x="55" y="20" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="800" font-size="14" fill="#003737">AI</text></svg>
+        <span style="font-family: Manrope, sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.035em"><span style="color: #1C1B1E">AI</span><span style="color: #39235F">Toolbox</span></span>
+        <span style="display: flex; flex-direction: column; margin-left: 8px; padding-left: 16px; border-left: 1px solid #CAC4CF; min-width: 0"><span class="ui" style="font-size: 14px; font-weight: 600">Architecture</span><span style="font-size: 12px; color: #48454E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Changes · CHG-14</span></span>
+      </div>
+      <div class="search" role="search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><label for="al-q" class="vh">Search, or ask the assistant</label><input id="al-q" type="text" placeholder="Search, or ask the assistant" style="border: 0; outline: 0; flex: 1; font: 400 14px 'Open Sans', sans-serif; background: transparent; min-width: 0"></div>
+      <div style="display: flex; align-items: center; gap: 8px; flex: 1 1 200px; justify-content: flex-end">
+        <sc-if value="{{showInd}}" hint-placeholder-val="{{true}}"><button type="button" class="ind {{indCls}}" onClick="{{openAgents}}" aria-label="{{indAria}}"><sc-if value="{{indRun}}" hint-placeholder-val="{{true}}"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></sc-if>✦ {{indText}}</button></sc-if>
+        <sc-if value="{{showPanelBtn}}" hint-placeholder-val="{{true}}"><button type="button" class="ind ind-idle" onClick="{{togglePanel}}" aria-pressed="{{panelOpen}}">✦ Assistant</button></sc-if>
+        <span class="av" aria-label="Léa Martin">LM</span>
+      </div>
+    </header>
+    <div class="body">
+      <nav class="rail" aria-label="Features">
+        <a href="#home"><span class="pill"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg></span>Home</a>
+        <a href="#arch" class="on" aria-current="page"><span class="pill"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="7" height="6" rx="1"/><rect x="14" y="4" width="7" height="6" rx="1"/><rect x="8.5" y="14" width="7" height="6" rx="1"/><path d="M6.5 10v2h11v-2M12 12v2"/></svg></span>Architecture</a>
+        <a href="#docs"><span class="pill"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg></span>Docs</a>
+        <a href="#envs"><span class="pill"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01"/></svg></span>Environments</a>
+      </nav>
+
+      <main class="main">
+        <div class="subhdr">
+          <span class="id">CHG-14</span>
+          <h1 class="sh-t">Self-service environment reservation</h1>
+          <span class="sh-c">Phase B · Business architecture · requested by Tom Girard</span>
+          <span style="margin-left: auto" class="st {{chgCls}}"><span class="g" aria-hidden="true">{{chgGlyph}}</span>{{chgLabel}}</span>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Change">
+          <button type="button" role="tab" class="tab {{tabOvCls}}" aria-selected="{{tabOv}}" onClick="{{showOverview}}">Overview</button>
+          <sc-if value="{{hasAgentsTab}}" hint-placeholder-val="{{true}}"><button type="button" role="tab" class="tab {{tabAgCls}}" aria-selected="{{tabAg}}" onClick="{{openAgents}}">✦ Agents <span class="n">{{agentCount}}</span></button></sc-if>
+          <button type="button" role="tab" class="tab" aria-selected="false" disabled style="opacity: .55; cursor: default">Model changes</button>
+          <button type="button" role="tab" class="tab" aria-selected="false" disabled style="opacity: .55; cursor: default">Documents</button>
+        </div>
+
+        <sc-if value="{{tabOv}}" hint-placeholder-val="{{false}}">
+          <div class="box">
+            <h2 class="h3">What changes</h2>
+            <p style="margin: 0; font-size: 14px; line-height: 21px; max-width: 70ch">Teams reserve a feature environment themselves for a given period instead of asking the platform team by ticket. The reservation is checked against capacity and released automatically at the end of the period.</p>
+            <dl class="ov"><dt>Origin</dt><dd>Business request (ticket ENV-198)</dd><dt>Entry phase</dt><dd>B · Business architecture</dd><dt>Lead architect</dt><dd>Léa Martin</dd><dt>Next gate</dt><dd>G2 · Architecture board</dd></dl>
+            <sc-if value="{{ovHint}}" hint-placeholder-val="{{true}}"><p class="empty">{{ovHintText}}</p></sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{tabAg}}" hint-placeholder-val="{{true}}">
+          <div class="track" aria-label="Agents by TOGAF step">
+            <sc-for list="{{stages}}" as="s" hint-placeholder-count="4">
+              <button type="button" class="scard {{s.cardCls}}" aria-pressed="{{s.sel}}" onClick="{{s.select}}">
+                <span class="sn">{{s.n}} · {{s.label}}</span>
+                <span class="sa">✦ {{s.agent}}</span>
+                <span class="adm">{{s.adm}}</span>
+                <span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st {{s.stCls}}"><span class="g" aria-hidden="true">{{s.glyph}}</span>{{s.stLabel}}</span><sc-if value="{{s.running}}" hint-placeholder-val="{{false}}"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></sc-if><span style="font-size: 12px; color: #48454E">{{s.progress}}</span></span>
+                <span class="bar {{s.barCls}}" aria-hidden="true"><i style="width: {{s.pct}}%"></i></span>
+                <span class="adm">{{s.foot}}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div class="detail">
+            <div class="box">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><h2 class="h3">✦ {{cur.agent}}</h2><span class="ai">✦ agent</span><span class="st {{cur.stCls}}"><span class="g" aria-hidden="true">{{cur.glyph}}</span>{{cur.stLabel}}</span><span style="font-size: 12px; color: #48454E; margin-left: auto">{{cur.runLabel}}</span></div>
+              <p class="adm" style="margin: 0; font-size: 13px">{{cur.role}}</p>
+              <ol class="steps">
+                <sc-for list="{{cur.steps}}" as="k" hint-placeholder-count="4"><li class="{{k.cls}}"><span class="sm {{k.mkCls}}" aria-hidden="true">{{k.mk}}</span><span>{{k.label}}</span><span class="vh">{{k.state}}</span></li></sc-for>
+              </ol>
+              <sc-if value="{{cur.gateOpen}}" hint-placeholder-val="{{false}}">
+                <div class="gate" role="group" aria-label="Review gate">
+                  <span><b>Waiting for you · {{cur.gateQ}}</b></span>
+                  <span style="font-size: 13px">{{cur.gateText}}</span>
+                  <span style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn btn-s f" onClick="{{cur.approve}}">{{cur.okLabel}}</button><sc-if value="{{cur.canReject}}" hint-placeholder-val="{{false}}"><button type="button" class="btn btn-s o" onClick="{{cur.reject}}">Request changes</button></sc-if></span>
+                </div>
+              </sc-if>
+            </div>
+            <div class="box">
+              <h2 class="h3">Output</h2>
+              <sc-if value="{{cur.hasOut}}" hint-placeholder-val="{{false}}">
+                <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap"><b class="ui" style="font-size: 15px">{{cur.out.title}}</b><span style="font-size: 12px; color: #48454E">{{cur.out.summary}}</span></div>
+                <sc-for list="{{cur.out.rows}}" as="r" hint-placeholder-count="4"><div class="orow"><span class="mk {{r.cls}}" aria-hidden="true">{{r.mark}}</span><span>{{r.text}}<small>{{r.sub}}</small></span></div></sc-for>
+              </sc-if>
+              <sc-if value="{{cur.noOut}}" hint-placeholder-val="{{true}}"><p class="empty">{{cur.noOutText}}</p></sc-if>
+              <h2 class="h3" style="margin-top: 6px">Activity</h2>
+              <ul class="log" aria-label="Activity of this agent">
+                <sc-for list="{{cur.log}}" as="l" hint-placeholder-count="3"><li><time>{{l.time}}</time>{{l.text}}</li></sc-for>
+              </ul>
+              <sc-if value="{{cur.noLog}}" hint-placeholder-val="{{false}}"><p class="empty">Nothing yet.</p></sc-if>
+            </div>
+          </div>
+        </sc-if>
+      </main>
+
+      <sc-if value="{{panelVisible}}" hint-placeholder-val="{{true}}">
+        <aside class="panel" aria-label="Assistant">
+          <div class="ph"><span class="ui" style="font-weight: 700; font-size: 15px">✦ Assistant</span><span style="font-size: 12px; color: #48454E">CHG-14</span><sc-if value="{{showPanelBtn}}" hint-placeholder-val="{{false}}"><button type="button" class="btn btn-s x" style="margin-left: auto" onClick="{{togglePanel}}" aria-label="Close the assistant">✕</button></sc-if></div>
+          <sc-if value="{{showStrip}}" hint-placeholder-val="{{false}}">
+            <div class="strip" role="status">
+              <span class="mrow"><span class="st {{strip.stCls}}"><span class="g" aria-hidden="true">{{strip.glyph}}</span>{{strip.stLabel}}</span><b class="ui">✦ {{strip.agent}}</b><span style="font-size: 12px; color: #48454E">{{strip.progress}}</span></span>
+              <span class="mrow" style="justify-content: space-between"><span style="font-size: 12px; color: #48454E">{{strip.trail}}</span><button type="button" class="btn btn-s x" onClick="{{openAgents}}">Open in change</button></span>
+            </div>
+          </sc-if>
+          <div class="msgs" aria-live="polite">
+            <sc-for list="{{msgs}}" as="m" hint-placeholder-count="3">
+              <sc-if value="{{m.isUser}}" hint-placeholder-val="{{false}}"><div class="mu">{{m.text}}</div></sc-if>
+              <sc-if value="{{m.isText}}" hint-placeholder-val="{{true}}"><div class="ma">{{m.text}}</div></sc-if>
+              <sc-if value="{{m.isCard}}" hint-placeholder-val="{{false}}">
+                <div class="mcard {{m.s.mcardCls}}">
+                  <span class="mrow"><b class="ui">✦ {{m.s.agent}}</b><span class="st {{m.s.stCls}}"><span class="g" aria-hidden="true">{{m.s.glyph}}</span>{{m.s.stLabel}}</span><sc-if value="{{m.s.running}}" hint-placeholder-val="{{false}}"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></sc-if></span>
+                  <span class="adm">{{m.s.n}} · {{m.s.label}} · {{m.s.runLabel}}</span>
+                  <ol class="steps">
+                    <sc-for list="{{m.s.steps}}" as="k" hint-placeholder-count="4"><li class="{{k.cls}}"><span class="sm {{k.mkCls}}" aria-hidden="true">{{k.mk}}</span><span>{{k.label}}</span><span class="vh">{{k.state}}</span></li></sc-for>
+                  </ol>
+                  <sc-if value="{{m.s.hasOut}}" hint-placeholder-val="{{false}}">
+                    <div style="border-top: 1px solid #CAC4CF; padding-top: 8px; display: flex; flex-direction: column; gap: 6px"><b class="ui" style="font-size: 14px">{{m.s.out.title}} <span style="font-weight: 400; font-size: 12px; color: #48454E">{{m.s.out.summary}}</span></b>
+                      <sc-for list="{{m.s.out.rows}}" as="r" hint-placeholder-count="3"><div class="orow"><span class="mk {{r.cls}}" aria-hidden="true">{{r.mark}}</span><span>{{r.text}}</span></div></sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{m.s.gateOpen}}" hint-placeholder-val="{{false}}">
+                    <div class="gate"><b>Waiting for you · {{m.s.gateQ}}</b><span style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn btn-s f" onClick="{{m.s.approve}}">{{m.s.okLabel}}</button><sc-if value="{{m.s.canReject}}" hint-placeholder-val="{{false}}"><button type="button" class="btn btn-s o" onClick="{{m.s.reject}}">Request changes</button></sc-if></span></div>
+                  </sc-if>
+                </div>
+              </sc-if>
+              <sc-if value="{{m.isRow}}" hint-placeholder-val="{{false}}">
+                <div class="mcard {{m.rowCls}}">
+                  <span class="mrow"><span class="mk {{m.mkCls}}" aria-hidden="true">{{m.mk}}</span><span><b class="ui">✦ {{m.agent}}</b> {{m.text}}</span></span>
+                  <sc-if value="{{m.gateLive}}" hint-placeholder-val="{{false}}"><span style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn btn-s f" onClick="{{m.approve}}">{{m.okLabel}}</button><sc-if value="{{m.canReject}}" hint-placeholder-val="{{false}}"><button type="button" class="btn btn-s o" onClick="{{m.reject}}">Request changes</button></sc-if></span></sc-if>
+                  <span class="mrow" style="justify-content: flex-end"><button type="button" class="btn btn-s x" onClick="{{m.open}}">Open in change</button></span>
+                </div>
+              </sc-if>
+            </sc-for>
+          </div>
+          <div class="composer"><label for="al-c" class="vh">Message the assistant</label><input id="al-c" type="text" placeholder="Ask about CHG-14"><button type="button" class="btn btn-s f" aria-label="Send">Send</button></div>
+        </aside>
+      </sc-if>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+const LEAD = 'Léa Martin · Lead architect';
+const STAGES = [
+  { id: 'analysis', n: 1, label: 'Analysis', agent: 'Analysis agent', adm: 'Phase B · requirements and impact',
+    role: 'Reads the request and the model, finds what the change touches and in which ADM phases.',
+    steps: ['Read the request and the conversation', 'Search the model for related elements', 'Map the impact on phases B and C', 'Write the impact analysis'],
+    gate: { q: 'Confirm the scope', ok: 'Confirm scope', reject: false, text: 'Check the impacted elements before the drafting agent writes the model.' } },
+  { id: 'draft', n: 2, label: 'Draft', agent: 'Drafting agent', adm: 'Phases B–C · target architecture',
+    role: 'Writes the model update in YAML on a branch, generates the views and opens a draft pull request.',
+    steps: ['Branch from main', 'Draft the YAML model changes', 'Generate the views', 'Open draft pull request #48'],
+    rework: ['Read the review comments', 'Set the owner of APC-04', 'Update pull request #48'], gate: null },
+  { id: 'review', n: 3, label: 'Review', agent: 'Review agent', adm: 'Architecture board · compliance',
+    role: 'Runs the pipeline checks on the pull request and writes the review report for the board.',
+    steps: ['JSON Schema', 'References and relations', 'Principles (PRI-01 review gate)', 'View checks', 'Write the review report'],
+    gate: { q: 'Approve the change', ok: 'Approve', reject: true, text: 'Your approval merges pull request #48. Request changes sends it back to the drafting agent.' } },
+  { id: 'implement', n: 4, label: 'Implementation', agent: 'Implementation agent', adm: 'Publish and hand over to delivery',
+    role: 'Merges the approved change, renders the diagrams, publishes the Docs pages and creates the delivery work items.',
+    steps: ['Merge pull request #48', 'Render the diagrams (PlantUML, Mermaid)', 'Publish the Docs pages', 'Create the Jira work items'], gate: null }
+];
+const OUT = {
+  analysis: () => ({ title: 'Impact analysis', summary: '4 elements · phases B and C', rows: [
+    { mark: '+', cls: 'mk-added', text: 'PRC-06 Reserve an environment', sub: 'Business process, new' },
+    { mark: '+', cls: 'mk-added', text: 'BSV-03 Environment reservation', sub: 'Business service, new' },
+    { mark: 'Δ', cls: 'mk-changed', text: 'APC-04 Environments', sub: 'Application component, gains the reservation API' },
+    { mark: '+', cls: 'mk-added', text: 'DOB-09 Reservation', sub: 'Data object, new, with its life cycle' },
+    { mark: '·', cls: 'mk-info', text: 'PRI-01 applies', sub: 'Reservations made by an agent pass a person' } ] }),
+  draft: (run) => run > 1 ? { title: 'Pull request #48 updated', summary: '1 file changed', rows: [
+    { mark: 'Δ', cls: 'mk-changed', text: 'model/application.yaml', sub: 'APC-04 owner: team-environments' } ] }
+    : { title: 'Draft pull request #48', summary: 'model +38 −2 lines · 2 new views', rows: [
+    { mark: 'Δ', cls: 'mk-changed', text: 'model/business.yaml', sub: 'PRC-06, BSV-03 added' },
+    { mark: 'Δ', cls: 'mk-changed', text: 'model/application.yaml', sub: 'APC-04 serves BSV-03' },
+    { mark: '+', cls: 'mk-added', text: 'model/data.yaml', sub: 'DOB-09 Reservation' },
+    { mark: '+', cls: 'mk-added', text: 'views/reserve-environment.yaml', sub: 'Business workflow' },
+    { mark: '+', cls: 'mk-added', text: 'views/reservation-lifecycle.yaml', sub: 'State machine' } ] },
+  review: (run) => run > 1 ? { title: 'Review report', summary: '15 checks passed', rows: [
+    { mark: '✓', cls: 'mk-ok', text: 'JSON Schema, references, relations', sub: '' },
+    { mark: '✓', cls: 'mk-ok', text: 'PRI-01: PRC-06 has a review gate', sub: '' },
+    { mark: '✓', cls: 'mk-ok', text: 'Owner of APC-04 set', sub: 'Fixed in run 2' } ] }
+    : { title: 'Review report', summary: '14 passed · 1 warning', rows: [
+    { mark: '✓', cls: 'mk-ok', text: 'JSON Schema, references, relations', sub: '' },
+    { mark: '✓', cls: 'mk-ok', text: 'PRI-01: PRC-06 has a review gate', sub: '' },
+    { mark: '✓', cls: 'mk-ok', text: 'Views render in both renderers', sub: '' },
+    { mark: '!', cls: 'mk-warn', text: 'APC-04 has no owner', sub: 'Warning: the board will ask for one' } ] },
+  implement: () => ({ title: 'Delivered', summary: 'merged · published · handed over', rows: [
+    { mark: '✓', cls: 'mk-ok', text: 'Pull request #48 merged into main', sub: '' },
+    { mark: '✓', cls: 'mk-ok', text: '2 diagrams rendered', sub: 'Workflow (PlantUML), life cycle (Mermaid)' },
+    { mark: '✓', cls: 'mk-ok', text: 'Docs page published', sub: 'Reserve an environment' },
+    { mark: '✓', cls: 'mk-ok', text: 'Jira ENV-231, ENV-232, ENV-233 created', sub: 'Team environments' } ] })
+};
+const OPTS = {
+  A: { label: 'A Assistant panel', title: 'A · In the assistant panel only',
+       text: 'Each agent posts a live run card in the conversation: its steps, its state, its output and the gate buttons. The change page knows nothing about agents.',
+       points: ['+ Nothing to learn: you follow where you asked', '− Lost once the conversation scrolls or closes; colleagues see nothing', '− No place to see several changes or agents at once'] },
+  B: { label: 'B Web page', title: 'B · In the change page only',
+       text: 'The change gets an Agents tab: the four TOGAF steps side by side, the selected agent’s steps, output and activity, the gate. The header shows what runs or waits for you.',
+       points: ['+ Shareable, kept with the change, same for every reviewer', '+ Fits the tracks decided in the Change start lab', '− You leave the chat to see progress; no conversation with the agent'] },
+  C: { label: 'C Both, one run · decided', title: 'C · Both, on one run (decided 2026-11-23)',
+       text: 'One run object, two views. The panel keeps the conversation: a pinned strip with the current agent, one line per milestone and the gate buttons where you are. The page is the record: Agents tab as in B.',
+       points: ['Decided 2026-11-23. Design: Agent run component on the design system canvas (usage, panel, page, output viewer).', '+ Act in the chat, check and share in the page: same states, same gate', '+ Header indicator: what runs and what waits for you, from anywhere', '− Two places to keep in step (same component, same data)'] }
+};
+const GL = { queued: '·', running: '✦', input: '!', done: '✓', changes: 'Δ' };
+const SL = { queued: 'Queued', running: 'Running', input: 'Waiting for you', done: 'Done', changes: 'Changes requested' };
+const SC = { queued: 'st-q', running: 'st-run', input: 'st-wait', done: 'st-done', changes: 'st-chg' };
+function fresh() {
+  const st = {};
+  STAGES.forEach(s => { st[s.id] = { status: 'queued', step: 0, run: 0, log: [] }; });
+  return { t: 0, st, msgs: [{ who: 'user', text: 'Assess what self-service environment reservation changes in the architecture, and take it to the board.' }], finished: false, started: false };
+}
+function clock(t) { const s = 9 * 3600 + 40 * 60 + t * 15; const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, x = s % 60; return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(x).padStart(2, '0'); }
+function stepsOf(def, run) { return (def.id === 'draft' && run > 1) ? def.rework : def.steps; }
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { opt: 'C', playing: false, sim: fresh(), sel: 'analysis', tab: 'agents', panel: true }; }
+  componentDidMount() { this.timer = setInterval(() => { if (this.state.playing) this.tick(); }, 1100); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  clone() { return JSON.parse(JSON.stringify(this.state.sim)); }
+  start(s, id) {
+    const x = s.st[id]; x.status = 'running'; x.step = 0; x.run += 1;
+    const d = STAGES.find(z => z.id === id);
+    x.log.push({ time: clock(s.t), text: x.run > 1 ? 'Run ' + x.run + ' started' : 'Started' });
+    s.msgs.push({ kind: 'start', stage: id, run: x.run, text: x.run > 1 ? 'restarted on the review comments' : 'started · ' + d.adm });
+    return id;
+  }
+  finish(s, id) {
+    const d = STAGES.find(z => z.id === id), x = s.st[id];
+    if (d.gate) { x.status = 'input'; x.log.push({ time: clock(s.t), text: 'Waiting for ' + LEAD }); s.msgs.push({ kind: 'gate', stage: id, run: x.run }); return 'pause'; }
+    x.status = 'done'; x.log.push({ time: clock(s.t), text: 'Done' }); s.msgs.push({ kind: 'output', stage: id, run: x.run });
+    const i = STAGES.findIndex(z => z.id === id);
+    if (id === 'draft' && x.run > 1) return this.start(s, 'review');
+    if (i < STAGES.length - 1) return this.start(s, STAGES[i + 1].id);
+    s.finished = true; s.msgs.push({ kind: 'text', text: 'CHG-14 is delivered: model merged, views and Docs published, three Jira work items for the environments team.' }); return 'end';
+  }
+  tick() {
+    const s = this.clone(); if (s.finished) { this.setState({ playing: false }); return; }
+    s.t += 1; let follow = null;
+    if (!s.started) { s.started = true; s.msgs.push({ kind: 'text', text: 'I opened CHG-14 and started the analysis agent. I will stop at each review gate for you.' }); follow = this.start(s, 'analysis'); }
+    else {
+      const cur = STAGES.find(z => s.st[z.id].status === 'running');
+      if (!cur) { this.setState({ sim: s, playing: false }); return; }
+      const x = s.st[cur.id], list = stepsOf(cur, x.run);
+      x.log.push({ time: clock(s.t), text: list[x.step] }); x.step += 1;
+      if (x.step >= list.length) { const r = this.finish(s, cur.id); if (r === 'pause' || r === 'end') { this.setState({ sim: s, playing: false, sel: cur.id }); return; } follow = r; } else follow = cur.id;
+    }
+    this.setState({ sim: s, sel: follow || this.state.sel });
+  }
+  approve(id) {
+    const s = this.clone(), x = s.st[id]; if (x.status !== 'input') return;
+    s.t += 1; x.status = 'done'; x.log.push({ time: clock(s.t), text: (id === 'analysis' ? 'Scope confirmed' : 'Approved') + ' by Léa Martin' });
+    s.msgs.push({ who: 'user', text: id === 'analysis' ? 'Scope confirmed. Go ahead with the draft.' : 'Approved. Merge and publish.' });
+    const i = STAGES.findIndex(z => z.id === id); const nx = STAGES[i + 1].id; this.start(s, nx);
+    this.setState({ sim: s, sel: nx, playing: true });
+  }
+  reject(id) {
+    const s = this.clone(), x = s.st[id]; if (x.status !== 'input') return;
+    s.t += 1; x.status = 'changes'; x.log.push({ time: clock(s.t), text: 'Changes requested by Léa Martin' });
+    s.msgs.push({ who: 'user', text: 'Request changes: APC-04 needs an owner, team-environments.' });
+    this.start(s, 'draft'); this.setState({ sim: s, sel: 'draft', playing: true });
+  }
+  view(id) {
+    const d = STAGES.find(z => z.id === id), x = this.state.sim.st[id];
+    const list = stepsOf(d, Math.max(1, x.run));
+    const steps = list.map((label, i) => {
+      const done = x.status === 'done' || x.status === 'input' || x.status === 'changes' || i < x.step;
+      const now = !done && x.status === 'running' && i === x.step;
+      return { label, cls: done || now ? '' : 'todo', mkCls: done ? 'sm-done' : now ? 'sm-now' : 'sm-todo', mk: done ? '✓' : now ? '✦' : String(i + 1), state: done ? 'done' : now ? 'in progress' : 'to do' };
+    });
+    const doneSteps = steps.filter(k => k.mk === '✓').length;
+    const hasOut = (x.status === 'done' || x.status === 'input' || x.status === 'changes') || (x.run > 1 && id === 'review');
+    const out = hasOut ? OUT[id](x.status === 'running' ? x.run - 1 : x.run) : { title: '', summary: '', rows: [] };
+    const g = d.gate || {};
+    const gateOpen = x.status === 'input';
+    const foot = gateOpen ? 'Waits for you: ' + g.q.toLowerCase() : x.status === 'done' ? out.title : x.status === 'changes' ? 'Sent back to the drafting agent' : d.gate ? 'Then: ' + g.q.toLowerCase() + ' (you)' : x.status === 'running' ? list[x.step] || '' : '';
+    return {
+      id, n: d.n, label: d.label, agent: d.agent, adm: d.adm, role: d.role,
+      status: x.status, stLabel: SL[x.status], stCls: SC[x.status], glyph: GL[x.status], running: x.status === 'running',
+      progress: x.run ? doneSteps + ' / ' + list.length + ' steps' : '', pct: Math.round(100 * doneSteps / list.length),
+      barCls: x.status === 'done' ? 'bar-done' : '', runLabel: x.run > 1 ? 'Run ' + x.run : x.run ? 'Run 1' : 'Not started',
+      steps, hasOut, noOut: !hasOut, noOutText: x.status === 'running' ? 'Appears when the agent finishes.' : 'Not started yet.', out,
+      log: x.log.slice().reverse(), noLog: x.log.length === 0,
+      gateOpen, gateQ: g.q || '', gateText: g.text || '', okLabel: g.ok || '', canReject: !!g.reject,
+      approve: () => this.approve(id), reject: () => this.reject(id),
+      sel: this.state.sel === id, select: () => this.setState({ sel: id, tab: 'agents' }),
+      cardCls: (gateOpen ? 'scard-wait ' : '') + (this.state.sel === id ? 'scard-sel' : ''),
+      mcardCls: gateOpen ? 'mcard-wait' : '', foot
+    };
+  }
+  renderVals() {
+    const { opt, playing, sim, sel, tab, panel } = this.state;
+    const views = STAGES.map(d => this.view(d.id)); const byId = {}; views.forEach(v => { byId[v.id] = v; });
+    const running = views.find(v => v.running), waiting = views.find(v => v.gateOpen);
+    const active = waiting || running || null;
+    const hasPage = opt !== 'A';
+    const curTab = hasPage ? tab : 'overview';
+    const openAgents = (id) => { if (opt === 'A') return; this.setState({ tab: 'agents', sel: typeof id === 'string' ? id : (active ? active.id : sel) }); };
+    // messages
+    const msgs = [];
+    sim.msgs.forEach((m, i) => {
+      if (m.who === 'user') { msgs.push({ isUser: true, isText: false, isCard: false, isRow: false, text: m.text }); return; }
+      if (m.kind === 'text') { msgs.push({ isUser: false, isText: true, isCard: false, isRow: false, text: m.text }); return; }
+      const v = byId[m.stage]; const d = STAGES.find(z => z.id === m.stage);
+      const latest = sim.st[m.stage].run === m.run;
+      if (opt === 'A') {
+        if (m.kind !== 'start') return;
+        let s = v;
+        if (!latest) { s = Object.assign({}, v, { stLabel: 'Superseded by run ' + sim.st[m.stage].run, stCls: 'st-q', glyph: '·', running: false, gateOpen: false, mcardCls: '', runLabel: 'Run ' + m.run, hasOut: true, out: OUT[m.stage](m.run), steps: stepsOf(d, m.run).map(label => ({ label, cls: '', mkCls: 'sm-done', mk: '✓', state: 'done' })) }); }
+        else if (m.stage === 'review' && v.status === 'changes') { s = Object.assign({}, v, { stLabel: 'Changes requested', hasOut: true }); }
+        msgs.push({ isUser: false, isText: false, isCard: true, isRow: false, s });
+        return;
+      }
+      if (opt === 'B') return;
+      const gateLive = m.kind === 'gate' && latest && v.gateOpen;
+      let text = m.text, mk = '✦', mkCls = 'mk-info', rowCls = '';
+      if (m.kind === 'output') { const o = OUT[m.stage](m.run); text = 'finished · ' + o.title + ' · ' + o.summary; mk = '✓'; mkCls = 'mk-ok'; }
+      if (m.kind === 'gate') { const o = OUT[m.stage](m.run); text = 'is ready · ' + o.title + ' (' + o.summary + '). ' + d.gate.q + '?'; mk = '!'; mkCls = 'mk-warn'; rowCls = gateLive ? 'mcard-wait' : ''; }
+      if (m.kind === 'start' && latest && v.running) text = text + ' · ' + v.progress;
+      msgs.push({ isUser: false, isText: false, isCard: false, isRow: true, agent: d.agent, text, mk, mkCls, rowCls, gateLive, okLabel: d.gate ? d.gate.ok : '', canReject: !!(d.gate && d.gate.reject), approve: () => this.approve(m.stage), reject: () => this.reject(m.stage), open: () => openAgents(m.stage) });
+    });
+    const EMPTY_S = { agent: '', stLabel: '', stCls: '', glyph: '', running: false, n: '', label: '', runLabel: '', steps: [], hasOut: false, out: { title: '', summary: '', rows: [] }, gateOpen: false, gateQ: '', okLabel: '', canReject: false, mcardCls: '' };
+    const BASE = { isUser: false, isText: false, isCard: false, isRow: false, text: '', s: EMPTY_S, agent: '', mk: '', mkCls: '', rowCls: '', gateLive: false, okLabel: '', canReject: false, approve: () => {}, reject: () => {}, open: () => {} };
+    for (let i = 0; i < msgs.length; i++) msgs[i] = Object.assign({}, BASE, msgs[i]);
+    const o = OPTS[opt];
+    const panelVisible = opt === 'A' || (opt === 'C' && panel);
+    const doneCount = views.filter(v => v.status === 'done').length;
+    const chg = sim.finished ? ['st-done', '✓', 'Delivered'] : waiting ? ['st-wait', '!', 'Waiting for you'] : running ? ['st-run', '✦', running.label + ' in progress'] : ['st-q', '·', 'Draft'];
+    const trail = views.map(v => v.label + (v.status === 'done' ? ' ✓' : v.gateOpen ? ' !' : v.running ? ' ✦' : '')).join(' → ');
+    return {
+      opts: ['A', 'B', 'C'].map(k => ({ label: OPTS[k].label, on: opt === k, cls: opt === k ? 'chip-on' : '', pick: () => this.setState({ opt: k }) })),
+      optTitle: o.title, optText: o.text, optPoints: o.points,
+      playing, playLabel: playing ? 'Pause' : (sim.finished ? 'Done' : 'Play'), playIcon: playing ? 'M6 5h4v14H6zM14 5h4v14h-4z' : 'M7 4l13 8-13 8z',
+      togglePlay: () => { if (sim.finished) return; if (!playing && (waiting)) { this.setState({ sel: waiting.id, tab: 'agents' }); return; } this.setState({ playing: !playing }); },
+      step: () => this.tick(), reset: () => this.setState({ sim: fresh(), playing: false, sel: 'analysis', tab: 'agents' }),
+      clockLine: sim.started ? clock(sim.t) + ' · ' + (sim.finished ? 'run finished' : waiting ? 'paused at the gate: your turn' : running ? running.agent + ' running' : '') : 'Not started',
+      showInd: hasPage, indCls: waiting ? 'ind-wait' : running ? 'ind-run' : 'ind-idle', indRun: !!running && !waiting,
+      indText: waiting ? '1 waiting for you' : running ? '1 agent running' : sim.finished ? 'All agents done' : 'No agent running',
+      indAria: waiting ? 'An agent is waiting for you, open the agents' : running ? 'One agent running, open the agents' : 'Agents',
+      openAgents, showPanelBtn: opt === 'C', panelOpen: panel, togglePanel: () => this.setState({ panel: !panel }),
+      panelVisible, showStrip: opt === 'C' && !!active,
+      strip: active ? { agent: active.agent, stLabel: active.stLabel, stCls: active.stCls, glyph: active.glyph, progress: active.progress, trail } : { agent: '', stLabel: '', stCls: '', glyph: '', progress: '', trail: '' },
+      chgCls: chg[0], chgGlyph: chg[1], chgLabel: chg[2],
+      hasAgentsTab: hasPage, tabOv: curTab === 'overview', tabAg: curTab === 'agents', tabOvCls: curTab === 'overview' ? 'tab-on' : '', tabAgCls: curTab === 'agents' ? 'tab-on' : '',
+      showOverview: () => this.setState({ tab: 'overview' }), agentCount: doneCount + '/4',
+      ovHint: opt === 'A', ovHintText: 'Option A: the agents of this change are only visible in the assistant panel of the person who started them.',
+      stages: views, cur: byId[sel], msgs
+    };
+  }
+}
+</script>
+</body>
+</html>

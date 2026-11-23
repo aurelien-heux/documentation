@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agent run · panel version</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E}
+button{font-family:inherit;cursor:pointer}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+.ui{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif}
+.k{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#48454E}
+.h1{margin:0;font-family:Manrope,'BNPP Type',sans-serif;font-size:45px;line-height:52px;font-weight:700;letter-spacing:-0.01em}
+.lead{margin:0;max-width:980px;font-size:16px;line-height:24px;color:#48454E}
+.pnl{display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:16px;background:#FAF4FF;min-width:0}
+.pt{font-family:Manrope,'BNPP Type',sans-serif;font-size:15px;font-weight:700}
+.mt{font-size:13px;line-height:19px;color:#48454E}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+ul.r{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:20px}
+table.tk{border-collapse:collapse;width:100%;font-size:13px;line-height:18px}
+table.tk th{text-align:left;font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;color:#48454E;padding:6px 8px;border-bottom:1px solid #CAC4CF}
+table.tk td{padding:7px 8px;border-bottom:1px solid #E6E0EC;vertical-align:top}
+.do,.dont{border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:20px}
+.do{background:#FFFFFF;box-shadow:inset 0 4px 0 #0B5314}.dont{background:#FFFFFF;box-shadow:inset 0 4px 0 #93000A}
+.do b,.dont b{font-family:Manrope,'BNPP Type',sans-serif}
+.chip{height:32px;padding:0 12px;border-radius:8px;border:1px solid #79757F;background:transparent;color:#1C1B1E;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.chip:hover{background:rgba(57,35,95,.06)}
+.chip-on{background:#DED7EB;border-color:#DED7EB;color:#1D1A28}
+.btn{height:32px;padding:0 14px;border:0;border-radius:12px;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.f{background:#39235F;color:#FFFFFF}.f:hover{background:#4A3470}
+.o{background:transparent;border:1px solid #79757F;color:#39235F}.o:hover{background:rgba(57,35,95,.06)}
+.x{background:transparent;color:#39235F;padding:0 10px}.x:hover{background:rgba(57,35,95,.06)}
+/* run status chip */
+.st{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px 0 4px;border-radius:4px;font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;white-space:nowrap}
+.st .g{width:18px;height:18px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+.st-q{background:#ECE5F4;color:#1C1B1E}.st-q .g{background:#48454E;color:#ECE5F4}
+.st-run{background:#9CF1F0;color:#002020}.st-run .g{background:#004F50;color:#9CF1F0}
+.st-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.st-wait .g{background:#39235F;color:#E3DFFF}
+.st-other{background:#E3DFFF;color:#14085E}.st-other .g{background:#39235F;color:#E3DFFF}
+.st-chg{background:#FFDEA0;color:#261900}.st-chg .g{background:#5F4100;color:#FFDEA0}
+.st-done{background:#ACF4A2;color:#002203}.st-done .g{background:#0B5314;color:#ACF4A2}
+.st-fail{background:#FFDAD6;color:#410002}.st-fail .g{background:#93000A;color:#FFDAD6}
+.st-cnl{background:transparent;color:#48454E;box-shadow:inset 0 0 0 1px #79757F}.st-cnl .g{color:#48454E}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}
+.dots i{width:4px;height:4px;border-radius:2px;background:#004F50;animation:dp 1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dp{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.dots i{animation:none;opacity:.8}}
+.ai{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border-radius:4px;background:#9CF1F0;color:#002020;font-family:Manrope,'BNPP Type',sans-serif;font-size:11px;font-weight:700;white-space:nowrap}
+.mk{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:3px;font-weight:700;font-size:12px;flex:none}
+.mk-added,.mk-ok{background:#0B5314;color:#ACF4A2}.mk-changed,.mk-warn{background:#5F4100;color:#FFDEA0}.mk-info{background:#48454E;color:#ECE5F4}.mk-err{background:#93000A;color:#FFDAD6}.mk-run{background:#004F50;color:#9CF1F0}
+/* header indicator */
+.ind{height:36px;padding:0 12px;border-radius:12px;border:0;display:inline-flex;align-items:center;gap:8px;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:700;white-space:nowrap}
+.ind-run{background:#9CF1F0;color:#002020}.ind-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.ind-fail{background:#FFDAD6;color:#410002}
+.band{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:#EDE4FF}
+.sbox{height:40px;flex:1 1 220px;max-width:360px;border-radius:16px;background:#FFFFFF;display:flex;align-items:center;padding:0 14px;color:#48454E;font-size:14px}
+/* panel parts */
+.panel{background:#F8F1FF;border:1px solid #CAC4CF;border-radius:16px;display:flex;flex-direction:column;gap:12px;padding:12px;width:400px;box-sizing:border-box}
+.strip{padding:10px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #CAC4CF;display:flex;flex-direction:column;gap:6px}
+.mrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;line-height:19px}
+.mcard{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.mcard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.mu{align-self:flex-end;max-width:85%;background:#DED7EB;color:#1D1A28;border-radius:16px 16px 4px 16px;padding:8px 12px;font-size:14px;line-height:20px}
+.gate{border-radius:12px;padding:12px;background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:19px}
+.gate b{font-family:Manrope,'BNPP Type',sans-serif}
+.gate-other{box-shadow:none}
+/* page parts */
+.scard{text-align:left;background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;box-sizing:border-box}
+.scard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.scard-sel{border-color:#39235F;box-shadow:inset 0 0 0 1px #39235F}
+.sn{font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;color:#48454E;letter-spacing:.3px;text-transform:uppercase}
+.sa{font-family:Manrope,'BNPP Type',sans-serif;font-size:15px;font-weight:700}
+.adm{font-size:12px;color:#48454E;line-height:16px}
+.bar{height:4px;border-radius:2px;background:#ECE5F4;overflow:hidden}
+.bar i{display:block;height:4px;background:#004F50}
+.bar-done i{background:#0B5314}.bar-fail i{background:#93000A}
+.box{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.h3{margin:0;font-family:Manrope,'BNPP Type',sans-serif;font-size:16px;font-weight:700}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.steps li{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:19px}
+.sm{width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;box-sizing:border-box}
+.sm-done{background:#0B5314;color:#ACF4A2}.sm-now{background:#9CF1F0;color:#002020;border:2px solid #004F50}.sm-todo{border:1.5px solid #79757F;color:#48454E}
+.todo{color:#48454E}
+.orow{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:19px}
+.orow small{display:block;color:#48454E;font-size:12px}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:18px}
+.log time{font-weight:600;color:#48454E;margin-right:8px;font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #CAC4CF;overflow-x:auto}
+.tab{height:44px;padding:0 14px;border:0;background:transparent;font-family:Manrope,'BNPP Type',sans-serif;font-size:14px;font-weight:600;color:#48454E;border-bottom:3px solid transparent;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tab:hover{background:rgba(57,35,95,.06)}
+.tab-on{color:#39235F;border-bottom-color:#39235F}
+.n{font-size:11px;padding:1px 6px;border-radius:6px;background:#F2EBFA;color:#48454E}
+.anno{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:999px;background:#39235F;color:#FFFFFF;font-family:Manrope,sans-serif;font-size:11px;font-weight:700;flex:none}
+.diff{margin:0;border-radius:8px;background:#FFFFFF;border:1px solid #CAC4CF;overflow:hidden;font-family:'Open Sans',sans-serif;font-weight:600;font-size:12.5px;line-height:20px}
+.diff div{padding:0 12px;white-space:pre}
+.diff .a{background:#E4F8DF}.diff .d{background:#FFEDEA;text-decoration:line-through;text-decoration-color:rgba(65,0,2,.4)}.diff .h{background:#F2EBFA;color:#48454E}
+.trace{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;border:1px solid #CAC4CF;border-radius:8px;background:#FFFFFF;overflow:hidden}
+.trace li{display:grid;grid-template-columns:76px 22px minmax(0,1fr) 70px;gap:8px;align-items:center;padding:6px 12px;border-top:1px solid #ECE5F4;font-size:12.5px;line-height:18px}
+.trace li:first-child{border-top:0}
+.trace code{font-family:'Open Sans',sans-serif;font-weight:600}
+.trace .d{color:#48454E;text-align:right;font-variant-numeric:tabular-nums}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</helmet>
+<div style="width: 1560px; min-height: 1960px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column; gap: 28px; padding: 56px 64px">
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <div class="k">Agent run · in the assistant panel</div>
+    <h1 class="h1">Panel version</h1>
+    <p class="lead">For the person in the conversation. A pinned strip says what runs now; the conversation gets one row per milestone; the gate is answered in place. Everything links to the page for the full record. Pick a moment to see the panel at that point of the run.</p>
+  </div>
+  <div style="display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 32px; align-items: start">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; gap: 6px; flex-wrap: wrap" role="group" aria-label="Moment of the run"><sc-for list="{{moments}}" as="m" hint-placeholder-count="5"><button type="button" class="chip {{m.cls}}" aria-pressed="{{m.on}}" onClick="{{m.pick}}">{{m.label}}</button></sc-for></div>
+      <aside class="panel" aria-label="Assistant">
+        <div class="mrow" style="padding: 2px 4px"><b class="ui" style="font-size: 15px">✦ Assistant</b><span class="mt">CHG-14</span></div>
+        <div class="strip" role="status">
+          <span class="mrow"><span class="anno" aria-hidden="true">1</span><span class="st {{s.cls}}"><span class="g" aria-hidden="true">{{s.glyph}}</span>{{s.label}}</span><sc-if value="{{s.dots}}" hint-placeholder-val="{{true}}"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></sc-if><b class="ui">✦ {{s.agent}}</b><span class="mt">{{s.progress}}</span></span>
+          <span class="mrow" style="justify-content: space-between"><span class="mt">{{s.trail}}</span><a class="btn x" href="#chg-14">Open in change</a></span>
+        </div>
+        <div class="mu">Assess what self-service environment reservation changes, and take it to the board.</div>
+        <div class="mcard"><span class="mrow"><span class="anno" aria-hidden="true">2</span><span class="mk mk-info" aria-hidden="true">✦</span><span><b class="ui">✦ Analysis agent</b> started · Phase B</span></span></div>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="2">
+          <div class="mcard {{r.cardCls}}">
+            <span class="mrow"><span class="anno" aria-hidden="true">{{r.anno}}</span><span class="mk {{r.mkCls}}" aria-hidden="true">{{r.mk}}</span><span><b class="ui">✦ {{r.agent}}</b> {{r.text}}</span></span>
+            <sc-if value="{{r.hasOut}}" hint-placeholder-val="{{false}}"><span class="mt" style="padding-left: 56px">{{r.outLine}}</span></sc-if>
+            <sc-if value="{{r.gate}}" hint-placeholder-val="{{false}}"><div class="gate" role="group" aria-label="{{r.gateQ}}"><b>Waiting for you · {{r.gateQ}}</b><span style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn f">{{r.ok}}</button><sc-if value="{{r.reject}}" hint-placeholder-val="{{false}}"><button type="button" class="btn o">Request changes</button></sc-if><a class="btn x" href="#viewer">View output</a></span></div></sc-if>
+            <sc-if value="{{r.fail}}" hint-placeholder-val="{{false}}"><span style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn f">Retry</button><a class="btn x" href="#log">View log</a></span></sc-if>
+            <sc-if value="{{r.links}}" hint-placeholder-val="{{true}}"><span class="mrow" style="justify-content: flex-end"><sc-if value="{{r.hasOut}}" hint-placeholder-val="{{false}}"><a class="btn x" href="#viewer">View output</a></sc-if><a class="btn x" href="#chg-14">Open in change</a></span></sc-if>
+          </div>
+        </sc-for>
+      </aside>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 24px; min-width: 0">
+      <div class="pnl"><span class="pt">Parts</span>
+        <table class="tk"><tr><th style="width: 34px"></th><th style="width: 200px">Part</th><th>Rules</th></tr>
+        <tr><td><span class="anno">1</span></td><td>Run strip</td><td>Pinned under the panel header while a run of this conversation is running or waits; shows the most urgent run (order on the usage board). Chip, agent, n / m steps, the trail of all steps (✓ done, ✦ running, ! waiting), Open in change. Steps tick here, not in the conversation. Gone when every run is done; the last milestone stays in the conversation.</td></tr>
+        <tr><td><span class="anno">2</span></td><td>Milestone row · started</td><td>Glyph tile, agent name in bold, “started · &lt;phase&gt;”. While it runs the row adds n / m steps; nothing else.</td></tr>
+        <tr><td><span class="anno">3</span></td><td>Milestone row · finished</td><td>✓ tile, “finished · &lt;output title&gt;”, the one-line summary, View output (opens the viewer as a side sheet) and Open in change.</td></tr>
+        <tr><td><span class="anno">4</span></td><td>Milestone row · waiting</td><td>Card with the 2 px primary border and the gate: question, primary action, Request changes when the gate allows it, View output. Answering adds your reply as a user message and removes the buttons; the row keeps “Approved by you · 10:11”.</td></tr>
+        <tr><td><span class="anno">5</span></td><td>Milestone row · failed</td><td>✕ tile, what failed in one line, Retry (new run) and View log.</td></tr></table></div>
+      <div class="pnl"><span class="pt">Sizes and tokens</span>
+        <table class="tk"><tr><th>Element</th><th>Value</th></tr>
+        <tr><td>Panel width</td><td class="mono">360–480, default 400 (assistant panel spec)</td></tr>
+        <tr><td>Strip, row card</td><td class="mono">surface-container-lowest, 1 px outline-variant, radius 12, padding 10–12</td></tr>
+        <tr><td>Waiting row</td><td class="mono">2 px primary inset border; gate block primary-container, on-primary-container text</td></tr>
+        <tr><td>Glyph tile</td><td class="mono">20 × 20, radius 3, the state’s tile colours</td></tr>
+        <tr><td>Buttons</td><td class="mono">32 high: filled for the gate’s action, outlined for Request changes, text for links</td></tr>
+        <tr><td>Motion</td><td class="mono">working dots 1 s loop; rows appear with the conversation’s message motion; reduced motion: none</td></tr></table></div>
+      <div class="g2" style="gap: 16px">
+        <div class="do"><b>Do</b><span>Keep the conversation readable: five agents make about ten rows, not fifty.</span><span>Show the gate where the person is, with the output one click away.</span></div>
+        <div class="dont"><b>Don’t</b><span>Put the full output in the conversation; summary and View output.</span><span>Show runs the person neither started nor must approve; those live on the page.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1560,"height":1960}}'>
+const M = [
+  { id: 'run', label: 'Draft running', s: { cls: 'st-run', glyph: '✦', label: 'Running', dots: true, agent: 'Drafting agent', progress: '2 / 4 steps', trail: 'Analysis ✓ → Draft ✦ → Review → Implementation' },
+    rows: [ { anno: '3', mk: '✓', mkCls: 'mk-ok', agent: 'Analysis agent', text: 'finished · Impact analysis', outLine: '4 elements · phases B and C', hasOut: true, links: true },
+            { anno: '2', mk: '✦', mkCls: 'mk-run', agent: 'Drafting agent', text: 'started · Phases B–C · 2 / 4 steps', links: true } ] },
+  { id: 'wait', label: 'Review waits for you', s: { cls: 'st-wait', glyph: '!', label: 'Waiting for you', dots: false, agent: 'Review agent', progress: '5 / 5 steps', trail: 'Analysis ✓ → Draft ✓ → Review ! → Implementation' },
+    rows: [ { anno: '3', mk: '✓', mkCls: 'mk-ok', agent: 'Drafting agent', text: 'finished · Draft pull request #48', outLine: 'model +38 −2 lines · 2 new views', hasOut: true, links: true },
+            { anno: '4', mk: '!', mkCls: 'mk-warn', agent: 'Review agent', text: 'is ready · Review report (14 passed · 1 warning). Approve the change?', cardCls: 'mcard-wait', gate: true, gateQ: 'Approve the change', ok: 'Approve', reject: true } ] },
+  { id: 'fail', label: 'Implementation failed', s: { cls: 'st-fail', glyph: '✕', label: 'Failed', dots: false, agent: 'Implementation agent', progress: '2 / 4 steps', trail: 'Analysis ✓ → Draft ✓ → Review ✓ → Implementation ✕' },
+    rows: [ { anno: '3', mk: '✓', mkCls: 'mk-ok', agent: 'Review agent', text: 'approved by you · 10:11', links: true },
+            { anno: '5', mk: '✕', mkCls: 'mk-err', agent: 'Implementation agent', text: 'failed · Publish the Docs pages: the Docs service did not answer (timeout after 30 s).', fail: true } ] },
+  { id: 'done', label: 'All done', s: { cls: 'st-done', glyph: '✓', label: 'Done', dots: false, agent: 'Implementation agent', progress: '4 / 4 steps', trail: 'Analysis ✓ → Draft ✓ → Review ✓ → Implementation ✓' },
+    rows: [ { anno: '3', mk: '✓', mkCls: 'mk-ok', agent: 'Implementation agent', text: 'finished · Delivered', outLine: 'merged · 2 diagrams · Docs page · 3 Jira items', hasOut: true, links: true } ] }
+];
+const BASE = { cardCls: '', hasOut: false, outLine: '', gate: false, gateQ: '', ok: '', reject: false, fail: false, links: false };
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { m: 'wait' }; }
+  renderVals() {
+    const cur = M.find(x => x.id === this.state.m);
+    return {
+      moments: M.map(x => ({ label: x.label, on: x.id === cur.id, cls: x.id === cur.id ? 'chip-on' : '', pick: () => this.setState({ m: x.id }) })),
+      s: cur.s, rows: cur.rows.map(r => Object.assign({}, BASE, r))
+    };
+  }
+}
+</script>
+</body>
+</html>

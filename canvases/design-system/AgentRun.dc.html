@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agent run · usage</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E}
+button{font-family:inherit;cursor:pointer}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+.ui{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif}
+.k{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#48454E}
+.h1{margin:0;font-family:Manrope,'BNPP Type',sans-serif;font-size:45px;line-height:52px;font-weight:700;letter-spacing:-0.01em}
+.lead{margin:0;max-width:980px;font-size:16px;line-height:24px;color:#48454E}
+.pnl{display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:16px;background:#FAF4FF;min-width:0}
+.pt{font-family:Manrope,'BNPP Type',sans-serif;font-size:15px;font-weight:700}
+.mt{font-size:13px;line-height:19px;color:#48454E}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+ul.r{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:20px}
+table.tk{border-collapse:collapse;width:100%;font-size:13px;line-height:18px}
+table.tk th{text-align:left;font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;color:#48454E;padding:6px 8px;border-bottom:1px solid #CAC4CF}
+table.tk td{padding:7px 8px;border-bottom:1px solid #E6E0EC;vertical-align:top}
+.do,.dont{border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:20px}
+.do{background:#FFFFFF;box-shadow:inset 0 4px 0 #0B5314}.dont{background:#FFFFFF;box-shadow:inset 0 4px 0 #93000A}
+.do b,.dont b{font-family:Manrope,'BNPP Type',sans-serif}
+.chip{height:32px;padding:0 12px;border-radius:8px;border:1px solid #79757F;background:transparent;color:#1C1B1E;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.chip:hover{background:rgba(57,35,95,.06)}
+.chip-on{background:#DED7EB;border-color:#DED7EB;color:#1D1A28}
+.btn{height:32px;padding:0 14px;border:0;border-radius:12px;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.f{background:#39235F;color:#FFFFFF}.f:hover{background:#4A3470}
+.o{background:transparent;border:1px solid #79757F;color:#39235F}.o:hover{background:rgba(57,35,95,.06)}
+.x{background:transparent;color:#39235F;padding:0 10px}.x:hover{background:rgba(57,35,95,.06)}
+/* run status chip */
+.st{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px 0 4px;border-radius:4px;font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;white-space:nowrap}
+.st .g{width:18px;height:18px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+.st-q{background:#ECE5F4;color:#1C1B1E}.st-q .g{background:#48454E;color:#ECE5F4}
+.st-run{background:#9CF1F0;color:#002020}.st-run .g{background:#004F50;color:#9CF1F0}
+.st-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.st-wait .g{background:#39235F;color:#E3DFFF}
+.st-other{background:#E3DFFF;color:#14085E}.st-other .g{background:#39235F;color:#E3DFFF}
+.st-chg{background:#FFDEA0;color:#261900}.st-chg .g{background:#5F4100;color:#FFDEA0}
+.st-done{background:#ACF4A2;color:#002203}.st-done .g{background:#0B5314;color:#ACF4A2}
+.st-fail{background:#FFDAD6;color:#410002}.st-fail .g{background:#93000A;color:#FFDAD6}
+.st-cnl{background:transparent;color:#48454E;box-shadow:inset 0 0 0 1px #79757F}.st-cnl .g{color:#48454E}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}
+.dots i{width:4px;height:4px;border-radius:2px;background:#004F50;animation:dp 1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dp{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.dots i{animation:none;opacity:.8}}
+.ai{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border-radius:4px;background:#9CF1F0;color:#002020;font-family:Manrope,'BNPP Type',sans-serif;font-size:11px;font-weight:700;white-space:nowrap}
+.mk{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:3px;font-weight:700;font-size:12px;flex:none}
+.mk-added,.mk-ok{background:#0B5314;color:#ACF4A2}.mk-changed,.mk-warn{background:#5F4100;color:#FFDEA0}.mk-info{background:#48454E;color:#ECE5F4}.mk-err{background:#93000A;color:#FFDAD6}.mk-run{background:#004F50;color:#9CF1F0}
+/* header indicator */
+.ind{height:36px;padding:0 12px;border-radius:12px;border:0;display:inline-flex;align-items:center;gap:8px;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:700;white-space:nowrap}
+.ind-run{background:#9CF1F0;color:#002020}.ind-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.ind-fail{background:#FFDAD6;color:#410002}
+.band{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:#EDE4FF}
+.sbox{height:40px;flex:1 1 220px;max-width:360px;border-radius:16px;background:#FFFFFF;display:flex;align-items:center;padding:0 14px;color:#48454E;font-size:14px}
+/* panel parts */
+.panel{background:#F8F1FF;border:1px solid #CAC4CF;border-radius:16px;display:flex;flex-direction:column;gap:12px;padding:12px;width:400px;box-sizing:border-box}
+.strip{padding:10px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #CAC4CF;display:flex;flex-direction:column;gap:6px}
+.mrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;line-height:19px}
+.mcard{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.mcard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.mu{align-self:flex-end;max-width:85%;background:#DED7EB;color:#1D1A28;border-radius:16px 16px 4px 16px;padding:8px 12px;font-size:14px;line-height:20px}
+.gate{border-radius:12px;padding:12px;background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:19px}
+.gate b{font-family:Manrope,'BNPP Type',sans-serif}
+.gate-other{box-shadow:none}
+/* page parts */
+.scard{text-align:left;background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;box-sizing:border-box}
+.scard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.scard-sel{border-color:#39235F;box-shadow:inset 0 0 0 1px #39235F}
+.sn{font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;color:#48454E;letter-spacing:.3px;text-transform:uppercase}
+.sa{font-family:Manrope,'BNPP Type',sans-serif;font-size:15px;font-weight:700}
+.adm{font-size:12px;color:#48454E;line-height:16px}
+.bar{height:4px;border-radius:2px;background:#ECE5F4;overflow:hidden}
+.bar i{display:block;height:4px;background:#004F50}
+.bar-done i{background:#0B5314}.bar-fail i{background:#93000A}
+.box{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.h3{margin:0;font-family:Manrope,'BNPP Type',sans-serif;font-size:16px;font-weight:700}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.steps li{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:19px}
+.sm{width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;box-sizing:border-box}
+.sm-done{background:#0B5314;color:#ACF4A2}.sm-now{background:#9CF1F0;color:#002020;border:2px solid #004F50}.sm-todo{border:1.5px solid #79757F;color:#48454E}
+.todo{color:#48454E}
+.orow{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:19px}
+.orow small{display:block;color:#48454E;font-size:12px}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:18px}
+.log time{font-weight:600;color:#48454E;margin-right:8px;font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #CAC4CF;overflow-x:auto}
+.tab{height:44px;padding:0 14px;border:0;background:transparent;font-family:Manrope,'BNPP Type',sans-serif;font-size:14px;font-weight:600;color:#48454E;border-bottom:3px solid transparent;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tab:hover{background:rgba(57,35,95,.06)}
+.tab-on{color:#39235F;border-bottom-color:#39235F}
+.n{font-size:11px;padding:1px 6px;border-radius:6px;background:#F2EBFA;color:#48454E}
+.anno{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:999px;background:#39235F;color:#FFFFFF;font-family:Manrope,sans-serif;font-size:11px;font-weight:700;flex:none}
+.diff{margin:0;border-radius:8px;background:#FFFFFF;border:1px solid #CAC4CF;overflow:hidden;font-family:'Open Sans',sans-serif;font-weight:600;font-size:12.5px;line-height:20px}
+.diff div{padding:0 12px;white-space:pre}
+.diff .a{background:#E4F8DF}.diff .d{background:#FFEDEA;text-decoration:line-through;text-decoration-color:rgba(65,0,2,.4)}.diff .h{background:#F2EBFA;color:#48454E}
+.trace{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;border:1px solid #CAC4CF;border-radius:8px;background:#FFFFFF;overflow:hidden}
+.trace li{display:grid;grid-template-columns:76px 22px minmax(0,1fr) 70px;gap:8px;align-items:center;padding:6px 12px;border-top:1px solid #ECE5F4;font-size:12.5px;line-height:18px}
+.trace li:first-child{border-top:0}
+.trace code{font-family:'Open Sans',sans-serif;font-weight:600}
+.trace .d{color:#48454E;text-align:right;font-variant-numeric:tabular-nums}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</helmet>
+<div style="width: 1560px; min-height: 2140px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column; gap: 28px; padding: 56px 64px">
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <div class="k">AIToolbox · Components · Agents · decided 2026-11-23</div>
+    <h1 class="h1">Agent run</h1>
+    <p class="lead">An agent run is one agent working on one object (a change, a request) through its steps, up to an output and, when the output must take effect, a review gate. The same run is shown in two places: the <b>assistant panel</b>, where a person talks and acts, and the <b>object page</b>, which is the record everyone shares. The state, the steps, the output and the gate are the same data in both; only the depth differs. Example on these boards: the four TOGAF agents of a change (analysis, draft, review, implementation).</p>
+  </div>
+  <div class="g3">
+    <div class="pnl"><span class="pt">One run, two views</span><ul class="r">
+      <li><b>Panel</b>: milestones of the runs this conversation started or that wait for you. Act at the gate without leaving the chat.</li>
+      <li><b>Page</b>: every run of the object in process order, all steps, the activity and the output. Link to it, review there, keep the history.</li>
+      <li><b>Header indicator</b>: from anywhere, what runs and what waits for you.</li>
+      <li><b>Output viewer</b>: the full output of one run, opened from either view; it has its own address.</li></ul></div>
+    <div class="pnl"><span class="pt">Use the panel version when</span><ul class="r">
+      <li>the person started the agents from the conversation, or asked about them there;</li>
+      <li>the next thing they need is a decision (a gate) or a short answer;</li>
+      <li>a run reaches a milestone: started, finished, waiting, failed. One line each, never one per step.</li></ul>
+      <span class="pt">Use the page version when</span><ul class="r">
+      <li>several people follow or review the object;</li>
+      <li>you need every step, the activity, earlier runs or the output in full;</li>
+      <li>the run was started by a signal, a schedule or another agent, not by a conversation.</li></ul></div>
+    <div class="pnl"><span class="pt">Rules</span><ul class="r">
+      <li>An agent output that takes effect passes a person first (PRI-01): the run stops at a gate, nothing is applied before.</li>
+      <li>Only the named approver sees the gate buttons; everyone else sees “Waiting for &lt;name&gt;”.</li>
+      <li>Teal means an agent is working, nothing else. Waiting for you is violet with a 2 px border, the review gate of the notation.</li>
+      <li>A state is a word and a glyph, never a colour alone.</li>
+      <li>A new run never overwrites an old one: run 2 is listed after run 1, which shows “Cancelled · superseded”.</li></ul></div>
+  </div>
+  <div class="pnl"><span class="pt">Run status · eight states, one chip</span>
+    <table class="tk"><tr><th style="width: 260px">Chip</th><th>Means</th><th>Colour roles</th></tr><tr><td><span class="st st-q"><span class="g" aria-hidden="true">·</span>Queued</span></td><td>Created, waits for the previous agent or a free slot.</td><td class="mt">neutral: surface-container-highest + on-surface-variant tile</td></tr><tr><td><span class="st st-run"><span class="g" aria-hidden="true">✦</span>Running</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></td><td>Working on its steps. Shows the working dots and n / m steps.</td><td class="mt">ai-container #9CF1F0 + ai #004F50 tile · the only teal state</td></tr><tr><td><span class="st st-wait"><span class="g" aria-hidden="true">!</span>Waiting for you</span></td><td>At a review gate whose approver is the person looking.</td><td class="mt">primary-container #E3DFFF + 2 px primary border (the review gate)</td></tr><tr><td><span class="st st-other"><span class="g" aria-hidden="true">!</span>Waiting for Léa Martin</span></td><td>At a review gate owned by someone else: no buttons.</td><td class="mt">primary-container, no border</td></tr><tr><td><span class="st st-chg"><span class="g" aria-hidden="true">↩</span>Changes requested</span></td><td>The approver sent the output back; the previous agent runs again.</td><td class="mt">warning-container #FFDEA0 + warning tile</td></tr><tr><td><span class="st st-done"><span class="g" aria-hidden="true">✓</span>Done</span></td><td>Finished; its output is final for this run.</td><td class="mt">success-container #ACF4A2 + success tile</td></tr><tr><td><span class="st st-fail"><span class="g" aria-hidden="true">✕</span>Failed</span></td><td>Stopped on an error; Retry and View log are offered.</td><td class="mt">error-container #FFDAD6 + error tile</td></tr><tr><td><span class="st st-cnl"><span class="g" aria-hidden="true">–</span>Cancelled</span></td><td>Stopped by a person, or superseded by a newer run.</td><td class="mt">transparent, 1 px outline</td></tr></table>
+    <span class="mt">Order of attention when several runs are summed up (header, strip): Waiting for you → Failed → Changes requested → Running → Queued → Done.</span></div>
+  <div class="g2">
+    <div class="pnl"><span class="pt">Anatomy</span>
+      <table class="tk"><tr><th>Part</th><th>Panel</th><th>Page</th></tr>
+      <tr><td>Run status chip</td><td>strip, milestone rows</td><td>stage card, detail, viewer header</td></tr>
+      <tr><td>Header indicator</td><td colspan="2">header, right of the search: count and the most urgent state; hidden when nothing runs or waits</td></tr>
+      <tr><td>Run strip</td><td>pinned at the top of the conversation: current agent, state, progress, trail of the steps, Open</td><td>—</td></tr>
+      <tr><td>Milestone row</td><td>started, finished (View output), waiting (gate), failed (Retry · View log)</td><td>—</td></tr>
+      <tr><td>Stage track and card</td><td>—</td><td>one card per agent in process order: step number, agent, phase, state, progress, next</td></tr>
+      <tr><td>Run detail</td><td>—</td><td>steps, gate, output summary, activity</td></tr>
+      <tr><td>Review gate</td><td>in the milestone row</td><td>in the run detail and the viewer</td></tr>
+      <tr><td>Output summary</td><td>in the finished row: title, one-line summary, View output</td><td>in the run detail: title, summary, up to 6 rows</td></tr>
+      <tr><td>Output viewer</td><td colspan="2">side sheet from the panel, tab of the object page, own address: Summary, Changes, Views, Checks, Log, Files</td></tr></table></div>
+    <div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+      <div class="do"><b>Do</b><span>Post one line per milestone; let the steps tick in the strip and on the page.</span><span>Name the output by what it is: Impact analysis, Draft pull request #48, Review report.</span><span>Write gates as an action on the object: Confirm the scope · Approve the change.</span><span>Link every milestone to the page (Open in change) and every output to the viewer.</span></div>
+      <div class="dont"><b>Don’t</b><span>Stream every step or tool call into the conversation: it buries the gate.</span><span>Show Approve to someone who is not the approver, or approve on someone’s behalf.</span><span>Colour a run teal once it stops: teal is for working only.</span><span>Move focus or open the viewer by itself when a run finishes.</span></div>
+      <div class="pnl"><span class="pt">Accessibility</span><ul class="r">
+        <li>Milestone rows sit in the conversation’s <span class="mono">aria-live="polite"</span> region; step ticks are not announced.</li>
+        <li>The strip is <span class="mono">role="status"</span>; the gate is a group named by its question.</li>
+        <li>Working dots are <span class="mono">aria-hidden</span> and stop with <span class="mono">prefers-reduced-motion</span>; the word Running stays.</li>
+        <li>Stage cards are buttons with <span class="mono">aria-pressed</span> for the selected run; tabs of the viewer are a tablist.</li></ul></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1560,"height":2140}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
