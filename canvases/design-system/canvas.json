@@ -184,6 +184,36 @@
       "w": 1440,
       "h": 1320,
       "is_interactive": true
+    },
+    "AgentRun.dc.html": {
+      "x": 0,
+      "y": 45432,
+      "w": 1560,
+      "h": 2140,
+      "title": "Agent run · usage: one run, two views (assistant panel, object page), eight states, anatomy, rules, do and don’t, accessibility (decided 2026-11-23: option C of the Agent follow lab)"
+    },
+    "AgentRunPanel.dc.html": {
+      "x": 1640,
+      "y": 45432,
+      "w": 1560,
+      "h": 1960,
+      "title": "Agent run · panel version: run strip, milestone rows (started, finished, waiting with the gate, failed), sizes and tokens · pick a moment",
+      "is_interactive": true
+    },
+    "AgentRunPage.dc.html": {
+      "x": 3280,
+      "y": 45432,
+      "w": 1560,
+      "h": 2100,
+      "title": "Agent run · page version: header indicator, Agents tab with the stage track (TOGAF: analysis, draft, review, implementation), run detail, output summary and activity, stage card in every state"
+    },
+    "AgentOutput.dc.html": {
+      "x": 4920,
+      "y": 45432,
+      "w": 1560,
+      "h": 2000,
+      "title": "Agent run · output viewer: header, tabs by agent (Summary, Changes, Views, Checks, Files, Log), the gate at the bottom, where it opens · pick an agent and a tab",
+      "is_interactive": true
     }
   },
   "createdOnFiles": {
@@ -294,6 +324,13 @@
       "w": 240,
       "x": 0,
       "y": 26376
+    },
+    "t12": {
+      "kind": "title1",
+      "x": 0,
+      "y": 45172,
+      "text": "Components · agent run (decided 2026-11-23): usage, panel version, page version, output viewer",
+      "maxW": 6440
     }
   },
   "order": [
@@ -322,7 +359,11 @@
     "Tooltip.dc.html",
     "AssistantPanel.dc.html",
     "AssistantChat.dc.html",
-    "Breakpoints.dc.html"
+    "Breakpoints.dc.html",
+    "AgentRun.dc.html",
+    "AgentRunPanel.dc.html",
+    "AgentRunPage.dc.html",
+    "AgentOutput.dc.html"
   ],
   "title": "AIToolbox design system"
 }
