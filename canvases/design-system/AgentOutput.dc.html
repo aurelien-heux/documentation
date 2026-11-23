@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agent run · output viewer</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E}
+button{font-family:inherit;cursor:pointer}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+.ui{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif}
+.k{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#48454E}
+.h1{margin:0;font-family:Manrope,'BNPP Type',sans-serif;font-size:45px;line-height:52px;font-weight:700;letter-spacing:-0.01em}
+.lead{margin:0;max-width:980px;font-size:16px;line-height:24px;color:#48454E}
+.pnl{display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:16px;background:#FAF4FF;min-width:0}
+.pt{font-family:Manrope,'BNPP Type',sans-serif;font-size:15px;font-weight:700}
+.mt{font-size:13px;line-height:19px;color:#48454E}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+ul.r{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:20px}
+table.tk{border-collapse:collapse;width:100%;font-size:13px;line-height:18px}
+table.tk th{text-align:left;font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;color:#48454E;padding:6px 8px;border-bottom:1px solid #CAC4CF}
+table.tk td{padding:7px 8px;border-bottom:1px solid #E6E0EC;vertical-align:top}
+.do,.dont{border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:20px}
+.do{background:#FFFFFF;box-shadow:inset 0 4px 0 #0B5314}.dont{background:#FFFFFF;box-shadow:inset 0 4px 0 #93000A}
+.do b,.dont b{font-family:Manrope,'BNPP Type',sans-serif}
+.chip{height:32px;padding:0 12px;border-radius:8px;border:1px solid #79757F;background:transparent;color:#1C1B1E;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.chip:hover{background:rgba(57,35,95,.06)}
+.chip-on{background:#DED7EB;border-color:#DED7EB;color:#1D1A28}
+.btn{height:32px;padding:0 14px;border:0;border-radius:12px;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.f{background:#39235F;color:#FFFFFF}.f:hover{background:#4A3470}
+.o{background:transparent;border:1px solid #79757F;color:#39235F}.o:hover{background:rgba(57,35,95,.06)}
+.x{background:transparent;color:#39235F;padding:0 10px}.x:hover{background:rgba(57,35,95,.06)}
+/* run status chip */
+.st{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px 0 4px;border-radius:4px;font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;white-space:nowrap}
+.st .g{width:18px;height:18px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+.st-q{background:#ECE5F4;color:#1C1B1E}.st-q .g{background:#48454E;color:#ECE5F4}
+.st-run{background:#9CF1F0;color:#002020}.st-run .g{background:#004F50;color:#9CF1F0}
+.st-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.st-wait .g{background:#39235F;color:#E3DFFF}
+.st-other{background:#E3DFFF;color:#14085E}.st-other .g{background:#39235F;color:#E3DFFF}
+.st-chg{background:#FFDEA0;color:#261900}.st-chg .g{background:#5F4100;color:#FFDEA0}
+.st-done{background:#ACF4A2;color:#002203}.st-done .g{background:#0B5314;color:#ACF4A2}
+.st-fail{background:#FFDAD6;color:#410002}.st-fail .g{background:#93000A;color:#FFDAD6}
+.st-cnl{background:transparent;color:#48454E;box-shadow:inset 0 0 0 1px #79757F}.st-cnl .g{color:#48454E}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}
+.dots i{width:4px;height:4px;border-radius:2px;background:#004F50;animation:dp 1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dp{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.dots i{animation:none;opacity:.8}}
+.ai{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border-radius:4px;background:#9CF1F0;color:#002020;font-family:Manrope,'BNPP Type',sans-serif;font-size:11px;font-weight:700;white-space:nowrap}
+.mk{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:3px;font-weight:700;font-size:12px;flex:none}
+.mk-added,.mk-ok{background:#0B5314;color:#ACF4A2}.mk-changed,.mk-warn{background:#5F4100;color:#FFDEA0}.mk-info{background:#48454E;color:#ECE5F4}.mk-err{background:#93000A;color:#FFDAD6}.mk-run{background:#004F50;color:#9CF1F0}
+/* header indicator */
+.ind{height:36px;padding:0 12px;border-radius:12px;border:0;display:inline-flex;align-items:center;gap:8px;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:700;white-space:nowrap}
+.ind-run{background:#9CF1F0;color:#002020}.ind-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.ind-fail{background:#FFDAD6;color:#410002}
+.band{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:#EDE4FF}
+.sbox{height:40px;flex:1 1 220px;max-width:360px;border-radius:16px;background:#FFFFFF;display:flex;align-items:center;padding:0 14px;color:#48454E;font-size:14px}
+/* panel parts */
+.panel{background:#F8F1FF;border:1px solid #CAC4CF;border-radius:16px;display:flex;flex-direction:column;gap:12px;padding:12px;width:400px;box-sizing:border-box}
+.strip{padding:10px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #CAC4CF;display:flex;flex-direction:column;gap:6px}
+.mrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;line-height:19px}
+.mcard{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.mcard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.mu{align-self:flex-end;max-width:85%;background:#DED7EB;color:#1D1A28;border-radius:16px 16px 4px 16px;padding:8px 12px;font-size:14px;line-height:20px}
+.gate{border-radius:12px;padding:12px;background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:19px}
+.gate b{font-family:Manrope,'BNPP Type',sans-serif}
+.gate-other{box-shadow:none}
+/* page parts */
+.scard{text-align:left;background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;box-sizing:border-box}
+.scard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.scard-sel{border-color:#39235F;box-shadow:inset 0 0 0 1px #39235F}
+.sn{font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;color:#48454E;letter-spacing:.3px;text-transform:uppercase}
+.sa{font-family:Manrope,'BNPP Type',sans-serif;font-size:15px;font-weight:700}
+.adm{font-size:12px;color:#48454E;line-height:16px}
+.bar{height:4px;border-radius:2px;background:#ECE5F4;overflow:hidden}
+.bar i{display:block;height:4px;background:#004F50}
+.bar-done i{background:#0B5314}.bar-fail i{background:#93000A}
+.box{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.h3{margin:0;font-family:Manrope,'BNPP Type',sans-serif;font-size:16px;font-weight:700}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.steps li{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:19px}
+.sm{width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;box-sizing:border-box}
+.sm-done{background:#0B5314;color:#ACF4A2}.sm-now{background:#9CF1F0;color:#002020;border:2px solid #004F50}.sm-todo{border:1.5px solid #79757F;color:#48454E}
+.todo{color:#48454E}
+.orow{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:19px}
+.orow small{display:block;color:#48454E;font-size:12px}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:18px}
+.log time{font-weight:600;color:#48454E;margin-right:8px;font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #CAC4CF;overflow-x:auto}
+.tab{height:44px;padding:0 14px;border:0;background:transparent;font-family:Manrope,'BNPP Type',sans-serif;font-size:14px;font-weight:600;color:#48454E;border-bottom:3px solid transparent;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tab:hover{background:rgba(57,35,95,.06)}
+.tab-on{color:#39235F;border-bottom-color:#39235F}
+.n{font-size:11px;padding:1px 6px;border-radius:6px;background:#F2EBFA;color:#48454E}
+.anno{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:999px;background:#39235F;color:#FFFFFF;font-family:Manrope,sans-serif;font-size:11px;font-weight:700;flex:none}
+.diff{margin:0;border-radius:8px;background:#FFFFFF;border:1px solid #CAC4CF;overflow:hidden;font-family:'Open Sans',sans-serif;font-weight:600;font-size:12.5px;line-height:20px}
+.diff div{padding:0 12px;white-space:pre}
+.diff .a{background:#E4F8DF}.diff .d{background:#FFEDEA;text-decoration:line-through;text-decoration-color:rgba(65,0,2,.4)}.diff .h{background:#F2EBFA;color:#48454E}
+.trace{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;border:1px solid #CAC4CF;border-radius:8px;background:#FFFFFF;overflow:hidden}
+.trace li{display:grid;grid-template-columns:76px 22px minmax(0,1fr) 70px;gap:8px;align-items:center;padding:6px 12px;border-top:1px solid #ECE5F4;font-size:12.5px;line-height:18px}
+.trace li:first-child{border-top:0}
+.trace code{font-family:'Open Sans',sans-serif;font-weight:600}
+.trace .d{color:#48454E;text-align:right;font-variant-numeric:tabular-nums}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</helmet>
+<div style="width: 1560px; min-height: 2000px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column; gap: 28px; padding: 56px 64px">
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <div class="k">Agent run · output</div>
+    <h1 class="h1">Output viewer</h1>
+    <p class="lead">Where a person reads what one run produced, before approving it or after. One view with its own address (<span class="mono">/architecture/changes/CHG-14/runs/review-2</span>): opened as a side sheet from the panel (View output), as a full view from the page, shared as a link. Tabs depend on what the agent produces. Pick an agent and a tab.</p>
+  </div>
+  <div style="display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 32px; align-items: start">
+    <div style="display: flex; flex-direction: column; gap: 10px; min-width: 0">
+      <div style="display: flex; gap: 6px; flex-wrap: wrap" role="group" aria-label="Agent"><sc-for list="{{agents}}" as="a" hint-placeholder-count="4"><button type="button" class="chip {{a.cls}}" aria-pressed="{{a.on}}" onClick="{{a.pick}}">✦ {{a.label}}</button></sc-for></div>
+      <section class="box" style="padding: 0; gap: 0; overflow: hidden" aria-label="Output viewer">
+        <div style="display: flex; flex-direction: column; gap: 8px; padding: 16px 20px 0; background: #F8F1FF">
+          <div class="mrow"><span class="anno" aria-hidden="true">1</span><h2 class="h3" style="font-size: 20px">{{v.title}}</h2><span class="st {{v.stCls}}"><span class="g" aria-hidden="true">{{v.glyph}}</span>{{v.stLabel}}</span><span style="margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap"><sc-if value="{{v.hasPr}}" hint-placeholder-val="{{true}}"><a class="btn o" href="#pr">Open pull request #48</a></sc-if><button type="button" class="btn x">Copy link</button><button type="button" class="btn x">Download</button></span></div>
+          <div class="mrow mt"><span class="ai">✦ agent</span><span>{{v.meta}}</span></div>
+          <div class="tabs" role="tablist" aria-label="Output" style="border-bottom: 0"><span class="anno" aria-hidden="true" style="align-self: center">2</span><sc-for list="{{tabs}}" as="t" hint-placeholder-count="4"><button type="button" role="tab" class="tab {{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.label}} <span class="n">{{t.count}}</span></button></sc-for></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; padding: 16px 20px 20px; border-top: 1px solid #CAC4CF; min-height: 420px" role="tabpanel">
+          <sc-if value="{{show.summary}}" hint-placeholder-val="{{true}}">
+            <span class="mt">{{v.summary}}</span>
+            <sc-for list="{{v.rows}}" as="r" hint-placeholder-count="4"><div class="orow"><span class="mk {{r.cls}}" aria-hidden="true">{{r.mark}}</span><span>{{r.text}}<small>{{r.sub}}</small></span></div></sc-for>
+          </sc-if>
+          <sc-if value="{{show.changes}}" hint-placeholder-val="{{false}}">
+            <span class="mt">model/business.yaml · +12 −0</span>
+            <div class="diff" role="img" aria-label="Diff of model/business.yaml: 12 lines added">
+              <div class="h">@@ processes @@</div>
+              <div>  - id: PRC-04</div>
+              <div>    name: Change the architecture model</div>
+              <div class="a">+ - id: PRC-06</div>
+              <div class="a">+   name: Reserve an environment</div>
+              <div class="a">+   status: draft</div>
+              <div class="a">+   realizes: [BSV-03]</div>
+              <div class="h">@@ services @@</div>
+              <div class="a">+ - id: BSV-03</div>
+              <div class="a">+   name: Environment reservation</div>
+            </div>
+            <span class="mt">model/application.yaml · +3 −1</span>
+            <div class="diff" role="img" aria-label="Diff of model/application.yaml: 3 lines added, 1 removed">
+              <div>  - id: APC-04</div>
+              <div class="d">-   serves: []</div>
+              <div class="a">+   serves: [BSV-03]</div>
+              <div class="a">+   owner: team-environments</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{show.views}}" hint-placeholder-val="{{false}}">
+            <span class="mt">views/reserve-environment.yaml · business workflow · rendered with PlantUML, AIToolbox theme</span>
+            <div style="border: 1px solid #CAC4CF; border-radius: 12px; padding: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; background: #FFFFFF" role="img" aria-label="Workflow: the requester asks for an environment, the reservation agent checks capacity and drafts the reservation, the environment owner approves, the platform reserves it">
+              <div style="display: flex; flex-direction: column; gap: 10px; align-items: center"><span class="sn">Requester</span><span style="padding: 6px 12px; border-radius: 16px; background: #FFF2B3; border: 1px solid #5E5000; font-size: 12px">event · Environment needed</span><span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #79757F; font-size: 12px">Pick dates and size</span></div>
+              <div style="display: flex; flex-direction: column; gap: 10px; align-items: center"><span class="sn">Reservation agent</span><span style="padding: 6px 12px; border-radius: 16px; background: #9CF1F0; border: 1px solid #004F50; color: #002020; font-size: 12px">✦ agent · Check capacity</span><span style="padding: 6px 12px; border-radius: 16px; background: #9CF1F0; border: 1px solid #004F50; color: #002020; font-size: 12px">✦ agent · Draft the reservation</span></div>
+              <div style="display: flex; flex-direction: column; gap: 10px; align-items: center"><span class="sn">Environment owner</span><span style="padding: 6px 12px; border-radius: 16px; background: #E3DFFF; box-shadow: inset 0 0 0 2px #39235F; color: #14085E; font-size: 12px">review gate · Approve</span><span style="padding: 6px 12px; border-radius: 16px; background: #ECE5F4; border: 1px solid #CAC4CF; font-size: 12px">system · Reserve</span></div>
+            </div>
+            <span class="mt">Each view of the run opens in the diagram frame of the ArchiMate notation (renderer switch, fit width, sources). Mini preview here.</span>
+          </sc-if>
+          <sc-if value="{{show.checks}}" hint-placeholder-val="{{false}}">
+            <table class="tk"><tr><th style="width: 40px"></th><th>Check</th><th>Result</th></tr>
+            <sc-for list="{{v.checks}}" as="c" hint-placeholder-count="5"><tr><td><span class="mk {{c.cls}}" aria-hidden="true">{{c.mark}}</span></td><td>{{c.name}}</td><td class="mt">{{c.res}}</td></tr></sc-for></table>
+          </sc-if>
+          <sc-if value="{{show.log}}" hint-placeholder-val="{{false}}">
+            <span class="mt">Execution trace: every step and tool call, with its duration. Read-only; Download gives the JSON.</span>
+            <ol class="trace">
+              <sc-for list="{{v.trace}}" as="l" hint-placeholder-count="6"><li><span class="mt" style="font-variant-numeric: tabular-nums">{{l.t}}</span><span class="mk {{l.cls}}" aria-hidden="true">{{l.mark}}</span><span><code>{{l.call}}</code><span class="mt"> · {{l.note}}</span></span><span class="d">{{l.d}}</span></li></sc-for>
+            </ol>
+          </sc-if>
+          <sc-if value="{{show.files}}" hint-placeholder-val="{{false}}">
+            <sc-for list="{{v.files}}" as="f" hint-placeholder-count="4"><div class="orow"><span class="mk {{f.cls}}" aria-hidden="true">{{f.mark}}</span><span><a href="#file">{{f.name}}</a><small>{{f.sub}}</small></span></div></sc-for>
+          </sc-if>
+          <sc-if value="{{v.gate}}" hint-placeholder-val="{{false}}"><div class="gate" role="group" aria-label="{{v.gateQ}}" style="margin-top: auto"><span class="mrow"><span class="anno" aria-hidden="true">3</span><b>Waiting for you · {{v.gateQ}}</b></span><span style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn f">{{v.ok}}</button><sc-if value="{{v.reject}}" hint-placeholder-val="{{false}}"><button type="button" class="btn o">Request changes</button></sc-if></span></div></sc-if>
+        </div>
+      </section>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 24px; min-width: 0">
+      <div class="pnl"><span class="pt">Parts</span><table class="tk">
+        <tr><td><span class="anno">1</span></td><td><b>Header</b>: output title (what it is), run chip, agent, run number, object, start, duration, who started it, who approved it. Actions: the object the output lives in (pull request, page), Copy link, Download.</td></tr>
+        <tr><td><span class="anno">2</span></td><td><b>Tabs</b> by kind of output, with counts. Summary is always first and selected when opened from a milestone; Log is always last.</td></tr>
+        <tr><td><span class="anno">3</span></td><td><b>Gate</b> at the bottom while the run waits and you are the approver: you decide having read it.</td></tr></table></div>
+      <div class="pnl"><span class="pt">Tabs per agent</span><table class="tk"><tr><th>Agent</th><th>Tabs</th></tr>
+        <tr><td>Analysis</td><td>Summary (impacted elements with change marks) · Log</td></tr>
+        <tr><td>Drafting</td><td>Summary · Changes (YAML diff per file) · Views (rendered) · Files · Log</td></tr>
+        <tr><td>Review</td><td>Summary · Checks (one row per rule, failing elements linked) · Log</td></tr>
+        <tr><td>Implementation</td><td>Summary · Files (published pages, tickets, merged commit) · Log</td></tr></table>
+        <span class="mt">A tab appears only when it has content. Changes use the notation’s marks: added lines success-container, removed error-container struck through, never colour alone (+ and − lead each line).</span></div>
+      <div class="pnl"><span class="pt">Where it opens</span><table class="tk">
+        <tr><td>From the panel</td><td>Side sheet over the page, 640 wide (full screen under 840 px); the conversation stays open beside it.</td></tr>
+        <tr><td>From the page</td><td>Replaces the run detail, back arrow to the Agents tab.</td></tr>
+        <tr><td>From a link</td><td>The object page with the viewer open.</td></tr>
+        <tr><td>Earlier runs</td><td>Same viewer with the run chip “Cancelled · superseded by run 2”; no gate.</td></tr></table></div>
+      <div class="dont"><b>Don’t</b><span>Show raw model prompts or chain of thought in Log: steps, tool calls, inputs and outputs only.</span><span>Let the Download be the only way to read an output.</span></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1560,"height":2000}}'>
+const A = {
+  analysis: { label: 'Analysis agent', title: 'Impact analysis', st: ['st-done', '✓', 'Done'], hasPr: false,
+    meta: 'Analysis agent · run 1 · CHG-14 · 09:40 · 1 min · started by Léa Martin from the assistant · scope confirmed by Léa Martin 09:50',
+    summary: '4 elements · phases B and C', tabs: ['summary', 'log'],
+    rows: [ { mark: '+', cls: 'mk-added', text: 'PRC-06 Reserve an environment', sub: 'Business process, new' }, { mark: '+', cls: 'mk-added', text: 'BSV-03 Environment reservation', sub: 'Business service, new' }, { mark: 'Δ', cls: 'mk-changed', text: 'APC-04 Environments', sub: 'Application component, gains the reservation API' }, { mark: '+', cls: 'mk-added', text: 'DOB-09 Reservation', sub: 'Data object, new' }, { mark: '·', cls: 'mk-info', text: 'PRI-01 applies', sub: 'Reservations drafted by an agent pass a person' } ] },
+  draft: { label: 'Drafting agent', title: 'Draft pull request #48', st: ['st-done', '✓', 'Done'], hasPr: true,
+    meta: 'Drafting agent · run 2 · CHG-14 · 10:07 · 45 s · started by the review (changes requested)',
+    summary: 'model +38 −2 lines · 2 new views', tabs: ['summary', 'changes', 'views', 'files', 'log'],
+    rows: [ { mark: 'Δ', cls: 'mk-changed', text: 'model/business.yaml', sub: 'PRC-06, BSV-03 added' }, { mark: 'Δ', cls: 'mk-changed', text: 'model/application.yaml', sub: 'APC-04 serves BSV-03, owner set' }, { mark: '+', cls: 'mk-added', text: 'model/data.yaml', sub: 'DOB-09 Reservation' }, { mark: '+', cls: 'mk-added', text: 'views/reserve-environment.yaml', sub: 'Business workflow' }, { mark: '+', cls: 'mk-added', text: 'views/reservation-lifecycle.yaml', sub: 'State machine' } ] },
+  review: { label: 'Review agent', title: 'Review report', st: ['st-wait', '!', 'Waiting for you'], hasPr: true, gate: true, gateQ: 'Approve the change', ok: 'Approve', reject: true,
+    meta: 'Review agent · run 2 · CHG-14 · 10:09 · 1 min 15 s · started by the drafting agent',
+    summary: '15 checks passed · run 1 had 1 warning', tabs: ['summary', 'checks', 'log'],
+    rows: [ { mark: '✓', cls: 'mk-ok', text: 'JSON Schema, references, relations', sub: '' }, { mark: '✓', cls: 'mk-ok', text: 'PRI-01: PRC-06 has a review gate', sub: '' }, { mark: '✓', cls: 'mk-ok', text: 'Owner of APC-04 set', sub: 'Fixed in run 2' } ] },
+  implement: { label: 'Implementation agent', title: 'Delivered', st: ['st-done', '✓', 'Done'], hasPr: true,
+    meta: 'Implementation agent · run 1 · CHG-14 · 10:11 · 1 min 10 s · started by the approval of Léa Martin',
+    summary: 'merged · published · handed over', tabs: ['summary', 'files', 'log'],
+    rows: [ { mark: '✓', cls: 'mk-ok', text: 'Pull request #48 merged into main', sub: 'commit 4f2c9e1' }, { mark: '✓', cls: 'mk-ok', text: '2 diagrams rendered', sub: 'Workflow (PlantUML), life cycle (Mermaid)' }, { mark: '✓', cls: 'mk-ok', text: 'Docs page published', sub: 'Reserve an environment' }, { mark: '✓', cls: 'mk-ok', text: 'Jira ENV-231, ENV-232, ENV-233 created', sub: 'Team environments' } ] }
+};
+const CHECKS = [ ['✓', 'mk-ok', 'JSON Schema', 'model/*.yaml valid'], ['✓', 'mk-ok', 'References', 'every ID exists (PRC-06, BSV-03, APC-04, DOB-09)'], ['✓', 'mk-ok', 'Relations', 'realization, serving, access allowed by the metamodel'], ['✓', 'mk-ok', 'PRI-01 review gate', 'PRC-06 has a gate before the reservation takes effect'], ['✓', 'mk-ok', 'Views', 'both views render in PlantUML and Mermaid'], ['✓', 'mk-ok', 'Ownership', 'APC-04 owner: team-environments (run 1: warning)'] ];
+const TRACE = {
+  analysis: [ ['09:40:15', 'mk-run', '✦', 'conversation.read()', 'request and 3 messages', '0.4 s'], ['09:40:30', 'mk-run', '✦', 'model.search("environment reservation")', '7 hits', '1.2 s'], ['09:41:00', 'mk-run', '✦', 'model.impact(PRC-06, APC-04)', '4 elements, phases B, C', '2.1 s'], ['09:41:20', 'mk-ok', '✓', 'output.write("Impact analysis")', '5 rows', '0.3 s'], ['09:41:20', 'mk-info', '!', 'gate.open("Confirm the scope", Léa Martin)', 'waiting', '—'] ],
+  draft: [ ['10:07:00', 'mk-run', '✦', 'review.comments(run 1)', '1 comment', '0.2 s'], ['10:07:15', 'mk-run', '✦', 'yaml.edit(model/application.yaml)', '+1 −0', '0.6 s'], ['10:07:30', 'mk-run', '✦', 'git.push(change/chg-14)', 'commit 9ab31d0', '2.4 s'], ['10:07:45', 'mk-ok', '✓', 'pr.update(#48)', 'ready for review', '0.8 s'] ],
+  review: [ ['10:09:00', 'mk-run', '✦', 'schema.validate(model/)', '0 errors', '1.1 s'], ['10:09:15', 'mk-run', '✦', 'refs.check()', '0 missing', '0.7 s'], ['10:09:30', 'mk-run', '✦', 'principles.check(PRI-01)', 'gate found in PRC-06', '0.5 s'], ['10:09:50', 'mk-run', '✦', 'views.render(2)', 'PlantUML, Mermaid', '6.8 s'], ['10:10:15', 'mk-ok', '✓', 'output.write("Review report")', '15 checks', '0.3 s'], ['10:10:30', 'mk-info', '!', 'gate.open("Approve the change", Léa Martin)', 'waiting', '—'] ],
+  implement: [ ['10:11:15', 'mk-run', '✦', 'pr.merge(#48)', 'commit 4f2c9e1', '3.0 s'], ['10:11:30', 'mk-run', '✦', 'views.render(2)', 'svg, light and dark', '7.2 s'], ['10:11:50', 'mk-run', '✦', 'docs.publish("Reserve an environment")', 'published', '2.6 s'], ['10:12:10', 'mk-ok', '✓', 'jira.create(ENV, 3)', 'ENV-231…233', '1.9 s'] ]
+};
+const FILES = {
+  draft: [ ['Δ', 'mk-changed', 'model/business.yaml', '+12 −0'], ['Δ', 'mk-changed', 'model/application.yaml', '+3 −1'], ['+', 'mk-added', 'model/data.yaml', '+18 −0'], ['+', 'mk-added', 'views/reserve-environment.yaml', 'business workflow'], ['+', 'mk-added', 'views/reservation-lifecycle.yaml', 'state machine'] ],
+  implement: [ ['✓', 'mk-ok', 'Pull request #48', 'merged into main · 4f2c9e1'], ['✓', 'mk-ok', 'Docs · Reserve an environment', 'published 10:11'], ['✓', 'mk-ok', 'ENV-231 Reservation API in Environments', 'Jira · team environments'], ['✓', 'mk-ok', 'ENV-232 Reservation screen', 'Jira'], ['✓', 'mk-ok', 'ENV-233 Automatic release job', 'Jira'] ]
+};
+const TL = { summary: 'Summary', changes: 'Changes', views: 'Views', checks: 'Checks', files: 'Files', log: 'Log' };
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { a: 'review', t: 'summary' }; }
+  renderVals() {
+    const a = A[this.state.a]; const t = a.tabs.includes(this.state.t) ? this.state.t : 'summary';
+    const trace = TRACE[this.state.a].map(x => ({ t: x[0], cls: x[1], mark: x[2], call: x[3], note: x[4], d: x[5] }));
+    const files = (FILES[this.state.a] || []).map(x => ({ mark: x[0], cls: x[1], name: x[2], sub: x[3] }));
+    const counts = { summary: a.rows.length, changes: 2, views: 2, checks: CHECKS.length, files: files.length, log: trace.length };
+    const show = {}; Object.keys(TL).forEach(k => { show[k] = t === k; });
+    return {
+      agents: Object.keys(A).map(k => ({ label: A[k].label, on: this.state.a === k, cls: this.state.a === k ? 'chip-on' : '', pick: () => this.setState({ a: k, t: 'summary' }) })),
+      tabs: a.tabs.map(k => ({ label: TL[k], count: counts[k], on: t === k, cls: t === k ? 'tab-on' : '', pick: () => this.setState({ t: k }) })),
+      show,
+      v: { title: a.title, stCls: a.st[0], glyph: a.st[1], stLabel: a.st[2], hasPr: a.hasPr, meta: a.meta, summary: a.summary, rows: a.rows, gate: !!a.gate, gateQ: a.gateQ || '', ok: a.ok || '', reject: !!a.reject,
+           checks: CHECKS.map(c => ({ mark: c[0], cls: c[1], name: c[2], res: c[3] })), trace, files }
+    };
+  }
+}
+</script>
+</body>
+</html>

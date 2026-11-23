@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agent run · page version</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E}
+button{font-family:inherit;cursor:pointer}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+.ui{font-family:Manrope,'BNPP Type','Segoe UI',system-ui,sans-serif}
+.k{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#48454E}
+.h1{margin:0;font-family:Manrope,'BNPP Type',sans-serif;font-size:45px;line-height:52px;font-weight:700;letter-spacing:-0.01em}
+.lead{margin:0;max-width:980px;font-size:16px;line-height:24px;color:#48454E}
+.pnl{display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:16px;background:#FAF4FF;min-width:0}
+.pt{font-family:Manrope,'BNPP Type',sans-serif;font-size:15px;font-weight:700}
+.mt{font-size:13px;line-height:19px;color:#48454E}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+ul.r{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:20px}
+table.tk{border-collapse:collapse;width:100%;font-size:13px;line-height:18px}
+table.tk th{text-align:left;font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;color:#48454E;padding:6px 8px;border-bottom:1px solid #CAC4CF}
+table.tk td{padding:7px 8px;border-bottom:1px solid #E6E0EC;vertical-align:top}
+.do,.dont{border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:20px}
+.do{background:#FFFFFF;box-shadow:inset 0 4px 0 #0B5314}.dont{background:#FFFFFF;box-shadow:inset 0 4px 0 #93000A}
+.do b,.dont b{font-family:Manrope,'BNPP Type',sans-serif}
+.chip{height:32px;padding:0 12px;border-radius:8px;border:1px solid #79757F;background:transparent;color:#1C1B1E;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.chip:hover{background:rgba(57,35,95,.06)}
+.chip-on{background:#DED7EB;border-color:#DED7EB;color:#1D1A28}
+.btn{height:32px;padding:0 14px;border:0;border-radius:12px;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.f{background:#39235F;color:#FFFFFF}.f:hover{background:#4A3470}
+.o{background:transparent;border:1px solid #79757F;color:#39235F}.o:hover{background:rgba(57,35,95,.06)}
+.x{background:transparent;color:#39235F;padding:0 10px}.x:hover{background:rgba(57,35,95,.06)}
+/* run status chip */
+.st{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px 0 4px;border-radius:4px;font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;white-space:nowrap}
+.st .g{width:18px;height:18px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+.st-q{background:#ECE5F4;color:#1C1B1E}.st-q .g{background:#48454E;color:#ECE5F4}
+.st-run{background:#9CF1F0;color:#002020}.st-run .g{background:#004F50;color:#9CF1F0}
+.st-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.st-wait .g{background:#39235F;color:#E3DFFF}
+.st-other{background:#E3DFFF;color:#14085E}.st-other .g{background:#39235F;color:#E3DFFF}
+.st-chg{background:#FFDEA0;color:#261900}.st-chg .g{background:#5F4100;color:#FFDEA0}
+.st-done{background:#ACF4A2;color:#002203}.st-done .g{background:#0B5314;color:#ACF4A2}
+.st-fail{background:#FFDAD6;color:#410002}.st-fail .g{background:#93000A;color:#FFDAD6}
+.st-cnl{background:transparent;color:#48454E;box-shadow:inset 0 0 0 1px #79757F}.st-cnl .g{color:#48454E}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}
+.dots i{width:4px;height:4px;border-radius:2px;background:#004F50;animation:dp 1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dp{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.dots i{animation:none;opacity:.8}}
+.ai{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border-radius:4px;background:#9CF1F0;color:#002020;font-family:Manrope,'BNPP Type',sans-serif;font-size:11px;font-weight:700;white-space:nowrap}
+.mk{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:3px;font-weight:700;font-size:12px;flex:none}
+.mk-added,.mk-ok{background:#0B5314;color:#ACF4A2}.mk-changed,.mk-warn{background:#5F4100;color:#FFDEA0}.mk-info{background:#48454E;color:#ECE5F4}.mk-err{background:#93000A;color:#FFDAD6}.mk-run{background:#004F50;color:#9CF1F0}
+/* header indicator */
+.ind{height:36px;padding:0 12px;border-radius:12px;border:0;display:inline-flex;align-items:center;gap:8px;font-family:Manrope,'BNPP Type',sans-serif;font-size:13px;font-weight:700;white-space:nowrap}
+.ind-run{background:#9CF1F0;color:#002020}.ind-wait{background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F}.ind-fail{background:#FFDAD6;color:#410002}
+.band{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:#EDE4FF}
+.sbox{height:40px;flex:1 1 220px;max-width:360px;border-radius:16px;background:#FFFFFF;display:flex;align-items:center;padding:0 14px;color:#48454E;font-size:14px}
+/* panel parts */
+.panel{background:#F8F1FF;border:1px solid #CAC4CF;border-radius:16px;display:flex;flex-direction:column;gap:12px;padding:12px;width:400px;box-sizing:border-box}
+.strip{padding:10px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #CAC4CF;display:flex;flex-direction:column;gap:6px}
+.mrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;line-height:19px}
+.mcard{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.mcard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.mu{align-self:flex-end;max-width:85%;background:#DED7EB;color:#1D1A28;border-radius:16px 16px 4px 16px;padding:8px 12px;font-size:14px;line-height:20px}
+.gate{border-radius:12px;padding:12px;background:#E3DFFF;color:#14085E;box-shadow:inset 0 0 0 2px #39235F;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:19px}
+.gate b{font-family:Manrope,'BNPP Type',sans-serif}
+.gate-other{box-shadow:none}
+/* page parts */
+.scard{text-align:left;background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;box-sizing:border-box}
+.scard-wait{box-shadow:inset 0 0 0 2px #39235F;border-color:#39235F}
+.scard-sel{border-color:#39235F;box-shadow:inset 0 0 0 1px #39235F}
+.sn{font-family:Manrope,'BNPP Type',sans-serif;font-size:12px;font-weight:700;color:#48454E;letter-spacing:.3px;text-transform:uppercase}
+.sa{font-family:Manrope,'BNPP Type',sans-serif;font-size:15px;font-weight:700}
+.adm{font-size:12px;color:#48454E;line-height:16px}
+.bar{height:4px;border-radius:2px;background:#ECE5F4;overflow:hidden}
+.bar i{display:block;height:4px;background:#004F50}
+.bar-done i{background:#0B5314}.bar-fail i{background:#93000A}
+.box{background:#FFFFFF;border:1px solid #CAC4CF;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.h3{margin:0;font-family:Manrope,'BNPP Type',sans-serif;font-size:16px;font-weight:700}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.steps li{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:19px}
+.sm{width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;box-sizing:border-box}
+.sm-done{background:#0B5314;color:#ACF4A2}.sm-now{background:#9CF1F0;color:#002020;border:2px solid #004F50}.sm-todo{border:1.5px solid #79757F;color:#48454E}
+.todo{color:#48454E}
+.orow{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:19px}
+.orow small{display:block;color:#48454E;font-size:12px}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:18px}
+.log time{font-weight:600;color:#48454E;margin-right:8px;font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #CAC4CF;overflow-x:auto}
+.tab{height:44px;padding:0 14px;border:0;background:transparent;font-family:Manrope,'BNPP Type',sans-serif;font-size:14px;font-weight:600;color:#48454E;border-bottom:3px solid transparent;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tab:hover{background:rgba(57,35,95,.06)}
+.tab-on{color:#39235F;border-bottom-color:#39235F}
+.n{font-size:11px;padding:1px 6px;border-radius:6px;background:#F2EBFA;color:#48454E}
+.anno{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:999px;background:#39235F;color:#FFFFFF;font-family:Manrope,sans-serif;font-size:11px;font-weight:700;flex:none}
+.diff{margin:0;border-radius:8px;background:#FFFFFF;border:1px solid #CAC4CF;overflow:hidden;font-family:'Open Sans',sans-serif;font-weight:600;font-size:12.5px;line-height:20px}
+.diff div{padding:0 12px;white-space:pre}
+.diff .a{background:#E4F8DF}.diff .d{background:#FFEDEA;text-decoration:line-through;text-decoration-color:rgba(65,0,2,.4)}.diff .h{background:#F2EBFA;color:#48454E}
+.trace{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;border:1px solid #CAC4CF;border-radius:8px;background:#FFFFFF;overflow:hidden}
+.trace li{display:grid;grid-template-columns:76px 22px minmax(0,1fr) 70px;gap:8px;align-items:center;padding:6px 12px;border-top:1px solid #ECE5F4;font-size:12.5px;line-height:18px}
+.trace li:first-child{border-top:0}
+.trace code{font-family:'Open Sans',sans-serif;font-weight:600}
+.trace .d{color:#48454E;text-align:right;font-variant-numeric:tabular-nums}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</helmet>
+<div style="width: 1560px; min-height: 2100px; box-sizing: border-box; background: #FDF8FD; color: #1C1B1E; display: flex; flex-direction: column; gap: 28px; padding: 56px 64px">
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <div class="k">Agent run · in the object page</div>
+    <h1 class="h1">Page version</h1>
+    <p class="lead">The record. The object (here change CHG-14) gets an <b>Agents</b> tab: one card per agent in process order, the selected run in detail, and the output viewer one click away. The header indicator brings anyone there from any page. Same chip, same gate, same data as the panel.</p>
+  </div>
+  <div class="pnl"><span class="pt"><span class="anno" aria-hidden="true">1</span> Header indicator</span>
+    <div class="band"><span class="ui" style="font-weight: 800; font-size: 18px">AI<span style="color: #39235F">Toolbox</span></span><span class="sbox">Search, or ask the assistant</span><span style="flex: 1"></span>
+      <button type="button" class="ind ind-run"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>✦ 1 agent running</button>
+      <button type="button" class="ind ind-wait">✦ 1 waiting for you</button>
+      <button type="button" class="ind ind-fail">✕ 1 failed</button></div>
+    <span class="mt">Right of the search, before the assistant button. Shows the most urgent state among the runs you started or must approve, with their count (“2 waiting for you”). One run: opens its object’s Agents tab; several: a menu listing them with chip, agent and object. Hidden when nothing runs, waits or failed in the last 24 h.</span></div>
+  <div class="pnl"><span class="pt"><span class="anno" aria-hidden="true">2</span> Agents tab · stage track</span>
+    <div style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 12px; background: #FDF8FD; border: 1px solid #CAC4CF">
+      <div class="tabs" role="tablist" aria-label="Change"><button type="button" role="tab" class="tab" aria-selected="false">Overview</button><button type="button" role="tab" class="tab tab-on" aria-selected="true">✦ Agents <span class="n">2/4</span></button><button type="button" role="tab" class="tab" aria-selected="false">Model changes</button><button type="button" role="tab" class="tab" aria-selected="false">Documents</button></div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px"><div class="scard "><span class="sn">1 · Analysis</span><span class="sa">✦ Analysis agent</span><span class="adm">Phase B · requirements and impact</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-done"><span class="g" aria-hidden="true">✓</span>Done</span><span class="mt" style="font-size: 12px">4 / 4 steps</span></span><span class="bar bar-done" aria-hidden="true"><i style="width: 100%"></i></span><span class="adm">Impact analysis · scope confirmed by Léa Martin</span></div><div class="scard "><span class="sn">2 · Draft</span><span class="sa">✦ Drafting agent</span><span class="adm">Phases B–C · target architecture</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-done"><span class="g" aria-hidden="true">✓</span>Done</span><span class="mt" style="font-size: 12px">3 / 3 steps</span></span><span class="bar bar-done" aria-hidden="true"><i style="width: 100%"></i></span><span class="adm">Draft pull request #48 · run 2</span></div><div class="scard scard-wait scard-sel"><span class="sn">3 · Review</span><span class="sa">✦ Review agent</span><span class="adm">Architecture board · compliance</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-wait"><span class="g" aria-hidden="true">!</span>Waiting for you</span><span class="mt" style="font-size: 12px">5 / 5 steps</span></span><span class="bar " aria-hidden="true"><i style="width: 100%"></i></span><span class="adm">Waits for you: approve the change</span></div><div class="scard "><span class="sn">4 · Implementation</span><span class="sa">✦ Implementation agent</span><span class="adm">Publish and hand over</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-q"><span class="g" aria-hidden="true">·</span>Queued</span><span class="mt" style="font-size: 12px"></span></span><span class="bar " aria-hidden="true"><i style="width: 0%"></i></span><span class="adm">Starts after the approval</span></div></div>
+    </div>
+    <span class="mt">One card per agent, in the order of the process (TOGAF: analysis → draft → review → implementation), never sorted by state. The card is a button that selects the run below. The tab counts done / all. A waiting card carries the 2 px border; the selected one a 1 px primary ring.</span></div>
+  <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px">
+    <div class="pnl"><span class="pt"><span class="anno" aria-hidden="true">3</span> Run detail</span>
+      <div class="box">
+        <div class="mrow"><h2 class="h3">✦ Review agent</h2><span class="ai">✦ agent</span><span class="st st-wait"><span class="g" aria-hidden="true">!</span>Waiting for you</span><span class="mt" style="margin-left: auto">Run 2 · run 1 superseded</span></div>
+        <ol class="steps">
+          <li><span class="sm sm-done" aria-hidden="true">✓</span>JSON Schema</li><li><span class="sm sm-done" aria-hidden="true">✓</span>References and relations</li><li><span class="sm sm-done" aria-hidden="true">✓</span>Principles (PRI-01 review gate)</li><li><span class="sm sm-done" aria-hidden="true">✓</span>View checks</li><li><span class="sm sm-done" aria-hidden="true">✓</span>Write the review report</li></ol>
+        <div class="gate" role="group" aria-label="Approve the change"><b>Waiting for you · Approve the change</b><span>Your approval merges pull request #48. Request changes sends it back to the drafting agent.</span><span style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn f">Approve</button><button type="button" class="btn o">Request changes</button></span></div>
+        <div class="gate gate-other"><b>Seen by everyone else · Waiting for Léa Martin</b><span>Approve the change · since 10:10</span></div>
+      </div>
+      <span class="mt">Steps as a checklist (✓ done, ✦ current with the teal ring, number for to do). The gate under the steps; the read-only version for anyone who is not the approver. Earlier runs are listed under the activity, never merged.</span></div>
+    <div class="pnl"><span class="pt"><span class="anno" aria-hidden="true">4</span> Output summary and activity</span>
+      <div class="box">
+        <div class="mrow"><b class="ui" style="font-size: 15px">Review report</b><span class="mt">15 checks passed</span><a class="btn x" style="margin-left: auto" href="#viewer">View output</a></div>
+        <div class="orow"><span class="mk mk-ok" aria-hidden="true">✓</span><span>JSON Schema, references, relations</span></div>
+        <div class="orow"><span class="mk mk-ok" aria-hidden="true">✓</span><span>PRI-01: PRC-06 has a review gate</span></div>
+        <div class="orow"><span class="mk mk-ok" aria-hidden="true">✓</span><span>Owner of APC-04 set<small>Fixed in run 2</small></span></div>
+        <h3 class="h3" style="font-size: 14px; margin-top: 4px">Activity</h3>
+        <ul class="log"><li><time>10:10:30</time>Waiting for Léa Martin</li><li><time>10:10:15</time>Write the review report</li><li><time>10:09:15</time>JSON Schema</li><li><time>10:09:00</time>Run 2 started</li><li><time>10:01:30</time>Run 1 · changes requested by Léa Martin</li></ul>
+      </div>
+      <span class="mt">Up to six rows of the output; the rest is in the viewer. Activity newest first, with the run number when there is more than one.</span></div>
+  </div>
+  <div class="pnl"><span class="pt">Stage card · every state</span>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px"><div class="scard "><span class="sn">· · Queued</span><span class="sa">✦ Any agent</span><span class="adm">Before its turn</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-q"><span class="g" aria-hidden="true">·</span>Queued</span><span class="mt" style="font-size: 12px"></span></span><span class="bar " aria-hidden="true"><i style="width: 0%"></i></span><span class="adm">Starts after …</span></div><div class="scard "><span class="sn">· · Running</span><span class="sa">✦ Any agent</span><span class="adm">Steps ticking</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-run"><span class="g" aria-hidden="true">✦</span>Running</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="mt" style="font-size: 12px">2 / 4 steps</span></span><span class="bar " aria-hidden="true"><i style="width: 50%"></i></span><span class="adm">Current step</span></div><div class="scard scard-wait"><span class="sn">· · Waiting · you</span><span class="sa">✦ Any agent</span><span class="adm">You are the approver</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-wait"><span class="g" aria-hidden="true">!</span>Waiting for you</span><span class="mt" style="font-size: 12px"></span></span><span class="bar " aria-hidden="true"><i style="width: 100%"></i></span><span class="adm">Waits for you: …</span></div><div class="scard "><span class="sn">· · Waiting · other</span><span class="sa">✦ Any agent</span><span class="adm">Someone else approves</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-other"><span class="g" aria-hidden="true">!</span>Waiting for Léa Martin</span><span class="mt" style="font-size: 12px"></span></span><span class="bar " aria-hidden="true"><i style="width: 100%"></i></span><span class="adm">Waits for Léa Martin</span></div><div class="scard "><span class="sn">· · Sent back</span><span class="sa">✦ Any agent</span><span class="adm">Its output was sent back</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-chg"><span class="g" aria-hidden="true">↩</span>Changes requested</span><span class="mt" style="font-size: 12px"></span></span><span class="bar " aria-hidden="true"><i style="width: 100%"></i></span><span class="adm">Sent back to the drafting agent</span></div><div class="scard "><span class="sn">· · Failed</span><span class="sa">✦ Any agent</span><span class="adm">Stopped on an error</span><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span class="st st-fail"><span class="g" aria-hidden="true">✕</span>Failed</span><span class="mt" style="font-size: 12px"></span></span><span class="bar bar-fail" aria-hidden="true"><i style="width: 50%"></i></span><span class="adm">Retry · View log</span></div></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1560,"height":2100}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -154,6 +154,15 @@
       "y": 0,
       "is_interactive": true,
       "title": "Colour system review · decision lab (decided 2026-11-14: C Sweep palette adopted with the dark lavender primary kept, tokens 5.0): ten findings on tokens 4.7, four ways forward — A keep 4.7 · B tidy · C Sweep palette (recommended, lime Run kept in dark) · D Material 3 as generated — each live on the app screen in light and dark next to today, with the colour rules, the token diff, contrast checks and a scorecard · press Play, click an option"
+    },
+    "AgentLab.dc.html": {
+      "title": "Agent follow lab (decided 2026-11-23: C both on one run; designed as the Agent run component on the design system canvas) · where to follow the TOGAF agents of a change: A assistant panel only (live run cards in the conversation) · B change page only (Agents tab: analysis, draft, review, implementation side by side, steps, output, activity, header indicator) · C both on one run (pinned strip and milestones in the panel, Agents tab as the record) · four agents on CHG-14 with the review gates (PRI-01): confirm scope, approve or request changes · press Play",
+      "x": 1520,
+      "y": 12416,
+      "w": 1440,
+      "h": 1500,
+      "is_interactive": true,
+      "expand": "fill"
     }
   },
   "order": [
@@ -173,7 +182,8 @@
     "StartLab.dc.html",
     "RunButton3.dc.html",
     "SweepPurples.dc.html",
-    "ColourLab.dc.html"
+    "ColourLab.dc.html",
+    "AgentLab.dc.html"
   ],
   "notes": {
     "l1": {
@@ -215,6 +225,14 @@
       "w": 240,
       "x": 1520,
       "y": 10116
+    },
+    "l6": {
+      "kind": "title1",
+      "maxW": 2960,
+      "text": "Process labs · Change start (decided 2026-11-10) · Agent follow (C adopted 2026-11-23: both views, one run)",
+      "w": 240,
+      "x": 0,
+      "y": 12116
     }
   },
   "noteOrder": [
