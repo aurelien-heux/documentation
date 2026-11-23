@@ -1,4 +1,4 @@
-"""Compact the Meridian Bank model (MODEL of architecture-meridian-bank.html) for the Architecture board, and add
+"""Compact the Meridian Bank model (MODEL of backup/architecture/pages/architecture-meridian-bank.html) for the Architecture board, and add
 the prototype's business extension: business roles, role × process (RACI) and the application components that
 serve each business process. Everything added is marked ext: true so the board can say so.
 usage: python3 data_prep.py <mb_model.json> <arch_data.json>"""

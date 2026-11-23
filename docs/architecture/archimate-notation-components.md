@@ -138,4 +138,4 @@ Mermaid has no ArchiMate end markers: its lines name the type. Use PlantUML for 
 - New / Retired chip — now Added / Removed change marks; Retired is a model status.
 - Angular bindings (`atb-ax-*`) — pending the React + shadcn decision (DEC-04).
 
-Notation 1.x stays in `architecture/knowledge-base-example/` (LikeC4 model, `design-system/archimate/archimate.css`, Angular library) and `tooling/canvas/archimate_ds.py` as history.
+Notation 1.x is kept as history in `backup/architecture/knowledge-base-example/` (LikeC4 model, `design-system/archimate/archimate.css`, Angular library); `tooling/canvas/archimate_ds.py` still draws the Docs and Architecture lab boards with it.

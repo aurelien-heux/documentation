@@ -11,8 +11,9 @@ product and architecture documents. The live versions are Claude artifacts (link
 | [`brand/`](brand/) | Production brand files: logos and wordmark, favicon and app icon, loaders and progress indicators, state marks, feature marks (Sweep, Docs, Environments, Chatbot, Notifications, Architecture), `css/` (tokens with `--md-sys-color-*`, loaders, tooltips), the BNPP Type font. | `brand/README.md` |
 | [`canvases/`](canvases/) | The three Design canvases as source files (`canvas.json` + one `.dc.html` per board): `design-system/` (foundations, components, app shell, brand), `labs/` (decision labs, including the colour review), `prototypes/` (live product prototypes, the production vision). | `canvases/README.md` |
 | [`packages/aitoolbox-ui/`](packages/aitoolbox-ui/) | Angular workspace of `@aitoolbox/ui`: the component library (ng-packagr) and its showcase app. | `packages/aitoolbox-ui/README.md` |
-| [`architecture/`](architecture/) | `knowledge-base-example/`: the architecture knowledge base example (LikeC4 model, ArchiMate notation, ADRs, ARB, detailed design, validation and site tools). `pages/`: the published architecture pages (Meridian Bank, Environments, change process, wide views demo, ArchiMate notation, Jira 3-tier). | `architecture/knowledge-base-example/README.md` |
+| [`architecture/`](architecture/) | `pages/archimate-notation.html`: the ArchiMate notation 2.0 reference page. | `design-system/archimate/README.md` |
 | [`docs/`](docs/) | Domain reference, architecture decisions and notes, design-system notes (colour review, feature marks), product notes, the Git model and release cycle, the artifact index. | `docs/README.md` |
+| [`backup/`](backup/) | History only: the pre-restart knowledge-base example (LikeC4, notation 1.x) and the pre-restart architecture pages. | `backup/README.md` |
 | [`tooling/`](tooling/) | Scripts that generate the canvas boards and prototypes (`canvas/`), the colour review lab (`colour-review/`). | `tooling/README.md` |
 
 ## Conventions
