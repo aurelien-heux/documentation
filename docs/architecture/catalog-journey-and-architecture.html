@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catalog Journey and Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one reading column, wide figures scroll sideways on their own. AIToolbox surfaces and primary. */
+:root {
+  --bg: #FDF8FD;
+  --surface: #F2EBFA;
+  --ink: #1C1B1E;
+  --muted: #5E5868;
+  --line: #CAC4CF;
+  --accent: #6A3FD0;
+  --accent-soft: #E9DDFF;
+  --warn-soft: #FFE3B8;
+  --font: "Open Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14121E; --surface: #2B2836; --ink: #ECE5F8; --muted: #B7B0C4;
+    --line: #494458; --accent: #C8B3FF; --accent-soft: #3D2D6E; --warn-soft: #4A3512;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14121E; --surface: #2B2836; --ink: #ECE5F8; --muted: #B7B0C4;
+  --line: #494458; --accent: #C8B3FF; --accent-soft: #3D2D6E; --warn-soft: #4A3512;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--font); }
+main { max-width: 1160px; margin: 0 auto; padding: 32px 20px 64px; display: grid; gap: 40px; }
+.prose { max-width: 70ch; }
+h1 { font-size: 30px; line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+h2 { font-size: 21px; margin: 0 0 8px; text-wrap: balance; }
+h3 { font-size: 16px; margin: 20px 0 6px; }
+p { margin: 0 0 10px; }
+.meta { color: var(--muted); font-size: 13px; }
+figure { margin: 0; }
+.fig { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); padding: 12px; }
+.fig svg { display: block; min-width: 900px; width: 100%; height: auto; color: var(--ink); }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 8px; max-width: 80ch; }
+svg .box { fill: var(--surface); stroke: var(--line); }
+svg .hot { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+svg .warn { fill: var(--warn-soft); stroke: var(--line); }
+svg .group { fill: none; stroke: var(--line); stroke-dasharray: 5 4; }
+svg .lane { fill: var(--surface); opacity: .45; }
+svg .t { fill: currentColor; font: 600 12.5px var(--font); }
+svg .s { fill: var(--muted); font: 400 11px var(--font); }
+svg .g { fill: var(--muted); font: 700 11px var(--font); letter-spacing: .06em; text-transform: uppercase; }
+svg .a { fill: none; stroke: currentColor; stroke-width: 1.3; }
+svg .d { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-dasharray: 4 3; }
+svg .ac { fill: none; stroke: var(--accent); stroke-width: 1.6; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border-radius: 12px; padding: 16px 18px; }
+.card h3 { margin-top: 0; }
+ol, ul { margin: 0; padding-left: 20px; }
+li { margin: 4px 0; }
+code { font: 600 13px var(--font); background: var(--surface); padding: 1px 5px; border-radius: 4px; }
+.card code { background: var(--bg); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.tw { overflow-x: auto; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.note { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="prose">
+  <h1>Catalog: user journey and implementation architecture</h1>
+  <p>How skills, tools and MCP servers move from an author to the assistant and Sweep, and the services that carry them. Based on the Catalog rules in <code>aitoolbox-component-rules.md</code> and the bounded contexts of the domain reference.</p>
+  <p class="meta">Draft · 2026-11-13 · the backend context name is provisional (CTX-LIB) until the Catalog naming clash with CTX-CAT is settled.</p>
+</header>
+
+<!-- 1. JOURNEY -->
+<section>
+  <div class="prose">
+    <h2>1. User journey</h2>
+    <p>Four people touch the Catalog: the author who publishes a skill, the reviewer who checks it for everyone, the user who adds it to their assistant, and the admin who opens it to Sweep and retires it.</p>
+  </div>
+  <figure>
+    <div class="fig">
+<svg viewBox="0 0 1110 450" role="img" aria-label="Swimlane: author writes, tests and submits; skills for everyone go to review; published items are browsed, added and used in the assistant; admins bind them to Sweep phases and retire them.">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+  </defs>
+  <!-- lanes -->
+  <rect class="lane" x="0" y="10" width="1110" height="100" rx="8"/>
+  <rect class="lane" x="0" y="225" width="1110" height="100" rx="8"/>
+  <text class="g" x="14" y="64">Author</text>
+  <text class="g" x="14" y="172">Reviewer</text>
+  <text class="g" x="14" y="280">User</text>
+  <text class="g" x="14" y="388">Admin</text>
+
+  <!-- author lane y center 60 -->
+  <rect class="box" x="120" y="36" width="150" height="48" rx="10"/>
+  <text class="t" x="195" y="57" text-anchor="middle">1 Write</text>
+  <text class="s" x="195" y="73" text-anchor="middle">UI form or Git import</text>
+  <rect class="box" x="300" y="36" width="150" height="48" rx="10"/>
+  <text class="t" x="375" y="57" text-anchor="middle">2 Test</text>
+  <text class="s" x="375" y="73" text-anchor="middle">auto checks + one dry run</text>
+  <rect class="box" x="480" y="36" width="150" height="48" rx="10"/>
+  <text class="t" x="555" y="57" text-anchor="middle">3 Submit</text>
+  <text class="s" x="555" y="73" text-anchor="middle">pick who can use it</text>
+  <rect class="hot" x="700" y="36" width="170" height="48" rx="10"/>
+  <text class="t" x="785" y="57" text-anchor="middle">Live for me / my team</text>
+  <text class="s" x="785" y="73" text-anchor="middle">no review, ceiling applies</text>
+  <line class="a" x1="270" y1="60" x2="298" y2="60" marker-end="url(#ar)"/>
+  <line class="a" x1="450" y1="60" x2="478" y2="60" marker-end="url(#ar)"/>
+  <line class="a" x1="630" y1="60" x2="698" y2="60" marker-end="url(#ar)"/>
+  <text class="s" x="664" y="52" text-anchor="middle">me · team</text>
+
+  <!-- reviewer lane y center 167 -->
+  <rect class="box" x="480" y="143" width="150" height="48" rx="10"/>
+  <text class="t" x="555" y="164" text-anchor="middle">4 Review queue</text>
+  <text class="s" x="555" y="180" text-anchor="middle">champion or admin, 2 days</text>
+  <rect class="box" x="700" y="143" width="170" height="48" rx="10"/>
+  <text class="t" x="785" y="164" text-anchor="middle">Try · 3 ticks · discuss</text>
+  <text class="s" x="785" y="180" text-anchor="middle">in the skill's Discussion</text>
+  <rect class="hot" x="910" y="143" width="170" height="48" rx="10"/>
+  <text class="t" x="995" y="164" text-anchor="middle">5 Published</text>
+  <text class="s" x="995" y="180" text-anchor="middle">for everyone</text>
+  <line class="a" x1="555" y1="84" x2="555" y2="141" marker-end="url(#ar)"/>
+  <text class="s" x="561" y="118">everyone</text>
+  <line class="a" x1="630" y1="167" x2="698" y2="167" marker-end="url(#ar)"/>
+  <line class="a" x1="870" y1="167" x2="908" y2="167" marker-end="url(#ar)"/>
+  <path class="d" d="M700,180 H660 V205 H195 V86" marker-end="url(#ar)"/>
+  <text class="s" x="330" y="200">ask for changes → back to Write</text>
+
+  <!-- user lane y center 275 -->
+  <rect class="box" x="120" y="251" width="150" height="48" rx="10"/>
+  <text class="t" x="195" y="272" text-anchor="middle">Browse · search</text>
+  <text class="s" x="195" y="288" text-anchor="middle">kind switch, Mine tab</text>
+  <rect class="box" x="300" y="251" width="150" height="48" rx="10"/>
+  <text class="t" x="375" y="272" text-anchor="middle">Item page</text>
+  <text class="s" x="375" y="288" text-anchor="middle">lock line, Try asking</text>
+  <rect class="box" x="480" y="251" width="150" height="48" rx="10"/>
+  <text class="t" x="555" y="272" text-anchor="middle">Add to my assistant</text>
+  <text class="s" x="555" y="288" text-anchor="middle">shows in Tools menu</text>
+  <rect class="box" x="700" y="251" width="170" height="48" rx="10"/>
+  <text class="t" x="785" y="272" text-anchor="middle">Ask in chat</text>
+  <text class="s" x="785" y="288" text-anchor="middle">skill loads when relevant</text>
+  <rect class="warn" x="910" y="251" width="170" height="48" rx="10"/>
+  <text class="t" x="995" y="272" text-anchor="middle">Approval card</text>
+  <text class="s" x="995" y="288" text-anchor="middle">only for actions that change</text>
+  <line class="a" x1="270" y1="275" x2="298" y2="275" marker-end="url(#ar)"/>
+  <line class="a" x1="450" y1="275" x2="478" y2="275" marker-end="url(#ar)"/>
+  <line class="a" x1="630" y1="275" x2="698" y2="275" marker-end="url(#ar)"/>
+  <line class="a" x1="870" y1="275" x2="908" y2="275" marker-end="url(#ar)"/>
+  <path class="d" d="M995,191 V218 H195 V249" marker-end="url(#ar)"/>
+  <path class="d" d="M870,74 H890 V218"/>
+  <text class="s" x="700" y="232">listed in Catalog and Tools menu</text>
+  <path class="d" d="M995,299 V315 H375 V301" marker-end="url(#ar)"/>
+  <text class="s" x="560" y="312">Good / Bad, Discussion, Report a problem</text>
+
+  <!-- admin lane y center 383 -->
+  <rect class="box" x="120" y="359" width="150" height="48" rx="10"/>
+  <text class="t" x="195" y="380" text-anchor="middle">Set the ceiling</text>
+  <text class="s" x="195" y="396" text-anchor="middle">Ask first · Allowed · Off</text>
+  <rect class="box" x="300" y="359" width="150" height="48" rx="10"/>
+  <text class="t" x="375" y="380" text-anchor="middle">Bind to Sweep</text>
+  <text class="s" x="375" y="396" text-anchor="middle">per phase checkbox</text>
+  <rect class="box" x="480" y="359" width="150" height="48" rx="10"/>
+  <text class="t" x="555" y="380" text-anchor="middle">Watch usage</text>
+  <text class="s" x="555" y="396" text-anchor="middle">uses, errors, feedback</text>
+  <rect class="box" x="700" y="359" width="170" height="48" rx="10"/>
+  <text class="t" x="785" y="380" text-anchor="middle">Retire</text>
+  <text class="s" x="785" y="396" text-anchor="middle">names the successor</text>
+  <rect class="box" x="910" y="359" width="170" height="48" rx="10"/>
+  <text class="t" x="995" y="380" text-anchor="middle">Users moved</text>
+  <text class="s" x="995" y="396" text-anchor="middle">after 30 days</text>
+  <line class="a" x1="270" y1="383" x2="298" y2="383" marker-end="url(#ar)"/>
+  <line class="a" x1="450" y1="383" x2="478" y2="383" marker-end="url(#ar)"/>
+  <line class="a" x1="630" y1="383" x2="698" y2="383" marker-end="url(#ar)"/>
+  <line class="a" x1="870" y1="383" x2="908" y2="383" marker-end="url(#ar)"/>
+  <text class="s" x="120" y="436">The admin lane runs for any published item; tools and MCP servers enter here, added by the platform team in Core › Catalog › Items.</text>
+</svg>
+    </div>
+    <figcaption>Skills for everyone pass through review; skills for the author or their team go live at once, still capped by the admin ceiling. Every published item appears in the Catalog and in the assistant's Tools menu.</figcaption>
+  </figure>
+
+  <div class="steps" style="margin-top:20px">
+    <div class="card">
+      <h3>Author: publish a skill</h3>
+      <ol>
+        <li><strong>Write</strong> name, one line, instructions, tools it may use, one example request. Or point to a Git repository with <code>SKILL.md</code> and <code>skill.json</code>; tags become versions.</li>
+        <li><strong>Test</strong> runs the automatic checks and one try in the assistant. Write tools run in dry-run mode during this try.</li>
+        <li><strong>Submit</strong>: Just me or My team goes live at once; Everyone goes to review.</li>
+        <li>Follows the review in the skill's Discussion; fixes and resubmits if asked.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>User: find and use</h3>
+      <ol>
+        <li>Opens Catalog from the rail, or Browse catalog from the assistant's Tools menu.</li>
+        <li>Reads the item page: what it does, the lock line if it can change something, Try asking.</li>
+        <li>Adds it. It appears in the Tools menu at once, under Built-in, Organisation or Yours.</li>
+        <li>Asks a question. The assistant loads the skill when the request matches, and stops on an approval card before any action that changes something.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Reviewer and admin</h3>
+      <ol>
+        <li>Reviewer opens Core › Catalog › Review, reads instructions and tools, tries it, ticks the three points, then publishes or asks for changes.</li>
+        <li>Admin sets the ceiling for actions that change something, separately for the assistant and Sweep.</li>
+        <li>Admin binds items to Sweep phases (implement, review, test, release).</li>
+        <li>Retiring names a successor; installs move after 30 days.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 2. LIFECYCLE -->
+<section>
+  <div class="prose">
+    <h2>2. Version lifecycle</h2>
+    <p>Each version has one stage. The stage is what the Mine tab shows and what the backend enforces.</p>
+  </div>
+  <figure>
+    <div class="fig">
+<svg viewBox="0 0 1110 230" role="img" aria-label="States: Draft, Checked, In review, Published, Deprecated, Retired. Team and personal skills skip review. Changes requested and new versions go back to Draft.">
+  <defs>
+    <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+  </defs>
+  <rect class="box" x="20" y="90" width="140" height="44" rx="10"/><text class="t" x="90" y="117" text-anchor="middle">Draft</text>
+  <rect class="box" x="200" y="90" width="140" height="44" rx="10"/><text class="t" x="270" y="117" text-anchor="middle">Checked</text>
+  <rect class="box" x="380" y="90" width="140" height="44" rx="10"/><text class="t" x="450" y="117" text-anchor="middle">In review</text>
+  <rect class="hot" x="560" y="90" width="140" height="44" rx="10"/><text class="t" x="630" y="117" text-anchor="middle">Published</text>
+  <rect class="warn" x="740" y="90" width="140" height="44" rx="10"/><text class="t" x="810" y="117" text-anchor="middle">Deprecated</text>
+  <rect class="box" x="920" y="90" width="140" height="44" rx="10"/><text class="t" x="990" y="117" text-anchor="middle">Retired</text>
+  <line class="a" x1="160" y1="112" x2="198" y2="112" marker-end="url(#ar2)"/>
+  <text class="s" x="179" y="84" text-anchor="middle">checks pass</text>
+  <line class="a" x1="340" y1="112" x2="378" y2="112" marker-end="url(#ar2)"/>
+  <text class="s" x="359" y="84" text-anchor="middle">everyone</text>
+  <line class="a" x1="520" y1="112" x2="558" y2="112" marker-end="url(#ar2)"/>
+  <text class="s" x="539" y="84" text-anchor="middle">approved</text>
+  <line class="a" x1="700" y1="112" x2="738" y2="112" marker-end="url(#ar2)"/>
+  <line class="a" x1="880" y1="112" x2="918" y2="112" marker-end="url(#ar2)"/>
+  <text class="s" x="899" y="84" text-anchor="middle">30 days</text>
+  <path class="a" d="M290,90 V40 H610 V88" marker-end="url(#ar2)"/>
+  <text class="s" x="450" y="34" text-anchor="middle">Just me · My team (no review)</text>
+  <path class="d" d="M450,134 V168 H110 V136" marker-end="url(#ar2)"/>
+  <text class="s" x="280" y="162" text-anchor="middle">changes requested</text>
+  <path class="d" d="M630,134 V200 H60 V136" marker-end="url(#ar2)"/>
+  <text class="s" x="345" y="194" text-anchor="middle">new version: starts as a draft; review again only if it adds a write tool</text>
+  <text class="s" x="810" y="160" text-anchor="middle">successor named,</text>
+  <text class="s" x="810" y="174" text-anchor="middle">still runs, no new installs</text>
+</svg>
+    </div>
+    <figcaption>Two stages the current Mine tab lacks: Changes requested (shown on the Draft) and Deprecated. Published versions never change; a fix is a new version.</figcaption>
+  </figure>
+</section>
+
+<!-- 3. ARCHITECTURE -->
+<section>
+  <div class="prose">
+    <h2>3. Implementation architecture</h2>
+    <p>One new backend context owns the Catalog. Runtime calls never go straight from the model to a tool: every call passes one gateway that applies the ceiling, raises the approval card and injects credentials.</p>
+  </div>
+  <figure>
+    <div class="fig">
+<svg viewBox="0 0 1120 640" role="img" aria-label="Angular app calls the Catalog service. The Catalog service stores metadata in Postgres and frozen bundles in object storage, and emits events to CTX-KI. The assistant and Sweep resolve items from the Catalog service and send every tool call through a Tool gateway that reads the policy, takes secrets from the CTX-INT vault and calls MCP servers and native tools.">
+  <defs>
+    <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+  </defs>
+  <!-- groups -->
+  <text class="g" x="20" y="30">Angular app</text>
+  <rect class="group" x="20" y="40" width="240" height="400" rx="12"/>
+  <text class="g" x="320" y="30">Catalog service · CTX-LIB (new)</text>
+  <rect class="group" x="320" y="40" width="380" height="400" rx="12"/>
+  <text class="g" x="760" y="30">Runtime</text>
+  <rect class="group" x="760" y="40" width="340" height="400" rx="12"/>
+
+  <!-- A: Angular -->
+  <rect class="box" x="40" y="70" width="200" height="44" rx="8"/><text class="t" x="140" y="90" text-anchor="middle">Catalog</text><text class="s" x="140" y="106" text-anchor="middle">Browse · Mine · Item page</text>
+  <rect class="box" x="40" y="130" width="200" height="44" rx="8"/><text class="t" x="140" y="150" text-anchor="middle">Publish stepper</text><text class="s" x="140" y="166" text-anchor="middle">Write · Test · Submit</text>
+  <rect class="box" x="40" y="190" width="200" height="44" rx="8"/><text class="t" x="140" y="210" text-anchor="middle">Admin › Catalog</text><text class="s" x="140" y="226" text-anchor="middle">Review · Items · Policies</text>
+  <rect class="box" x="40" y="250" width="200" height="44" rx="8"/><text class="t" x="140" y="270" text-anchor="middle">Sweep › Tools and skills</text><text class="s" x="140" y="286" text-anchor="middle">bindings per phase</text>
+  <rect class="box" x="40" y="330" width="200" height="44" rx="8"/><text class="t" x="140" y="350" text-anchor="middle">Assistant pane</text><text class="s" x="140" y="366" text-anchor="middle">Tools menu · approval card</text>
+
+  <!-- B: Catalog service -->
+  <rect class="box" x="340" y="70" width="160" height="44" rx="8"/><text class="t" x="420" y="90" text-anchor="middle">Registry API</text><text class="s" x="420" y="106" text-anchor="middle">items, versions, installs</text>
+  <rect class="box" x="340" y="140" width="160" height="44" rx="8"/><text class="t" x="420" y="160" text-anchor="middle">Checks runner</text><text class="s" x="420" y="176" text-anchor="middle">schema · secrets · tools</text>
+  <rect class="box" x="340" y="210" width="160" height="44" rx="8"/><text class="t" x="420" y="230" text-anchor="middle">Publication workflow</text><text class="s" x="420" y="246" text-anchor="middle">stages, review, retire</text>
+  <rect class="box" x="520" y="70" width="160" height="44" rx="8"/><text class="t" x="600" y="90" text-anchor="middle">Search</text><text class="s" x="600" y="106" text-anchor="middle">Postgres full text</text>
+  <rect class="hot" x="520" y="140" width="160" height="44" rx="8"/><text class="t" x="600" y="160" text-anchor="middle">Resolver API</text><text class="s" x="600" y="176" text-anchor="middle">runtime read path, cached</text>
+  <rect class="box" x="520" y="210" width="160" height="44" rx="8"/><text class="t" x="600" y="230" text-anchor="middle">Policy and risk</text><text class="s" x="600" y="246" text-anchor="middle">ceiling, read / write</text>
+  <rect class="box" x="340" y="330" width="160" height="60" rx="8"/><text class="t" x="420" y="355" text-anchor="middle">Object storage</text><text class="s" x="420" y="372" text-anchor="middle">bundles by sha256</text>
+  <rect class="box" x="520" y="330" width="160" height="60" rx="8"/><text class="t" x="600" y="355" text-anchor="middle">Postgres</text><text class="s" x="600" y="372" text-anchor="middle">metadata and workflow</text>
+
+  <!-- C: runtime -->
+  <rect class="box" x="780" y="70" width="140" height="64" rx="8"/><text class="t" x="850" y="94" text-anchor="middle">Assistant</text><text class="s" x="850" y="110" text-anchor="middle">CTX-AST</text><text class="s" x="850" y="124" text-anchor="middle">skill index · load_skill</text>
+  <rect class="box" x="940" y="70" width="140" height="64" rx="8"/><text class="t" x="1010" y="94" text-anchor="middle">Sweep run</text><text class="s" x="1010" y="110" text-anchor="middle">CTX-ORC → CTX-ART</text><text class="s" x="1010" y="124" text-anchor="middle">Context pack</text>
+  <rect class="hot" x="780" y="200" width="300" height="64" rx="8"/><text class="t" x="930" y="224" text-anchor="middle">Tool gateway</text><text class="s" x="930" y="242" text-anchor="middle">policy check · approval · credentials · audit log</text>
+  <rect class="box" x="780" y="330" width="140" height="60" rx="8"/><text class="t" x="850" y="354" text-anchor="middle">MCP servers</text><text class="s" x="850" y="372" text-anchor="middle">DevOps · Knowledge base</text>
+  <rect class="box" x="940" y="330" width="140" height="60" rx="8"/><text class="t" x="1010" y="354" text-anchor="middle">Native tools</text><text class="s" x="1010" y="372" text-anchor="middle">Deploy · Reserve · Jira</text>
+
+  <!-- bottom row -->
+  <rect class="box" x="340" y="520" width="160" height="44" rx="8"/><text class="t" x="420" y="540" text-anchor="middle">Git hosting</text><text class="s" x="420" y="556" text-anchor="middle">via CTX-INT</text>
+  <rect class="box" x="520" y="520" width="160" height="44" rx="8"/><text class="t" x="600" y="540" text-anchor="middle">Event bus</text><text class="s" x="600" y="556" text-anchor="middle">EVT-CATALOG-ITEM-*</text>
+  <rect class="box" x="780" y="520" width="140" height="44" rx="8"/><text class="t" x="850" y="540" text-anchor="middle">CTX-KI</text><text class="s" x="850" y="556" text-anchor="middle">indexed for suggestions</text>
+  <rect class="box" x="940" y="520" width="140" height="44" rx="8"/><text class="t" x="1010" y="540" text-anchor="middle">Vault</text><text class="s" x="1010" y="556" text-anchor="middle">CTX-INT credentials</text>
+
+  <!-- arrows -->
+  <line class="a" x1="240" y1="92" x2="338" y2="92" marker-end="url(#ar3)"/>
+  <text class="s" x="289" y="84" text-anchor="middle">REST</text>
+  <text class="s" x="289" y="128" text-anchor="middle">all screens</text>
+  <path class="d" d="M340,542 H300 V162 H338" marker-end="url(#ar3)"/>
+  <text class="s" x="306" y="470" transform="rotate(-90 306 470)">tag webhook → import</text>
+  <line class="a" x1="420" y1="254" x2="420" y2="328" marker-end="url(#ar3)"/>
+  <text class="s" x="426" y="296">freeze bundle</text>
+  <line class="a" x1="600" y1="254" x2="600" y2="328" marker-end="url(#ar3)"/>
+  <text class="s" x="606" y="296">read / write</text>
+  <path class="a" d="M500,240 H510 V542 H518" marker-end="url(#ar3)"/>
+  <line class="a" x1="680" y1="542" x2="778" y2="542" marker-end="url(#ar3)"/>
+  <text class="s" x="729" y="534" text-anchor="middle">published</text>
+  <path class="ac" d="M780,102 H740 V162 H682" marker-end="url(#ar3)"/>
+  <path class="ac" d="M1010,70 V54 H740 V102"/>
+  <text class="s" x="744" y="196">resolve items</text>
+  <text class="s" x="744" y="210">+ SKILL.md</text>
+  <line class="ac" x1="850" y1="134" x2="850" y2="198" marker-end="url(#ar3)"/>
+  <line class="ac" x1="1010" y1="134" x2="1010" y2="198" marker-end="url(#ar3)"/>
+  <text class="s" x="856" y="172">tool call</text>
+  <text class="s" x="1016" y="172">tool call</text>
+  <line class="a" x1="780" y1="232" x2="682" y2="232" marker-end="url(#ar3)"/>
+  <text class="s" x="731" y="226" text-anchor="middle">ceiling</text>
+  <line class="ac" x1="850" y1="264" x2="850" y2="328" marker-end="url(#ar3)"/>
+  <line class="ac" x1="1010" y1="264" x2="1010" y2="328" marker-end="url(#ar3)"/>
+  <text class="s" x="856" y="300">call</text>
+  <text class="s" x="1016" y="300">call</text>
+  <path class="a" d="M1080,250 H1096 V542 H1082" marker-end="url(#ar3)"/>
+  <text class="s" x="1090" y="470" transform="rotate(-90 1090 470)">secret</text>
+  <path class="a" d="M240,352 H280 V600 H770 V118 H778" marker-start="url(#ar3)" marker-end="url(#ar3)"/>
+  <text class="s" x="520" y="594" text-anchor="middle">chat stream (SSE) · approval card · tool trace</text>
+</svg>
+    </div>
+    <figcaption>Purple path: the runtime read and call path, the one that must be fast and safe. The Resolver API serves the frozen SKILL.md from object storage through a cache; the gateway logs every call to OpenSearch for usage metrics.</figcaption>
+  </figure>
+
+  <div class="steps" style="margin-top:20px">
+    <div class="card">
+      <h3>Publish path</h3>
+      <ol>
+        <li>Stepper saves a draft through the Registry API (Postgres row, files as JSON).</li>
+        <li>Test starts the Checks runner: JSON Schema of <code>skill.json</code>, gitleaks, every tool exists in the registry, risk worked out.</li>
+        <li>Dry-run try: the assistant runs with the draft on; the gateway answers write calls with a preview, never the real action.</li>
+        <li>Submit moves the stage; Everyone creates a review task.</li>
+        <li>On publish, the workflow writes the bundle to <code>skill-bundles/&lt;item&gt;/&lt;sha256&gt;/</code> and emits <code>EVT-CATALOG-ITEM-PUBLISHED</code>.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Run path (assistant)</h3>
+      <ol>
+        <li>At conversation start, the assistant asks the Resolver for the user's installed items (one cached call).</li>
+        <li>The system prompt gets only name and one line per skill.</li>
+        <li>When a request matches, the model calls <code>load_skill</code> and gets the full SKILL.md.</li>
+        <li>Tool calls go to the gateway: it checks the item's risk against the user setting and the admin ceiling, raises the approval card if needed, adds the credential and calls the tool.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Run path (Sweep)</h3>
+      <ol>
+        <li>CTX-ORC asks the Resolver for items bound to the Run's phase.</li>
+        <li>Skills go into the Context pack; tools become Capabilities of the Run.</li>
+        <li>Calls use the same gateway with the Sweep ceiling; an approval emits <code>EVT-APPROVAL-REQUESTED</code> and pauses the Run.</li>
+        <li>The Trace records the skill version used, so a Run can be replayed.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 4. DATA AND API -->
+<section class="prose" style="max-width:none">
+  <h2>4. Data model and API</h2>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Table</th><th>Key fields</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>catalog_item</code></td><td>id, kind (skill · tool · mcp_server), slug, owner_team, author, audience (me · team · org), current_version</td><td>Tools and MCP servers: platform team only.</td></tr>
+      <tr><td><code>item_version</code></td><td>item_id, semver, stage, manifest (jsonb), bundle_sha, risk (read · write), write_tools[], source (ui · git tag)</td><td>Immutable once Published.</td></tr>
+      <tr><td><code>review</code></td><td>version_id, reviewer, checks (3 booleans), decision, due_at</td><td>Discussion thread reuses the Community component.</td></tr>
+      <tr><td><code>install</code></td><td>user_id, item_id, pinned_version?, mode (always · ask · off)</td><td>Null pin = latest published.</td></tr>
+      <tr><td><code>phase_binding</code></td><td>application?, phase, item_id</td><td>Sweep per-phase checkboxes.</td></tr>
+      <tr><td><code>policy</code></td><td>surface (assistant · sweep), write_ceiling (ask · allowed · off), who_can_publish</td><td>Read is always allowed.</td></tr>
+      <tr><td><code>tool_effect</code></td><td>item_id, tool_name, effect (read · write), confirmed_by</td><td>From MCP <code>readOnlyHint</code> / <code>destructiveHint</code>, confirmed by an admin.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Endpoints</h3>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Call</th><th>Used by</th></tr></thead>
+    <tbody>
+      <tr><td><code>GET /api/catalog/items?kind=&amp;q=</code> · <code>GET /items/{slug}</code></td><td>Browse, Item page</td></tr>
+      <tr><td><code>POST /items</code> · <code>PUT /items/{id}/draft</code> · <code>POST /items/{id}/versions/{v}/checks</code> · <code>/submit</code></td><td>Publish stepper</td></tr>
+      <tr><td><code>POST /reviews/{id}/decision</code> · <code>POST /items/{id}/retire</code></td><td>Admin › Catalog</td></tr>
+      <tr><td><code>PUT /me/installs/{itemId}</code> · <code>PUT /phase-bindings</code></td><td>Add to my assistant, Sweep settings</td></tr>
+      <tr><td><code>GET /resolve?user=&amp;surface=</code> · <code>GET /resolve?phase=&amp;app=</code> · <code>GET /bundles/{sha}/SKILL.md</code></td><td>Assistant, CTX-ORC (internal)</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 5. CHOICES -->
+<section class="prose">
+  <h2>5. Choices behind the design</h2>
+  <ul>
+    <li><strong>Postgres plus immutable bundles</strong>, the same split as the architecture knowledge base (DEC-KB-07): workflow changes in seconds, published content never changes, and a Sweep Run can name the exact version it used.</li>
+    <li><strong>Risk is worked out from the tools</strong>, never declared by the author. That makes "review again only if it adds a write tool" a set comparison.</li>
+    <li><strong>Skills load on demand.</strong> Only names and one-liners sit in the prompt, so fifty installed skills cost little.</li>
+    <li><strong>One gateway</strong> for the assistant and Sweep keeps one approval card, one ceiling and one audit log. Credentials stay in CTX-INT (INV-07).</li>
+    <li><strong>MCP servers stay platform-owned</strong> in v1. The "add by https URL" option in Assistant settings should go, or become a request to the platform team.</li>
+  </ul>
+  <p class="note">Open before build: the context name (Catalog vs CTX-CAT), "tool" vs Capability in the ubiquitous language, and whether team skills with write tools need review.</p>
+</section>
+
+</main>
+</body>
+</html>
