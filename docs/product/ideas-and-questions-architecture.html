@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ideas and Questions Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one reading column; wide figures scroll on their own. AIToolbox tokens 5.0 (Sweep palette). */
+:root {
+  --bg: #FDF8FD; --surface: #F2EBFA; --ink: #1C1B1E; --muted: #48454E; --line: #CAC4CF;
+  --accent: #39235F; --accent-soft: #E3DFFF; --warn-soft: #FFDEA0; --ai-soft: #9CF1F0; --ok: #0B5314;
+  --font: "Open Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14121E; --surface: #2B2836; --ink: #ECE5F8; --muted: #CAC3DC; --line: #494458;
+    --accent: #C4C0FF; --accent-soft: #413C8A; --warn-soft: #5C4300; --ai-soft: #004F50; --ok: #91D888;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14121E; --surface: #2B2836; --ink: #ECE5F8; --muted: #CAC3DC; --line: #494458;
+  --accent: #C4C0FF; --accent-soft: #413C8A; --warn-soft: #5C4300; --ai-soft: #004F50; --ok: #91D888;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--font); }
+main { max-width: 1160px; margin: 0 auto; padding: 32px 20px 64px; display: grid; gap: 40px; }
+.prose { max-width: 72ch; }
+h1 { font-size: 30px; line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+h2 { font-size: 21px; margin: 0 0 8px; text-wrap: balance; }
+h3 { font-size: 16px; margin: 20px 0 6px; }
+p { margin: 0 0 10px; }
+.meta { color: var(--muted); font-size: 13px; }
+figure { margin: 0; }
+.fig { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); padding: 12px; }
+.fig svg { display: block; min-width: 900px; width: 100%; height: auto; color: var(--ink); }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 8px; max-width: 84ch; }
+svg .box { fill: var(--surface); stroke: var(--line); }
+svg .hot { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+svg .warn { fill: var(--warn-soft); stroke: var(--line); }
+svg .ai { fill: var(--ai-soft); stroke: var(--line); }
+svg .group { fill: none; stroke: var(--line); stroke-dasharray: 5 4; }
+svg .lane { fill: var(--surface); opacity: .45; }
+svg .t { fill: currentColor; font: 600 12.5px var(--font); }
+svg .s { fill: var(--muted); font: 400 11px var(--font); }
+svg .g { fill: var(--muted); font: 700 11px var(--font); letter-spacing: .06em; text-transform: uppercase; }
+svg .a { fill: none; stroke: currentColor; stroke-width: 1.3; }
+svg .d { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-dasharray: 4 3; }
+svg .ac { fill: none; stroke: var(--accent); stroke-width: 1.6; }
+svg .acd { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 5 3; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border-radius: 12px; padding: 16px 18px; }
+.card h3 { margin-top: 0; }
+ol, ul { margin: 0; padding-left: 20px; }
+li { margin: 4px 0; }
+code { font: 600 13px var(--font); background: var(--surface); padding: 1px 5px; border-radius: 4px; }
+.card code { background: var(--bg); }
+.tw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.note { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="prose">
+  <h1>Ideas and Questions: user journey and implementation architecture</h1>
+  <p>Community gets a Questions section that works like Stack Overflow (votes, accepted answers, tags, duplicates), tied to the Ideas box: a question that shows a missing feature becomes an idea, an idea lists the questions behind it, and a delivered idea answers them. Built on the Community feature, the domain reference and the Discussion rules.</p>
+  <p class="meta">Draft · 2026-11-26 · reopens the design-system decision "no votes, no accepted answer" (Discussion), see section 6.</p>
+</header>
+
+<!-- 1. JOURNEY -->
+<section>
+  <div class="prose">
+    <h2>1. User journey</h2>
+    <p>Four roles: the person who asks, the people who answer (anyone, with champions on call for their tags), the people who vote on ideas, and the platform team who triages and delivers.</p>
+  </div>
+  <figure>
+    <div class="fig">
+<svg viewBox="0 0 1110 470" role="img" aria-label="Swimlane: ask with similar questions and an assistant draft, post, answer, accept. Unanswered questions go to tag champions. A 'not possible today' answer becomes an idea; ideas are voted, triaged, planned in Jira and delivered, which drafts answers on the linked questions.">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+  <rect class="lane" x="0" y="10" width="1110" height="100" rx="8"/>
+  <rect class="lane" x="0" y="240" width="1110" height="100" rx="8"/>
+  <text class="g" x="14" y="64">Asker</text>
+  <text class="g" x="14" y="179">Answerer</text>
+  <text class="g" x="14" y="294">Ideas</text>
+  <text class="g" x="14" y="409">Platform</text>
+
+  <!-- asker -->
+  <rect class="box" x="120" y="36" width="150" height="48" rx="10"/><text class="t" x="195" y="57" text-anchor="middle">Ask</text><text class="s" x="195" y="73" text-anchor="middle">title, details, tags</text>
+  <rect class="ai" x="300" y="36" width="150" height="48" rx="10"/><text class="t" x="375" y="57" text-anchor="middle">Similar + draft</text><text class="s" x="375" y="73" text-anchor="middle">questions, assistant draft</text>
+  <rect class="box" x="480" y="36" width="150" height="48" rx="10"/><text class="t" x="555" y="57" text-anchor="middle">Post</text><text class="s" x="555" y="73" text-anchor="middle">follows it by default</text>
+  <rect class="box" x="660" y="36" width="150" height="48" rx="10"/><text class="t" x="735" y="57" text-anchor="middle">Accept an answer</text><text class="s" x="735" y="73" text-anchor="middle">or the team after 7 days</text>
+  <rect class="hot" x="860" y="36" width="170" height="48" rx="10"/><text class="t" x="945" y="57" text-anchor="middle">Solved</text><text class="s" x="945" y="73" text-anchor="middle">indexed for the assistant</text>
+  <line class="a" x1="270" y1="60" x2="298" y2="60" marker-end="url(#ar)"/>
+  <line class="a" x1="450" y1="60" x2="478" y2="60" marker-end="url(#ar)"/>
+  <line class="a" x1="810" y1="60" x2="858" y2="60" marker-end="url(#ar)"/>
+  <path class="d" d="M375,36 V22 H945 V34" marker-end="url(#ar)"/>
+  <text class="s" x="560" y="18">already answered: follow the existing question, nothing posted</text>
+
+  <!-- answerer -->
+  <rect class="box" x="120" y="151" width="150" height="48" rx="10"/><text class="t" x="195" y="172" text-anchor="middle">Unanswered by tag</text><text class="s" x="195" y="188" text-anchor="middle">page filter, Teams digest</text>
+  <rect class="box" x="300" y="151" width="150" height="48" rx="10"/><text class="t" x="375" y="172" text-anchor="middle">Answer</text><text class="s" x="375" y="188" text-anchor="middle">Markdown, code, links</text>
+  <rect class="box" x="480" y="151" width="150" height="48" rx="10"/><text class="t" x="555" y="172" text-anchor="middle">Votes up / down</text><text class="s" x="555" y="188" text-anchor="middle">on questions and answers</text>
+  <rect class="warn" x="660" y="151" width="150" height="48" rx="10"/><text class="t" x="735" y="172" text-anchor="middle">No answer, 2 days</text><text class="s" x="735" y="188" text-anchor="middle">tag champions, then inbox</text>
+  <line class="a" x1="270" y1="175" x2="298" y2="175" marker-end="url(#ar)"/>
+  <line class="a" x1="450" y1="175" x2="478" y2="175" marker-end="url(#ar)"/>
+  <path class="d" d="M555,84 V118 H195 V149" marker-end="url(#ar)"/>
+  <text class="s" x="210" y="114">listed in Unanswered</text>
+  <path class="a" d="M555,151 V132 H735 V86" marker-end="url(#ar)"/>
+  <path class="d" d="M195,199 V218 H735 V201" marker-end="url(#ar)"/>
+  <text class="s" x="420" y="214">nobody answers</text>
+
+  <!-- ideas -->
+  <rect class="box" x="120" y="266" width="150" height="48" rx="10"/><text class="t" x="195" y="287" text-anchor="middle">Same need</text><text class="s" x="195" y="303" text-anchor="middle">link a question to an idea</text>
+  <rect class="box" x="300" y="266" width="150" height="48" rx="10"/><text class="t" x="375" y="287" text-anchor="middle">Propose as idea</text><text class="s" x="375" y="303" text-anchor="middle">prefilled from the question</text>
+  <rect class="hot" x="480" y="266" width="150" height="48" rx="10"/><text class="t" x="555" y="287" text-anchor="middle">Idea · Proposed</text><text class="s" x="555" y="303" text-anchor="middle">lists its questions</text>
+  <rect class="box" x="660" y="266" width="150" height="48" rx="10"/><text class="t" x="735" y="287" text-anchor="middle">Vote once, follow</text><text class="s" x="735" y="303" text-anchor="middle">from the Ideas page</text>
+  <path class="acd" d="M375,199 V264" marker-end="url(#ar)"/>
+  <text class="s" x="382" y="236">answer: not possible today</text>
+  <line class="ac" x1="450" y1="290" x2="478" y2="290" marker-end="url(#ar)"/>
+  <line class="a" x1="660" y1="290" x2="632" y2="290" marker-end="url(#ar)"/>
+  <path class="acd" d="M195,314 V332 H515 V316" marker-end="url(#ar)"/>
+  <text class="s" x="250" y="327">demand +1, the question waits on the idea</text>
+
+  <!-- platform -->
+  <rect class="box" x="480" y="381" width="150" height="48" rx="10"/><text class="t" x="555" y="402" text-anchor="middle">Triage</text><text class="s" x="555" y="418" text-anchor="middle">merge, status, public note</text>
+  <rect class="box" x="660" y="381" width="150" height="48" rx="10"/><text class="t" x="735" y="402" text-anchor="middle">Planned</text><text class="s" x="735" y="418" text-anchor="middle">Jira epic via CTX-INT</text>
+  <rect class="hot" x="860" y="381" width="170" height="48" rx="10"/><text class="t" x="945" y="402" text-anchor="middle">Delivered</text><text class="s" x="945" y="418" text-anchor="middle">in a What's new release</text>
+  <line class="a" x1="555" y1="314" x2="555" y2="379" marker-end="url(#ar)"/>
+  <line class="a" x1="630" y1="405" x2="658" y2="405" marker-end="url(#ar)"/>
+  <line class="a" x1="810" y1="405" x2="858" y2="405" marker-end="url(#ar)"/>
+  <path class="acd" d="M1030,405 H1080 V60 H1032" marker-end="url(#ar)"/>
+  <text class="s" x="1074" y="300" transform="rotate(-90 1074 300)">draft answer on every linked question</text>
+  <text class="s" x="120" y="456">Bugs never become ideas: the Ask form links to Report a bug (Jira), as Feedback does today.</text>
+</svg>
+    </div>
+    <figcaption>Purple dashed lines are the coupling: an answer can turn a question into an idea, other questions can join it as the same need, and a delivery drafts an answer on all of them for the platform team to confirm.</figcaption>
+  </figure>
+
+  <div class="steps" style="margin-top:20px">
+    <div class="card">
+      <h3>Ask and get an answer</h3>
+      <ol>
+        <li>Ask from Community › Questions, from the header field ("Ask the community" when the assistant has no grounded answer), or from a page with its context attached.</li>
+        <li>While the title is typed, similar questions appear, solved first. The assistant drafts an answer from Docs, marked as not checked.</li>
+        <li>If one of them answers it, the person follows that question and nothing is posted.</li>
+        <li>Answers arrive; the asker accepts one. Accepted answers are indexed so the assistant can cite them.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Answer and keep it moving</h3>
+      <ol>
+        <li>Anyone can answer and vote. Tags are AIToolbox areas and Applications from the Software Catalog; each tag has champions.</li>
+        <li>Unanswered after 2 working days: the tag's champions get a Teams mention; after 2 more, it lands in Administration › Community › Feedback › Inbox.</li>
+        <li>No accepted answer after 7 days: the platform team can accept the best-voted one.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>From question to idea and back</h3>
+      <ol>
+        <li>"Propose as idea" on a question (or on an answer that says it cannot be done) opens the idea form prefilled; the question shows "Waiting on idea".</li>
+        <li>Another question with the same need links to the idea (+1 demand), not a new idea.</li>
+        <li>The team triages: merge duplicates, set the status, write the public note; Planned creates the Jira epic.</li>
+        <li>When the release ships, every linked question gets a drafted answer ("Delivered in 4.8, here is how") that the team confirms, and followers are told.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 2. LIFECYCLES -->
+<section>
+  <div class="prose">
+    <h2>2. Lifecycles and how they connect</h2>
+    <p>A question and an idea each have their own status. The link between them is a record of its own, so one idea can carry many questions.</p>
+  </div>
+  <figure>
+    <div class="fig">
+<svg viewBox="0 0 1110 360" role="img" aria-label="Question states: Open, Answered, Solved, Waiting on idea, Duplicate, Closed as bug. Idea states: Proposed, Under review, Planned, In progress, Delivered, Declined, Merged. Waiting on idea is linked to the idea; Delivered drafts the answer that solves the question.">
+  <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+  <text class="g" x="20" y="44">Question</text>
+  <rect class="box" x="20" y="54" width="140" height="44" rx="10"/><text class="t" x="90" y="81" text-anchor="middle">Open</text>
+  <rect class="box" x="220" y="54" width="140" height="44" rx="10"/><text class="t" x="290" y="81" text-anchor="middle">Answered</text>
+  <rect class="hot" x="440" y="54" width="140" height="44" rx="10"/><text class="t" x="510" y="81" text-anchor="middle">Solved</text>
+  <rect class="warn" x="660" y="54" width="160" height="44" rx="10"/><text class="t" x="740" y="81" text-anchor="middle">Waiting on idea</text>
+  <rect class="box" x="20" y="132" width="140" height="36" rx="10"/><text class="t" x="90" y="155" text-anchor="middle">Duplicate</text>
+  <rect class="box" x="220" y="132" width="170" height="36" rx="10"/><text class="t" x="305" y="155" text-anchor="middle">Closed · bug in Jira</text>
+  <line class="a" x1="160" y1="76" x2="218" y2="76" marker-end="url(#ar2)"/><text class="s" x="189" y="70" text-anchor="middle">answer</text>
+  <line class="a" x1="360" y1="76" x2="438" y2="76" marker-end="url(#ar2)"/><text class="s" x="399" y="70" text-anchor="middle">accepted</text>
+  <line class="a" x1="90" y1="98" x2="90" y2="130" marker-end="url(#ar2)"/>
+  <path class="a" d="M140,98 V114 H305 V130" marker-end="url(#ar2)"/><text class="s" x="190" y="112">reported as a bug</text>
+  <path class="acd" d="M290,54 V34 H740 V52" marker-end="url(#ar2)"/><text class="s" x="515" y="28" text-anchor="middle">proposed as idea, or linked as the same need</text>
+
+  <text class="g" x="20" y="226">Idea</text>
+  <rect class="box" x="20" y="236" width="140" height="44" rx="10"/><text class="t" x="90" y="263" text-anchor="middle">Proposed</text>
+  <rect class="box" x="200" y="236" width="140" height="44" rx="10"/><text class="t" x="270" y="263" text-anchor="middle">Under review</text>
+  <rect class="box" x="380" y="236" width="140" height="44" rx="10"/><text class="t" x="450" y="263" text-anchor="middle">Planned</text>
+  <rect class="box" x="560" y="236" width="140" height="44" rx="10"/><text class="t" x="630" y="263" text-anchor="middle">In progress</text>
+  <rect class="hot" x="740" y="236" width="140" height="44" rx="10"/><text class="t" x="810" y="263" text-anchor="middle">Delivered</text>
+  <rect class="box" x="200" y="310" width="140" height="36" rx="10"/><text class="t" x="270" y="333" text-anchor="middle">Declined</text>
+  <rect class="box" x="20" y="310" width="140" height="36" rx="10"/><text class="t" x="90" y="333" text-anchor="middle">Merged</text>
+  <line class="a" x1="160" y1="258" x2="198" y2="258" marker-end="url(#ar2)"/>
+  <line class="a" x1="340" y1="258" x2="378" y2="258" marker-end="url(#ar2)"/><text class="s" x="359" y="252" text-anchor="middle">Jira epic</text>
+  <line class="a" x1="520" y1="258" x2="558" y2="258" marker-end="url(#ar2)"/><text class="s" x="539" y="252" text-anchor="middle">Jira status</text>
+  <line class="a" x1="700" y1="258" x2="738" y2="258" marker-end="url(#ar2)"/><text class="s" x="719" y="252" text-anchor="middle">release</text>
+  <line class="a" x1="270" y1="280" x2="270" y2="308" marker-end="url(#ar2)"/><text class="s" x="276" y="298">with a public note</text>
+  <line class="a" x1="90" y1="280" x2="90" y2="308" marker-end="url(#ar2)"/><text class="s" x="96" y="298">into another idea</text>
+  <path class="acd" d="M740,98 V190 H90 V234" marker-end="url(#ar2)"/><text class="s" x="420" y="186" text-anchor="middle">linked both ways (question_idea_link)</text>
+  <path class="acd" d="M880,258 H960 V20 H510 V52" marker-end="url(#ar2)"/><text class="s" x="966" y="140">team confirms the</text><text class="s" x="966" y="154">drafted answer</text>
+</svg>
+    </div>
+    <figcaption>Votes freeze when an idea is Delivered, Declined or Merged; votes and links of a merged idea move to the idea it was merged into. A question waiting on a declined idea goes back to Answered with the team's note.</figcaption>
+  </figure>
+</section>
+
+<!-- 3. ARCHITECTURE -->
+<section>
+  <div class="prose">
+    <h2>3. Implementation architecture</h2>
+    <p>One new backend module, Community (CTX-COM), in the Devtoolbox backend. Postgres holds everything, search included, for v1; the assistant brings similar-question detection and draft answers; Jira and Teams go through CTX-INT as every other connector does.</p>
+  </div>
+  <figure>
+    <div class="fig">
+<svg viewBox="0 0 1120 640" role="img" aria-label="Angular Community feature calls the Community service over REST. The service stores questions, answers, votes, ideas and links in Postgres with full-text and vector search, attachments in object storage, and publishes events through an outbox to CTX-KI and CTX-INT. The assistant drafts answers and computes embeddings. CTX-INT syncs Jira epics and sends Teams mentions.">
+  <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+  <text class="g" x="20" y="30">Angular · Community remote module</text>
+  <rect class="group" x="20" y="40" width="240" height="400" rx="12"/>
+  <text class="g" x="320" y="30">Community service · CTX-COM (new)</text>
+  <rect class="group" x="320" y="40" width="400" height="400" rx="12"/>
+  <text class="g" x="780" y="30">Other contexts</text>
+  <rect class="group" x="780" y="40" width="320" height="400" rx="12"/>
+
+  <rect class="box" x="40" y="70" width="200" height="44" rx="8"/><text class="t" x="140" y="90" text-anchor="middle">Questions</text><text class="s" x="140" y="106" text-anchor="middle">list · question page</text>
+  <rect class="box" x="40" y="130" width="200" height="44" rx="8"/><text class="t" x="140" y="150" text-anchor="middle">Ask form</text><text class="s" x="140" y="166" text-anchor="middle">similar questions live</text>
+  <rect class="box" x="40" y="190" width="200" height="44" rx="8"/><text class="t" x="140" y="210" text-anchor="middle">Ideas</text><text class="s" x="140" y="226" text-anchor="middle">list + detail, linked questions</text>
+  <rect class="box" x="40" y="250" width="200" height="44" rx="8"/><text class="t" x="140" y="270" text-anchor="middle">Admin › Community</text><text class="s" x="140" y="286" text-anchor="middle">Ideas triage · moderation</text>
+  <rect class="box" x="40" y="330" width="200" height="44" rx="8"/><text class="t" x="140" y="350" text-anchor="middle">Assistant pane</text><text class="s" x="140" y="366" text-anchor="middle">cites solved questions</text>
+
+  <rect class="box" x="340" y="70" width="170" height="44" rx="8"/><text class="t" x="425" y="90" text-anchor="middle">Questions API</text><text class="s" x="425" y="106" text-anchor="middle">questions, answers, tags</text>
+  <rect class="box" x="340" y="130" width="170" height="44" rx="8"/><text class="t" x="425" y="150" text-anchor="middle">Votes · accept</text><text class="s" x="425" y="166" text-anchor="middle">one vote per person</text>
+  <rect class="box" x="340" y="190" width="170" height="44" rx="8"/><text class="t" x="425" y="210" text-anchor="middle">Routing</text><text class="s" x="425" y="226" text-anchor="middle">2 days → champions → inbox</text>
+  <rect class="box" x="530" y="70" width="170" height="44" rx="8"/><text class="t" x="615" y="90" text-anchor="middle">Ideas API</text><text class="s" x="615" y="106" text-anchor="middle">ideas, status, votes</text>
+  <rect class="hot" x="530" y="130" width="170" height="44" rx="8"/><text class="t" x="615" y="150" text-anchor="middle">Links</text><text class="s" x="615" y="166" text-anchor="middle">question ↔ idea, merge</text>
+  <rect class="box" x="530" y="190" width="170" height="44" rx="8"/><text class="t" x="615" y="210" text-anchor="middle">Notifier</text><text class="s" x="615" y="226" text-anchor="middle">follows, digest, mentions</text>
+  <rect class="box" x="340" y="330" width="170" height="60" rx="8"/><text class="t" x="425" y="355" text-anchor="middle">Postgres</text><text class="s" x="425" y="372" text-anchor="middle">FTS + pgvector · outbox</text>
+  <rect class="box" x="530" y="330" width="170" height="60" rx="8"/><text class="t" x="615" y="355" text-anchor="middle">Object storage</text><text class="s" x="615" y="372" text-anchor="middle">screenshots, attachments</text>
+
+  <rect class="ai" x="800" y="70" width="280" height="56" rx="8"/><text class="t" x="940" y="92" text-anchor="middle">Assistant · CTX-AST</text><text class="s" x="940" y="110" text-anchor="middle">embeddings · draft answer grounded in Docs</text>
+  <rect class="box" x="800" y="150" width="280" height="56" rx="8"/><text class="t" x="940" y="172" text-anchor="middle">CTX-CAT · CTX-IAM</text><text class="s" x="940" y="190" text-anchor="middle">Application tags · champion and team roles</text>
+  <rect class="box" x="800" y="230" width="280" height="56" rx="8"/><text class="t" x="940" y="252" text-anchor="middle">CTX-KI</text><text class="s" x="940" y="270" text-anchor="middle">solved questions, delivered ideas as a Source</text>
+  <rect class="box" x="800" y="310" width="280" height="56" rx="8"/><text class="t" x="940" y="332" text-anchor="middle">CTX-INT</text><text class="s" x="940" y="350" text-anchor="middle">Jira epics · Teams mentions and digest</text>
+
+  <rect class="box" x="340" y="520" width="360" height="44" rx="8"/><text class="t" x="520" y="540" text-anchor="middle">Event bus</text><text class="s" x="520" y="556" text-anchor="middle">EVT-QUESTION-* · EVT-ANSWER-ACCEPTED · EVT-IDEA-*</text>
+  <rect class="box" x="800" y="520" width="130" height="44" rx="8"/><text class="t" x="865" y="540" text-anchor="middle">Jira</text><text class="s" x="865" y="556" text-anchor="middle">epic per idea</text>
+  <rect class="box" x="950" y="520" width="130" height="44" rx="8"/><text class="t" x="1015" y="540" text-anchor="middle">Teams</text><text class="s" x="1015" y="556" text-anchor="middle">champions</text>
+
+  <line class="a" x1="240" y1="92" x2="338" y2="92" marker-end="url(#ar3)"/><text class="s" x="289" y="84" text-anchor="middle">REST</text><text class="s" x="289" y="128" text-anchor="middle">all screens</text>
+  <path class="ac" d="M425,70 V54 H760 V98 H798" marker-end="url(#ar3)"/><text class="s" x="560" y="50">similar check + draft answer</text>
+  <line class="a" x1="425" y1="234" x2="425" y2="328" marker-end="url(#ar3)"/><text class="s" x="431" y="290">write + outbox row</text>
+  <path class="a" d="M425,390 V518" marker-end="url(#ar3)"/><text class="s" x="431" y="470">outbox relay</text>
+  <line class="a" x1="800" y1="178" x2="722" y2="178" marker-end="url(#ar3)"/><text class="s" x="760" y="172" text-anchor="middle">tags, roles</text>
+  <path class="a" d="M700,532 H740 V258 H798" marker-end="url(#ar3)"/><text class="s" x="746" y="300">ingest</text>
+  <path class="a" d="M700,552 H750 V338 H798" marker-end="url(#ar3)"/><text class="s" x="756" y="420">sync</text>
+  <line class="a" x1="865" y1="366" x2="865" y2="518" marker-end="url(#ar3)"/>
+  <line class="a" x1="1015" y1="366" x2="1015" y2="518" marker-end="url(#ar3)"/>
+  <path class="ac" d="M240,352 H280 V600 H770 V112 H798" marker-start="url(#ar3)" marker-end="url(#ar3)"/><text class="s" x="520" y="594" text-anchor="middle">"Ask the community" when no grounded answer · cites solved questions</text>
+</svg>
+    </div>
+    <figcaption>Purple: the assistant path. On the Ask form, the Questions API embeds the draft title, finds the closest solved questions in Postgres (pgvector plus full-text) and asks the assistant for a draft answer from Docs. Jira status changes come back through CTX-INT and move the idea to In progress.</figcaption>
+  </figure>
+
+  <div class="steps" style="margin-top:20px">
+    <div class="card">
+      <h3>Write path</h3>
+      <ol>
+        <li>Every write (question, answer, vote, accept, idea, link) is one Postgres transaction that also inserts an outbox row.</li>
+        <li>The relay publishes the event; the Notifier and CTX-INT react (Teams mention, Jira epic), CTX-KI ingests solved questions.</li>
+        <li>Embeddings are computed after the commit, from the event, so a slow model never blocks a post.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Similar questions</h3>
+      <ol>
+        <li>Debounced at 400 ms on the title: embed the text, then <code>ORDER BY embedding &lt;=&gt; :q</code> limited to 20, re-ranked with <code>ts_rank</code> on the title and body.</li>
+        <li>Show 5, solved first, with their score and status.</li>
+        <li>Duplicate closing uses the same query in the moderation view.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Scheduled jobs</h3>
+      <ol>
+        <li>Every hour: questions over 2 working days without an answer → tag champions; over 4 → Feedback inbox (source "Questions").</li>
+        <li>Daily: no accepted answer after 7 days → listed for the team.</li>
+        <li>Weekly: Teams digest per tag (unanswered, solved, ideas that moved).</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 4. DATA AND API -->
+<section class="prose" style="max-width:none">
+  <h2>4. Data model and API</h2>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Table</th><th>Key fields</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>question</code></td><td>id, title, body_md, author_id, status (open · answered · solved · waiting_on_idea · duplicate · closed), accepted_answer_id, duplicate_of, score, answer_count, views, context (page, applicationSlug), embedding vector(1024), tsv</td><td>Edits keep history in <code>revision</code>.</td></tr>
+      <tr><td><code>answer</code></td><td>id, question_id, body_md, author_id, score, accepted, source (person · assistant_draft · delivery_draft), confirmed_by</td><td>An assistant or delivery draft is shown only once a person confirms it.</td></tr>
+      <tr><td><code>vote</code></td><td>user_id, target (question · answer), target_id, value (+1 · −1)</td><td>Primary key (user_id, target, target_id). No vote on your own post.</td></tr>
+      <tr><td><code>tag</code> · <code>question_tag</code></td><td>slug, kind (area · application), applicationSlug, champions[]</td><td>Application tags come from CTX-CAT; 1 to 3 tags per question.</td></tr>
+      <tr><td><code>idea</code></td><td>id, title, body_md, author_id, area, status, vote_count, team_note, jira_key, delivered_in (release), merged_into</td><td>Existing Ideas data, plus jira_key and merged_into.</td></tr>
+      <tr><td><code>idea_vote</code></td><td>user_id, idea_id, created_at</td><td>One per person; frozen after Delivered, Declined or Merged.</td></tr>
+      <tr><td><code>question_idea_link</code></td><td>question_id, idea_id, kind (origin · same_need), created_by</td><td>The idea's demand = votes + linked questions.</td></tr>
+      <tr><td><code>follow</code></td><td>user_id, target (question · idea · tag), target_id</td><td>Askers and answerers follow by default.</td></tr>
+      <tr><td><code>outbox</code></td><td>id, type, payload jsonb, created_at, published_at</td><td>Transactional outbox, relayed in order.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Endpoints</h3>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Call</th><th>Used by</th></tr></thead>
+    <tbody>
+      <tr><td><code>GET /api/community/questions?tab=newest|unanswered|votes&amp;tag=&amp;q=&amp;page=</code> · <code>GET /questions/{id}</code></td><td>Questions list, question page</td></tr>
+      <tr><td><code>POST /questions/similar</code> {title, body} → questions + assistant draft</td><td>Ask form, as the title is typed</td></tr>
+      <tr><td><code>POST /questions</code> · <code>POST /questions/{id}/answers</code> · <code>PUT /votes</code> · <code>POST /answers/{id}/accept</code></td><td>Ask, answer, vote, accept</td></tr>
+      <tr><td><code>POST /questions/{id}/propose-idea</code> · <code>POST /ideas/{id}/links</code> {questionId, kind}</td><td>Coupling</td></tr>
+      <tr><td><code>GET /ideas?status=&amp;sort=</code> · <code>PUT /ideas/{id}/vote</code> · <code>PATCH /ideas/{id}</code> (status, note, merge)</td><td>Ideas page, Admin › Community › Ideas</td></tr>
+      <tr><td><code>POST /questions/{id}/duplicate</code> · <code>POST /reports</code></td><td>Moderation</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 5. RULES -->
+<section class="prose">
+  <h2>5. Rules that keep it healthy</h2>
+  <ul>
+    <li><strong>Votes without points.</strong> Votes sort answers and questions; there is no reputation score and no badge in v1 (principle 6, minimal by default). Role chips stay as in Discussion: Platform team, Champion, Author.</li>
+    <li><strong>The asker accepts.</strong> After 7 days without acceptance, the platform team can accept the best-voted answer; the page says who accepted it.</li>
+    <li><strong>The assistant never posts on its own.</strong> Its draft shows on the Ask form and, once a person confirms it, as an answer marked "Drafted by the assistant, checked by …".</li>
+    <li><strong>Bugs go to Jira.</strong> "Report a bug" on the Ask form and "Closed · bug in Jira" for questions that turn out to be bugs, as the Feedback rule says.</li>
+    <li><strong>Everything is under the company SSO.</strong> No anonymous posting; names are shown. Moderation: report, hide, close as duplicate, move to an idea.</li>
+  </ul>
+</section>
+
+<!-- 6. DECISIONS -->
+<section class="prose">
+  <h2>6. Decisions this reopens</h2>
+  <ul>
+    <li><strong>Discussion rule.</strong> The design system says Discussion has "no votes, no same question, no accepted answer" and replaced the Q&amp;A pattern. Proposal: keep Discussion as it is on releases; add Questions as a separate Community section with votes and accepted answers; on an idea, the linked questions replace the Discussion panel.</li>
+    <li><strong>Vision consistency review.</strong> Its option A (simple Community) drops discussions. This proposal goes the other way and needs that choice made first.</li>
+    <li><strong>Community navigation.</strong> What's new · Guides · Questions · Ideas.</li>
+    <li><strong>Search store.</strong> Postgres full-text and pgvector for v1, a few thousand questions. Move to OpenSearch (already used for usage metrics) past about 50,000 posts or when search must cover Docs too.</li>
+  </ul>
+</section>
+
+</main>
+</body>
+</html>

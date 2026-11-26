@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Question, re-run only the failed checks</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E;background:#FDF8FD}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+button{cursor:pointer;font:inherit;color:inherit}
+button:disabled{opacity:.38;cursor:default}
+.ui{font-family:'BNPP Type',Manrope,'Segoe UI',system-ui,sans-serif}
+.sr{position:absolute;left:-9999px}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:8px;background:#F2EBFA;color:#1D1A28;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}
+.ib{width:40px;height:40px;border:0;border-radius:999px;background:transparent;color:#48454E;display:inline-flex;align-items:center;justify-content:center}
+.code{background:#ECE5F4;border-radius:8px;padding:12px 14px;font-size:13px;line-height:20px;font-weight:600;white-space:pre;overflow-x:auto;margin:0}
+</style>
+</helmet>
+<div style="display: flex; min-height: 100vh; background: #FDF8FD">
+  <nav aria-label="Main" style="width: 80px; flex: none; background: #EDE4FF; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px">
+    <button type="button" aria-label="Open the navigation drawer" class="ib" style="width: 48px; height: 48px; border-radius: 16px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="5">
+      <a href="#" aria-current="{{n.current}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; width: 72px">
+        <span style="width: 56px; height: 32px; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: {{n.pill}}; box-shadow: {{n.bar}}; color: #1D1A28"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"/></svg></span>
+        <span class="ui" style="font-size: 12px; font-weight: 600">{{n.label}}</span>
+      </a>
+    </sc-for>
+  </nav>
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+    <header style="height: 64px; background: #EDE4FF; margin-left: 2px; display: flex; align-items: center; gap: 16px; padding: 0 24px">
+      <span style="font-family: Manrope, sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.2px">AI<span style="color: #39235F">Toolbox</span></span>
+      <span style="display: flex; flex-direction: column; line-height: 1.2"><span class="ui" style="font-size: 14px; font-weight: 600">Community</span><span style="font-size: 12px; color: #48454E">Questions and ideas</span></span>
+      <span style="flex: 1"></span>
+      <label for="q" class="sr">Search questions and ideas, or ask</label>
+      <div style="width: 440px; max-width: 40%; height: 44px; border-radius: 16px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-3.5-3.5"/></svg>
+        <input id="q" type="text" placeholder="Search questions and ideas, or ask" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 14px">
+        <button type="button" class="ui" style="height: 32px; border: 0; border-radius: 8px; background: #9CF1F0; color: #002020; font-size: 13px; font-weight: 600; padding: 0 10px">Ask</button>
+      </div>
+      <button type="button" aria-label="Notifications, 3 new" class="ib"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0"/></svg></button>
+      <span aria-label="Aurélien Heux" style="width: 32px; height: 32px; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">AH</span>
+    </header>
+    <main style="flex: 1; padding: 16px 32px 64px; display: flex; justify-content: center">
+      <div style="width: 100%; max-width: 1180px; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+          <a href="Main.dc.html" class="ui" style="height: 32px; padding: 0 12px 0 8px; border-radius: 8px; border: 1px solid #79757F; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; text-decoration: none; color: #1C1B1E"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Questions</a>
+          <span style="flex: 1"></span>
+          <a href="Ask.dc.html" class="ui" style="height: 40px; border-radius: 16px; padding: 0 20px; display: inline-flex; align-items: center; background: #DED7EB; color: #1D1A28; font-size: 14px; font-weight: 600; text-decoration: none">Ask a question</a>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid #CAC4CF">
+          <h1 class="ui" style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 600; text-wrap: balance">Can I re-run only the failed checks of a sweep?</h1>
+          <div style="display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 13px; color: #48454E">
+            <span>Asked 23 Nov</span><span>Active today</span><span>Viewed 214 times</span>
+            <span class="chip" style="background: #ACF4A2; color: #002203; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Solved</span>
+            <a href="Ideas.dc.html" class="chip" style="background: #FFDEA0; color: #261900; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Waiting on an idea · Planned</a>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start">
+          <div style="flex: 999 1 620px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+
+            <article aria-label="Question" style="display: flex; gap: 16px">
+              <div style="width: 48px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 2px">
+                    <button type="button" class="ib" aria-label="Vote up, question" aria-pressed="{{q.up}}" onClick="{{q.voteUp}}" style="border: 1px solid #CAC4CF; background: {{q.upBg}}; color: {{q.upFg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg></button>
+                    <span class="ui" aria-live="polite" style="font-size: 18px; font-weight: 600; line-height: 28px">{{q.score}}</span>
+                    <button type="button" class="ib" aria-label="Vote down, question" aria-pressed="{{q.down}}" onClick="{{q.voteDown}}" style="border: 1px solid #CAC4CF; background: {{q.downBg}}; color: {{q.downFg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l-7-8h14z"/></svg></button>
+                  </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+                <p style="margin: 0; font-size: 15px; line-height: 24px">On a big pull request one of the twelve checks fails, often the flaky <b style="font-weight: 600">e2e-reservation</b> suite. Sweep then asks me to re-run the whole sweep, which takes about 12 minutes and re-runs checks that already passed.</p>
+                <p style="margin: 0; font-size: 15px; line-height: 24px">Is there a way to restart only the failed check, from the PR page or from the run?</p>
+                <pre class="code">sweep run #4821 · environments-backend · PR 918
+✓ build            2m 10s
+✓ unit-tests       3m 02s
+✕ e2e-reservation  4m 41s   timeout on reserve_env_test
+✓ sonar            1m 15s</pre>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap"><a href="Main.dc.html" class="chip">Sweep</a><a href="Main.dc.html" class="chip">environments-backend</a></div>
+                <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+                  <div style="display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 13px">
+                      <a href="#" style="font-weight: 600">Share</a><a href="#" style="font-weight: 600">Edit</a><a href="#" style="font-weight: 600">Following</a><a href="#" style="font-weight: 600; color: #48454E">Report</a>
+                    </div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: #FAF4FF; min-width: 220px">
+                      <span aria-hidden="true" style="width: 32px; height: 32px; flex: none; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">LG</span>
+                      <span style="display: flex; flex-direction: column; line-height: 1.3"><span style="font-size: 12px; color: #48454E">asked 23 Nov</span><span style="font-size: 13px; font-weight: 600">Léa Garnier</span><span style="font-size: 12px; color: #48454E">Payments</span></span>
+                    </div>
+                </div>
+              </div>
+            </article>
+
+            <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #CAC4CF; padding-bottom: 8px">
+              <h2 class="ui" style="margin: 0; font-size: 18px; font-weight: 600; flex: 1">3 answers</h2>
+              <label for="sort" style="font-size: 13px; color: #48454E">Sort</label>
+              <select id="sort" style="height: 36px; border: 1px solid #79757F; border-radius: 4px; background: #FFFFFF; font: inherit; font-size: 13px; padding: 0 8px"><option>Accepted, then votes</option><option>Newest</option></select>
+            </div>
+
+            <article aria-label="Accepted answer" style="display: flex; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid #CAC4CF">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+                <div style="width: 48px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 2px">
+                    <button type="button" class="ib" aria-label="Vote up, answer by the platform team" aria-pressed="{{a1.up}}" onClick="{{a1.voteUp}}" style="border: 1px solid #CAC4CF; background: {{a1.upBg}}; color: {{a1.upFg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg></button>
+                    <span class="ui" aria-live="polite" style="font-size: 18px; font-weight: 600; line-height: 28px">{{a1.score}}</span>
+                    <button type="button" class="ib" aria-label="Vote down, answer by the platform team" aria-pressed="{{a1.down}}" onClick="{{a1.voteDown}}" style="border: 1px solid #CAC4CF; background: {{a1.downBg}}; color: {{a1.downFg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l-7-8h14z"/></svg></button>
+                  </div>
+                <span title="Accepted by Léa Garnier" style="width: 32px; height: 32px; border-radius: 999px; background: #ACF4A2; color: #002203; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+                <div style="font-size: 12px; font-weight: 600; color: #0B5314">Accepted by Léa Garnier, 24 Nov</div>
+                <p style="margin: 0; font-size: 15px; line-height: 24px">Not from the PR page today. You can do it from the command line: the runner keeps the passed checks of the last run for 24 hours, so this only runs the failed one.</p>
+                <pre class="code">sweep rerun 4821 --only-failed</pre>
+                <p style="margin: 0; font-size: 15px; line-height: 24px">A button on the PR page is the idea <a href="Ideas.dc.html" style="font-weight: 600">Re-run only the failed checks</a>, planned for 4.8. Vote for it and you will be told when it ships.</p>
+                <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+                  <div style="display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 13px">
+                      <a href="#" style="font-weight: 600">Share</a><a href="#" style="font-weight: 600">Edit</a><a href="#" style="font-weight: 600; color: #48454E">Report</a>
+                    </div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: #FAF4FF; min-width: 220px">
+                      <span aria-hidden="true" style="width: 32px; height: 32px; flex: none; border-radius: 999px; background: #E3DFFF; color: #14085E; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">JR</span>
+                      <span style="display: flex; flex-direction: column; line-height: 1.3"><span style="font-size: 12px; color: #48454E">answered 24 Nov</span><span style="font-size: 13px; font-weight: 600">Julien Roche <span class="chip" style="background: #F2EBFA">Platform team</span></span><span style="font-size: 12px; color: #48454E">Sweep</span></span>
+                    </div>
+                </div>
+              </div>
+            </article>
+
+            <article aria-label="Answer drafted by the assistant" style="display: flex; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid #CAC4CF">
+              <div style="width: 48px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 2px">
+                    <button type="button" class="ib" aria-label="Vote up, answer drafted by the assistant" aria-pressed="{{a2.up}}" onClick="{{a2.voteUp}}" style="border: 1px solid #CAC4CF; background: {{a2.upBg}}; color: {{a2.upFg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg></button>
+                    <span class="ui" aria-live="polite" style="font-size: 18px; font-weight: 600; line-height: 28px">{{a2.score}}</span>
+                    <button type="button" class="ib" aria-label="Vote down, answer drafted by the assistant" aria-pressed="{{a2.down}}" onClick="{{a2.voteDown}}" style="border: 1px solid #CAC4CF; background: {{a2.downBg}}; color: {{a2.downFg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l-7-8h14z"/></svg></button>
+                  </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+                <span class="chip" style="align-self: flex-start; background: #9CF1F0; color: #002020; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg>Drafted by the assistant from Docs · checked by Marta Kowalski</span>
+                <p style="margin: 0; font-size: 15px; line-height: 24px">The flaky suite can also be retried automatically. Add a retry rule to the check in <b style="font-weight: 600">.sweep.yml</b>; a check that passes on retry is marked flaky instead of failed.</p>
+                <pre class="code">checks:
+  e2e-reservation:
+    retry: 1          # one automatic retry
+    mark-flaky: true</pre>
+                <p style="margin: 0; font-size: 13px; color: #48454E">Source: <a href="#">Docs › Sweep › Checks › Retries</a></p>
+                <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+                  <div style="display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 13px">
+                      <a href="#" style="font-weight: 600">Share</a><a href="#" style="font-weight: 600">Edit</a><a href="#" style="font-weight: 600; color: #48454E">Report</a>
+                    </div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: #FAF4FF; min-width: 220px">
+                      <span aria-hidden="true" style="width: 32px; height: 32px; flex: none; border-radius: 999px; background: #FFDEA0; color: #261900; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">MK</span>
+                      <span style="display: flex; flex-direction: column; line-height: 1.3"><span style="font-size: 12px; color: #48454E">checked 24 Nov</span><span style="font-size: 13px; font-weight: 600">Marta Kowalski <span class="chip" style="background: #E3DFFF; color: #14085E">Champion</span></span><span style="font-size: 12px; color: #48454E">Sweep</span></span>
+                    </div>
+                </div>
+              </div>
+            </article>
+
+            <article aria-label="Answer by Thomas Lefèvre" style="display: flex; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid #CAC4CF">
+              <div style="width: 48px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 2px">
+                    <button type="button" class="ib" aria-label="Vote up, answer by Thomas Lefèvre" aria-pressed="{{a3.up}}" onClick="{{a3.voteUp}}" style="border: 1px solid #CAC4CF; background: {{a3.upBg}}; color: {{a3.upFg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg></button>
+                    <span class="ui" aria-live="polite" style="font-size: 18px; font-weight: 600; line-height: 28px">{{a3.score}}</span>
+                    <button type="button" class="ib" aria-label="Vote down, answer by Thomas Lefèvre" aria-pressed="{{a3.down}}" onClick="{{a3.voteDown}}" style="border: 1px solid #CAC4CF; background: {{a3.downBg}}; color: {{a3.downFg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l-7-8h14z"/></svg></button>
+                  </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+                <p style="margin: 0; font-size: 15px; line-height: 24px">If the flaky test is <b style="font-weight: 600">reserve_env_test</b>, it is the 30-second reservation timeout on env-int. We raised it to 90 seconds in our fork and the failures stopped.</p>
+                <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+                  <div style="display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 13px">
+                      <a href="#" style="font-weight: 600">Share</a><a href="#" style="font-weight: 600">Edit</a><a href="#" style="font-weight: 600; color: #48454E">Report</a>
+                    </div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: #FAF4FF; min-width: 220px">
+                      <span aria-hidden="true" style="width: 32px; height: 32px; flex: none; border-radius: 999px; background: #ACF4A2; color: #002203; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">TL</span>
+                      <span style="display: flex; flex-direction: column; line-height: 1.3"><span style="font-size: 12px; color: #48454E">answered 25 Nov</span><span style="font-size: 13px; font-weight: 600">Thomas Lefèvre</span><span style="font-size: 12px; color: #48454E">QA guild</span></span>
+                    </div>
+                </div>
+              </div>
+            </article>
+
+            <section aria-labelledby="your-h" style="display: flex; flex-direction: column; gap: 10px">
+              <h2 id="your-h" class="ui" style="margin: 0; font-size: 18px; font-weight: 600">Your answer</h2>
+              <div style="border: 1px solid #79757F; border-radius: 4px; background: #FFFFFF; overflow: hidden">
+                <div role="toolbar" aria-label="Formatting" style="display: flex; gap: 2px; padding: 4px; border-bottom: 1px solid #CAC4CF; background: #FAF4FF">
+                  <button type="button" class="ib" aria-label="Bold" style="width: 36px; height: 36px; font-weight: 700">B</button>
+                  <button type="button" class="ib" aria-label="Italic" style="width: 36px; height: 36px; font-style: italic">I</button>
+                  <button type="button" class="ib" aria-label="Code" style="width: 36px; height: 36px; font-weight: 600; font-size: 13px">{ }</button>
+                  <button type="button" class="ib" aria-label="Link" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></button>
+                  <button type="button" class="ib" aria-label="Attach a screenshot" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11l-9 9a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8"/></svg></button>
+                  <span style="flex: 1"></span>
+                  <button type="button" class="ui" style="height: 36px; border: 0; border-radius: 8px; padding: 0 12px; background: transparent; font-size: 13px; font-weight: 600; color: #39235F">Preview</button>
+                </div>
+                <label for="ans" class="sr">Your answer, Markdown</label>
+                <textarea id="ans" rows="5" placeholder="Explain what worked for you. Markdown and code blocks are supported." style="width: 100%; box-sizing: border-box; border: 0; outline: 0; resize: vertical; padding: 12px 14px; font: inherit; font-size: 14px; line-height: 22px"></textarea>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+                <button type="button" class="ui" style="height: 40px; border: 0; border-radius: 16px; padding: 0 24px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600">Post your answer</button>
+                <span style="font-size: 13px; color: #48454E">Not possible today? <a href="Ideas.dc.html" style="font-weight: 600">Propose it as an idea</a> or link it to an existing one.</span>
+              </div>
+            </section>
+          </div>
+
+          <aside aria-label="Related" style="flex: 1 1 300px; max-width: 340px; display: flex; flex-direction: column; gap: 16px">
+            <section aria-labelledby="idea-h" style="border: 1px solid #CAC4CF; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #FDF8FD">
+              <div style="display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><h2 id="idea-h" class="ui" style="margin: 0; font-size: 13px; font-weight: 600; color: #48454E; flex: 1">This question waits on an idea</h2></div>
+              <a href="Ideas.dc.html" class="ui" style="font-size: 16px; font-weight: 600; line-height: 22px; text-decoration: none; color: #39235F">Re-run only the failed checks</a>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center"><span class="chip" style="background: #E3DFFF; color: #14085E">Planned · 4.8</span><span style="font-size: 12px; color: #48454E">48 votes · 4 questions</span></div>
+              <p style="margin: 0; font-size: 13px; line-height: 19px; color: #1C1B1E">Platform team: partial re-run from the PR page. Design review on 5 Dec.</p>
+              <div style="display: flex; gap: 8px">
+                <button type="button" class="ui" aria-pressed="{{ideaVoted}}" onClick="{{toggleIdea}}" style="height: 40px; border: 0; border-radius: 16px; padding: 0 16px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; background: {{ideaBg}}; color: {{ideaFg}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg>{{ideaLabel}}</button>
+                <a href="Ideas.dc.html" class="ui" style="height: 40px; border-radius: 16px; padding: 0 16px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; border: 1px solid #79757F; text-decoration: none; color: #39235F">Open</a>
+              </div>
+            </section>
+            <section aria-labelledby="sim-h" style="border: 1px solid #CAC4CF; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 4px; background: #FDF8FD">
+              <h2 id="sim-h" class="ui" style="margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #48454E">Similar questions</h2>
+              <sc-for list="{{similar}}" as="s" hint-placeholder-count="4">
+                <a href="#" style="display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; text-decoration: none; color: #1C1B1E; border-top: 1px solid #CAC4CF">
+                  <span class="ui" style="min-width: 32px; height: 24px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; background: {{s.bg}}; color: {{s.fg}}">{{s.score}}</span>
+                  <span style="font-size: 14px; line-height: 19px">{{s.title}}</span>
+                </a>
+              </sc-for>
+            </section>
+            <section aria-labelledby="ch-h" style="border: 1px solid #CAC4CF; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: #FDF8FD">
+              <h2 id="ch-h" class="ui" style="margin: 0; font-size: 13px; font-weight: 600; color: #48454E">Sweep champions</h2>
+              <div style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 28px; height: 28px; flex: none; border-radius: 999px; background: #E3DFFF; color: #14085E; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">JR</span><span aria-hidden="true" style="width: 28px; height: 28px; flex: none; border-radius: 999px; background: #FFDEA0; color: #261900; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">MK</span><span aria-hidden="true" style="width: 28px; height: 28px; flex: none; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">AH</span><span style="font-size: 13px; color: #48454E">answer within 2 working days</span></div>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2400}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { v: { q: 0, a1: 0, a2: 0, a3: 0 }, idea: false }; }
+  renderVals() {
+    const navItem = (label, icon, current) => ({ label, icon, current: current ? 'page' : 'false', pill: current ? '#DED7EB' : 'transparent', bar: current ? 'inset 3px 0 0 #39235F' : 'none' });
+    const nav = [
+      navItem('Sweep', 'M4 20l7-7M14 4l6 6-7 7-6-6zM18 2v3M20 4h-3'),
+      navItem('Envs', 'M4 6h6v6H4zM14 12h6v6h-6zM10 9h4v6'),
+      navItem('Docs', 'M4 4h5v16H4zM10 4h4v16h-4zM15 5l4-1 2 15-4 1z'),
+      navItem('Catalog', 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z'),
+      navItem('Community', 'M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5', true)
+    ];
+    const base = { q: 12, a1: 21, a2: 8, a3: 3 };
+    const mk = (k) => {
+      const v = this.state.v[k];
+      const set = (n) => this.setState({ v: Object.assign({}, this.state.v, { [k]: v === n ? 0 : n }) });
+      return { score: base[k] + v, up: v === 1 ? 'true' : 'false', down: v === -1 ? 'true' : 'false',
+        upBg: v === 1 ? '#DED7EB' : 'transparent', upFg: v === 1 ? '#39235F' : '#48454E',
+        downBg: v === -1 ? '#DED7EB' : 'transparent', downFg: v === -1 ? '#39235F' : '#48454E',
+        voteUp: () => set(1), voteDown: () => set(-1) };
+    };
+    const voted = this.state.idea;
+    return {
+      nav, q: mk('q'), a1: mk('a1'), a2: mk('a2'), a3: mk('a3'),
+      ideaVoted: voted ? 'true' : 'false', ideaLabel: voted ? '49 · Voted' : 'Vote · 48',
+      ideaBg: voted ? '#DED7EB' : '#39235F', ideaFg: voted ? '#1D1A28' : '#FFFFFF',
+      toggleIdea: () => this.setState({ idea: !voted }),
+      similar: [['7', 'Sweep re-runs every check after a force push', true], ['5', 'Mark a check as flaky instead of failed', true], ['2', 'Skip Sonar on draft pull requests', false], ['1', 'Run Sweep on a fork?', false]].map((s) => ({
+        score: s[0], title: s[1], bg: s[2] ? '#ACF4A2' : 'transparent', fg: s[2] ? '#002203' : '#48454E' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

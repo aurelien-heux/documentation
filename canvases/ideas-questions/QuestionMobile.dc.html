@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Question on a phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E;background:#FDF8FD}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+button{cursor:pointer;font:inherit;color:inherit}
+button:disabled{opacity:.38;cursor:default}
+.ui{font-family:'BNPP Type',Manrope,'Segoe UI',system-ui,sans-serif}
+.sr{position:absolute;left:-9999px}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:8px;background:#F2EBFA;color:#1D1A28;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}
+.ib{width:40px;height:40px;border:0;border-radius:999px;background:transparent;color:#48454E;display:inline-flex;align-items:center;justify-content:center}
+.code{background:#ECE5F4;border-radius:8px;padding:12px 14px;font-size:13px;line-height:20px;font-weight:600;white-space:pre;overflow-x:auto;margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 1880px; position: relative; overflow: hidden; background: #FDF8FD; color: #1C1B1E; font-family: 'Open Sans', system-ui, sans-serif">
+  <header style="height: 56px; background: #EDE4FF; display: flex; align-items: center; gap: 4px; padding: 0 4px">
+    <a href="#" aria-label="Back to Questions" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #48454E"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+    <span class="ui" style="flex: 1; font-size: 16px; font-weight: 600">Questions</span>
+    <button type="button" class="ib" aria-label="Following" style="width: 48px; height: 48px; color: #39235F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0"/></svg></button>
+    <button type="button" class="ib" aria-label="Share" style="width: 48px; height: 48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></button>
+  </header>
+
+  <main style="padding: 16px 16px 120px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <h1 class="ui" style="margin: 0; font-size: 20px; line-height: 27px; font-weight: 600">Can I re-run only the failed checks of a sweep?</h1>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center">
+        <span class="chip" style="background: #ACF4A2; color: #002203; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Solved</span>
+        <a href="#" class="chip" style="background: #FFDEA0; color: #261900; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Waiting on an idea</a>
+        <span style="font-size: 12px; color: #48454E">Léa Garnier · 23 Nov · 214 views</span>
+      </div>
+    </div>
+
+    <p style="margin: 0; font-size: 15px; line-height: 23px">On a big pull request one of the twelve checks fails, often the flaky <b style="font-weight: 600">e2e-reservation</b> suite. Sweep then asks me to re-run the whole sweep, about 12 minutes. Is there a way to restart only the failed check?</p>
+    <pre class="code" style="font-size: 12px">✓ build            2m 10s
+✓ unit-tests       3m 02s
+✕ e2e-reservation  4m 41s
+✓ sonar            1m 15s</pre>
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+      <div style="display: flex; align-items: center; gap: 4px">
+        <button type="button" class="ib" aria-label="Vote up, question" style="width: 44px; height: 44px; border: 1px solid #CAC4CF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg></button>
+        <span class="ui" style="min-width: 32px; text-align: center; font-size: 16px; font-weight: 600">12</span>
+        <button type="button" class="ib" aria-label="Vote down, question" style="width: 44px; height: 44px; border: 1px solid #CAC4CF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l-7-8h14z"/></svg></button></div>
+      <div style="display: flex; gap: 6px"><span class="chip">Sweep</span><span class="chip">environments-backend</span></div>
+    </div>
+
+    <a href="#" style="display: flex; flex-direction: column; gap: 6px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; text-decoration: none; color: #1C1B1E; background: #FDF8FD">
+      <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #48454E"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>This question waits on an idea</span>
+      <span class="ui" style="font-size: 15px; font-weight: 600; color: #39235F">Re-run only the failed checks</span>
+      <span style="display: flex; gap: 6px; align-items: center"><span class="chip" style="background: #E3DFFF; color: #14085E">Planned · 4.8</span><span style="font-size: 12px; color: #48454E">48 votes · 4 questions</span></span>
+    </a>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #CAC4CF; padding-bottom: 6px">
+      <h2 class="ui" style="margin: 0; font-size: 17px; font-weight: 600">3 answers</h2>
+      <span style="font-size: 13px; color: #48454E">Accepted, then votes</span>
+    </div>
+
+    <article aria-label="Accepted answer" style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid #CAC4CF">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 999px; background: #E3DFFF; color: #14085E; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">JR</span>
+        <span style="flex: 1; font-size: 13px"><b style="font-weight: 600">Julien Roche</b> <span class="chip" style="background: #F2EBFA">Platform team</span></span>
+        <span class="chip" style="background: #ACF4A2; color: #002203; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Accepted</span>
+      </div>
+      <p style="margin: 0; font-size: 15px; line-height: 23px">Not from the PR page today. From the command line the runner keeps the passed checks of the last run for 24 hours:</p>
+      <pre class="code" style="font-size: 12px">sweep rerun 4821 --only-failed</pre>
+      <p style="margin: 0; font-size: 15px; line-height: 23px">The button is the idea <a href="#" style="font-weight: 600">Re-run only the failed checks</a>, planned for 4.8.</p>
+      <div style="display: flex; align-items: center; justify-content: space-between"><div style="display: flex; align-items: center; gap: 4px">
+        <button type="button" class="ib" aria-label="Vote up, accepted answer" style="width: 44px; height: 44px; border: 1px solid #CAC4CF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg></button>
+        <span class="ui" style="min-width: 32px; text-align: center; font-size: 16px; font-weight: 600">21</span>
+        <button type="button" class="ib" aria-label="Vote down, accepted answer" style="width: 44px; height: 44px; border: 1px solid #CAC4CF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l-7-8h14z"/></svg></button></div><span style="font-size: 12px; color: #48454E">24 Nov</span></div>
+    </article>
+
+    <article aria-label="Answer drafted by the assistant" style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid #CAC4CF">
+      <span class="chip" style="align-self: flex-start; background: #9CF1F0; color: #002020; gap: 4px; white-space: normal; height: auto; padding: 4px 8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg>Drafted by the assistant · checked by Marta Kowalski</span>
+      <p style="margin: 0; font-size: 15px; line-height: 23px">Add a retry rule to the check in <b style="font-weight: 600">.sweep.yml</b>; a check that passes on retry is marked flaky instead of failed.</p>
+      <pre class="code" style="font-size: 12px">checks:
+  e2e-reservation:
+    retry: 1
+    mark-flaky: true</pre>
+      <div style="display: flex; align-items: center; justify-content: space-between"><div style="display: flex; align-items: center; gap: 4px">
+        <button type="button" class="ib" aria-label="Vote up, answer drafted by the assistant" style="width: 44px; height: 44px; border: 1px solid #CAC4CF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg></button>
+        <span class="ui" style="min-width: 32px; text-align: center; font-size: 16px; font-weight: 600">8</span>
+        <button type="button" class="ib" aria-label="Vote down, answer drafted by the assistant" style="width: 44px; height: 44px; border: 1px solid #CAC4CF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l-7-8h14z"/></svg></button></div><span style="font-size: 12px; color: #48454E">24 Nov</span></div>
+    </article>
+
+    <article aria-label="Answer by Thomas Lefèvre" style="display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 999px; background: #ACF4A2; color: #002203; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">TL</span>
+        <span style="flex: 1; font-size: 13px"><b style="font-weight: 600">Thomas Lefèvre</b> · QA guild</span>
+      </div>
+      <p style="margin: 0; font-size: 15px; line-height: 23px">If it is <b style="font-weight: 600">reserve_env_test</b>, raise the reservation timeout from 30 to 90 seconds; the failures stopped for us.</p>
+      <div style="display: flex; align-items: center; justify-content: space-between"><div style="display: flex; align-items: center; gap: 4px">
+        <button type="button" class="ib" aria-label="Vote up, answer by Thomas Lefèvre" style="width: 44px; height: 44px; border: 1px solid #CAC4CF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg></button>
+        <span class="ui" style="min-width: 32px; text-align: center; font-size: 16px; font-weight: 600">3</span>
+        <button type="button" class="ib" aria-label="Vote down, answer by Thomas Lefèvre" style="width: 44px; height: 44px; border: 1px solid #CAC4CF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l-7-8h14z"/></svg></button></div><span style="font-size: 12px; color: #48454E">25 Nov</span></div>
+    </article>
+  </main>
+
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 16px 20px; background: #F8F1FF; border-top: 1px solid #CAC4CF; display: flex; gap: 8px; align-items: center">
+    <label for="m-ans" class="sr">Write an answer</label>
+    <input id="m-ans" type="text" placeholder="Write an answer" style="flex: 1; min-width: 0; height: 48px; border: 1px solid #79757F; border-radius: 4px; padding: 0 12px; font: inherit; font-size: 15px; background: #FFFFFF">
+    <button type="button" class="ui" style="height: 48px; border: 0; border-radius: 16px; padding: 0 18px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600">Post</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1880}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

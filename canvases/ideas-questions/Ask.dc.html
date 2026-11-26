@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ask a question</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E;background:#FDF8FD}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+button{cursor:pointer;font:inherit;color:inherit}
+button:disabled{opacity:.38;cursor:default}
+.ui{font-family:'BNPP Type',Manrope,'Segoe UI',system-ui,sans-serif}
+.sr{position:absolute;left:-9999px}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:8px;background:#F2EBFA;color:#1D1A28;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}
+.ib{width:40px;height:40px;border:0;border-radius:999px;background:transparent;color:#48454E;display:inline-flex;align-items:center;justify-content:center}
+.code{background:#ECE5F4;border-radius:8px;padding:12px 14px;font-size:13px;line-height:20px;font-weight:600;white-space:pre;overflow-x:auto;margin:0}
+</style>
+</helmet>
+<div style="display: flex; min-height: 100vh; background: #FDF8FD">
+  <nav aria-label="Main" style="width: 80px; flex: none; background: #EDE4FF; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px">
+    <button type="button" aria-label="Open the navigation drawer" class="ib" style="width: 48px; height: 48px; border-radius: 16px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="5">
+      <a href="#" aria-current="{{n.current}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; width: 72px">
+        <span style="width: 56px; height: 32px; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: {{n.pill}}; box-shadow: {{n.bar}}; color: #1D1A28"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"/></svg></span>
+        <span class="ui" style="font-size: 12px; font-weight: 600">{{n.label}}</span>
+      </a>
+    </sc-for>
+  </nav>
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+    <header style="height: 64px; background: #EDE4FF; margin-left: 2px; display: flex; align-items: center; gap: 16px; padding: 0 24px">
+      <span style="font-family: Manrope, sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.2px">AI<span style="color: #39235F">Toolbox</span></span>
+      <span style="display: flex; flex-direction: column; line-height: 1.2"><span class="ui" style="font-size: 14px; font-weight: 600">Community</span><span style="font-size: 12px; color: #48454E">Questions and ideas</span></span>
+      <span style="flex: 1"></span>
+      <label for="q" class="sr">Search questions and ideas, or ask</label>
+      <div style="width: 440px; max-width: 40%; height: 44px; border-radius: 16px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-3.5-3.5"/></svg>
+        <input id="q" type="text" placeholder="Search questions and ideas, or ask" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 14px">
+        <button type="button" class="ui" style="height: 32px; border: 0; border-radius: 8px; background: #9CF1F0; color: #002020; font-size: 13px; font-weight: 600; padding: 0 10px">Ask</button>
+      </div>
+      <button type="button" aria-label="Notifications, 3 new" class="ib"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0"/></svg></button>
+      <span aria-label="Aurélien Heux" style="width: 32px; height: 32px; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">AH</span>
+    </header>
+    <main style="flex: 1; padding: 16px 32px 64px; display: flex; justify-content: center">
+      <div style="width: 100%; max-width: 1180px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: flex-end; gap: 16px; border-bottom: 1px solid #CAC4CF; flex-wrap: wrap">
+<nav aria-label="Community" style="display: flex; flex: 1; flex-wrap: wrap">
+<a href="#" class="ui" style="height: 48px; padding: 0 18px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; color: #48454E; box-shadow: none">What's new</a>
+<a href="#" class="ui" style="height: 48px; padding: 0 18px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; color: #48454E; box-shadow: none">Guides</a>
+<a href="Main.dc.html" aria-current="page" class="ui" style="height: 48px; padding: 0 18px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; color: #39235F; box-shadow: inset 0 -3px 0 #39235F">Questions<span style="font-size: 12px; font-weight: 400; color: #48454E">6 unanswered</span></a>
+<a href="Ideas.dc.html" class="ui" style="height: 48px; padding: 0 18px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; color: #48454E; box-shadow: none">Ideas</a>
+</nav>
+</div>
+        <div style="display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start">
+          <form aria-labelledby="ask-h" style="flex: 999 1 560px; max-width: 680px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <h1 id="ask-h" class="ui" style="margin: 0; font-size: 24px; font-weight: 600">Ask the community</h1>
+              <p style="margin: 0; font-size: 14px; color: #48454E">Something broken? <a href="#" style="font-weight: 600">Report a bug</a> instead: bugs go to Jira.</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <label for="title" class="ui" style="font-size: 14px; font-weight: 600">Title</label>
+              <input id="title" type="text" value="{{title}}" onChange="{{setTitle}}" aria-describedby="title-help" style="width: 100%; box-sizing: border-box; height: 56px; border: 1px solid #79757F; border-radius: 4px; background: #FFFFFF; padding: 0 14px; font: inherit; font-size: 15px">
+              <span id="title-help" style="font-size: 12px; color: #48454E">One question, as you would ask a colleague. Similar questions appear on the right as you type.</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <label for="details" class="ui" style="font-size: 14px; font-weight: 600">Details</label>
+              <div style="border: 1px solid #79757F; border-radius: 4px; background: #FFFFFF; overflow: hidden">
+                <div role="toolbar" aria-label="Formatting" style="display: flex; gap: 2px; padding: 4px; border-bottom: 1px solid #CAC4CF; background: #FAF4FF">
+                  <button type="button" class="ib" aria-label="Bold" style="width: 36px; height: 36px; font-weight: 700">B</button>
+                  <button type="button" class="ib" aria-label="Italic" style="width: 36px; height: 36px; font-style: italic">I</button>
+                  <button type="button" class="ib" aria-label="Code" style="width: 36px; height: 36px; font-weight: 600; font-size: 13px">{ }</button>
+                  <button type="button" class="ib" aria-label="Link" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></button>
+                  <button type="button" class="ib" aria-label="Attach a screenshot" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11l-9 9a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8"/></svg></button>
+                  <span style="flex: 1"></span>
+                  <button type="button" class="ui" style="height: 36px; border: 0; border-radius: 8px; padding: 0 12px; background: transparent; font-size: 13px; font-weight: 600; color: #39235F">Preview</button>
+                </div>
+                <textarea id="details" rows="7" style="width: 100%; box-sizing: border-box; border: 0; outline: 0; resize: vertical; padding: 12px 14px; font: inherit; font-size: 14px; line-height: 22px">Our env-perf-02 reservation (2 hours) ran out while the Helm rollout was still going. Someone else deployed their branch and our run broke halfway.
+
+Can a reservation extend itself while one of our deployments is in progress?</textarea>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <span id="tags-l" class="ui" style="font-size: 14px; font-weight: 600">Tags <span style="font-weight: 400; font-size: 12px; color: #48454E">1 to 3 · areas and Applications from the Software Catalog</span></span>
+              <div role="group" aria-labelledby="tags-l" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+                <sc-for list="{{tagsOn}}" as="t" hint-placeholder-count="2">
+                  <button type="button" onClick="{{t.toggle}}" aria-label="Remove tag {{t.label}}" class="ui" style="height: 32px; border: 0; border-radius: 8px; padding: 0 8px 0 12px; background: #DED7EB; color: #1D1A28; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px">{{t.label}}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+                </sc-for>
+                <sc-for list="{{tagsOff}}" as="t" hint-placeholder-count="3">
+                  <button type="button" onClick="{{t.toggle}}" disabled="{{full}}" class="ui" style="height: 32px; border: 1px solid #79757F; border-radius: 8px; padding: 0 12px 0 8px; background: transparent; color: #1D1A28; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>{{t.label}}</button>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: #F8F1FF; font-size: 13px">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11l-9 9a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8"/></svg>
+              <span style="flex: 1">Context attached: <b style="font-weight: 600">Environments › env-perf-02 › Deployment #311</b> (you opened Ask from that page)</span>
+              <button type="button" class="ib" aria-label="Remove the attached context" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 8px; border-top: 1px solid #CAC4CF">
+              <button type="button" onClick="{{post}}" class="ui" style="height: 40px; border: 0; border-radius: 16px; padding: 0 24px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600">Post your question</button>
+              <button type="button" class="ui" style="height: 40px; border: 0; border-radius: 16px; padding: 0 16px; background: transparent; color: #39235F; font-size: 14px; font-weight: 600">Save draft</button>
+              <span style="font-size: 12px; color: #48454E">You follow it once posted. The Environments champions are told if nobody answers within 2 working days.</span>
+            </div>
+            <sc-if value="{{posted}}" hint-placeholder-val="{{false}}">
+              <div role="status" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 4px; background: #313033; color: #F4EFF4; font-size: 14px">Question posted. <a href="Question.dc.html" style="color: #C4C0FF; font-weight: 600">Open it</a></div>
+            </sc-if>
+          </form>
+
+          <aside aria-label="Before you post" style="flex: 1 1 340px; max-width: 420px; display: flex; flex-direction: column; gap: 16px">
+            <section aria-labelledby="sim-h" style="border: 1px solid #CAC4CF; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 4px; background: #FDF8FD">
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px"><h2 id="sim-h" class="ui" style="margin: 0; font-size: 15px; font-weight: 600; flex: 1">Already asked?</h2><span aria-live="polite" style="font-size: 12px; color: #48454E">{{simCount}}</span></div>
+              <sc-for list="{{similar}}" as="s" hint-placeholder-count="3">
+                <div style="display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-top: 1px solid #CAC4CF">
+                  <span class="ui" style="min-width: 32px; height: 24px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; gap: 2px; font-size: 12px; font-weight: 600; background: {{s.bg}}; color: {{s.fg}}; border: {{s.border}}">{{s.score}}</span>
+                  <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                    <a href="#" style="font-size: 14px; line-height: 19px; font-weight: 600; text-decoration: none">{{s.title}}</a>
+                    <span style="font-size: 12px; color: #48454E">{{s.meta}}</span>
+                    <sc-if value="{{s.hasIdea}}" hint-placeholder-val="{{false}}"><span class="chip" style="align-self: flex-start; background: #FFDEA0; color: #261900; gap: 4px; margin-top: 2px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>{{s.idea}}</span></sc-if>
+                  </span>
+                  <button type="button" onClick="{{s.follow}}" aria-pressed="{{s.followed}}" class="ui" style="height: 32px; border: 1px solid #79757F; border-radius: 8px; padding: 0 10px; background: {{s.fbg}}; font-size: 12px; font-weight: 600; color: #1D1A28">{{s.flabel}}</button>
+                </div>
+              </sc-for>
+              <sc-if value="{{noSimilar}}" hint-placeholder-val="{{false}}"><p style="margin: 0; padding: 10px 0; font-size: 13px; color: #48454E; border-top: 1px solid #CAC4CF">Nothing close yet. Keep typing, or post it.</p></sc-if>
+            </section>
+
+            <section aria-labelledby="ai-h" style="border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: #9CF1F0; color: #002020">
+              <div style="display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#004F50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg><h2 id="ai-h" class="ui" style="margin: 0; font-size: 15px; font-weight: 600; flex: 1">The assistant's draft</h2><span style="font-size: 12px">from Docs · not checked</span></div>
+              <p style="margin: 0; font-size: 14px; line-height: 21px">A reservation does not extend itself today. Two ways to avoid the cut:</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 21px">
+                <li>Extend it before the end with <b style="font-weight: 600">Extend by 1 hour</b> on the reservation, or ask the assistant to do it.</li>
+                <li>Reserve by Module instead of the whole Environment, so other teams can still deploy their own Modules.</li>
+              </ul>
+              <p style="margin: 0; font-size: 12px">Sources: <a href="#" style="color: #004F50; font-weight: 600">Environments › Reservations</a> · <a href="#" style="color: #004F50; font-weight: 600">Reservation scopes</a></p>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                <button type="button" onClick="{{solvedByAi}}" class="ui" style="height: 40px; border: 0; border-radius: 16px; padding: 0 16px; background: #004F50; color: #FFFFFF; font-size: 14px; font-weight: 600">This answers it</button>
+                <button type="button" class="ui" style="height: 40px; border: 1px solid #004F50; border-radius: 16px; padding: 0 16px; background: transparent; color: #002020; font-size: 14px; font-weight: 600">Post anyway</button>
+              </div>
+              <sc-if value="{{aiDone}}" hint-placeholder-val="{{false}}"><p role="status" style="margin: 0; font-size: 13px; font-weight: 600">Glad it helped. Nothing was posted; your feedback goes to the Docs team.</p></sc-if>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1160}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { title: 'Reservation expires while my deployment is still running', tags: ['Environments', 'reservation-api'], follow: {}, posted: false, aiDone: false }; }
+  renderVals() {
+    const navItem = (label, icon, current) => ({ label, icon, current: current ? 'page' : 'false', pill: current ? '#DED7EB' : 'transparent', bar: current ? 'inset 3px 0 0 #39235F' : 'none' });
+    const nav = [
+      navItem('Sweep', 'M4 20l7-7M14 4l6 6-7 7-6-6zM18 2v3M20 4h-3'),
+      navItem('Envs', 'M4 6h6v6H4zM14 12h6v6h-6zM10 9h4v6'),
+      navItem('Docs', 'M4 4h5v16H4zM10 4h4v16h-4zM15 5l4-1 2 15-4 1z'),
+      navItem('Catalog', 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z'),
+      navItem('Community', 'M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5', true)
+    ];
+    const S = [
+      [1, 'Reservation expired while my deployment was running', 9, '2 answers · 5 hours ago', 'Idea · Under review', false],
+      [2, 'Extend a reservation from the assistant', 6, 'Solved · 3 weeks ago', '', true],
+      [3, 'Reserve one Module instead of the whole Environment', 4, 'Solved · 1 month ago', '', true],
+      [4, 'Can a Placement target a tag instead of a branch?', 3, 'No answer · 1 week ago', '', false],
+      [5, 'Approval card times out after 10 minutes', 1, 'No answer · 2 weeks ago', '', false]
+    ];
+    const words = (t) => t.toLowerCase().split(/[^a-z]+/).filter((w) => w.length > 3);
+    const tw = words(this.state.title);
+    const ranked = S.map((s) => ({ s, hit: words(s[1]).filter((w) => tw.some((x) => x.slice(0, 5) === w.slice(0, 5))).length }))
+      .filter((r) => r.hit > 0).sort((a, b) => b.hit - a.hit || b.s[2] - a.s[2]).slice(0, 3);
+    const f = this.state.follow;
+    const similar = ranked.map(({ s }) => ({
+      title: s[1], score: s[2], meta: s[3], hasIdea: !!s[4], idea: s[4],
+      bg: s[5] ? '#ACF4A2' : 'transparent', fg: s[5] ? '#002203' : '#1C1B1E', border: s[5] ? '0' : '1px solid #79757F',
+      followed: f[s[0]] ? 'true' : 'false', flabel: f[s[0]] ? 'Following' : 'Same question', fbg: f[s[0]] ? '#DED7EB' : 'transparent',
+      follow: () => this.setState({ follow: Object.assign({}, f, { [s[0]]: !f[s[0]] }) })
+    }));
+    const all = ['Environments', 'reservation-api', 'Assistant', 'Sweep', 'env-perf-02'];
+    const on = this.state.tags;
+    const toggle = (t) => () => this.setState({ tags: on.includes(t) ? on.filter((x) => x !== t) : on.concat([t]) });
+    return {
+      nav, title: this.state.title, setTitle: (e) => this.setState({ title: e.target.value }),
+      similar, noSimilar: similar.length === 0, simCount: similar.length ? similar.length + ' close matches' : '',
+      tagsOn: on.map((t) => ({ label: t, toggle: toggle(t) })), tagsOff: all.filter((t) => !on.includes(t)).map((t) => ({ label: t, toggle: toggle(t) })),
+      full: on.length >= 3,
+      post: () => this.setState({ posted: true }), posted: this.state.posted,
+      solvedByAi: () => this.setState({ aiDone: true }), aiDone: this.state.aiDone
+    };
+  }
+}
+</script>
+</body>
+</html>
