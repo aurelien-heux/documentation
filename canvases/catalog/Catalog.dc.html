@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Catalog, browse and mine</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E;background:#FDF8FD}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+button{cursor:pointer;font:inherit}
+button:disabled{opacity:.38;cursor:default}
+.ui{font-family:'BNPP Type',Manrope,'Segoe UI',system-ui,sans-serif}
+.lnk{background:none;border:0;padding:0 4px;color:#39235F;font-family:'BNPP Type',Manrope,sans-serif;font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px}
+.row-li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #CAC4CF}
+</style>
+</helmet>
+<div style="display: flex; min-height: 100vh; background: #FDF8FD">
+
+  <nav aria-label="Main" style="width: 80px; flex: none; background: #EDE4FF; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px">
+    <button type="button" aria-label="Open the navigation drawer" style="width: 48px; height: 48px; border: 0; border-radius: 16px; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="5">
+      <a href="#" aria-current="{{n.current}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; width: 72px">
+        <span style="width: 56px; height: 32px; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: {{n.pill}}; box-shadow: {{n.bar}}; color: #1D1A28"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"/></svg></span>
+        <span class="ui" style="font-size: 12px; font-weight: 600">{{n.label}}</span>
+      </a>
+    </sc-for>
+  </nav>
+
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+    <header style="height: 64px; background: #EDE4FF; margin-left: 2px; display: flex; align-items: center; gap: 16px; padding: 0 24px">
+      <span class="ui" style="font-family: Manrope, sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.2px">AI<span style="color: #39235F">Toolbox</span></span>
+      <span style="display: flex; flex-direction: column; line-height: 1.2"><span class="ui" style="font-size: 14px; font-weight: 600">Catalog</span><span style="font-size: 12px; color: #48454E">Skills, tools and MCP servers</span></span>
+      <span style="flex: 1"></span>
+      <label for="q" style="position: absolute; left: -9999px">Search or ask</label>
+      <div style="width: 440px; max-width: 40%; height: 44px; border-radius: 16px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="text" placeholder="Search the Catalog or ask" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 14px">
+        <button type="button" class="ui" style="height: 32px; border: 0; border-radius: 8px; background: #9CF1F0; color: #002020; font-size: 13px; font-weight: 600; padding: 0 10px">Ask</button>
+      </div>
+      <button type="button" aria-label="Open assistant" style="width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4H6a2 2 0 0 0-2 2v4l-2 2 2 2v4a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v4l2 2-2 2v4a2 2 0 0 1-2 2h-2"/></svg></button>
+      <span aria-label="Aurélien Heux" style="width: 32px; height: 32px; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">AH</span>
+    </header>
+
+    <main style="flex: 1; padding: 16px 32px 64px; display: flex; justify-content: center">
+      <div style="width: 100%; max-width: 1200px; display: flex; flex-direction: column; gap: 20px">
+
+        <div style="display: flex; align-items: flex-end; gap: 16px; border-bottom: 1px solid #CAC4CF; flex-wrap: wrap">
+          <nav aria-label="Catalog" style="display: flex; flex: 1">
+            <sc-for list="{{tabs}}" as="t" hint-placeholder-count="2">
+              <a href="#" aria-current="{{t.current}}" onClick="{{t.pick}}" class="ui" style="height: 48px; padding: 0 20px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; color: {{t.fg}}; box-shadow: {{t.bar}}">{{t.label}}<span style="font-size: 12px; font-weight: 600; color: #48454E">{{t.count}}</span></a>
+            </sc-for>
+          </nav>
+          <a href="#" class="ui" style="height: 40px; margin-bottom: 8px; border-radius: 16px; padding: 0 24px 0 16px; display: inline-flex; align-items: center; gap: 8px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New skill</a>
+        </div>
+
+        <sc-if value="{{isBrowse}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; flex-direction: column; gap: 20px">
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+              <div role="group" aria-label="Kind" style="display: flex; height: 40px; border: 1px solid #79757F; border-radius: 16px; overflow: hidden">
+                <sc-for list="{{kinds}}" as="k" hint-placeholder-count="4">
+                  <button type="button" class="ui" aria-pressed="{{k.pressed}}" onClick="{{k.pick}}" style="border: 0; border-left: {{k.sep}}; padding: 0 16px; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; background: {{k.bg}}; color: #1D1A28"><sc-if value="{{k.on}}" hint-placeholder-val="{{false}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></sc-if>{{k.label}}<span style="font-weight: 400; color: #48454E">{{k.count}}</span></button>
+                </sc-for>
+              </div>
+              <span style="flex: 1"></span>
+              <span style="font-size: 13px; color: #48454E">Most used first · the header field searches the Catalog on this page</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px">
+              <sc-for list="{{items}}" as="it" hint-placeholder-count="9">
+                <a href="{{it.href}}" aria-label="{{it.label}}" style="display: flex; flex-direction: column; gap: 10px; padding: 16px; min-height: 148px; box-sizing: border-box; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+                  <div style="display: flex; align-items: center; gap: 12px">
+                    <span class="ui" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 10px; background: {{it.tileBg}}; color: {{it.tileFg}}; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{it.tile}}</span>
+                    <span class="ui" style="flex: 1; min-width: 0; font-size: 16px; font-weight: 600; line-height: 22px">{{it.name}}</span>
+                    <span style="font-size: 12px; color: #48454E; white-space: nowrap">{{it.uses}}</span>
+                  </div>
+                  <p style="margin: 0; flex: 1; font-size: 14px; line-height: 20px; color: #1C1B1E">{{it.line}}</p>
+                  <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #48454E">
+                    <span style="flex: 1; min-width: 0">{{it.author}}</span>
+                    <sc-if value="{{it.added}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0B5314" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>In my assistant</span></sc-if>
+                    <sc-if value="{{it.lock}}" hint-placeholder-val="{{false}}"><span title="Asks before it changes something" style="display: inline-flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Asks first</span></sc-if>
+                  </div>
+                </a>
+              </sc-for>
+            </div>
+
+            <div role="navigation" aria-label="Pages of the Catalog" style="display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px 24px; min-height: 56px; padding: 0 8px; border-top: 1px solid #CAC4CF; font-size: 12px; color: #48454E">
+              <span style="display: flex; align-items: center; gap: 8px">
+                <label for="per">Items per page</label>
+                <select id="per" value="{{per}}" onChange="{{setPer}}" style="height: 40px; border: 1px solid #79757F; border-radius: 4px; background: #FFFFFF; padding: 0 8px; font: inherit; font-size: 13px; color: #1C1B1E">
+                  <sc-for list="{{perOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.n}}">{{o.n}}</option></sc-for>
+                </select>
+              </span>
+              <span aria-live="polite" style="font-size: 13px; color: #1C1B1E; min-width: 96px; text-align: center">{{range}}</span>
+              <span style="display: flex; gap: 4px">
+                <button type="button" aria-label="First page" disabled="{{atStart}}" onClick="{{first}}" style="width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 18l-6-6 6-6M7 6v12"/></svg></button>
+                <button type="button" aria-label="Previous page" disabled="{{atStart}}" onClick="{{prev}}" style="width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+                <button type="button" aria-label="Next page" disabled="{{atEnd}}" onClick="{{next}}" style="width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+                <button type="button" aria-label="Last page" disabled="{{atEnd}}" onClick="{{last}}" style="width: 40px; height: 40px; border: 0; border-radius: 999px; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18l6-6-6-6M17 6v12"/></svg></button>
+              </span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{isMine}}" hint-placeholder-val="{{false}}">
+          <div style="border: 1px solid #CAC4CF; border-radius: 12px; overflow-x: auto; background: #FDF8FD">
+            <table style="width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14px">
+              <thead><tr style="text-align: left; color: #48454E; font-size: 12px">
+                <th scope="col" style="padding: 12px 16px; font-weight: 600">Skill</th><th scope="col" style="padding: 12px 16px; font-weight: 600">Stage</th><th scope="col" style="padding: 12px 16px; font-weight: 600">Who can use it</th><th scope="col" style="padding: 12px 16px; font-weight: 600">Version</th><th scope="col" style="padding: 12px 16px; font-weight: 600">Uses, 30 days</th><th scope="col" style="padding: 12px 16px"><span style="position: absolute; left: -9999px">Next action</span></th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{mine}}" as="r" hint-placeholder-count="4">
+                  <tr style="border-top: 1px solid #CAC4CF">
+                    <td style="padding: 12px 16px"><div style="font-weight: 600">{{r.name}}</div><div style="font-size: 12px; color: #48454E">{{r.line}}</div></td>
+                    <td style="padding: 12px 16px"><span class="ui" style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px; border-radius: 4px; background: {{r.bg}}; color: {{r.fg}}; font-size: 12px; font-weight: 600; white-space: nowrap"><span aria-hidden="true">{{r.glyph}}</span>{{r.stage}}</span><div style="font-size: 12px; color: #48454E; margin-top: 2px">{{r.stageNote}}</div></td>
+                    <td style="padding: 12px 16px">{{r.who}}</td>
+                    <td style="padding: 12px 16px; font-weight: 600">{{r.version}}</td>
+                    <td style="padding: 12px 16px">{{r.uses}}</td>
+                    <td style="padding: 12px 16px; text-align: right"><a href="{{r.href}}" class="ui" style="font-size: 14px; font-weight: 600">{{r.action}}</a></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </sc-if>
+
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"lockOnCards":{"editor":"boolean","default":true,"section":"Cards"},"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { tab: 'browse', kind: 'all', page: 0, per: 9 }; }
+  renderVals() {
+    const navItem = (label, icon, current) => ({ label, icon, current: current ? 'page' : 'false', pill: current ? '#DED7EB' : 'transparent', bar: current ? 'inset 3px 0 0 #39235F' : 'none' });
+    const T = { skill: ['SK', '#E3DFFF', '#14085E', 'Skill'], tool: ['TL', '#DCEAB4', '#39235F', 'Tool'], mcp: ['MCP', '#9CF1F0', '#002020', 'MCP server'] };
+    const all = [
+      ['skill', 'Release notes', 'Drafts release notes from the pull requests merged since the last tag.', 'Camille Martin · Environments', 214, true, false, 'Main.dc.html'],
+      ['mcp', 'DevOps', 'Pipelines, builds, deployments and pull requests.', 'Platform team', 1840, true, true],
+      ['mcp', 'Knowledge base', 'Docs, runbooks, the architecture model and ARB decisions.', 'Platform team', 1622, false, true],
+      ['tool', 'Reserve environment', 'Reserves an Environment, an Application or a Module for a set time.', 'Platform team', 512, true, false],
+      ['tool', 'Deploy environment', 'Places a Module branch on an Environment through an auto-merge pull request.', 'Platform team', 388, true, false],
+      ['tool', 'Create Jira ticket', 'Creates a ticket in the project and board you name.', 'Platform team', 301, true, true],
+      ['skill', 'Incident summary', 'Writes the timeline and follow-up actions of an incident from its Teams channel and alerts.', 'Nadia Benali · Platform', 156, false, false],
+      ['skill', 'Flaky test triage', 'Finds the tests that failed then passed on retry this week and drafts a ticket for each.', 'Thomas Lefèvre · QA guild', 98, true, false],
+      ['skill', 'Environment health check', 'Explains why an Environment is degraded from its health checks, drift and last rollouts.', 'Camille Martin · Environments', 87, false, false],
+      ['skill', 'Dependency upgrade plan', 'Lists the outdated dependencies of an Application and orders the upgrades by risk.', 'Julien Roche · Architecture', 64, false, false],
+      ['skill', 'ADR writer', 'Turns a design discussion into an Architecture Decision Record in your team template.', 'Julien Roche · Architecture', 41, true, false],
+      ['skill', 'Sprint review notes', 'Turns the closed Work items of a sprint into review notes for the team channel.', 'Léa Garnier · Payments', 29, false, false],
+      ['skill', 'Runbook check', 'Checks a runbook against the current Environment and flags steps that no longer match.', 'Camille Martin · Environments', 27, false, false],
+      ['skill', 'Pull request reviewer brief', 'Summarises a pull request for its reviewer: what changed, risks, tests to look at.', 'Thomas Lefèvre · QA guild', 25, false, false],
+      ['skill', 'SonarQube triage', 'Groups new SonarQube issues by cause and drafts the fixes worth doing first.', 'Marc Dubois · Quality', 22, true, false],
+      ['skill', 'API change notice', 'Writes the notice for consumers when a contract changes, from the OpenAPI diff.', 'Julien Roche · Architecture', 19, false, false],
+      ['skill', 'Postmortem draft', 'Drafts a blameless postmortem from an incident summary and its timeline.', 'Nadia Benali · Platform', 17, false, false],
+      ['skill', 'Test plan from story', 'Proposes test cases for a Jira story from its acceptance criteria.', 'Sarah Klein · QA guild', 15, true, false],
+      ['skill', 'Cost of an Environment', 'Estimates what an Environment costs per month from its namespaces and quotas.', 'Hugo Martin · FinOps', 12, false, false],
+      ['skill', 'Translate docs page', 'Translates a Docs page between English and French and keeps its code blocks.', 'Sarah Klein · Docs team', 10, false, false],
+      ['skill', 'Changelog checker', 'Checks that every merged pull request appears in CHANGELOG.md before a release.', 'Camille Martin · Environments', 8, false, false],
+      ['skill', 'Team digest', 'Writes a weekly digest of releases, incidents and reservations for a team.', 'Aurélien Heux · Platform', 6, false, false],
+      ['skill', 'Access request', 'Prepares the access request for a repository or an Environment, ready to submit.', 'Nadia Benali · Platform', 4, true, false],
+      ['skill', 'Onboarding guide', 'Answers a newcomer\'s first questions about an Application from its Docs and runbooks.', 'Sarah Klein · Docs team', 33, false, false]
+    ];
+    const showLock = this.props.lockOnCards ?? true;
+    const kind = this.state.kind, tab = this.state.tab;
+    const filtered = all.filter((x) => kind === 'all' || x[0] === kind);
+    const per = this.state.per, pages = Math.max(1, Math.ceil(filtered.length / per)), page = Math.min(this.state.page, pages - 1);
+    const items = filtered.slice(page * per, page * per + per).map((x) => ({
+      tile: T[x[0]][0], tileBg: T[x[0]][1], tileFg: T[x[0]][2], name: x[1], line: x[2], author: x[3],
+      uses: x[4].toLocaleString('en-GB') + ' uses', lock: showLock && x[5], added: x[6], href: x[7] || '#',
+      label: x[1] + ', ' + T[x[0]][3] + ', ' + x[3]
+    }));
+    const count = (k) => all.filter((x) => k === 'all' || x[0] === k).length;
+    const kinds = [['all', 'All'], ['skill', 'Skills'], ['tool', 'Tools'], ['mcp', 'MCP servers']].map(([id, label], i) => ({
+      label, count: count(id), on: kind === id, pressed: kind === id ? 'true' : 'false', bg: kind === id ? '#DED7EB' : 'transparent',
+      sep: i ? '1px solid #79757F' : '0', pick: () => this.setState({ kind: id, page: 0 })
+    }));
+    const tabs = [['browse', 'Browse', ''], ['mine', 'Mine', '4']].map(([id, label, c]) => ({
+      label, count: c, current: tab === id ? 'page' : 'false', fg: tab === id ? '#39235F' : '#48454E',
+      bar: tab === id ? 'inset 0 -3px 0 #39235F' : 'none', pick: (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ tab: id }); }
+    }));
+    const st = {
+      published: ['Published', '✓', '#ACF4A2', '#002203'], review: ['In review', 'i', '#E3DFFF', '#14085E'],
+      changes: ['Changes requested', '!', '#FFDEA0', '#261900'], draft: ['Draft', '–', '#ECE5F4', '#1C1B1E']
+    };
+    const mine = [
+      ['Release notes', 'Drafts release notes from merged pull requests.', 'published', 'Since 18 Nov', 'Everyone', 'v1.3.0', '214', 'New version', 'Main.dc.html'],
+      ['Incident summary', 'Writes an incident timeline and follow-ups.', 'review', 'Reviewer answers by 28 Nov', 'Everyone', 'v0.9.0', '—', 'Open'],
+      ['Environment health check', 'Explains why an Environment is degraded.', 'changes', 'Julien Roche asked 2 changes', 'Everyone', 'v0.4.0', '87', 'Continue'],
+      ['Sprint digest', 'Summarises the sprint for the team channel.', 'draft', 'Checks not run yet', 'Just me', '—', '—', 'Continue']
+    ].map((r) => ({ name: r[0], line: r[1], stage: st[r[2]][0], glyph: st[r[2]][1], bg: st[r[2]][2], fg: st[r[2]][3], stageNote: r[3], who: r[4], version: r[5], uses: r[6], action: r[7], href: r[8] || '#' }));
+    return {
+      nav: [
+        navItem('Sweep', 'M4 20l7-7M14 4l6 6-7 7-6-6zM18 2v3M20 4h-3'),
+        navItem('Envs', 'M4 6h6v6H4zM14 12h6v6h-6zM10 9h4v6'),
+        navItem('Docs', 'M4 4h5v16H4zM10 4h4v16h-4zM15 5l4-1 2 15-4 1z'),
+        navItem('Catalog', 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z', true),
+        navItem('Community', 'M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5')
+      ],
+      tabs, kinds, items, mine,
+      range: filtered.length ? (page * per + 1) + ' – ' + Math.min(filtered.length, page * per + per) + ' of ' + filtered.length : '0 of 0',
+      per, perOptions: [9, 18, 36].map((n) => ({ n })),
+      setPer: (e) => this.setState({ per: Number(e.target.value), page: 0 }),
+      atStart: page === 0, atEnd: page >= pages - 1,
+      first: () => this.setState({ page: 0 }), prev: () => this.setState({ page: Math.max(0, page - 1) }),
+      next: () => this.setState({ page: Math.min(pages - 1, page + 1) }), last: () => this.setState({ page: pages - 1 }),
+      pageLabel: 'Page ' + (page + 1) + ' of ' + pages, isBrowse: tab === 'browse', isMine: tab === 'mine'
+    };
+  }
+}
+</script>
+</body>
+</html>

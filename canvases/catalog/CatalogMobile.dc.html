@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Catalog on a phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#39235F}a:hover{color:#14085E}
+.ui{font-family:'BNPP Type',Manrope,'Segoe UI',system-ui,sans-serif}
+.li{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #CAC4CF}
+.lnk{background:none;border:0;color:#39235F;font-family:'BNPP Type',Manrope,sans-serif;font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px;min-height:44px;padding:0 4px}
+</style>
+</helmet>
+<div style="width: 390px; height: 1420px; position: relative; overflow: hidden; background: #FDF8FD; color: #1C1B1E; font-family: 'Open Sans', system-ui, sans-serif">
+  <header style="height: 56px; background: #EDE4FF; display: flex; align-items: center; gap: 4px; padding: 0 8px">
+    <button type="button" aria-label="Open the navigation drawer" style="width: 48px; height: 48px; border: 0; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <span class="ui" style="flex: 1; font-size: 16px; font-weight: 600">Catalog</span>
+    <button type="button" aria-label="Search" style="width: 48px; height: 48px; border: 0; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+    <span aria-label="Aurélien Heux" style="width: 32px; height: 32px; margin: 0 8px; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">AH</span>
+  </header>
+  <nav aria-label="Catalog" style="display: flex; border-bottom: 1px solid #CAC4CF; padding: 0 8px">
+    <a href="#" aria-current="page" class="ui" style="height: 48px; padding: 0 16px; display: flex; align-items: center; font-size: 14px; font-weight: 600; color: #39235F; text-decoration: none; box-shadow: inset 0 -3px 0 #39235F">Browse</a>
+    <a href="#" class="ui" style="height: 48px; padding: 0 16px; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #48454E; text-decoration: none">Mine <span style="font-size: 12px">4</span></a>
+  </nav>
+  <div role="group" aria-label="Kind" style="display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto"><button type="button" class="ui" aria-pressed="true" style="height: 32px; flex: none; border-radius: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; border: 0; background: #DED7EB; color: #1D1A28">All 24</button><button type="button" class="ui" aria-pressed="false" style="height: 32px; flex: none; border-radius: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; border: 1px solid #79757F; background: transparent; color: #1D1A28">Skills 19</button><button type="button" class="ui" aria-pressed="false" style="height: 32px; flex: none; border-radius: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; border: 1px solid #79757F; background: transparent; color: #1D1A28">Tools 3</button><button type="button" class="ui" aria-pressed="false" style="height: 32px; flex: none; border-radius: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; border: 1px solid #79757F; background: transparent; color: #1D1A28">MCP servers 2</button></div>
+  <main style="padding: 0 16px 160px; display: flex; flex-direction: column; gap: 10px">
+      <a href="Mobile.dc.html" style="display: flex; gap: 12px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+        <span class="ui" aria-hidden="true" style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #E3DFFF; color: #14085E; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">SK</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span class="ui" style="font-size: 15px; font-weight: 600">Release notes</span><span style="font-size: 13px; line-height: 18px">Drafts release notes from the pull requests merged since the last tag.</span><span style="font-size: 12px; color: #48454E">Camille Martin · 214 uses · Asks first</span></span>
+      </a>
+      <a href="#" style="display: flex; gap: 12px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+        <span class="ui" aria-hidden="true" style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #9CF1F0; color: #002020; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">MCP</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span class="ui" style="font-size: 15px; font-weight: 600">DevOps</span><span style="font-size: 13px; line-height: 18px">Pipelines, builds, deployments and pull requests.</span><span style="font-size: 12px; color: #48454E">Platform team · 1,840 uses · In my assistant</span></span>
+      </a>
+      <a href="#" style="display: flex; gap: 12px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+        <span class="ui" aria-hidden="true" style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #9CF1F0; color: #002020; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">MCP</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span class="ui" style="font-size: 15px; font-weight: 600">Knowledge base</span><span style="font-size: 13px; line-height: 18px">Docs, runbooks, the architecture model and ARB decisions.</span><span style="font-size: 12px; color: #48454E">Platform team · 1,622 uses · In my assistant</span></span>
+      </a>
+      <a href="#" style="display: flex; gap: 12px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+        <span class="ui" aria-hidden="true" style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #DCEAB4; color: #39235F; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">TL</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span class="ui" style="font-size: 15px; font-weight: 600">Reserve environment</span><span style="font-size: 13px; line-height: 18px">Reserves an Environment, an Application or a Module for a set time.</span><span style="font-size: 12px; color: #48454E">Platform team · 512 uses · Asks first</span></span>
+      </a>
+      <a href="#" style="display: flex; gap: 12px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+        <span class="ui" aria-hidden="true" style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #DCEAB4; color: #39235F; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">TL</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span class="ui" style="font-size: 15px; font-weight: 600">Deploy environment</span><span style="font-size: 13px; line-height: 18px">Places a Module branch on an Environment through an auto-merge pull request.</span><span style="font-size: 12px; color: #48454E">Platform team · 388 uses · Asks first</span></span>
+      </a>
+      <a href="#" style="display: flex; gap: 12px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+        <span class="ui" aria-hidden="true" style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #DCEAB4; color: #39235F; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">TL</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span class="ui" style="font-size: 15px; font-weight: 600">Create Jira ticket</span><span style="font-size: 13px; line-height: 18px">Creates a ticket in the project and board you name.</span><span style="font-size: 12px; color: #48454E">Platform team · 301 uses · Asks first</span></span>
+      </a>
+      <a href="#" style="display: flex; gap: 12px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+        <span class="ui" aria-hidden="true" style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #E3DFFF; color: #14085E; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">SK</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span class="ui" style="font-size: 15px; font-weight: 600">Incident summary</span><span style="font-size: 13px; line-height: 18px">Writes the timeline and follow-up actions of an incident from its Teams channel and alerts.</span><span style="font-size: 12px; color: #48454E">Nadia Benali · 156 uses</span></span>
+      </a>
+      <a href="#" style="display: flex; gap: 12px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+        <span class="ui" aria-hidden="true" style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #E3DFFF; color: #14085E; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">SK</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span class="ui" style="font-size: 15px; font-weight: 600">Flaky test triage</span><span style="font-size: 13px; line-height: 18px">Finds the tests that failed then passed on retry this week and drafts a ticket for each.</span><span style="font-size: 12px; color: #48454E">Thomas Lefèvre · 98 uses · Asks first</span></span>
+      </a>
+      <a href="#" style="display: flex; gap: 12px; padding: 14px; border: 1px solid #CAC4CF; border-radius: 12px; background: #FDF8FD; text-decoration: none; color: #1C1B1E">
+        <span class="ui" aria-hidden="true" style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #E3DFFF; color: #14085E; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">SK</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span class="ui" style="font-size: 15px; font-weight: 600">Environment health check</span><span style="font-size: 13px; line-height: 18px">Explains why an Environment is degraded from its health checks, drift and last rollouts.</span><span style="font-size: 12px; color: #48454E">Camille Martin · 87 uses</span></span>
+      </a>
+    <div role="navigation" aria-label="Pages of the Catalog" style="display: flex; align-items: center; justify-content: space-between; min-height: 56px; margin-top: 4px; border-top: 1px solid #CAC4CF; font-size: 13px; color: #1C1B1E">
+      <button type="button" aria-label="Previous page" disabled style="width: 48px; height: 48px; border: 0; background: transparent; color: #48454E; opacity: .38; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <span>1 – 9 of 24</span>
+      <button type="button" aria-label="Next page" style="width: 48px; height: 48px; border: 0; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+  </main>
+  <a href="#" class="ui" style="position: absolute; right: 16px; bottom: 96px; height: 56px; border-radius: 16px; padding: 0 20px 0 16px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; text-decoration: none; box-shadow: 0 1px 3px rgba(0,0,0,.3), 0 4px 8px 3px rgba(0,0,0,.15)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New skill</a>
+  <nav aria-label="Main" style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: #EDE4FF; display: flex; justify-content: space-around; align-items: center">
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; min-width: 64px"><span style="width: 56px; height: 32px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l7-7M14 4l6 6-7 7-6-6z"/></svg></span><span class="ui" style="font-size: 12px; font-weight: 600">Sweep</span></a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; min-width: 64px"><span style="width: 56px; height: 32px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h5v16H4zM10 4h4v16h-4z"/></svg></span><span class="ui" style="font-size: 12px; font-weight: 600">Docs</span></a>
+    <a href="#" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; min-width: 64px"><span style="width: 56px; height: 32px; border-radius: 16px; background: #DED7EB; box-shadow: inset 0 3px 0 #39235F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D1A28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></span><span class="ui" style="font-size: 12px; font-weight: 600">Catalog</span></a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; min-width: 64px"><span style="width: 56px; height: 32px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4H6a2 2 0 0 0-2 2v4l-2 2 2 2v4a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v4l2 2-2 2v4a2 2 0 0 1-2 2h-2"/></svg></span><span class="ui" style="font-size: 12px; font-weight: 600">Assistant</span></a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1420}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
