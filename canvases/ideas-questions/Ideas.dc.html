@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Community, Ideas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Open Sans',system-ui,sans-serif;color:#1C1B1E;background:#FDF8FD}
+a{color:#39235F}a:hover{color:#14085E}
+:focus-visible{outline:2px solid #39235F;outline-offset:2px}
+button{cursor:pointer;font:inherit;color:inherit}
+button:disabled{opacity:.38;cursor:default}
+.ui{font-family:'BNPP Type',Manrope,'Segoe UI',system-ui,sans-serif}
+.sr{position:absolute;left:-9999px}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:8px;background:#F2EBFA;color:#1D1A28;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}
+.ib{width:40px;height:40px;border:0;border-radius:999px;background:transparent;color:#48454E;display:inline-flex;align-items:center;justify-content:center}
+.code{background:#ECE5F4;border-radius:8px;padding:12px 14px;font-size:13px;line-height:20px;font-weight:600;white-space:pre;overflow-x:auto;margin:0}
+</style>
+</helmet>
+<div style="display: flex; min-height: 100vh; background: #FDF8FD">
+  <nav aria-label="Main" style="width: 80px; flex: none; background: #EDE4FF; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px">
+    <button type="button" aria-label="Open the navigation drawer" class="ib" style="width: 48px; height: 48px; border-radius: 16px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="5">
+      <a href="#" aria-current="{{n.current}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; width: 72px">
+        <span style="width: 56px; height: 32px; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: {{n.pill}}; box-shadow: {{n.bar}}; color: #1D1A28"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"/></svg></span>
+        <span class="ui" style="font-size: 12px; font-weight: 600">{{n.label}}</span>
+      </a>
+    </sc-for>
+  </nav>
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+    <header style="height: 64px; background: #EDE4FF; margin-left: 2px; display: flex; align-items: center; gap: 16px; padding: 0 24px">
+      <span style="font-family: Manrope, sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.2px">AI<span style="color: #39235F">Toolbox</span></span>
+      <span style="display: flex; flex-direction: column; line-height: 1.2"><span class="ui" style="font-size: 14px; font-weight: 600">Community</span><span style="font-size: 12px; color: #48454E">Questions and ideas</span></span>
+      <span style="flex: 1"></span>
+      <label for="q" class="sr">Search questions and ideas, or ask</label>
+      <div style="width: 440px; max-width: 40%; height: 44px; border-radius: 16px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-3.5-3.5"/></svg>
+        <input id="q" type="text" placeholder="Search questions and ideas, or ask" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 14px">
+        <button type="button" class="ui" style="height: 32px; border: 0; border-radius: 8px; background: #9CF1F0; color: #002020; font-size: 13px; font-weight: 600; padding: 0 10px">Ask</button>
+      </div>
+      <button type="button" aria-label="Notifications, 3 new" class="ib"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0"/></svg></button>
+      <span aria-label="Aurélien Heux" style="width: 32px; height: 32px; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">AH</span>
+    </header>
+    <main style="flex: 1; padding: 16px 32px 64px; display: flex; justify-content: center">
+      <div style="width: 100%; max-width: 1240px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: flex-end; gap: 16px; border-bottom: 1px solid #CAC4CF; flex-wrap: wrap">
+<nav aria-label="Community" style="display: flex; flex: 1; flex-wrap: wrap">
+<a href="#" class="ui" style="height: 48px; padding: 0 18px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; color: #48454E; box-shadow: none">What's new</a>
+<a href="#" class="ui" style="height: 48px; padding: 0 18px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; color: #48454E; box-shadow: none">Guides</a>
+<a href="Main.dc.html" class="ui" style="height: 48px; padding: 0 18px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; color: #48454E; box-shadow: none">Questions<span style="font-size: 12px; font-weight: 400; color: #48454E">6 unanswered</span></a>
+<a href="Ideas.dc.html" aria-current="page" class="ui" style="height: 48px; padding: 0 18px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; color: #39235F; box-shadow: inset 0 -3px 0 #39235F">Ideas</a>
+</nav>
+<a href="#" class="ui" style="height: 40px; margin-bottom: 8px; border-radius: 16px; padding: 0 24px 0 16px; display: inline-flex; align-items: center; gap: 8px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New idea</a>
+</div>
+        <div style="display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start">
+          <section aria-label="Ideas" style="flex: 1 1 320px; max-width: 360px; display: flex; flex-direction: column; gap: 12px">
+            <div role="group" aria-label="Status" style="display: flex; gap: 6px; flex-wrap: wrap">
+              <sc-for list="{{filters}}" as="f" hint-placeholder-count="5">
+                <button type="button" aria-pressed="{{f.pressed}}" onClick="{{f.pick}}" class="ui" style="height: 32px; border: {{f.border}}; border-radius: 8px; padding: 0 10px; background: {{f.bg}}; font-size: 13px; font-weight: 600; color: #1D1A28">{{f.label}} <span style="font-weight: 400; color: #48454E">{{f.count}}</span></button>
+              </sc-for>
+            </div>
+            <div style="font-size: 12px; color: #48454E">Most demand first · demand = votes + linked questions</div>
+            <div role="listbox" aria-label="Ideas" style="border: 1px solid #CAC4CF; border-radius: 12px; overflow: hidden; background: #FDF8FD">
+              <sc-for list="{{list}}" as="i" hint-placeholder-count="6">
+                <button type="button" role="option" aria-selected="{{i.selected}}" onClick="{{i.pick}}" style="width: 100%; display: flex; gap: 12px; padding: 12px 14px; border: 0; border-top: {{i.sep}}; background: {{i.bg}}; box-shadow: {{i.bar}}; text-align: left">
+                  <span style="width: 44px; flex: none; text-align: center"><b class="ui" style="display: block; font-size: 17px">{{i.votes}}</b><span style="font-size: 11px; color: #48454E">votes</span></span>
+                  <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+                    <span style="font-size: 14px; font-weight: 600; line-height: 19px">{{i.title}}</span>
+                    <span style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap"><span class="chip" style="background: {{i.sbg}}; color: {{i.sfg}}">{{i.status}}</span><span style="font-size: 12px; color: #48454E">{{i.area}} · {{i.q}}</span></span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </section>
+
+          <article aria-labelledby="idea-title" style="flex: 999 1 600px; min-width: 0; display: flex; flex-direction: column; gap: 20px; border: 1px solid #CAC4CF; border-radius: 12px; padding: 24px; background: #FDF8FD">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap"><span class="chip" style="background: {{d.sbg}}; color: {{d.sfg}}">{{d.status}}</span><span class="chip">{{d.area}}</span><span style="font-size: 13px; color: #48454E">Proposed by {{d.who}} · {{d.when}}</span></div>
+              <h1 id="idea-title" class="ui" style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 600">{{d.title}}</h1>
+              <p style="margin: 0; font-size: 15px; line-height: 24px; max-width: 70ch">{{d.body}}</p>
+            </div>
+
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
+              <button type="button" aria-pressed="{{voted}}" onClick="{{toggleVote}}" disabled="{{frozen}}" class="ui" style="height: 40px; border: 0; border-radius: 16px; padding: 0 18px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; background: {{voteBg}}; color: {{voteFg}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l7 8H5z"/></svg>{{voteLabel}}</button>
+              <button type="button" aria-pressed="true" class="ui" style="height: 40px; border: 1px solid #79757F; border-radius: 16px; padding: 0 16px; display: inline-flex; align-items: center; gap: 6px; background: transparent; font-size: 14px; font-weight: 600; color: #39235F"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0"/></svg>Following</button>
+              <span style="flex: 1"></span>
+              <span style="font-size: 13px; color: #48454E">Demand <b style="color: #1C1B1E">{{d.demand}}</b> · {{d.votesN}} votes + {{d.qN}} questions</span>
+            </div>
+
+            <ol aria-label="Progress" style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px">
+              <sc-for list="{{d.track}}" as="t" hint-placeholder-count="5">
+                <li aria-current="{{t.current}}" style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="height: 6px; border-radius: 3px; background: {{t.bar}}"></span>
+                  <span style="font-size: 12px; font-weight: {{t.weight}}; color: {{t.fg}}">{{t.label}}</span>
+                  <span style="font-size: 11px; color: #48454E">{{t.when}}</span>
+                </li>
+              </sc-for>
+            </ol>
+
+            <sc-if value="{{d.hasNote}}" hint-placeholder-val="{{true}}">
+              <div style="display: flex; gap: 12px; padding: 14px 16px; border-radius: 12px; background: #F8F1FF">
+                <span aria-hidden="true" style="width: 32px; height: 32px; flex: none; border-radius: 999px; background: #E3DFFF; color: #14085E; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">JR</span>
+                <div style="display: flex; flex-direction: column; gap: 4px">
+                  <span style="font-size: 13px"><b style="font-weight: 600">Julien Roche</b> <span class="chip" style="background: #F2EBFA">Platform team</span> <span style="color: #48454E">· {{d.noteWhen}}</span></span>
+                  <p style="margin: 0; font-size: 14px; line-height: 21px">{{d.note}}</p>
+                  <sc-if value="{{d.hasJira}}" hint-placeholder-val="{{true}}"><a href="#" style="font-size: 13px; font-weight: 600">Jira {{d.jira}}</a></sc-if>
+                </div>
+              </div>
+            </sc-if>
+
+            <section aria-labelledby="qs-h" style="display: flex; flex-direction: column; gap: 8px">
+              <div style="display: flex; align-items: center; gap: 8px">
+                <h2 id="qs-h" class="ui" style="margin: 0; font-size: 16px; font-weight: 600; flex: 1">Questions behind this idea · {{d.qN}}</h2>
+                <button type="button" class="ui" style="height: 36px; border: 0; border-radius: 16px; padding: 0 12px; background: transparent; color: #39235F; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Link a question</button>
+              </div>
+              <p style="margin: 0; font-size: 13px; color: #48454E">People who asked are told when the status changes. When it ships, each question gets a drafted answer for the team to confirm.</p>
+              <div style="border: 1px solid #CAC4CF; border-radius: 12px; overflow: hidden">
+                <sc-for list="{{d.questions}}" as="q" hint-placeholder-count="3">
+                  <a href="{{q.href}}" style="display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-top: {{q.sep}}; text-decoration: none; color: #1C1B1E">
+                    <span class="ui" style="min-width: 40px; height: 24px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; background: {{q.bg}}; color: {{q.fg}}; border: {{q.border}}">{{q.score}}</span>
+                    <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600; color: #39235F">{{q.title}}</span><span style="font-size: 12px; color: #48454E">{{q.meta}}</span></span>
+                    <span class="chip" style="background: {{q.kbg}}">{{q.kind}}</span>
+                  </a>
+                </sc-for>
+              </div>
+            </section>
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1280}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { sel: 1, filter: 'all', voted: { 1: true } }; }
+  renderVals() {
+    const navItem = (label, icon, current) => ({ label, icon, current: current ? 'page' : 'false', pill: current ? '#DED7EB' : 'transparent', bar: current ? 'inset 3px 0 0 #39235F' : 'none' });
+    const nav = [
+      navItem('Sweep', 'M4 20l7-7M14 4l6 6-7 7-6-6zM18 2v3M20 4h-3'),
+      navItem('Envs', 'M4 6h6v6H4zM14 12h6v6h-6zM10 9h4v6'),
+      navItem('Docs', 'M4 4h5v16H4zM10 4h4v16h-4zM15 5l4-1 2 15-4 1z'),
+      navItem('Catalog', 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z'),
+      navItem('Community', 'M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5', true)
+    ];
+    const ST = { proposed: ['Proposed', '#F2EBFA', '#1D1A28'], review: ['Under review', '#E3DFFF', '#14085E'], planned: ['Planned', '#E3DFFF', '#14085E'],
+      progress: ['In progress', '#FFDEA0', '#261900'], delivered: ['Delivered', '#ACF4A2', '#002203'] };
+    const order = ['proposed', 'review', 'planned', 'progress', 'delivered'];
+    const I = [
+      { id: 1, title: 'Re-run only the failed checks', area: 'Sweep', status: 'planned', votes: 47, who: 'Léa Garnier', when: 'from a question, 24 Nov',
+        body: 'When one check fails on a big pull request, people re-run the whole sweep. A Re-run failed checks button on the PR page and on the run would save about 10 minutes each time.',
+        dates: ['24 Nov', '26 Nov', '2 Dec', '', ''], note: 'Planned for 4.8: partial re-run from the PR page and the run page. Design review on 5 Dec.', noteWhen: '2 Dec', jira: 'SWEEP-1423',
+        questions: [['Can I re-run only the failed checks of a sweep?', 13, true, 'Solved · 3 answers · Léa Garnier', 'Origin', 'Question.dc.html'], ['Sweep re-runs every check after a force push', 7, true, 'Solved · 2 answers · Marc Dubois', 'Same need'], ['Restart one check from the run page?', 3, false, '1 answer · Sarah Klein', 'Same need'], ['Flaky e2e suite costs us 12 minutes per PR', 2, false, 'No answer · Hugo Martin', 'Same need']] },
+      { id: 2, title: 'Extend a reservation during a rollout', area: 'Environments', status: 'review', votes: 31, who: 'Hugo Martin', when: 'from a question, 26 Nov',
+        body: 'A reservation should not expire while a deployment started by its owner is still rolling out. Extend it automatically by 30 minutes, at most twice, and tell the owner.',
+        dates: ['26 Nov', '26 Nov', '', '', ''], note: 'Looking at it with the Environments team: the rollout state comes from ArgoCD, so the extension can follow it.', noteWhen: 'today', jira: '',
+        questions: [['Reservation expired while my deployment was running', 9, false, '2 answers · Hugo Martin', 'Origin'], ['Reservation expires while my deployment is still running', 0, false, 'Asked today · Aurélien Heux', 'Same need'], ['Extend a reservation from the assistant', 6, true, 'Solved · Sarah Klein', 'Same need']] },
+      { id: 3, title: 'PR summary in the repository language', area: 'Sweep · Assistant', status: 'proposed', votes: 12, who: 'Camille Martin', when: 'from a question, 20 Nov',
+        body: 'Write the Sweep review summary in the language of the repository (commit messages and README), French or English.',
+        dates: ['20 Nov', '', '', '', ''], note: '', noteWhen: '', jira: '',
+        questions: [['Sweep review summary is in English on a French repository', 4, false, '1 answer · Camille Martin', 'Origin'], ['Can the assistant answer in French by default?', 2, true, 'Solved · Léa Garnier', 'Same need']] },
+      { id: 4, title: 'Dark theme for the runs table', area: 'Sweep', status: 'progress', votes: 27, who: 'Thomas Lefèvre', when: '12 Oct', body: 'The runs table should follow the night theme like the rest of the app.', dates: ['12 Oct', '15 Oct', '20 Oct', '18 Nov', ''], note: 'In 4.7 with the rest of the night theme.', noteWhen: '18 Nov', jira: 'SWEEP-1310', questions: [] },
+      { id: 5, title: 'Approval timeout set per tool', area: 'Assistant', status: 'proposed', votes: 9, who: 'Sarah Klein', when: '14 Nov', body: 'Let admins set how long an approval card waits before it expires, per tool.', dates: ['14 Nov', '', '', '', ''], note: '', noteWhen: '', jira: '', questions: [['Approval card times out after 10 minutes', 1, false, 'No answer · Sarah Klein', 'Origin']] },
+      { id: 6, title: 'Copy a skill to my team', area: 'Catalog', status: 'delivered', votes: 22, who: 'Nadia Benali', when: '2 Oct', body: 'Start a team skill from an existing one instead of writing it again.', dates: ['2 Oct', '4 Oct', '9 Oct', '21 Oct', '12 Nov · 4.6'], note: 'Delivered in 4.6: New version › Start from this skill.', noteWhen: '12 Nov', jira: 'CAT-212', questions: [['Can I fork a skill for my team?', 5, true, 'Solved by the delivery · Léa Garnier', 'Origin']] }
+    ];
+    const s = this.state;
+    const vc = (i) => i.votes + (s.voted[i.id] ? 1 : 0);
+    const demand = (i) => vc(i) + i.questions.length;
+    const shown = I.filter((i) => s.filter === 'all' || i.status === s.filter).sort((a, b) => demand(b) - demand(a));
+    const filters = [['all', 'All', I.length]].concat(order.map((k) => [k, ST[k][0], I.filter((i) => i.status === k).length])).filter((f) => f[2] > 0).map(([id, label, n]) => ({
+      label, count: n, pressed: s.filter === id ? 'true' : 'false', bg: s.filter === id ? '#DED7EB' : 'transparent', border: s.filter === id ? '0' : '1px solid #79757F',
+      pick: () => this.setState({ filter: id })
+    }));
+    const list = shown.map((i, n) => ({
+      title: i.title, area: i.area, status: ST[i.status][0], sbg: ST[i.status][1], sfg: ST[i.status][2],
+      votes: vc(i), q: i.questions.length === 1 ? '1 question' : i.questions.length + ' questions',
+      selected: s.sel === i.id ? 'true' : 'false', bg: s.sel === i.id ? '#DED7EB' : 'transparent', bar: s.sel === i.id ? 'inset 3px 0 0 #39235F' : 'none',
+      sep: n ? '1px solid #CAC4CF' : '0', pick: () => this.setState({ sel: i.id })
+    }));
+    const i = I.find((x) => x.id === s.sel) || I[0];
+    const at = order.indexOf(i.status);
+    const voted = !!s.voted[i.id], frozen = i.status === 'delivered';
+    const nVotes = vc(i);
+    return {
+      nav, filters, list,
+      d: { title: i.title, area: i.area, status: ST[i.status][0], sbg: ST[i.status][1], sfg: ST[i.status][2], who: i.who, when: i.when, body: i.body,
+        demand: nVotes + i.questions.length, votesN: nVotes, qN: i.questions.length,
+        hasNote: !!i.note, note: i.note, noteWhen: i.noteWhen, hasJira: !!i.jira, jira: i.jira,
+        track: order.map((k, n) => ({ label: ST[k][0], when: i.dates[n], current: n === at ? 'step' : 'false', bar: n <= at ? '#39235F' : '#ECE5F4', weight: n === at ? '700' : '600', fg: n <= at ? '#1C1B1E' : '#48454E' })),
+        questions: i.questions.map((q, n) => ({ title: q[0], score: q[1], meta: q[3], kind: q[4], href: q[5] || '#', sep: n ? '1px solid #CAC4CF' : '0',
+          bg: q[2] ? '#ACF4A2' : 'transparent', fg: q[2] ? '#002203' : '#1C1B1E', border: q[2] ? '0' : '1px solid #79757F', kbg: q[4] === 'Origin' ? '#FFDEA0' : '#F2EBFA' })) },
+      voted: voted ? 'true' : 'false', frozen,
+      voteLabel: frozen ? nVotes + ' votes · closed' : (voted ? nVotes + ' · Voted' : 'Vote · ' + nVotes),
+      voteBg: voted ? '#DED7EB' : '#39235F', voteFg: voted ? '#1D1A28' : '#FFFFFF',
+      toggleVote: () => this.setState({ voted: Object.assign({}, s.voted, { [i.id]: !voted }) })
+    };
+  }
+}
+</script>
+</body>
+</html>

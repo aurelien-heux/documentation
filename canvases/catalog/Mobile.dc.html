@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Skill page on a phone, Release notes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#39235F}a:hover{color:#14085E}
+.ui{font-family:'BNPP Type',Manrope,'Segoe UI',system-ui,sans-serif}
+.li{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #CAC4CF}
+.lnk{background:none;border:0;color:#39235F;font-family:'BNPP Type',Manrope,sans-serif;font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px;min-height:44px;padding:0 4px}
+</style>
+</helmet>
+<div style="width: 390px; height: 1640px; position: relative; overflow: hidden; background: #FDF8FD; color: #1C1B1E; font-family: 'Open Sans', system-ui, sans-serif">
+
+  <header style="height: 56px; background: #EDE4FF; display: flex; align-items: center; gap: 4px; padding: 0 8px">
+    <button type="button" aria-label="Open the navigation drawer" style="width: 48px; height: 48px; border: 0; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <span class="ui" style="flex: 1; font-size: 16px; font-weight: 600">Catalog</span>
+    <button type="button" aria-label="Search" style="width: 48px; height: 48px; border: 0; background: transparent; color: #48454E; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+    <span aria-label="Aurélien Heux" style="width: 32px; height: 32px; margin: 0 8px; border-radius: 999px; background: #DED7EB; color: #1D1A28; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">AH</span>
+  </header>
+
+  <main style="padding: 12px 16px 120px; display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <a href="CatalogMobile.dc.html" aria-label="Back to the Catalog" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #48454E"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+      <span class="ui" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 10px; background: #E3DFFF; color: #14085E; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">SK</span>
+      <div style="min-width: 0">
+        <h1 class="ui" style="margin: 0; font-size: 20px; line-height: 26px; font-weight: 600">Release notes</h1>
+        <div style="font-size: 12px; line-height: 16px; color: #48454E">Skill · Camille Martin · <span style="font-weight: 600">v1.3.0</span></div>
+      </div>
+    </div>
+
+    <p style="margin: 0; font-size: 15px; line-height: 22px">Collects the pull requests merged since the last tag, groups them by Work item type and drafts the release notes in your team's template. When you ask, it adds them to CHANGELOG.md in a pull request and creates the Jira release ticket.</p>
+
+    <div style="display: flex; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #F8F1FF; font-size: 14px; line-height: 20px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 1px"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+      <span>Asks before it does anything that changes something: <b style="font-weight: 600">open pull request</b>, <b style="font-weight: 600">create Jira ticket</b>.</span>
+    </div>
+
+    <section aria-labelledby="m-try" style="display: flex; flex-direction: column">
+      <h2 id="m-try" class="ui" style="margin: 0 0 2px; font-size: 14px; font-weight: 600; color: #48454E">Try asking</h2>
+      <div class="li"><span style="flex: 1; font-size: 14px; line-height: 20px">“Draft the release notes for environments-backend since 2.14.0”</span><button type="button" class="lnk">Try it</button></div>
+      <div class="li"><span style="flex: 1; font-size: 14px; line-height: 20px">“What changed in reservation-api this sprint?”</span><button type="button" class="lnk">Try it</button></div>
+      <div class="li"><span style="flex: 1; font-size: 14px; line-height: 20px">“Add the 2.15.0 notes to CHANGELOG.md and open the pull request”</span><button type="button" class="lnk">Try it</button></div>
+    </section>
+
+    <section aria-labelledby="m-uses" style="display: flex; flex-direction: column">
+      <h2 id="m-uses" class="ui" style="margin: 0 0 2px; font-size: 14px; font-weight: 600; color: #48454E">Uses</h2>
+      <div class="li"><span style="flex: 1; font-size: 14px">DevOps · List pull requests</span><span style="font-size: 12px; color: #48454E">reads</span></div>
+      <div class="li"><span style="flex: 1; font-size: 14px">DevOps · Open pull request</span><span style="font-size: 12px; color: #48454E">asks first</span></div>
+      <div class="li"><span style="flex: 1; font-size: 14px">Knowledge base · Search Docs</span><span style="font-size: 12px; color: #48454E">reads</span></div>
+      <div class="li"><span style="flex: 1; font-size: 14px">Create Jira ticket</span><span style="font-size: 12px; color: #48454E">asks first</span></div>
+    </section>
+
+    <section aria-labelledby="m-files" style="display: flex; flex-direction: column">
+      <h2 id="m-files" class="ui" style="margin: 0 0 2px; font-size: 14px; font-weight: 600; color: #48454E">What's inside</h2>
+      <p style="margin: 0 0 4px; font-size: 12px; line-height: 18px; color: #48454E">7 files. The assistant reads SKILL.md first and opens the others only when a step needs them.</p>
+      <a href="#" class="li" style="text-decoration: none; color: #1C1B1E; min-height: 44px; padding: 8px 0"><span class="ui" aria-hidden="true" style="width: 34px; height: 20px; flex: none; border-radius: 4px; background: #E3DFFF; color: #14085E; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">MD</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">SKILL.md</span><span style="font-size: 12px; color: #48454E">Instructions · read first</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#" class="li" style="text-decoration: none; color: #1C1B1E; min-height: 44px; padding: 8px 0"><span class="ui" aria-hidden="true" style="width: 34px; height: 20px; flex: none; border-radius: 4px; background: #DED7EB; color: #1D1A28; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">JSON</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">skill.json</span><span style="font-size: 12px; color: #48454E">Manifest</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#" class="li" style="text-decoration: none; color: #1C1B1E; min-height: 44px; padding: 8px 0"><span class="ui" aria-hidden="true" style="width: 34px; height: 20px; flex: none; border-radius: 4px; background: #E3DFFF; color: #14085E; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">MD</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">references/grouping-rules.md</span><span style="font-size: 12px; color: #48454E">Opened at step 2</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#" class="li" style="text-decoration: none; color: #1C1B1E; min-height: 44px; padding: 8px 0"><span class="ui" aria-hidden="true" style="width: 34px; height: 20px; flex: none; border-radius: 4px; background: #E3DFFF; color: #14085E; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">MD</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">references/template-en.md</span><span style="font-size: 12px; color: #48454E">Opened at step 3</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#" class="li" style="text-decoration: none; color: #1C1B1E; min-height: 44px; padding: 8px 0"><span class="ui" aria-hidden="true" style="width: 34px; height: 20px; flex: none; border-radius: 4px; background: #E3DFFF; color: #14085E; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">MD</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">references/template-fr.md</span><span style="font-size: 12px; color: #48454E">Opened at step 3, in French</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="MobileFile.dc.html" class="li" style="text-decoration: none; color: #1C1B1E; min-height: 44px; padding: 8px 0"><span class="ui" aria-hidden="true" style="width: 34px; height: 20px; flex: none; border-radius: 4px; background: #DCEAB4; color: #39235F; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">PY</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">scripts/group_prs.py</span><span style="font-size: 12px; color: #48454E">Runs in the sandbox</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#" class="li" style="text-decoration: none; color: #1C1B1E; min-height: 44px; padding: 8px 0"><span class="ui" aria-hidden="true" style="width: 34px; height: 20px; flex: none; border-radius: 4px; background: #DCEAB4; color: #39235F; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">PY</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">scripts/render_changelog.py</span><span style="font-size: 12px; color: #48454E">Runs in the sandbox, step 4</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48454E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+    </section>
+
+    <div style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; line-height: 20px; color: #48454E; border-top: 1px solid #CAC4CF; padding-top: 12px">
+      <span>Reviewed 18 Nov by Julien Roche, champion</span>
+      <span>214 uses in 30 days · Assistant and Sweep (release)</span>
+      <a href="#" style="font-weight: 600">Source: git/environments/skills</a>
+      <a href="#">Report a problem</a>
+    </div>
+  </main>
+
+  <button type="button" class="ui" style="position: absolute; right: 16px; bottom: 96px; height: 56px; border: 0; border-radius: 16px; padding: 0 20px 0 16px; background: #39235F; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.3), 0 4px 8px 3px rgba(0,0,0,.15)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add to my assistant
+  </button>
+
+  <nav aria-label="Main" style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: #EDE4FF; display: flex; justify-content: space-around; align-items: center">
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; min-width: 64px"><span style="width: 56px; height: 32px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l7-7M14 4l6 6-7 7-6-6z"/></svg></span><span class="ui" style="font-size: 12px; font-weight: 600">Sweep</span></a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; min-width: 64px"><span style="width: 56px; height: 32px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h5v16H4zM10 4h4v16h-4z"/></svg></span><span class="ui" style="font-size: 12px; font-weight: 600">Docs</span></a>
+    <a href="#" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; min-width: 64px"><span style="width: 56px; height: 32px; border-radius: 16px; background: #DED7EB; box-shadow: inset 0 3px 0 #39235F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D1A28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></span><span class="ui" style="font-size: 12px; font-weight: 600">Catalog</span></a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1C1B1E; min-width: 64px"><span style="width: 56px; height: 32px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4H6a2 2 0 0 0-2 2v4l-2 2 2 2v4a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v4l2 2-2 2v4a2 2 0 0 1-2 2h-2"/></svg></span><span class="ui" style="font-size: 12px; font-weight: 600">Assistant</span></a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1640}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

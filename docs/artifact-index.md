@@ -11,6 +11,8 @@ Snapshot taken 2026-11-13, updated 2026-11-14. On 2026-11-14 the design canvas w
 | AIToolbox (design system, tokens and component rules, v5.0: the Sweep palette — purple primary, pale purple secondary, lime tertiary and Run) | Design System | 2026-11-14 | https://claude.ai/artifact/Vx3WX1dqVqxSQ466jAfKpP |
 | AIToolbox design system (canvas: design-system boards only since 2026-11-14 — colour roles, type, components, brand, app shell, breakpoints; recoloured for tokens 5.0; Agent run component (usage, panel, page, output viewer) since 2026-11-23) | Design | 2026-11-23 | https://claude.ai/artifact/99DCh11LTWKebFQ9QJANMV |
 | AIToolbox labs (canvas: every decision lab — hover, Run button rounds 2–3, tour focus, Community, Administration, Catalog, Docs, Architecture, change start, agent follow (C decided 2026-11-23), Purples trial, Colour system review) | Design | 2026-11-23 | https://claude.ai/artifact/DTSkQfZZJTHTrpBSQxmZVg |
+| Skill page (canvas: Catalog screens, source `canvases/catalog/` — skill page desktop 1440 with the app shell, phone 390 and phone file viewer; "What's inside" lists SKILL.md, the reference Markdown files and the scripts with Markdown preview / source and highlighted code; listing with Browse (kind switch, cards, paginator) and Mine (stages), desktop and phone; Play works; open points as stickies) | Design | 2026-11-26 | https://claude.ai/artifact/4ax3vXidC5xqbwxkPVXaXj |
+| Ideas and Questions (canvas, source `canvases/ideas-questions/` — questions list, question page with votes, accepted answer and assistant-drafted answer, Ask form with live similar questions, Ideas list + detail with linked questions, phone question; Play works) | Design | 2026-11-26 | https://claude.ai/artifact/13tUcpJKcBSisrMJ6eaZEK |
 | AIToolbox prototypes (canvas: live prototypes — production vision, Architecture, assistant, Community + Administration, header, feedback, brand motion, accessibility plan, release channels) | Design | 2026-11-14 | https://claude.ai/artifact/7GdjuxqjRdryVMquDeX32J |
 | Colour Decision Lab (colour system review of tokens 4.7, phone-friendly page; same lab as the board on the labs canvas; decided: C adopted as tokens 5.0, summary in `claude/aitoolbox-colour-review.md`) | Page | 2026-11-14 | https://claude.ai/artifact/2mZGPYmS98tgzvpEb8jjgd |
 | AIToolbox accessibility plan | Doc | 2026-10-21 | https://claude.ai/artifact/K5LCRkFyycdrdRCMMkgxRo |
@@ -22,6 +24,7 @@ Snapshot taken 2026-11-13, updated 2026-11-14. On 2026-11-14 the design canvas w
 
 | Artifact | Type | Last update | Link |
 |---|---|---|---|
+| Ideas and Questions Architecture (Community Q&A like Stack Overflow coupled to Ideas: user journey, lifecycles, implementation architecture, data model, API, decisions it reopens; source `docs/product/ideas-and-questions-architecture.html`) | Page | 2026-11-26 | https://claude.ai/artifact/52dtreQvukx2d4Vk8QyygB |
 | Catalog Journey and Architecture (skills, tools and MCP servers: user journey, version lifecycle, implementation architecture, data model, API) | Page | 2026-11-13 | https://claude.ai/artifact/MgYkbMZ3Qdug5PNzWRsRUc |
 | AIToolbox Architecture | Page | 2026-11-03 | https://claude.ai/artifact/2Su7sBCivJmNmhqcRvwZuY |
 | Wide Views Demo (five ways to render a wide TOGAF landscape in LikeC4) | Page | 2026-11-02 | https://claude.ai/artifact/Ptt8tNYbq5YmjJRMmeGoAN |
